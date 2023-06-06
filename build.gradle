@@ -13,7 +13,7 @@ repositories {
 bootJar.enabled = false
 
 subprojects {
-    group = 'com.innogrid.medge'
+    group = 'lab.cherry.nw'
     version = '0.0.1-SNAPSHOT'
     sourceCompatibility = '17'
 

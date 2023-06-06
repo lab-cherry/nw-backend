@@ -1,9 +1,9 @@
-## 낭만웨딩(?) Backend
+## nw-backend
 
 ---
 
 ### Prerequisite
-- Name : 낭만웨딩(?) Backend
+- Name : nw-backend
 - Language : Java
 - Build System : Gradle v7.4
 - Gradle DSL : Groovy
