@@ -43,10 +43,12 @@ public class AuthController {
 //        map.put("username", loginRequest.getUsername());
 //        map.put("token", accessToken.getToken());
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", "Bearer " + accessToken.getToken());
 
-        return new ResponseEntity<>(accessToken, httpHeaders, HttpStatus.OK);
+        // Header 에 등록
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add("Authorization", "Bearer " + accessToken.getToken());
+
+        return new ResponseEntity<>(accessToken, new HttpHeaders(), HttpStatus.OK);
 
     }
 

@@ -23,6 +23,6 @@ public class RoleEntity extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<UserEntity> users = new HashSet<>();
+//    @ManyToMany(mappedBy = "roles")
+//    private Set<UserEntity> users = new HashSet<>();
 }

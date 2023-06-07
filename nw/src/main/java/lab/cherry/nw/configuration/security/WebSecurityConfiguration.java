@@ -10,12 +10,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
+//@EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfiguration {
 
@@ -32,6 +34,8 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // 토큰 사용으로 csrf 설정 Disable 처리
         http
+            .cors()
+                .disable()
             .csrf()
                 .disable()
             .formLogin()
@@ -51,8 +55,7 @@ public class WebSecurityConfiguration {
                     "/swagger-ui.html"
             )
               .permitAll()
-            .requestMatchers("/api/v1/**").hasAnyRole("ADMIN", "ROLE_USER")
-            .requestMatchers("/api/v1/mgmt/**").hasRole("ADMIN")
+            .requestMatchers("/api/v1/**").hasAnyRole("ADMIN", "USER")
             .anyRequest()
               .authenticated();
 

@@ -62,37 +62,26 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional(readOnly = true)
     public AccessToken login(UserLoginDto userLoginDto) {
-        String username = userLoginDto.getUsername();
-        String password = userLoginDto.getPassword();
-
+        
         log.error("username = {}", userLoginDto.getUsername());
         log.error("password = {}", userLoginDto.getPassword());
 
         authenticateByIdAndPassword(userLoginDto);
-        Set<RoleEntity> roles = userRepository.findByUserName(username).get().getRoles();
+        Set<RoleEntity> roles = userRepository.findByUserName(userLoginDto.getUsername()).get().getRoles();
         return iJwtTokenProvider.createJwtToken(userLoginDto.getUsername(), roles);
 
-
-//        try {
-//            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
-//            Set<RoleEntity> roles = userRepository.findByUserName(username).get().getRoles();
-//            return iJwtTokenProvider.createJwtToken(username,roles);
-//
-//        }catch (AuthenticationException exception) {
-//            throw new CustomException(ErrorCode.RUNTIME_EXCEPTION);
-//        }
     }
     private void checkUserExistsWithUserName(String username) {
         if (userRepository.existsByUsername(username)) {
-            throw new CustomException(ErrorCode.DUPLICATE);
+            throw new CustomException(ErrorCode.DUPLICATE); // 중복된 아이디
         }
     }
     private void authenticateByIdAndPassword(UserLoginDto userLoginDto) {
         UserEntity user = userRepository.findByUserName(userLoginDto.getUsername())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));   // 로그인 요청 시, 등록되지 않은 아이디 처리
 
         if(!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
-            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 로그인 요청 시, 비밀번호가 잘못된 경우 처리
         }
     }
     private Set<RoleEntity> getRoles(String [] roles){

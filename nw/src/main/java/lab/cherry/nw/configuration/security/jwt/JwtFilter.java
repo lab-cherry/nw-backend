@@ -36,7 +36,8 @@ public class JwtFilter extends OncePerRequestFilter {
             if (checkAccessToken(token)) {
                 Authentication authentication = tokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.debug("Security Context에 '{}' 인증 정보를 저장했습니다.", authentication.getName());
+                log.error("Security Context에 '{}' 인증 정보를 저장했습니다.", authentication.getName());
+                log.error("getAuthorities : {}", authentication.getAuthorities());
             }
             filterChain.doFilter(request, response);
 

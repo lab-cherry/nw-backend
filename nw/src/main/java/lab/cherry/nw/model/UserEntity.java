@@ -58,7 +58,7 @@ public class UserEntity extends BaseEntity {
     @CreationTimestamp
     private Timestamp created_at;
 
-    @ManyToMany
+    @ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(

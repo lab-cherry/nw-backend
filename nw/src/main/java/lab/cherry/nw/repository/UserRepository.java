@@ -13,11 +13,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    @Query("select u from UserEntity u WHERE u.username = ?1")
+    @Query("select u from UserEntity u LEFT JOIN FETCH u.roles WHERE u.username = ?1")
     Optional<UserEntity> findByUserName(String username);
 
     @Override
-    @Query("select u from UserEntity u")
+    @Query("select u from UserEntity u LEFT JOIN FETCH u.roles")
     List<UserEntity> findAll();
 
     boolean existsByUsername(String username);
