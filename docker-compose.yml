@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  nw-backend:
+    container_name: nw-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+#    volumes:
+#      - ./log:/log/spring
