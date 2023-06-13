@@ -1,0 +1,23 @@
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+spring.datasource.url=jdbc:mariadb://databaseURI:databasePort/databaseName
+spring.datasource.username=databaseConnUserName
+spring.datasource.password=databaseConnUserPass
+
+spring.jpa.open-in-view=false
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+
+#set your port
+server.port=8888
+#server.error.include-message=always
+
+springdoc.api-docs.path=/api/v1
+springdoc.swagger-ui.path=/docs
+springdoc.swagger-ui.operationsSorter=method
+
+# App Properties
+#echo 'com-innogrid-medge-project-rndplan-dev-1team-secret-base-by-taking'|base64
+lab.cherry.nw.jwtSecret= 29tLWlubm9ncmlkLW1lZGdlLXByb2plY3Qtcm5kcGxhbi1kZXYtMXRlYW0tc2VjcmV0LWJhc2UtYnktdGFrYWluZwo=
+lab.cherry.nw.jwtExpirationMs= 86400000
+
+

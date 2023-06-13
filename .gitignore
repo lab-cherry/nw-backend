@@ -24,7 +24,7 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-application.properties
+*.properties
 
 ### Eclipse ###
 .apt_generated

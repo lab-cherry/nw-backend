@@ -1,0 +1,21 @@
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+spring.datasource.url=jdbc:mariadb://${DATABASE_HOST:nw-db}:${DATABASE_PORT:-3306}/${DATABASE_NAME:-nw}
+spring.datasource.username=${DATABASE_USERID}
+spring.datasource.password=${DATABASE_USERPASS}
+
+spring.jpa.open-in-view=false
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+
+#set your port
+server.port=8888
+#server.error.include-message=always
+
+springdoc.api-docs.path=/api/v1
+springdoc.swagger-ui.path=/docs
+springdoc.swagger-ui.operationsSorter=method
+
+# App Properties
+#echo 'lab-cherry-team-nw-project-secret-base-by-cherrylab'|base64
+lab.cherry.nw.jwtSecret= bGFiLWNoZXJyeS10ZWFtLW53LXByb2plY3Qtc2VjcmV0LWJhc2UtYnktY2hlcnJ5bGFiCg==
+lab.cherry.nw.jwtExpirationMs= 86400000
