@@ -53,3 +53,6 @@ bin/
 
 ### Log ###
 .log
+
+### etc ###
+db_data
