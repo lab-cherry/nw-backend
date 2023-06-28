@@ -43,7 +43,88 @@ dependencies {
 }
 ```
 
+#### Tree
+```
+ubuntu@oracle:~/nw-backend$ tree .
+.
+├── README.md
+├── nw
+│   ├── build.gradle
+│   └── src
+│       └── main
+│          ├── java
+│          │   └── lab
+│          │      └── cherry
+│          │          └── nw
+│          │              ├── NwApplication.java
+│          │              ├── configuration
+│          │              │   ├── bean
+│          │              │   │   ├── BeanConfig.java
+│          │              │   │   └── CorsConfig.java
+│          │              │   └── security
+│          │              │      ├── WebSecurityConfiguration.java
+│          │              │      └── jwt
+│          │              │          ├── CustomAccessDeniedHandler.java
+│          │              │          ├── JwtFilter.java
+│          │              │          └── UnauthorizedHandler.java
+│          │              ├── controller
+│          │              │   ├── AuthController.java
+│          │              │   └── UserController.java
+│          │              ├── error
+│          │              │   ├── ErrorResponse.java
+│          │              │   ├── enums
+│          │              │   │   └── ErrorCode.java
+│          │              │   ├── exception
+│          │              │   │   ├── CustomException.java
+│          │              │   │   └── EntityNotFoundException.java
+│          │              │   └── handler
+│          │              │      └── GlobalExceptionHandler.java
+│          │              ├── model
+│          │              │   ├── BaseEntity.java
+│          │              │   ├── RoleEntity.java
+│          │              │   ├── UserEntity.java
+│          │              │   └── dto
+│          │              │      ├── UserLoginDto.java
+│          │              │      └── UserRegisterDto.java
+│          │              ├── repository
+│          │              │   ├── RoleRepository.java
+│          │              │   └── UserRepository.java
+│          │              ├── service
+│          │              │   ├── AuthService.java
+│          │              │   ├── Impl
+│          │              │   │   ├── AuthServiceImpl.java
+│          │              │   │   └── UserServiceImpl.java
+│          │              │   ├── UserService.java
+│          │              │   └── security
+│          │              │      └── CustomUserDetailsService.java
+│          │              └── util
+│          │                  ├── FormatConverter.java
+│          │                  └── Security
+│          │                      ├── AccessToken.java
+│          │                      ├── SecretKey.java
+│          │                      └── jwt
+│          │                          ├── IJwtTokenHelper.java
+│          │                          ├── IJwtTokenProvider.java
+│          │                          ├── JwtTokenHelper.java
+│          │                          └── JwtTokenProvider.java
+│          └── resources
+│              ├── application.properties_sample
+│              └── static
+│                  └── index.html
+├── .gitignore
+├── application.proerties_docker
+├── docker-compose.yml
+├── Dockerfile
+├── build.gradle
+└── settings.gradle
+```
+
+
 ### How-to
+#### First
+ - roles : ROLE_ADMIN, ROLE_USER 와 같이 등록
+
+
 #### Swagger
  - 
 
