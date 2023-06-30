@@ -52,7 +52,8 @@ public class WebSecurityConfiguration {
                     "/swagger-resources",
                     "/swagger-resources/**",
                     "/swagger-ui/**",
-                    "/swagger-ui.html"
+                    "/swagger-ui.html",
+                    "/api-docs/**"
             )
               .permitAll()
             .requestMatchers("/api/v1/**").hasAnyRole("ADMIN", "USER")     // spring boot 에서 ROLE_ 은 자동으롭 붙여줌

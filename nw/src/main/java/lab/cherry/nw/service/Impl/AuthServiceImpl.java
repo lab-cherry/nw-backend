@@ -31,14 +31,11 @@ public class AuthServiceImpl implements AuthService {
 
     private final IJwtTokenProvider iJwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
-
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
-//    private final AuthenticationManager authenticationManager;
-
-
     public AccessToken register(UserRegisterDto userRegisterDto) {
+
         Date date = new Date();
         checkUserExistsWithUserName(userRegisterDto.getUsername());
         if(userRegisterDto.getRoles() == null) {    // Roles 값이 없을 시
@@ -61,7 +58,6 @@ public class AuthServiceImpl implements AuthService {
 
         return iJwtTokenProvider.createJwtToken(username,roles);
     }
-
 
     @Transactional(readOnly = true)
     public AccessToken login(UserLoginDto userLoginDto) {

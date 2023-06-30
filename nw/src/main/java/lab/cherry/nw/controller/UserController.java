@@ -14,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -27,7 +29,8 @@ public class UserController {
     @GetMapping("")
     public ResponseEntity<?> findAllUsers() {
         log.info("retrieve all users controller...!");
-        return new ResponseEntity<>(userService.getUsers(), new HttpHeaders(), HttpStatus.OK);
+        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
+        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PatchMapping("{id}")
@@ -57,8 +60,9 @@ public class UserController {
     @GetMapping("{id}")
     public ResponseEntity<?> findByUserId(@PathVariable("id") Long id) {
         log.info("[UserController] findByUserId...!");
-        UserEntity userEntity = userService.findById(id);
-        return new ResponseEntity<>(userEntity, new HttpHeaders(), HttpStatus.OK);
+
+        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
+        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

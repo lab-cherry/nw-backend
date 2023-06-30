@@ -1,6 +1,7 @@
 package lab.cherry.nw.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class RoleEntity extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-//    @ManyToMany(mappedBy = "roles")
-//    private Set<UserEntity> users = new HashSet<>();
+    @JsonIgnore
+    @ManyToMany(mappedBy = "roles", fetch=FetchType.EAGER)
+    private Set<UserEntity> users = new HashSet<>();
 }
