@@ -35,18 +35,21 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
-    private final AuthenticationManager authenticationManager;
+//    private final AuthenticationManager authenticationManager;
 
 
     public AccessToken register(UserRegisterDto userRegisterDto) {
         Date date = new Date();
         checkUserExistsWithUserName(userRegisterDto.getUsername());
+        if(userRegisterDto.getRoles() == null) {    // Roles 값이 없을 시
+            userRegisterDto.setRoles(new String[]{"ROLE_USER"});
+        }
 
         UserEntity userEntity = UserEntity.builder()
             .username(userRegisterDto.getUsername())
             .email(userRegisterDto.getEmail())
             .password(passwordEncoder.encode(userRegisterDto.getPassword()))
-            .roles(getRoles(userRegisterDto.getRoles()))
+            .roles(getRoles(userRegisterDto.getRoles()))  // "roles": ["ROLE_ADMIN", "ROLE_USER"]
             .enabled(true)
             .created_at(new Timestamp(date.getTime()))
             .build();

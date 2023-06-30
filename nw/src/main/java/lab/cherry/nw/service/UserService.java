@@ -10,7 +10,7 @@ import lab.cherry.nw.model.UserEntity;
 @Component
 public interface UserService {
     List<UserEntity> getUsers();
-//    void createUser(UserEntity user);
+    void updateUser(UserEntity user);
     void deleteUser(Long id);
     UserEntity findById(Long id);
     UserEntity findByUserName(String username);

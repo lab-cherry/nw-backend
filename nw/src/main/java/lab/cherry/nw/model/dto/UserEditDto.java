@@ -3,14 +3,14 @@ package lab.cherry.nw.model.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-
-import java.util.Set;
 
 @NoArgsConstructor @AllArgsConstructor
 @Data
-public class UserRegisterDto {
+public class UserEditDto {
     @NotBlank
     @Size(min = 3, max = 20)
     private String username;

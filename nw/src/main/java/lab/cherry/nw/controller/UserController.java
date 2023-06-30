@@ -1,14 +1,17 @@
 package lab.cherry.nw.controller;
 
+import lab.cherry.nw.error.ErrorResponse;
+import lab.cherry.nw.error.enums.ErrorCode;
+import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.service.UserService;
+import lab.cherry.nw.error.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -27,24 +30,28 @@ public class UserController {
         return new ResponseEntity<>(userService.getUsers(), new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PutMapping("{id}")
+    @PatchMapping("{id}")
     public ResponseEntity<?> updateUserById(@PathVariable("id") Long id,
             @RequestBody UserEntity userDetail) {
-        Map<String, Object> map = new LinkedHashMap<>();
-        try {
-            UserEntity user = userService.findById(id);
-//            user.setUsername(userDetail.getUsername());
-//            user.setPassword(userDetail.getPassword());
-//            userService.createUser(user);
-            map.put("status", 1);
-            map.put("data", userService.findById(id));
-            return new ResponseEntity<>(map, HttpStatus.OK);
-        } catch (Exception ex) {
-            map.clear();
-            map.put("status", 0);
-            map.put("message", "User is not found");
-            return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
-        }
+//        Map<String, Object> map = new LinkedHashMap<>();
+
+//        UserEntity user = userService.findById(id);
+
+//        try {
+//            UserEntity user = userService.findById(id);
+////            user.setUsername(userDetail.getUsername());
+////            user.setPassword(userDetail.getPassword());
+            userService.updateUser(userDetail);
+//            map.put("status", 1);
+//            map.put("data", userService.findById(id));
+//            return new ResponseEntity<>(map, HttpStatus.OK);
+//        } catch (Exception ex) {
+//            final ErrorResponse response = ErrorResponse.of(ErrorCode.ENTITY_NOT_FOUND);
+//            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+//        }
+
+        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
@@ -58,7 +65,9 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         log.info("[UserController] deleteUser...!");
         userService.deleteUser(id);
-        return new ResponseEntity<>("User Delete Success...!", new HttpHeaders(), HttpStatus.OK);
+
+        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
 
 //    @GetMapping("/find/name/{name}")
