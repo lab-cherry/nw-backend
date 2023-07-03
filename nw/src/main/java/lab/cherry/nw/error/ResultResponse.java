@@ -31,7 +31,6 @@ public class ResultResponse {
         this.data = data;
     }
 
-
     public static ResultResponse of(final SuccessCode code) {
         return new ResultResponse(code);
     }
