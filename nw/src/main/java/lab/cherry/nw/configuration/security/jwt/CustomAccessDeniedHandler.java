@@ -11,13 +11,34 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+
+/**
+ * <pre>
+ * ClassName : CustomAccessDeniedHandler
+ * Type : class
+ * Descrption : 권한이 없는 경우 CustomAccessDeniedHandler Exception 설정과 관련된 함수를 포함하고 있는 클래스입니다.
+ * Related : Spring Security
+ * </pre>
+ */
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
+    /**
+     * [Exception] 권한 없는 경우 예외처리 함수
+     * <pre>
+     * 상태 코드와 관련 메세지를 반환합니다.
+     * {
+     *     "status": 401,
+     *     "message": "Forbidden."
+     * }
+     * </pre>
+     *
+     * @author taking(taking@duck.com)
+     *
+     */
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
-//        response.sendError((HttpServletResponse.SC_FORBIDDEN);
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setHeader("Content-Type", "application/json");
         response.getWriter().write(FormatConverter.toJson(

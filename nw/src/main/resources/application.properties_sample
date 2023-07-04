@@ -19,5 +19,3 @@ springdoc.swagger-ui.operationsSorter=method
 #echo 'com-innogrid-medge-project-rndplan-dev-1team-secret-base-by-taking'|base64
 lab.cherry.nw.jwtSecret= 29tLWlubm9ncmlkLW1lZGdlLXByb2plY3Qtcm5kcGxhbi1kZXYtMXRlYW0tc2VjcmV0LWJhc2UtYnktdGFrYWluZwo=
 lab.cherry.nw.jwtExpirationMs= 86400000
-
-

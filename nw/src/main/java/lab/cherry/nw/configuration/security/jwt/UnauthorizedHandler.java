@@ -11,11 +11,33 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * <pre>
+ * ClassName : UnauthorizedHandler
+ * Type : class
+ * Descrption : 인증이 안된 경우 UnauthorizedHandler Exception 설정과 관련된 함수를 포함하고 있는 클래스입니다.
+ * Related : Spring Security
+ * </pre>
+ */
 @Component
 public class UnauthorizedHandler implements AuthenticationEntryPoint {
+
+    /**
+     * [Exception] 인증이 안된 경우 예외처리 함수
+     * <pre>
+     * 상태 코드와 관련 메세지를 반환합니다.
+     * {
+     *     "status": 401,
+     *     "message": "Unauthorized."
+     * }
+     * </pre>
+     *
+     * @author taking(taking@duck.com)
+     *
+     */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-//        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setHeader("Content-Type", "application/json");
         response.getWriter().write(FormatConverter.toJson(

@@ -1,4 +1,5 @@
 package lab.cherry.nw.configuration.bean;
+
 import lab.cherry.nw.service.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * <pre>
+ * ClassName : BeanConfig
+ * Type : class
+ * Descrption : Bean으로 등록한 외부 패키지와 관련된 함수를 포함하고 있는 클래스입니다.
+ * Related : All
+ * Included : PasswordEncoder, UserDetailsService, AuthenticationProvider, AuthenticationManager 등
+ * </pre>
+ */
 @Configuration
 @RequiredArgsConstructor
 public class BeanConfig {

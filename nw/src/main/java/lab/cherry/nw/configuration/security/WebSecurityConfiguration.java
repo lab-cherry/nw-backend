@@ -5,6 +5,7 @@ import lab.cherry.nw.configuration.security.jwt.JwtFilter;
 import lab.cherry.nw.configuration.security.jwt.UnauthorizedHandler;
 import lab.cherry.nw.util.Security.jwt.IJwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -15,19 +16,23 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * <pre>
+ * ClassName : WebSecurityConfiguration
+ * Type : class
+ * Descrption : Spring Security 설정과 관련된 함수를 포함하고 있는 클래스입니다.
+ * Related : Spring Security
+ * </pre>
+ */
 @Configuration
 @EnableMethodSecurity
-//@EnableWebSecurity
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfiguration {
 
     private final UnauthorizedHandler unauthorizedHandler;
     private final CustomAccessDeniedHandler accessDeniedHandler;
-//    private final CorsFilter corsFilter;
     private final AuthenticationProvider authenticationProvider;
-//    private final LogoutHandler logoutHandler;
-
-//    private final JwtFilter jwtFilter;
     private final IJwtTokenProvider iJwtTokenProvider;
 
     @Bean
@@ -52,11 +57,10 @@ public class WebSecurityConfiguration {
                     "/swagger-resources",
                     "/swagger-resources/**",
                     "/swagger-ui/**",
-                    "/swagger-ui.html",
-                    "/api-docs/**"
+                    "/swagger-ui.html"
             )
               .permitAll()
-            .requestMatchers("/api/v1/**").hasAnyRole("ADMIN", "USER")     // spring boot 에서 ROLE_ 은 자동으롭 붙여줌
+            .requestMatchers("/api/v1/**").hasAnyRole("ADMIN", "USER") // spring boot 에서 ROLE_ 은 자동으로 붙음
             .anyRequest()
               .authenticated();
 
@@ -69,12 +73,7 @@ public class WebSecurityConfiguration {
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(new JwtFilter(iJwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
             .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // 세션 사용하지 않음 (STATELESS 처리)
-//            .logout()
-//            .logoutUrl("/api/auth/logout")
-//            .addLogoutHandler(logoutHandler)
-//            .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-        ;
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);  // 세션 사용하지 않음 (STATELESS 처리)
 
         return http.build();
     }

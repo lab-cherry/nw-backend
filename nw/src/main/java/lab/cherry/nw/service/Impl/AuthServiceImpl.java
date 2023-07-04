@@ -13,7 +13,6 @@ import lab.cherry.nw.util.Security.AccessToken;
 import lab.cherry.nw.util.Security.jwt.IJwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +22,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * <pre>
+ * ClassName : AuthServiceImpl
+ * Type : class
+ * Descrption : 인증과 관련된 서비스 구현과 관련된 함수를 포함하고 있는 클래스입니다.
+ * Related : spring-boot-starter-data-jpa
+ * </pre>
+ */
 @Slf4j
 @Service("authServiceImpl")
 @Transactional

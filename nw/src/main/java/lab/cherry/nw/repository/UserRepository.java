@@ -10,6 +10,14 @@ import java.util.List;
 import java.util.Optional;
 
 
+/**
+ * <pre>
+ * ClassName : UserRepository
+ * Type : interface
+ * Descrption : User JPA 구현을 위한 인터페이스입니다.
+ * Related : spring-boot-starter-data-jpa, UserServiceImpl, AuthServiceImpl, CustomUserDetailsService
+ * </pre>
+ */
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 

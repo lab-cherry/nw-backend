@@ -1,18 +1,19 @@
 package lab.cherry.nw.error;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lab.cherry.nw.error.enums.SuccessCode;
-import lab.cherry.nw.model.RoleEntity;
-import lab.cherry.nw.model.UserEntity;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+/**
+ * <pre>
+ * ClassName : ResultResponse
+ * Type : class
+ * Descrption : Success 메시지 처리와 관련된 함수를 포함하고 있는 클래스입니다.
+ * Related : ErrorCode
+ * How-to :
+ *  1. final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+ * </pre>
+ */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonInclude(JsonInclude.Include.NON_NULL) // null 일 때만 필드를 무시

@@ -48,6 +48,10 @@ subprojects {
     test {
         useJUnitPlatform()
     }
+
+    java {
+        withJavadocJar()
+    }
 }
 
 bootRun {

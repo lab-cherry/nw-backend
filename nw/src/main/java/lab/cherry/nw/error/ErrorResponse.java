@@ -1,5 +1,6 @@
 package lab.cherry.nw.error;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lab.cherry.nw.error.enums.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+/**
+ * <pre>
+ * ClassName : ErrorResponse
+ * Type : class
+ * Descrption : 에러 메시지 처리와 관련된 함수를 포함하고 있는 클래스입니다.
+ * Related : ErrorCode
+ * How-to :
+ *  1. throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+ *  2. final ErrorResponse response = ErrorResponse.of(ErrorCode.FORBIDDEN);
+ * </pre>
+ */
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
