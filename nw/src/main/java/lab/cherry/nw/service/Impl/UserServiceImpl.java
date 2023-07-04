@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(Integer id) {
         userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with Id " + id + " Not Found."));
         userRepository.deleteById(id);
     }
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserEntity findById(Long id) {
+    public UserEntity findById(Integer id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with Id " + id + " Not Found."));
     }
 }

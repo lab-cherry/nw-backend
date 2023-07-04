@@ -11,7 +11,7 @@ import lab.cherry.nw.model.UserEntity;
 public interface UserService {
     List<UserEntity> getUsers();
     void updateUser(UserEntity user);
-    void deleteUser(Long id);
-    UserEntity findById(Long id);
+    void deleteUser(Integer id);
+    UserEntity findById(Integer id);
     UserEntity findByUserName(String username);
 }

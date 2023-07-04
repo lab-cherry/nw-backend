@@ -21,6 +21,7 @@ import java.util.*;
  * </pre>
  */
 @Getter
+@Setter
 @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Builder
