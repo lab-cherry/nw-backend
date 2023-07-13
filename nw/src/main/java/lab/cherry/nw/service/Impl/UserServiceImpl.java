@@ -12,6 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+/**
+ * <pre>
+ * ClassName : UserServiceImpl
+ * Type : class
+ * Descrption : 사용자와 관련된 서비스 구현과 관련된 함수를 포함하고 있는 클래스입니다.
+ * Related : spring-boot-starter-data-jpa
+ * </pre>
+ */
 @Slf4j
 @Service("userServiceImpl")
 @Transactional
@@ -19,7 +27,6 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     @Override

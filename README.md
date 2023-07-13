@@ -5,7 +5,7 @@
 ### Prerequisite
 - Name : nw-backend
 - Language : Java
-- Build System : Gradle v7.4
+- Build System : Gradle v8.2.1
 - Gradle DSL : Groovy
 - JDK : Eclipse Temurin (AdoptOpenJDK HotSpot v17.0.6)
 

@@ -56,3 +56,4 @@ bin/
 
 ### etc ###
 db_data
+.uuid

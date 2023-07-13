@@ -25,9 +25,6 @@ class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
-
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -40,12 +37,14 @@ class UserServiceImplTest {
     @DisplayName("[UserServiceImplTest] 사용자 1, 사용자2를 추가하고 전체 사용자를 조회합니다.")
     void testGetUsers() {
         // Mock data
+        Integer userId1 = 1;
         UserEntity user1 = new UserEntity();
-        user1.setId(1);
+        user1.setId(userId1);
         user1.setUsername("user1");
 
+        Integer userId2 = 2;
         UserEntity user2 = new UserEntity();
-        user2.setId(2);
+        user2.setId(userId2);
         user2.setUsername("user2");
 
         List<UserEntity> userList = Arrays.asList(user1, user2);
@@ -72,8 +71,9 @@ class UserServiceImplTest {
     @DisplayName("[UserServiceImplTest] {id}에 해당하는 사용자를 업데이트합니다.")
     void testUpdateUser() {
         // Mock data
+        Integer userId = 1;
         UserEntity user = new UserEntity();
-        user.setId(1);
+        user.setId(userId);
         user.setUsername("user1");
 
         // Mock UserRepository
