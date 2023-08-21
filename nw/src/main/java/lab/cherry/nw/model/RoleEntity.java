@@ -29,8 +29,6 @@ import java.util.Set;
         })
 public class RoleEntity implements Serializable {
 
-    private final String excludeThisField = "users";
-
     @Id
     @JsonProperty("roleId")
     @Schema(title = "권한 Id", example = "1")
