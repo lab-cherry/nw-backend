@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serializable;
@@ -14,12 +15,11 @@ import java.util.Set;
  * <pre>
  * ClassName : RoleEntity
  * Type : class
- * Descrption : Role과 관련된 Entity를 구성하고 있는 클래스입니다.
+ * Description : Role과 관련된 Entity를 구성하고 있는 클래스입니다.
  * Related : RoleRepository
  * </pre>
  */
 @Getter
-@Setter
 @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Builder
@@ -29,19 +29,23 @@ import java.util.Set;
         })
 public class RoleEntity implements Serializable {
 
-    @Schema(title = "권한 Id", example = "1")
-    @JsonProperty("roleId")
+    private final String excludeThisField = "users";
+
     @Id
+    @JsonProperty("roleId")
+    @Schema(title = "권한 Id", example = "1")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Schema(title = "권한 이름", example = "ROLE_USER")
+    @NotNull
+    @Column(name = "name")
     @JsonProperty("roleName")
-    @Column(name = "name", nullable = false)
+    @Schema(title = "권한 이름", example = "ROLE_USER")
     private String name;
 
-    @Schema(title = "사용자 정보")
+    @Builder.Default
     @JsonIgnore
+    @Schema(title = "사용자 정보")
     @ManyToMany(mappedBy = "roles", fetch=FetchType.EAGER)
     private Set<UserEntity> users = new HashSet<>();
 }

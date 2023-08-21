@@ -1,7 +1,6 @@
 plugins {
     id 'org.springframework.boot' version '3.0.2'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
     id 'idea'
     id 'java'
 }
@@ -35,7 +34,6 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'com.ewerk.gradle.plugins.querydsl'
 
     configurations {
         compileOnly {
@@ -52,12 +50,6 @@ subprojects {
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
         developmentOnly 'org.springframework.boot:spring-boot-devtools:3.0.2'
-
-//        // QueryDSL
-//        implementation 'com.querydsl:querydsl-core:5.0.0'
-//        implementation 'com.querydsl:querydsl-apt:5.0.0'
-//        implementation 'com.querydsl:querydsl-jpa:5.0.0'    // 실제 querydsl 사용하기 위한 필요한 모듈
-//        implementation 'javax.persistence:javax.persistence-api:2.2'
     }
 
     test {
@@ -68,37 +60,9 @@ subprojects {
         withJavadocJar()
     }
 
-//
-//    // QueryDSL 설정 시작
-//    def querydslDir = "$buildDir/generated/querydsl"
-//
-//    querydsl {
-//        library = "com.querydsl:querydsl-apt"
-//        jpa = true
-//        querydslSourcesDir = querydslDir
-//    }
-//
-//    sourceSets {
-//        main {
-//            java {
-//                srcDirs = ["$projectDir/src/main/java", querydslDir]
-//            }
-//        }
-//    }
-//
-//    compileQuerydsl{
-//        options.annotationProcessorPath = configurations.querydsl
-//    }
-//
-//    configurations {
-//        querydsl.extendsFrom compileClasspath
-//    }
-//
-//    compileQuerydsl {
-//        if(file(querydslDir).exists() )
-//            delete(file(querydslDir))
-//    }
-//    // QueryDSL 설정 끝
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
 }
 
 bootRun {

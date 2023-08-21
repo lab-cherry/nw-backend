@@ -1,4 +1,6 @@
-## nw-backend
+## medge-backend
+- Description : 낭만웨딩 플랫폼 벡엔드
+- Developer : [Maintainers](/MAINTAINERS.md)
 
 ---
 
@@ -7,7 +9,7 @@
 - Language : Java
 - Build System : Gradle v8.2.1
 - Gradle DSL : Groovy
-- JDK : Eclipse Temurin (AdoptOpenJDK HotSpot v17.0.6)
+- JDK : Eclipse Temurin (AdoptOpenJDK HotSpot v17.0.7)
 
 ### Plugins
 ```

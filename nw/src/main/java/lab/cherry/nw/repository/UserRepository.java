@@ -29,8 +29,4 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     List<UserEntity> findAll();
 
     boolean existsByUsername(String username);
-
-//    @EntityGraph(attributePaths = "roles")
-//    @Query("select u from UserEntity u LEFT JOIN FETCH u.roles WHERE u.username = ?1")
-//    Optional<UserEntity> findByUserNameAuth(String username);
 }

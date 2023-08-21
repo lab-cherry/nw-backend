@@ -2,9 +2,9 @@ package lab.cherry.nw.configuration.security.jwt;
 
 import java.io.IOException;
 
+import lab.cherry.nw.util.Security.AccessToken;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
-import lab.cherry.nw.util.Security.AccessToken;
 import lab.cherry.nw.util.Security.jwt.IJwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -31,8 +31,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         AccessToken token = tokenProvider.resolveJwtToken(request);
 
-        log.error("jwt is {}", token);
         try {
+            
             if (checkAccessToken(token)) {
                 Authentication authentication = tokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -41,11 +41,12 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
 
-        }catch (AuthenticationException e) {
+        } catch (AuthenticationException e) {
             log.error("Cannot set user authentication: ", e);
             SecurityContextHolder.clearContext();
             throw new CustomException(ErrorCode.INVALID_USERNAME);
         }
+
     }
 
     private boolean checkAccessToken(AccessToken accessToken) {
