@@ -17,7 +17,7 @@ import java.util.List;
 public interface UserService {
     List<UserEntity> getUsers();
     void updateUser(UserEntity user);
-    void deleteUser(Integer id);
-    UserEntity findById(Integer id);
+    void deleteUser(Long id);
+    UserEntity findById(Long id);
     UserEntity findByUserName(String username);
 }

@@ -9,6 +9,7 @@ import lab.cherry.nw.util.Security.AccessToken;
 import lab.cherry.nw.util.Security.jwt.IJwtTokenProvider;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
+import lab.cherry.nw.util.TsidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -57,6 +58,7 @@ public class AuthServiceImpl implements AuthService {
         checkExistsWithUserName(userRegisterDto.getUsername()); // 동일한 이름 중복체크
 
         UserEntity userEntity = UserEntity.builder()
+            .id(TsidGenerator.next())
             .username(userRegisterDto.getUsername())
             .email(userRegisterDto.getEmail())
             .password(passwordEncoder.encode(userRegisterDto.getPassword()))

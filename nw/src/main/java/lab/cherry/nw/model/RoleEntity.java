@@ -31,7 +31,7 @@ public class RoleEntity implements Serializable {
 
     @Id
     @JsonProperty("roleId")
-    @Schema(title = "권한 Id", example = "1")
+    @Schema(title = "권한 고유번호", example = "1")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 

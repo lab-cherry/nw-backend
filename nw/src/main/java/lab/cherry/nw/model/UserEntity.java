@@ -7,12 +7,16 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <pre>
@@ -35,9 +39,8 @@ public class UserEntity implements Serializable {
 
     @Id
     @JsonProperty("userId")
-    @Schema(title = "사용자 Id", example = "1")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    @Schema(title = "사용자 고유번호", example = "38352658567418867")
+    private Long id;
 
     @NotNull
     @Column(name = "username")

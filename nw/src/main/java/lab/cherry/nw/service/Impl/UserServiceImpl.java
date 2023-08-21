@@ -1,15 +1,15 @@
 package lab.cherry.nw.service.Impl;
 
+import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.UserService;
-import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * <pre>
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void deleteUser(Integer id) {
+    public void deleteUser(Long id) {
         userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with Id " + id + " Not Found."));
         userRepository.deleteById(id);
     }
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public UserEntity findById(Integer id) {
+    public UserEntity findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with Id " + id + " Not Found."));
     }
 }

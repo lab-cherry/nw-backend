@@ -1,5 +1,6 @@
 package lab.cherry.nw.repository;
 
+import com.github.f4b6a3.tsid.Tsid;
 import lab.cherry.nw.model.UserEntity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,7 +20,7 @@ import java.util.Optional;
  * </pre>
  */
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query("select u from UserEntity u LEFT JOIN FETCH u.roles WHERE u.username = ?1")
     Optional<UserEntity> findByUserName(String username);
@@ -27,6 +28,14 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     @Override
     @Query("select u from UserEntity u LEFT JOIN FETCH u.roles")
     List<UserEntity> findAll();
+
+    @Override
+    @Query("select u from UserEntity u WHERE u.id = ?1")
+    void deleteById(Long id);
+
+//    @Override
+//    @Query("select u from UserEntity u LEFT JOIN FETCH u.roles WHERE u.id = ?1")
+//    Optional<UserEntity> findById(Long id);
 
     boolean existsByUsername(String username);
 }

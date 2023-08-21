@@ -22,8 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
-//    @Autowired
-//    private RoleRepository roleRepository;
 
     @Transactional
     @Override

@@ -65,7 +65,7 @@ public class UserController {
      */
     @PatchMapping("{id}")
     @Operation(summary = "사용자 업데이트", description = "특정 사용자를 업데이트합니다.")
-    public ResponseEntity<?> updateUserById(@PathVariable("id") Integer id,
+    public ResponseEntity<?> updateUserById(@PathVariable("id") Long id,
             @RequestBody UserEntity userDetail) {
 //        Map<String, Object> map = new LinkedHashMap<>();
 
@@ -102,7 +102,7 @@ public class UserController {
      */
     @GetMapping("{id}")
     @Operation(summary = "ID로 사용자 찾기", description = "사용자를 조회합니다.")
-    public ResponseEntity<?> findByUserId(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> findByUserId(@PathVariable("id") Long id) {
         log.info("[UserController] findByUserId...!");
 
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
@@ -123,7 +123,7 @@ public class UserController {
      */
     @DeleteMapping("{id}")
     @Operation(summary = "사용자 삭제", description = "사용자를 삭제합니다.")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         log.info("[UserController] deleteUser...!");
         userService.deleteUser(id);
 

@@ -1,10 +1,8 @@
 package lab.cherry.nw.configuration.security;
 
-import lab.cherry.nw.configuration.filter.RequestLoggingFilter;
 import lab.cherry.nw.configuration.security.jwt.CustomAccessDeniedHandler;
 import lab.cherry.nw.configuration.security.jwt.JwtFilter;
 import lab.cherry.nw.configuration.security.jwt.UnauthorizedHandler;
-import lab.cherry.nw.util.Security.jwt.IJwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +34,7 @@ public class WebSecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
 //    private final IJwtTokenProvider iJwtTokenProvider;
     private final JwtFilter jwtFilter;
-    private final RequestLoggingFilter requestLoggingFilter;
+//    private final RequestLoggingFilter requestLoggingFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -79,8 +77,8 @@ public class WebSecurityConfiguration {
 
         http
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(new CorsFilter(), JwtFilter.class)
-            .addFilterBefore(requestLoggingFilter, CorsFilter.class);
+            .addFilterBefore(new CorsFilter(), JwtFilter.class);
+//            .addFilterBefore(requestLoggingFilter, CorsFilter.class);
 
         return http.build();
     }
