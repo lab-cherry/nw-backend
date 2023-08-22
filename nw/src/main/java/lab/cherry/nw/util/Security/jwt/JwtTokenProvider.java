@@ -33,11 +33,11 @@ public class JwtTokenProvider implements IJwtTokenProvider {
     private final IJwtTokenHelper tokenHelper;
     private final CustomUserDetailsService userDetailsService;
 
-    public AccessToken createJwtToken(String username, Set<RoleEntity> roles) {
+    public AccessToken createJwtToken(String username, RoleEntity role) {
         log.error("username is {}", username);
-        log.error("roles is {}", roles);
+        log.error("role is {}", role);
         SecretKey secretKey = new SecretKey(jwtSecretKey, jwtExpirationMs);
-        String token = tokenHelper.generateJwtToken(secretKey, username, roles);
+        String token = tokenHelper.generateJwtToken(secretKey, username, role);
         return new AccessToken(token);
     }
 

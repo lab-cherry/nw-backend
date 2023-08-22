@@ -1,14 +1,16 @@
 package lab.cherry.nw.service.Impl;
 
+import lab.cherry.nw.error.enums.ErrorCode;
+import lab.cherry.nw.error.exception.CustomException;
+import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.AuthService;
+import lab.cherry.nw.service.RoleService;
 import lab.cherry.nw.util.Security.AccessToken;
 import lab.cherry.nw.util.Security.jwt.IJwtTokenProvider;
-import lab.cherry.nw.error.enums.ErrorCode;
-import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.util.TsidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -39,6 +42,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
     /**
      * [AuthServiceImpl] 회원가입 함수
@@ -57,12 +61,16 @@ public class AuthServiceImpl implements AuthService {
         Instant instant = Instant.now();
         checkExistsWithUserName(userRegisterDto.getUsername()); // 동일한 이름 중복체크
 
+
+        // TODO: 추후 Production 시, 삭제 후 First DB Migration 으로 대체 예정 (테스트 용도)
+        RoleEntity roleEntity = initRole();
+
         UserEntity userEntity = UserEntity.builder()
             .id(TsidGenerator.next())
             .username(userRegisterDto.getUsername())
             .email(userRegisterDto.getEmail())
             .password(passwordEncoder.encode(userRegisterDto.getPassword()))
-            .roles(getRoles(new String[]{"ROLE_USER"}))  // 기본적으로 회원가입 시, ROLE_USER 를 할당한다.
+            .role(roleEntity)
             .enabled(true)
             .created_at(Timestamp.from(instant))
             .build();
@@ -70,9 +78,9 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(userEntity);
 
         String username = userEntity.getUsername();
-        Set<RoleEntity> roles = userEntity.getRoles();
+        RoleEntity role = userEntity.getRole();
 
-        return iJwtTokenProvider.createJwtToken(username,roles);
+        return iJwtTokenProvider.createJwtToken(username,role);
     }
 
     /**
@@ -95,8 +103,8 @@ public class AuthServiceImpl implements AuthService {
 
         authenticateByIdAndPassword(userLoginDto);
 
-        Set<RoleEntity> roles = userRepository.findByUserName(userLoginDto.getUsername()).get().getRoles();
-        return iJwtTokenProvider.createJwtToken(userLoginDto.getUsername(), roles);
+        RoleEntity role = userRepository.findByUserName(userLoginDto.getUsername()).get().getRole();
+        return iJwtTokenProvider.createJwtToken(userLoginDto.getUsername(), role);
 
     }
 
@@ -150,10 +158,31 @@ public class AuthServiceImpl implements AuthService {
      * Author : taking(taking@duck.com)
      */
     private Set<RoleEntity> getRoles(String [] roles){
-        Set<RoleEntity> userRoles = new HashSet<>();
-        for(String role : roles) {
-            userRoles.add(roleRepository.findByName(role));
+    Set<RoleEntity> userRoles = new HashSet<>();
+    for (String role : roles) {
+        Optional<RoleEntity> optionalRole = roleRepository.findByName(role);
+        if (optionalRole.isPresent()) {
+            userRoles.add(optionalRole.get()); // Extract the RoleEntity from Optional
+        } else {
+            // Handle the case when role is not found
+            // You can throw an exception or perform other error handling
         }
-        return userRoles;
+    }
+    return userRoles;
+    }
+
+    // TODO: 추후 Production 시, 삭제 후 First DB Migration 으로 대체 예정 (테스트 용도), ROLE_USER 없을 시, "ROLE_USER" 자동 추가
+    private RoleEntity initRole() {
+
+        if (roleRepository.findByName("ROLE_USER").isEmpty()) {
+
+            RoleEntity roleEntity = RoleEntity.builder()
+            .name("ROLE_USER")
+            .build();
+
+            return roleRepository.save(roleEntity);
+
+        }
+        return null;
     }
 }

@@ -29,7 +29,8 @@ public enum ErrorCode {
     NOT_FOUND(404, "Not Found."),
     HANDLE_ACCESS_DENIED(403, "Access is Denied."),
     ACCESS_DENIED_EXCEPTION(401, "Unauthorized."),
-    DUPLICATE(409, "Already Exist.");
+    DUPLICATE(409, "Already Exist."),
+    NO_BODY(400, "No Parameters.");
 
     private final int status;
     private final String message;

@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 public class JwtTokenHelper implements IJwtTokenHelper {
 
     @Override
-    public String generateJwtToken(SecretKey secretKey, String username, Set<RoleEntity> roles) {
+    public String generateJwtToken(SecretKey secretKey, String username, RoleEntity role) {
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("authorities",roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
+        claims.put("authorities",new SimpleGrantedAuthority(role.getName()));
 
 
         Date issuedAt = new Date(System.currentTimeMillis());

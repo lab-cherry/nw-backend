@@ -1,11 +1,15 @@
 package lab.cherry.nw.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -32,7 +36,7 @@ public class RoleEntity implements Serializable {
     @Id
     @JsonProperty("roleId")
     @Schema(title = "권한 고유번호", example = "1")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotNull
@@ -41,9 +45,18 @@ public class RoleEntity implements Serializable {
     @Schema(title = "권한 이름", example = "ROLE_USER")
     private String name;
 
-    @Builder.Default
-    @JsonIgnore
-    @Schema(title = "사용자 정보")
-    @ManyToMany(mappedBy = "roles", fetch=FetchType.EAGER)
-    private Set<UserEntity> users = new HashSet<>();
+    //////////////////////////////////////////////////////////////////////////
+
+    @Getter
+    @Builder
+    @NoArgsConstructor @AllArgsConstructor
+    public static class CreateDto {
+
+        @NotBlank
+        @Schema(title = "권한 이름", example = "ADMIN")
+        @Size(min = 4, max = 20, message = "Minimum name length: 4 characters")
+        private String name;
+
+    }
+
 }

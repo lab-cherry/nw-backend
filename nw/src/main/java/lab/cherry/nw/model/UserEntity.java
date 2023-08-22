@@ -1,5 +1,6 @@
 package lab.cherry.nw.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -39,7 +40,7 @@ public class UserEntity implements Serializable {
 
     @Id
     @JsonProperty("userId")
-    @Schema(title = "사용자 고유번호", example = "38352658567418867")
+    @Schema(title = "사용자 고유번호", example = "38352658567418867") // (Long) Tsid
     private Long id;
 
     @NotNull
@@ -68,17 +69,16 @@ public class UserEntity implements Serializable {
     @Schema(title = "사용자 활성화 여부", example = "true")
     private boolean enabled;
 
-    @Schema(title = "사용자 생성 시간", example = "2023-07-04T12:00:00.000+00:00")
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
+    @Schema(title = "사용자 생성 시간", example = "2023-07-04 12:00:00")
     @CreationTimestamp
     private Timestamp created_at;
 
-    @Builder.Default
-    @JsonProperty("userRoles")
-    @Schema(title = "사용자 권한 정보", example = "['ROLE_USER']")
-//    @ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @ManyToMany(fetch=FetchType.EAGER)
+    @JsonProperty("userRole")
+    @Schema(title = "사용자 권한 정보", example = "ROLE_USER")
+    @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_roles",
+            name = "user_role",
             joinColumns = @JoinColumn(
                     name = "user_id",referencedColumnName = "id"
             ),
@@ -86,7 +86,22 @@ public class UserEntity implements Serializable {
                     name = "role_id",referencedColumnName = "id"
             )
     )
-    private Set<RoleEntity> roles  = new HashSet<>();
+    private RoleEntity role;
+
+    @Builder.Default
+    @JsonProperty("userOrgs")
+    @Schema(title = "Org 정보", example = "더모멘트")
+    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_orgs",
+            joinColumns = @JoinColumn(
+                    name = "user_id",referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "org_id",referencedColumnName = "id"
+            )
+    )
+    private Set<OrgEntity> orgs = new HashSet<>();
 
 //////////////////////////////////////////////////////////////////////////
 

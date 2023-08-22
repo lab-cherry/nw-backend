@@ -31,27 +31,22 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .findByUserName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username : " + username));
 
-        Set<RoleEntity> roles = user.getRoles();
+        RoleEntity role = user.getRole();
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
-                .authorities(getSimpleGrantedAuthorities(roles))
+                .authorities(getSimpleGrantedAuthorities(role))
                 .accountExpired(false)
                 .accountLocked(false)
                 .disabled(false)
                 .credentialsExpired(false)
                 .build();
 
-
-
     }
-    private Set<GrantedAuthority> getSimpleGrantedAuthorities(Set<RoleEntity> roles){
+        private Set<GrantedAuthority> getSimpleGrantedAuthorities(RoleEntity role){
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-
-        for (RoleEntity role : roles) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
+        grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         return grantedAuthorities;
     }
 }

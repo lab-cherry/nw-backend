@@ -2,7 +2,11 @@ package lab.cherry.nw.repository;
 
 import lab.cherry.nw.model.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -15,5 +19,18 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RoleRepository extends JpaRepository<RoleEntity, Integer> {
-    RoleEntity findByName(String name);
+
+    @Query("select r from RoleEntity r WHERE r.name = ?1")
+    Optional<RoleEntity> findByName(String name);
+
+    @Override
+    @Query("select r from RoleEntity r")
+    List<RoleEntity> findAll();
+
+    @Override
+    @Query("select r from RoleEntity r WHERE r.id = ?1")
+    void deleteById(Integer id);
+
+    @Query("select count(*) from RoleEntity r")
+    long countRole();
 }
