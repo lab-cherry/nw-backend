@@ -3,7 +3,6 @@ package lab.cherry.nw.service.Impl;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
-import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.service.RoleService;
@@ -13,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 
 /**
@@ -67,6 +64,7 @@ public class RoleServiceImpl implements RoleService {
         checkExistsWithRoleName(roleCreateDto.getName()); // 동일한 이름 중복체크
 
         RoleEntity roleEntity = RoleEntity.builder()
+            .id(TsidGenerator.next())
             .name("ROLE_" + roleCreateDto.getName())
             .build();
 
@@ -100,9 +98,8 @@ public class RoleServiceImpl implements RoleService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void deleteRole(Integer id) {
-        roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Role with Id " + id + " Not Found."));
-        roleRepository.deleteById(id);
+    public void deleteRole(Long id) {
+        roleRepository.delete(roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Role with Id " + id + " Not Found.")));
     }
     
     /**
@@ -153,7 +150,7 @@ public class RoleServiceImpl implements RoleService {
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public RoleEntity findById(Integer id) {
+    public RoleEntity findById(Long id) {
         return roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Role with Id " + id + " Not Found."));
     }
 }

@@ -34,10 +34,10 @@ import java.util.Set;
 public class RoleEntity implements Serializable {
 
     @Id
+    @Column(name = "id")
     @JsonProperty("roleId")
-    @Schema(title = "권한 고유번호", example = "1")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Schema(title = "사용자 고유번호", example = "38352658567418867") // (Long) Tsid
+    private Long id;
 
     @NotNull
     @Column(name = "name")

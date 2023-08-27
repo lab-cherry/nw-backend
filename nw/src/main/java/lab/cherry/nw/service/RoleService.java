@@ -19,7 +19,7 @@ public interface RoleService {
     List<RoleEntity> getRoles();
     RoleEntity createRole(RoleEntity.CreateDto roleCreateDto);
     void updateRole(RoleEntity user);
-    void deleteRole(Integer id);
-    RoleEntity findById(Integer id);
+    void deleteRole(Long id);
+    RoleEntity findById(Long id);
     RoleEntity findByName(String name);
 }

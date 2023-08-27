@@ -9,12 +9,13 @@ import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.util.TsidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.List;
 
 /**
  * <pre>
@@ -45,8 +46,9 @@ public class OrgServiceImpl implements OrgService {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<OrgEntity> getOrgs() {
-        return EntityNotFoundException.requireNotEmpty(orgRepository.findAll(), "Orgs Not Found");
+    public Page<OrgEntity> getOrganizations(Pageable pageable) {
+        return orgRepository.findAll(pageable);
+//        return EntityNotFoundException.requireNotEmpty(orgRepository.findAll(), "Orgs Not Found");
     }
 
     /**
@@ -61,8 +63,7 @@ public class OrgServiceImpl implements OrgService {
      *
      * Author : taking(taking@duck.com)
      */
-    public OrgEntity createOrg(OrgEntity.CreateDto orgCreateDto) {
-
+    public OrgEntity createOrganization(OrgEntity.CreateDto orgCreateDto) {
         Instant instant = Instant.now();
         checkExistsWithOrgName(orgCreateDto.getName()); // 동일한 이름 중복체크
 
@@ -89,9 +90,22 @@ public class OrgServiceImpl implements OrgService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void updateOrg(OrgEntity org) {
-        findByName(org.getName());
-        orgRepository.save(org);
+    public void updateById(Long tsid, OrgEntity.UpdateDto org) {
+
+        OrgEntity orgEntity = findById(tsid);
+
+        if (org.getName() != null || org.getBiznum() != null || org.getContact() != null) {
+
+            String orgName = (org.getName() != null) ? org.getName() : orgEntity.getName();
+            String bizNum = (org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum();
+            String contact = (org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum();
+
+            orgRepository.updateOrganization(tsid, orgName, bizNum, contact);
+
+        } else {
+            log.error("[OrgServiceImpl - udpateOrganization] orgName, bizNum, contact 수정 가능합니다.");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+        }
     }
 
     /**
@@ -105,9 +119,8 @@ public class OrgServiceImpl implements OrgService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void deleteOrg(Long id) {
-        orgRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Org with Id " + id + " Not Found."));
-        orgRepository.deleteById(id);
+    public void deleteById(Long id) {
+        orgRepository.delete(orgRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Org with Id " + id + " Not Found.")));
     }
     
     /**
@@ -129,6 +142,23 @@ public class OrgServiceImpl implements OrgService {
     }
 
     /**
+     * [OrgServiceImpl] ID로 조직 조회 함수
+     *
+     * @param id 조회할 조직의 식별자입니다.
+     * @return 주어진 식별자에 해당하는 조직 정보
+     * @throws EntityNotFoundException 해당 ID의 조직 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 입력한 id에 해당하는 조직 정보를 조회합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @Transactional(readOnly = true)
+    public OrgEntity findById(Long id) {
+        return orgRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Org with Id " + id + " Not Found."));
+    }
+
+    /**
      * [OrgServiceImpl] NAME으로 조직 조회 함수
      *
      * @param name 조회할 조직의 이름입니다.
@@ -145,20 +175,8 @@ public class OrgServiceImpl implements OrgService {
         return orgRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Org with Name " + name + " Not Found."));
     }
 
-    /**
-     * [OrgServiceImpl] ID로 조직 조회 함수
-     *
-     * @param id 조회할 조직의 식별자입니다.
-     * @return 주어진 식별자에 해당하는 조직 정보
-     * @throws EntityNotFoundException 해당 ID의 조직 정보가 없을 경우 예외 처리 발생
-     * <pre>
-     * 입력한 id에 해당하는 조직 정보를 조회합니다.
-     * </pre>
-     *
-     * Author : taking(taking@duck.com)
-     */
     @Transactional(readOnly = true)
-    public OrgEntity findById(Long id) {
-        return orgRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Org with Id " + id + " Not Found."));
+    public Page<OrgEntity> findPageByName(String name, Pageable pageable) {
+        return orgRepository.findPageByName(name, pageable);
     }
 }

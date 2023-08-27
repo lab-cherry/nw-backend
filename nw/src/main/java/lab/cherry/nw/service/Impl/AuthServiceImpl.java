@@ -2,15 +2,13 @@ package lab.cherry.nw.service.Impl;
 
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
-import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.AuthService;
-import lab.cherry.nw.service.RoleService;
+import lab.cherry.nw.service.TokenService;
 import lab.cherry.nw.util.Security.AccessToken;
-import lab.cherry.nw.util.Security.jwt.IJwtTokenProvider;
 import lab.cherry.nw.util.TsidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,11 +36,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final IJwtTokenProvider iJwtTokenProvider;
+    private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final RoleService roleService;
 
     /**
      * [AuthServiceImpl] 회원가입 함수
@@ -59,14 +56,13 @@ public class AuthServiceImpl implements AuthService {
     public AccessToken register(UserEntity.RegisterDto userRegisterDto) {
 
         Instant instant = Instant.now();
-        checkExistsWithUserName(userRegisterDto.getUsername()); // 동일한 이름 중복체크
+        checkExistsWithUserId(userRegisterDto.getUserid()); // 동일한 이름 중복체크
 
-
-        // TODO: 추후 Production 시, 삭제 후 First DB Migration 으로 대체 예정 (테스트 용도)
-        RoleEntity roleEntity = initRole();
+        RoleEntity roleEntity = roleRepository.findByName("ROLE_USER").get();
 
         UserEntity userEntity = UserEntity.builder()
             .id(TsidGenerator.next())
+            .userid(userRegisterDto.getUserid())
             .username(userRegisterDto.getUsername())
             .email(userRegisterDto.getEmail())
             .password(passwordEncoder.encode(userRegisterDto.getPassword()))
@@ -77,10 +73,10 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(userEntity);
 
-        String username = userEntity.getUsername();
+        String userid = userEntity.getUserid();
         RoleEntity role = userEntity.getRole();
 
-        return iJwtTokenProvider.createJwtToken(username,role);
+        return tokenService.generateJwtToken(userid,role);
     }
 
     /**
@@ -96,32 +92,37 @@ public class AuthServiceImpl implements AuthService {
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public AccessToken login(UserEntity.LoginDto userLoginDto) {
-        if(userLoginDto == null) {  // Body 값이 비어 있을 경우, 예외처리
-            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 입력 값이 유효하지 않음
-        }
+    public AccessToken.Get login(UserEntity.LoginDto userLoginDto) {
 
         authenticateByIdAndPassword(userLoginDto);
 
-        RoleEntity role = userRepository.findByUserName(userLoginDto.getUsername()).get().getRole();
-        return iJwtTokenProvider.createJwtToken(userLoginDto.getUsername(), role);
+        Optional<UserEntity> userEntity = userRepository.findByUserId(userLoginDto.getUserid());
+        AccessToken accessToken = tokenService.generateJwtToken(userLoginDto.getUserid(), userEntity.get().getRole());
+
+        return AccessToken.Get.builder()
+            .accessToken(accessToken.getAccessToken())
+            .userSeq(userEntity.get().getId())
+            .userId(userEntity.get().getUserid())
+            .userName(userEntity.get().getUsername())
+            .userRole(userEntity.get().getRole())
+            .build();
 
     }
 
     /**
      * [AuthServiceImpl] 아이디 중복 체크 함수
      *
-     * @param username 중복 체크에 필요한 사용자 이름 객체입니다.
-     * @throws CustomException 사용자의 이름이 중복된 경우 예외 처리 발생
+     * @param userid 중복 체크에 필요한 사용자 아이디 객체입니다.
+     * @throws CustomException 사용자의 아이디가 중복된 경우 예외 처리 발생
      * <pre>
-     * 입력된 사용자 이름으로 이미 등록된 사용자가 있는지 확인합니다.
+     * 입력된 사용자 아아디로 이미 등록된 사용자가 있는지 확인합니다.
      * </pre>
      *
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public void checkExistsWithUserName(String username) {
-        if (userRepository.findByUserName(username).isPresent()) {
+    public void checkExistsWithUserId(String userid) {
+        if (userRepository.findByUserId(userid).isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE); // 사용자 아이디가 중복됨
         }
     }
@@ -138,10 +139,16 @@ public class AuthServiceImpl implements AuthService {
      * Author : taking(taking@duck.com)
      */
     private void authenticateByIdAndPassword(UserEntity.LoginDto userLoginDto) {
-        UserEntity user = userRepository.findByUserName(userLoginDto.getUsername())
+
+        if(userLoginDto == null) {  // Body 값이 비어 있을 경우, 예외처리
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 입력 값이 유효하지 않음
+        }
+
+        UserEntity user = userRepository.findByUserId(userLoginDto.getUserid())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));   // 로그인 정보가 유효하지 않음
 
         if(!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+            log.error("{} Account Password is Corrent!", userLoginDto.getUserid());
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 로그인 정보가 정확하지 않음
         }
     }
@@ -169,20 +176,5 @@ public class AuthServiceImpl implements AuthService {
         }
     }
     return userRoles;
-    }
-
-    // TODO: 추후 Production 시, 삭제 후 First DB Migration 으로 대체 예정 (테스트 용도), ROLE_USER 없을 시, "ROLE_USER" 자동 추가
-    private RoleEntity initRole() {
-
-        if (roleRepository.findByName("ROLE_USER").isEmpty()) {
-
-            RoleEntity roleEntity = RoleEntity.builder()
-            .name("ROLE_USER")
-            .build();
-
-            return roleRepository.save(roleEntity);
-
-        }
-        return null;
     }
 }

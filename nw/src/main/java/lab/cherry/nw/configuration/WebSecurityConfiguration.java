@@ -1,8 +1,9 @@
-package lab.cherry.nw.configuration.security;
+package lab.cherry.nw.configuration;
 
-import lab.cherry.nw.configuration.security.jwt.CustomAccessDeniedHandler;
-import lab.cherry.nw.configuration.security.jwt.JwtFilter;
-import lab.cherry.nw.configuration.security.jwt.UnauthorizedHandler;
+import lab.cherry.nw.configuration.filter.JwtFilter;
+import lab.cherry.nw.configuration.filter.RequestLoggingFilter;
+import lab.cherry.nw.error.handler.CustomAccessDeniedHandler;
+import lab.cherry.nw.error.handler.UnauthorizedHandler;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 /**
  * <pre>
@@ -32,22 +34,22 @@ public class WebSecurityConfiguration {
     private final UnauthorizedHandler unauthorizedHandler;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final AuthenticationProvider authenticationProvider;
-//    private final IJwtTokenProvider iJwtTokenProvider;
     private final JwtFilter jwtFilter;
-//    private final RequestLoggingFilter requestLoggingFilter;
+    private final CorsConfigurationSource corsConfigurationSource;
+    private final RequestLoggingFilter requestLoggingFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // 토큰 사용으로 csrf 설정 Disable 처리
         http
-            .cors()
-                .disable()
             .csrf()
                 .disable()
             .formLogin()
                 .disable()
             .httpBasic()
-                .disable();
+                .disable()
+            .cors()
+                .configurationSource(corsConfigurationSource);
 
         // 엔트리 포인트
         http
@@ -77,8 +79,7 @@ public class WebSecurityConfiguration {
 
         http
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(new CorsFilter(), JwtFilter.class);
-//            .addFilterBefore(requestLoggingFilter, CorsFilter.class);
+            .addFilterBefore(requestLoggingFilter, JwtFilter.class);
 
         return http.build();
     }

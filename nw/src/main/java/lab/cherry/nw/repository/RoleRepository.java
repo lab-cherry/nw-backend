@@ -18,18 +18,14 @@ import java.util.Optional;
  * </pre>
  */
 @Repository
-public interface RoleRepository extends JpaRepository<RoleEntity, Integer> {
+public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 
     @Query("select r from RoleEntity r WHERE r.name = ?1")
     Optional<RoleEntity> findByName(String name);
 
     @Override
-    @Query("select r from RoleEntity r")
-    List<RoleEntity> findAll();
-
-    @Override
     @Query("select r from RoleEntity r WHERE r.id = ?1")
-    void deleteById(Integer id);
+    void deleteById(Long id);
 
     @Query("select count(*) from RoleEntity r")
     long countRole();

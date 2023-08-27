@@ -25,16 +25,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Transactional
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userid) throws UsernameNotFoundException {
 
         UserEntity user = userRepository
-                .findByUserName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username : " + username));
+                .findByUserId(userid)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with userid : " + userid));
 
         RoleEntity role = user.getRole();
 
         return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
+                .withUsername(user.getUserid())
                 .password(user.getPassword())
                 .authorities(getSimpleGrantedAuthorities(role))
                 .accountExpired(false)

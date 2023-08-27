@@ -1,6 +1,8 @@
 package lab.cherry.nw.service;
 
 import lab.cherry.nw.model.OrgEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import lab.cherry.nw.model.UserEntity;
 import java.util.List;
@@ -16,10 +18,11 @@ import java.util.List;
  */
 @Component
 public interface OrgService {
-    List<OrgEntity> getOrgs();
-    OrgEntity createOrg(OrgEntity.CreateDto orgCreateDto);
-    void updateOrg(OrgEntity org);
-    void deleteOrg(Long id);
-    OrgEntity findById(Long id);
+    Page<OrgEntity> getOrganizations(Pageable pageable);
+    OrgEntity createOrganization(OrgEntity.CreateDto orgCreateDto);
+    void updateById(Long tsid, OrgEntity.UpdateDto org);
+    OrgEntity findById(Long tsid);
     OrgEntity findByName(String name);
+    void deleteById(Long tsid);
+    Page<OrgEntity> findPageByName(String name, Pageable pageable);
 }

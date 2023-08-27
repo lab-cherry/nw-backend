@@ -11,6 +11,8 @@ spring.jpa.hibernate.ddl-auto=update
 #set your port
 server.port=8888
 #server.error.include-message=always
+server.servlet.encoding.charset=UTF-8
+server.servlet.encoding.force=true
 
 # Swagger springdoc-ui Configuration
 springdoc.default-consumes-media-type=application/json;charset=UTF-8

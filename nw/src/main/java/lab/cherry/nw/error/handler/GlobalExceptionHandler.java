@@ -77,8 +77,8 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
         log.error(e.getMessage());
         //e.printStackTrace();
-        final ErrorResponse response = ErrorResponse.of(ErrorCode.HANDLE_ACCESS_DENIED);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.HANDLE_ACCESS_DENIED.getStatus()));
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.FORBIDDEN);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.FORBIDDEN.getStatus()));
     }
 
     /**

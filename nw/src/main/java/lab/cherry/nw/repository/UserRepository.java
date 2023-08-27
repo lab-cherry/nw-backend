@@ -3,8 +3,12 @@ package lab.cherry.nw.repository;
 import com.github.f4b6a3.tsid.Tsid;
 import lab.cherry.nw.model.UserEntity;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,20 +26,26 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    @Query("select u from UserEntity u LEFT JOIN FETCH u.role WHERE u.username = ?1")
-    Optional<UserEntity> findByUserName(String username);
-
     @Override
-    @Query("select u from UserEntity u LEFT JOIN FETCH u.role")
-    List<UserEntity> findAll();
+    @Query("select u from UserEntity u WHERE u.id = ?1")
+    Optional<UserEntity> findById(Long id);
+
+    @Query("select u from UserEntity u WHERE u.userid = ?1")
+    Page<UserEntity> findPageByUserId(String userid, Pageable pageable);
+
+    @Query("select u from UserEntity u WHERE u.userid = ?1")
+    Optional<UserEntity> findByUserId(String userid);
 
     @Override
     @Query("select u from UserEntity u WHERE u.id = ?1")
     void deleteById(Long id);
 
-//    @Override
-//    @Query("select u from UserEntity u LEFT JOIN FETCH u.roles WHERE u.id = ?1")
-//    Optional<UserEntity> findById(Long id);
-
-    boolean existsByUsername(String username);
+    @Modifying
+    @Query("update UserEntity u set u.username = :username, u.email = :email, u.password = :password where u.id = :id")
+    void updateUser(
+            @Param("id") Long id,
+            @Param("username") String username,
+            @Param("email") String email,
+            @Param("password") String password
+    );
 }
