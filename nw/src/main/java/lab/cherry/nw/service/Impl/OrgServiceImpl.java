@@ -3,7 +3,6 @@ package lab.cherry.nw.service.Impl;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
-import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.repository.OrgRepository;
 import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.util.TsidGenerator;

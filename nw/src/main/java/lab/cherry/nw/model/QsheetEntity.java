@@ -81,29 +81,29 @@ public class QsheetEntity implements Serializable {
     
     @Column(name = "vow")
     @JsonProperty("vow")
-    @Schema(title = "혼인서약", example = "true")
+    @Schema(title = "혼인서약", example = "")
     private String vow;
     
 
     @Column(name = "declaration")
     @JsonProperty("declaration")
-    @Schema(title = "성혼선언", example = "true")
+    @Schema(title = "성혼선언", example = "")
     private String declaration;
     
 
     @Column(name = "song")
     @JsonProperty("song")
-    @Schema(title = "축가", example = "true")
+    @Schema(title = "축가", example = "")
     private String song;
     
     @Column(name = "greeting")
     @JsonProperty("greeting")
-    @Schema(title = "인사", example = "true")
+    @Schema(title = "인사", example = "")
     private String greeting;
 
     @Column(name = "parade")
     @JsonProperty("parade")
-    @Schema(title = "행진", example = "true")
+    @Schema(title = "행진", example = "")
     private String parade;
     
 
@@ -122,19 +122,59 @@ public class QsheetEntity implements Serializable {
     public static class CreateDto {
 
         @NotBlank
-        @Schema(title = "조직 이름", example = "더모멘트")
+        @Schema(title = "큐시트 이름", example = "")
         @Size(min = 4, max = 20, message = "Minimum name length: 4 characters")
         private String name;
 
         @NotBlank
-        @Schema(title = "조직 사업자번호", example = "123-45-67890")
+        @Schema(title = "개식사", example = "")
         @Size(min = 4, max = 40, message = "Minimum biznum length: 4 characters")
-        private String biznum;
+        private String opening;
 
         @NotBlank
-        @Schema(title = "조직 연락처", example = "02-0000-0000")
+        @Schema(title = "화촉점화", example = "")
         @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-        private String contact;
-        
+        private String light;
+
+        @NotBlank
+        @Schema(title = "신랑 입장", example = "")
+        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
+        private String groom_entrance;
+
+        @NotBlank
+        @Schema(title = "신부입장", example = "")
+        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
+        private String bride_entrance;
+
+        @NotBlank
+        @Schema(title = "맞절", example = "")
+        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
+        private String bow;
+
+        @NotBlank
+        @Schema(title = "혼인서약", example = "")
+        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
+        private String vow;
+
+        @NotBlank
+        @Schema(title = "성혼선언", example = "")
+        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
+        private String declaration;
+
+        @NotBlank
+        @Schema(title = "축가", example = "")
+        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
+        private String song;
+
+        @NotBlank
+        @Schema(title = "인사", example = "")
+        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
+        private String greeting;
+
+        @NotBlank
+        @Schema(title = "행진", example = "")
+        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
+        private String parade;
+
         }
 }
