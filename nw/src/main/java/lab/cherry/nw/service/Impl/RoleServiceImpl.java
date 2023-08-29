@@ -3,19 +3,17 @@ package lab.cherry.nw.service.Impl;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
-import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.service.RoleService;
-import lab.cherry.nw.util.TsidGenerator;
+import lab.cherry.nw.util.UuidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * <pre>
@@ -100,9 +98,8 @@ public class RoleServiceImpl implements RoleService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void deleteRole(Integer id) {
-        roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Role with Id " + id + " Not Found."));
-        roleRepository.deleteById(id);
+    public void deleteRole(String id) {
+        roleRepository.delete(roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Role with Id " + id + " Not Found.")));
     }
     
     /**
@@ -153,7 +150,7 @@ public class RoleServiceImpl implements RoleService {
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public RoleEntity findById(Integer id) {
+    public RoleEntity findById(String id) {
         return roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Role with Id " + id + " Not Found."));
     }
 }

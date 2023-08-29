@@ -1,16 +1,35 @@
 package lab.cherry.nw.util.Security;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import lab.cherry.nw.model.RoleEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import java.util.UUID;
 
 @Getter
-@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccessToken {
-    private String token;
+
+    private String accessToken;
+
+    //////////////////////////////////////////////////////////////////////////
+
+    @Getter
+    @Builder
+    @NoArgsConstructor @AllArgsConstructor
+    public static class Get {
+
+        private UUID userSeq;
+        private String userId;
+        private String userName;
+        private RoleEntity userRole;
+        private String accessToken;
+        private String refreshToken;
+
+    }
 
 }

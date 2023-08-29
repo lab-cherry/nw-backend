@@ -1,12 +1,13 @@
 package lab.cherry.nw.repository;
 
 import lab.cherry.nw.model.OrgEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -17,17 +18,17 @@ import java.util.Optional;
  * Related : spring-boot-starter-data-jpa
  * </pre>
  */
-@Repository
-public interface OrgRepository extends JpaRepository<OrgEntity, Long> {
+//@Repository
+public interface OrgRepository extends MongoRepository<OrgEntity, UUID> {
 
-    @Query("select o from OrgEntity o WHERE o.name = ?1")
-    Optional<OrgEntity> findByName(String name);
+    Page<OrgEntity> findAll(Pageable pageable);
 
-    @Override
-    @Query("select o from OrgEntity o")
-    List<OrgEntity> findAll();
+    Page<OrgEntity> findPageByName(String orgname, Pageable pageable);
 
-    @Override
-    @Query("select o from OrgEntity o WHERE o.id = ?1")
-    void deleteById(Long id);
+    Optional<OrgEntity> findById(String id);
+
+    Optional<OrgEntity> findByName(String orgname);
+
+    void deleteById(UUID id);
+
 }

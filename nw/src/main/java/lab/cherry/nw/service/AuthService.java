@@ -16,6 +16,6 @@ import org.springframework.stereotype.Component;
 @Component
 public interface AuthService {
     AccessToken register(UserEntity.RegisterDto userRegisterDto);
-    AccessToken login(UserEntity.LoginDto userLoginDto);
-    void checkExistsWithUserName(String username);
+    AccessToken.Get login(UserEntity.LoginDto userLoginDto);
+    void checkExistsWithUserId(String userid);
 }

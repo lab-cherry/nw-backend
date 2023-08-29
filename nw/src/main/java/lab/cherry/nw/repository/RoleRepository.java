@@ -1,12 +1,13 @@
 package lab.cherry.nw.repository;
 
 import lab.cherry.nw.model.RoleEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -17,20 +18,17 @@ import java.util.Optional;
  * Related : spring-boot-starter-data-jpa
  * </pre>
  */
-@Repository
-public interface RoleRepository extends JpaRepository<RoleEntity, Integer> {
+//@Repository
+public interface RoleRepository extends MongoRepository<RoleEntity, UUID> {
 
-    @Query("select r from RoleEntity r WHERE r.name = ?1")
-    Optional<RoleEntity> findByName(String name);
+    Page<RoleEntity> findAll(Pageable pageable);
 
-    @Override
-    @Query("select r from RoleEntity r")
-    List<RoleEntity> findAll();
+    Page<RoleEntity> findPageByName(String rolename, Pageable pageable);
 
-    @Override
-    @Query("select r from RoleEntity r WHERE r.id = ?1")
-    void deleteById(Integer id);
+    Optional<RoleEntity> findById(String id);
 
-    @Query("select count(*) from RoleEntity r")
-    long countRole();
+    Optional<RoleEntity> findByName(String rolename);
+
+    void deleteById(UUID id);
+
 }
