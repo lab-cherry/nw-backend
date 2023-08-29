@@ -6,7 +6,6 @@ import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.service.RoleService;
-import lab.cherry.nw.util.UuidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

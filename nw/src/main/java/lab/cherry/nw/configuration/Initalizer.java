@@ -7,7 +7,6 @@ import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.OrgRepository;
 import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.repository.UserRepository;
-import lab.cherry.nw.util.UuidGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

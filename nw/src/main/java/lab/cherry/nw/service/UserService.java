@@ -24,4 +24,6 @@ public interface UserService {
     void updateById(String id, UserEntity.UpdateDto user);
     void deleteById(String id);
     Page<UserEntity> findPageByUserId(String userid, Pageable pageable);
+
+    void updateOrgById(String id, List<String> orgIds);
 }

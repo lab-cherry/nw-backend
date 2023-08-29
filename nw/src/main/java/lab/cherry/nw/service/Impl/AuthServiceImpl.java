@@ -9,14 +9,12 @@ import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.AuthService;
 import lab.cherry.nw.service.TokenService;
 import lab.cherry.nw.util.Security.AccessToken;
-import lab.cherry.nw.util.UuidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Optional;

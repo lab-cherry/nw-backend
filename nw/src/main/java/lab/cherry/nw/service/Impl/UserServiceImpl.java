@@ -3,7 +3,9 @@ package lab.cherry.nw.service.Impl;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
+import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.UserEntity;
+import lab.cherry.nw.repository.OrgRepository;
 import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final OrgRepository orgRepository;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -72,6 +75,7 @@ public class UserServiceImpl implements UserService {
     /**
      * [UserServiceImpl] 사용자 수정 함수
      *
+     * @param id 조회할 사용자의 고유번호입니다.
      * @param user 사용자 수정에 필요한 사용자 정보를 담은 개체입니다.
      * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
      * <pre>
@@ -87,6 +91,7 @@ public class UserServiceImpl implements UserService {
         if (user.getUsername() != null || user.getEmail() != null || user.getPassword() != null) {
 
             userEntity = UserEntity.builder()
+                .id(userEntity.getId())
                 .username((user.getUsername() != null) ? user.getUsername() : userEntity.getUsername())
                 .email((user.getEmail() != null) ? user.getEmail() : userEntity.getEmail())
                 .password((user.getPassword() != null) ? passwordEncoder.encode(user.getPassword()) : userEntity.getPassword())
@@ -99,6 +104,31 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
         }
     }
+
+
+    /**
+     * [UserServiceImpl] 사용자 조직 수정 함수
+     *
+     * @param id 조회할 사용자의 고유번호입니다.
+     * @param orgIds 사용자의 조직 정보고유아이번호를 가진 객체입니다.를 담은 리스트입니다.
+     * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 특정 사용자에 대해 사용자 정보를 수정합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    public void updateOrgById(String id, List<String> orgIds) {
+
+        UserEntity userEntity = findById(id);
+
+        List<OrgEntity> selectedOrgs = orgRepository.findAllById(orgIds);
+        userEntity.getOrgs().clear();  // 기존 org 정보 모두 삭제
+        userEntity.getOrgs().addAll(selectedOrgs);  // 새로 선택된 org 정보 추가
+
+        userRepository.save(userEntity);
+    }
+
 
     /**
      * [UserServiceImpl] 사용자 삭제 함수
