@@ -18,7 +18,6 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * <pre>
@@ -37,7 +36,7 @@ public class UserEntity implements Serializable {
 
     @Id
     @JsonProperty("userSeq")
-    @Schema(title = "사용자 고유번호", example = "dad6d905-2414-4d4e-ab01-bcbccdb6f677")
+    @Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
     @JsonProperty("userId")

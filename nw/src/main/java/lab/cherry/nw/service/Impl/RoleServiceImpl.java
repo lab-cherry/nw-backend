@@ -8,11 +8,13 @@ import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.Instant;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * <pre>
@@ -43,8 +45,9 @@ public class RoleServiceImpl implements RoleService {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<RoleEntity> getRoles() {
-        return EntityNotFoundException.requireNotEmpty(roleRepository.findAll(), "Orgs Not Found");
+    public Page<RoleEntity> getRoles(Pageable pageable) {
+        return roleRepository.findAll(pageable);
+        //        return EntityNotFoundException.requireNotEmpty(orgRepository.findAll(), "Roles Not Found");
     }
 
     /**
@@ -61,29 +64,15 @@ public class RoleServiceImpl implements RoleService {
      */
     public RoleEntity createRole(RoleEntity.CreateDto roleCreateDto) {
 
+        Instant instant = Instant.now();
         checkExistsWithRoleName(roleCreateDto.getName()); // 동일한 이름 중복체크
 
         RoleEntity roleEntity = RoleEntity.builder()
             .name("ROLE_" + roleCreateDto.getName())
+            .created_at(instant)
             .build();
 
         return roleRepository.save(roleEntity);
-    }
-    
-    /**
-     * [RoleServiceImpl] 역할 수정 함수
-     *
-     * @param role 역할 수정에 필요한 정보를 담은 개체입니다.
-     * @throws EntityNotFoundException 역할 정보가 없을 경우 예외 처리 발생
-     * <pre>
-     * 특정 역할에 대한 정보를 수정합니다.
-     * </pre>
-     *
-     * Author : taking(taking@duck.com)
-     */
-    public void updateRole(RoleEntity role) {
-        findByName(role.getName());
-        roleRepository.save(role);
     }
 
     /**
@@ -97,7 +86,7 @@ public class RoleServiceImpl implements RoleService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void deleteRole(String id) {
+    public void deleteById(String id) {
         roleRepository.delete(roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Role with Id " + id + " Not Found.")));
     }
     
@@ -151,5 +140,10 @@ public class RoleServiceImpl implements RoleService {
     @Transactional(readOnly = true)
     public RoleEntity findById(String id) {
         return roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Role with Id " + id + " Not Found."));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<RoleEntity> findPageByName(String name, Pageable pageable) {
+        return roleRepository.findPageByName(name, pageable);
     }
 }

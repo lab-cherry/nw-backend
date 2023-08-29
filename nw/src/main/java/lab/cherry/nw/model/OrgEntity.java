@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.UUID;
 
 /**
  * <pre>
@@ -33,7 +32,7 @@ public class OrgEntity implements Serializable {
 
     @Id
     @JsonProperty("orgSeq")
-    @Schema(title = "조직 조직 고유번호", example = "dad6d905-2414-4d4e-ab01-bcbccdb6f677")
+    @Schema(title = "조직 조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
     @JsonProperty("orgName")

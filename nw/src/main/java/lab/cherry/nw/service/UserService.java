@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import lab.cherry.nw.model.UserEntity;
 import java.util.List;
-import java.util.UUID;
 
 
 /**

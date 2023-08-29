@@ -1,5 +1,6 @@
 package lab.cherry.nw.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.util.UUID;
+import java.time.Instant;
 
 /**
  * <pre>
@@ -30,13 +31,18 @@ public class RoleEntity implements Serializable {
 
     @Id
     @JsonProperty("roleSeq")
-    @Schema(title = "사용자 고유번호", example = "dad6d905-2414-4d4e-ab01-bcbccdb6f677")
+    @Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
     @NotNull
     @JsonProperty("roleName")
     @Schema(title = "권한 이름", example = "ROLE_USER")
     private String name;
+
+    @JsonProperty("created_at")
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
+    @Schema(title = "권한 생성 시간", example = "2023-07-04 12:00:00")
+    private Instant created_at;
 
     //////////////////////////////////////////////////////////////////////////
 

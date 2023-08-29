@@ -89,6 +89,8 @@ public class UserController {
             @PathVariable("id") String id,
             @RequestBody UserEntity.UpdateDto userEntity) {
 
+        log.info("[UserController] updateUser...!");
+
         userService.updateById(id, userEntity);
 
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
@@ -114,6 +116,8 @@ public class UserController {
     public ResponseEntity<?> updateUserOrgs(
             @PathVariable("id") String id,
             @RequestBody Map<String, List<String>> request) {
+
+            log.info("[UserController] updateUserOrgs...!");
 
             List<String> selectedOrgIds = request.get("orgIds");
 
@@ -166,7 +170,9 @@ public class UserController {
     @DeleteMapping("{id}")
     @Operation(summary = "사용자 삭제", description = "사용자를 삭제합니다.")
     public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
+
         log.info("[UserController] deleteUser...!");
+
         userService.deleteById(id);
 
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);

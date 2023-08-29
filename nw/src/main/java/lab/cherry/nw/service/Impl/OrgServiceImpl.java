@@ -62,6 +62,7 @@ public class OrgServiceImpl implements OrgService {
      * Author : taking(taking@duck.com)
      */
     public OrgEntity createOrganization(OrgEntity.CreateDto orgCreateDto) {
+
         Instant instant = Instant.now();
         checkExistsWithOrgName(orgCreateDto.getName()); // 동일한 이름 중복체크
 
