@@ -1,7 +1,9 @@
 package lab.cherry.nw.service;
 
-import lab.cherry.nw.model.QsheetEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import lab.cherry.nw.model.QsheetEntity;
 import java.util.List;
 
 
@@ -15,10 +17,12 @@ import java.util.List;
  */
 @Component
 public interface QsheetService {
-    List<QsheetEntity> getQsheets();
-    QsheetEntity createQsheet(QsheetEntity.CreateDto qsheetCreateDto);
-    void updateQsheet(QsheetEntity org);
-    void deleteQsheet(Long id);
-    QsheetEntity findById(Long id);
-    QsheetEntity findByName(String name);
+ Page<QsheetEntity> getUsers(Pageable pageable);
+// QsheetEntity findById(String id);
+// QsheetEntity findByUserId(String userid);
+// void deleteById(String id);
+// Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable);
+// Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable);
+
+// void updateOrgById(String id, List<String> orgIds);
 }
