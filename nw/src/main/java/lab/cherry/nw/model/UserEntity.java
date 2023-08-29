@@ -68,6 +68,10 @@ public class UserEntity implements Serializable {
     @Schema(title = "사용자 활성화 여부", example = "true")
     private boolean enabled;
 
+    @JsonProperty("emailVerified")
+    @Column(name = "IS_EMAIL_VERIFIED", nullable = false)
+    private Boolean isEmailVerified;
+
     @Schema(title = "사용자 생성 시간", example = "2023-07-04T12:00:00.000+00:00")
     @CreationTimestamp
     private Timestamp created_at;
@@ -86,6 +90,9 @@ public class UserEntity implements Serializable {
                     name = "role_id",referencedColumnName = "id"
             )
     )
+
+
+
     private Set<RoleEntity> roles  = new HashSet<>();
 
 //////////////////////////////////////////////////////////////////////////
@@ -110,6 +117,7 @@ public class UserEntity implements Serializable {
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, max = 40)
         private String password;
+
     }
 
     @Getter
