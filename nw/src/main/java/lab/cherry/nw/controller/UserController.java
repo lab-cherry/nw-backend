@@ -17,8 +17,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <pre>
@@ -89,11 +89,44 @@ public class UserController {
             @PathVariable("id") String id,
             @RequestBody UserEntity.UpdateDto userEntity) {
 
+        log.info("[UserController] updateUser...!");
+
         userService.updateById(id, userEntity);
 
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
+
+
+    /**
+     * [UserController] 사용자 조직 업데이트 함수
+     *
+     * @param id 사용자 고유번호를 입력합니다.
+     * @param request 사용자 의 의 조직을 업데이트하기 위한 조직 고유아이디를 갖고 있는 객체입니다.업데이트에 필요한 사용자 정보를 담고 있는 객체입니다.
+     * @return
+     * <pre>
+     * true  : 업데이트된 사용자 정보를 반환합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @PutMapping("{id}/orgs")
+    @Operation(summary = "사용자 조직 업데이트", description = "특정 사용자의 조직 정보를 업데이트합니다.")
+    public ResponseEntity<?> updateUserOrgs(
+            @PathVariable("id") String id,
+            @RequestBody Map<String, List<String>> request) {
+
+            log.info("[UserController] updateUserOrgs...!");
+
+            List<String> selectedOrgIds = request.get("orgIds");
+
+            userService.updateOrgById(id, selectedOrgIds);
+
+            final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+            return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+    }
+
 
     /**
      * [UserController] 특정 사용자 조회 함수
@@ -137,7 +170,9 @@ public class UserController {
     @DeleteMapping("{id}")
     @Operation(summary = "사용자 삭제", description = "사용자를 삭제합니다.")
     public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
+
         log.info("[UserController] deleteUser...!");
+
         userService.deleteById(id);
 
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);

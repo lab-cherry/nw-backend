@@ -1,10 +1,7 @@
 # MongoDB connection properties
 spring.data.mongodb.uri=mongodb://databaseUserName:databaseUserPass@databaseURI:databasePort/databaseName?authSource=admin
-
-spring.jpa.open-in-view=false
-spring.jpa.show-sql=true
-spring.jpa.hibernate.ddl-auto=update
-# Production?? validate(???? ???? ?? ??????? ??), none(???? ??)
+spring.jackson.default-property-inclusion=NON_NULL
+# logging.level.ROOT=DEBUG
 
 #set your port
 server.port=8888

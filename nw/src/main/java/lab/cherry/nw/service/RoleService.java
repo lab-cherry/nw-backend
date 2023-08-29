@@ -1,10 +1,11 @@
 package lab.cherry.nw.service;
 
 import lab.cherry.nw.model.RoleEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
 
 
 /**
@@ -17,10 +18,10 @@ import java.util.UUID;
  */
 @Component
 public interface RoleService {
-    List<RoleEntity> getRoles();
-    RoleEntity createRole(RoleEntity.CreateDto roleCreateDto);
-    void updateRole(RoleEntity user);
-    void deleteRole(String id);
+    Page<RoleEntity> getRoles(Pageable pageable);
+    RoleEntity createRole(RoleEntity.CreateDto orgCreateDto);
     RoleEntity findById(String id);
     RoleEntity findByName(String name);
+    void deleteById(String id);
+    Page<RoleEntity> findPageByName(String name, Pageable pageable);
 }

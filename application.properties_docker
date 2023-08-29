@@ -1,17 +1,16 @@
 # MongoDB connection properties
 spring.data.mongodb.uri=mongodb://${DATABASE_USERID:-nw}:${DATABASE_USERPASS:-nw}@${DATABASE_HOST:nw-db}:${DATABASE_PORT:27017}/${DATABASE_NAME:-nw}?authSource=admin
-
-spring.jpa.open-in-view=false
-spring.jpa.show-sql=true
-spring.jpa.hibernate.ddl-auto=update
+spring.jackson.default-property-inclusion=NON_NULL
+# logging.level.ROOT=DEBUG
 
 #set your port
 server.port=8888
 #server.error.include-message=always
+server.servlet.encoding.charset=UTF-8
+server.servlet.encoding.force=true
 
 # Swagger springdoc-ui Configuration
-springdoc.default-consumes-media-type=application/json;charset=UTF-8
-springdoc.default-produces-media-type=application/json;charset=UTF-8
+spring.messages.encoding=UTF-8
 springdoc.api-docs.path=/docs/json
 springdoc.swagger-ui.path=/docs
 springdoc.api-docs.groups.enabled=true
@@ -20,6 +19,6 @@ springdoc.swagger-ui.tags-sorter=alpha
 springdoc.swagger-ui.operations-sorter=alpha
 
 # App Properties
-#echo 'lab-cherry-team-nw-project-secret-base-by-cherrylab'|base64
-lab.cherry.nw.jwtSecret= bGFiLWNoZXJyeS10ZWFtLW53LXByb2plY3Qtc2VjcmV0LWJhc2UtYnktY2hlcnJ5bGFiCg==
+#echo 'com-innogrid-medge-project-rndplan-dev-1team-secret-base-by-taking'|base64
+lab.cherry.nw.jwtSecret= 29tLWlubm9ncmlkLW1lZGdlLXByb2plY3Qtcm5kcGxhbi1kZXYtMXRlYW0tc2VjcmV0LWJhc2UtYnktdGFrYWluZwo=
 lab.cherry.nw.jwtExpirationMs= 86400000

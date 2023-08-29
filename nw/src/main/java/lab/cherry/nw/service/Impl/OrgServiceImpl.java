@@ -5,7 +5,6 @@ import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.repository.OrgRepository;
 import lab.cherry.nw.service.OrgService;
-import lab.cherry.nw.util.UuidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -13,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.UUID;
 
 /**
  * <pre>
@@ -64,6 +61,7 @@ public class OrgServiceImpl implements OrgService {
      * Author : taking(taking@duck.com)
      */
     public OrgEntity createOrganization(OrgEntity.CreateDto orgCreateDto) {
+
         Instant instant = Instant.now();
         checkExistsWithOrgName(orgCreateDto.getName()); // 동일한 이름 중복체크
 
@@ -96,6 +94,7 @@ public class OrgServiceImpl implements OrgService {
         if (org.getName() != null || org.getBiznum() != null || org.getContact() != null) {
 
             orgEntity = OrgEntity.builder()
+                .id(orgEntity.getId())
                 .name((org.getName() != null) ? org.getName() : orgEntity.getName())
                 .biznum((org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum())
                 .contact((org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum())

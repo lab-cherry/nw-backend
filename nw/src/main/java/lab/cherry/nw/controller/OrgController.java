@@ -10,7 +10,6 @@ import jakarta.validation.Valid;
 import lab.cherry.nw.error.ErrorResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.OrgEntity;
-import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.util.Common;
@@ -24,8 +23,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 /**
  * <pre>
@@ -98,6 +95,8 @@ public class OrgController {
     })
     public ResponseEntity<?> createOrganization(@Valid @RequestBody(required = false) OrgEntity.CreateDto orgCreateDto) {
 
+        log.info("[OrgController] createOrganization...!");
+
         OrgEntity orgEntity =  orgService.createOrganization(orgCreateDto);
 
         //         Header 에 등록
@@ -124,6 +123,8 @@ public class OrgController {
     @PatchMapping("{id}")
     @Operation(summary = "조직 업데이트", description = "특정 조직을 업데이트합니다.")
     public ResponseEntity<?> updateOrgById(@PathVariable("id") String id, @RequestBody OrgEntity.UpdateDto orgEntity) {
+
+        log.info("[OrgController] updateOrgById...!");
 
         orgService.updateById(id, orgEntity);
 
@@ -165,11 +166,11 @@ public class OrgController {
      *
      * Author : taking(taking@duck.com)
      */
-    @DeleteMapping("{tsid}")
+    @DeleteMapping("{id}")
     @Operation(summary = "조직 삭제", description = "조직을 삭제합니다.")
     public ResponseEntity<?> deleteOrganization(@PathVariable("id") String id) {
 
-        log.info("[UserController] deleteUser...!");
+        log.info("[UserController] deleteOrganization...!");
 
         orgService.deleteById(id);
 
