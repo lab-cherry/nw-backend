@@ -1,5 +1,7 @@
-# MongoDB connection properties
-spring.data.mongodb.uri=mongodb://databaseUserName:databaseUserPass@databaseURI:databasePort/databaseName?authSource=admin
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+spring.datasource.url=jdbc:mariadb://152.69.228.245:5002/nw
+spring.datasource.username=cherrylab
+spring.datasource.password=cherrylab
 
 spring.jpa.open-in-view=false
 spring.jpa.show-sql=true
@@ -7,8 +9,8 @@ spring.jpa.hibernate.ddl-auto=update
 # Production?? validate(???? ???? ?? ??????? ??), none(???? ??)
 
 #set your port
-server.port=8888
-#server.error.include-message=always
+server.port=10001
+server.error.include-message=always
 server.servlet.encoding.charset=UTF-8
 server.servlet.encoding.force=true
 

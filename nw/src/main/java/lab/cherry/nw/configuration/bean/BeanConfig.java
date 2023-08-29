@@ -30,19 +30,18 @@ import java.util.Arrays;
 @Configuration
 @RequiredArgsConstructor
 public class BeanConfig {
+
+    private final CustomUserDetailsService customUserDetailsService;
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(12);
-    }
-    @Bean
-    public UserDetailsService userDetailsService(){
-        return new CustomUserDetailsService();
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setUserDetailsService(customUserDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }

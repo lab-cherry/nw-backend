@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 /**
  * <pre>
  * ClassName : UserController
@@ -71,7 +73,7 @@ public class UserController {
     /**
      * [UserController] 사용자 업데이트 함수
      *
-     * @param tsid 사용자 고유번호를 입력합니다.
+     * @param id 사용자 고유번호를 입력합니다.
      * @param userEntity 사용자 업데이트에 필요한 사용자 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
@@ -81,13 +83,13 @@ public class UserController {
      *
      * Author : taking(taking@duck.com)
      */
-    @PatchMapping("{tsid}")
+    @PatchMapping("{id}")
     @Operation(summary = "사용자 업데이트", description = "특정 사용자를 업데이트합니다.")
     public ResponseEntity<?> updateUser(
-            @PathVariable("tsid") Long tsid,
+            @PathVariable("id") String id,
             @RequestBody UserEntity.UpdateDto userEntity) {
 
-        userService.updateById(tsid, userEntity);
+        userService.updateById(id, userEntity);
 
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
@@ -96,7 +98,7 @@ public class UserController {
     /**
      * [UserController] 특정 사용자 조회 함수
      *
-     * @param tsid 사용자 고유번호를 입력합니다.
+     * @param id 사용자 고유번호를 입력합니다.
      * @return
      * <pre>
      * true  : 특정 사용자 정보를 반환합니다.
@@ -109,15 +111,15 @@ public class UserController {
      *
      * Author : taking(taking@duck.com)
      */
-    @GetMapping("{tsid}")
+    @GetMapping("{id}")
     @Operation(summary = "사용자 찾기", description = "사용자를 조회합니다.")
     public ResponseEntity<?> findUser(
-            @PathVariable("tsid") Long tsid) {
+            @PathVariable("id") String id) {
 
         log.info("[UserController] findUser...!");
 
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
-        return new ResponseEntity<>(userService.findById(tsid), new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
@@ -134,7 +136,7 @@ public class UserController {
      */
     @DeleteMapping("{id}")
     @Operation(summary = "사용자 삭제", description = "사용자를 삭제합니다.")
-    public ResponseEntity<?> deleteById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
         log.info("[UserController] deleteUser...!");
         userService.deleteById(id);
 

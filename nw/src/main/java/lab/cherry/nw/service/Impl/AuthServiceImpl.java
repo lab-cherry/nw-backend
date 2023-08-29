@@ -9,7 +9,7 @@ import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.AuthService;
 import lab.cherry.nw.service.TokenService;
 import lab.cherry.nw.util.Security.AccessToken;
-import lab.cherry.nw.util.TsidGenerator;
+import lab.cherry.nw.util.UuidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,14 +61,13 @@ public class AuthServiceImpl implements AuthService {
         RoleEntity roleEntity = roleRepository.findByName("ROLE_USER").get();
 
         UserEntity userEntity = UserEntity.builder()
-            .id(TsidGenerator.next())
             .userid(userRegisterDto.getUserid())
             .username(userRegisterDto.getUsername())
             .email(userRegisterDto.getEmail())
             .password(passwordEncoder.encode(userRegisterDto.getPassword()))
             .role(roleEntity)
             .enabled(true)
-            .created_at(Timestamp.from(instant))
+            .created_at(instant)
             .build();
 
         userRepository.save(userEntity);
@@ -96,12 +95,11 @@ public class AuthServiceImpl implements AuthService {
 
         authenticateByIdAndPassword(userLoginDto);
 
-        Optional<UserEntity> userEntity = userRepository.findByUserId(userLoginDto.getUserid());
+        Optional<UserEntity> userEntity = userRepository.findByuserid(userLoginDto.getUserid());
         AccessToken accessToken = tokenService.generateJwtToken(userLoginDto.getUserid(), userEntity.get().getRole());
 
         return AccessToken.Get.builder()
             .accessToken(accessToken.getAccessToken())
-            .userSeq(userEntity.get().getId())
             .userId(userEntity.get().getUserid())
             .userName(userEntity.get().getUsername())
             .userRole(userEntity.get().getRole())
@@ -122,7 +120,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Transactional(readOnly = true)
     public void checkExistsWithUserId(String userid) {
-        if (userRepository.findByUserId(userid).isPresent()) {
+        if (userRepository.findByuserid(userid).isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE); // 사용자 아이디가 중복됨
         }
     }
@@ -144,7 +142,7 @@ public class AuthServiceImpl implements AuthService {
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 입력 값이 유효하지 않음
         }
 
-        UserEntity user = userRepository.findByUserId(userLoginDto.getUserid())
+        UserEntity user = userRepository.findByuserid(userLoginDto.getUserid())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));   // 로그인 정보가 유효하지 않음
 
         if(!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {

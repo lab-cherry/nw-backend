@@ -23,7 +23,7 @@ public class AccessToken {
     @NoArgsConstructor @AllArgsConstructor
     public static class Get {
 
-        private Long userSeq;
+        private UUID userSeq;
         private String userId;
         private String userName;
         private RoleEntity userRole;

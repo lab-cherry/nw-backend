@@ -25,6 +25,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 /**
  * <pre>
  * ClassName : OrgController
@@ -109,7 +111,7 @@ public class OrgController {
     /**
      * [OrgController] 조직 업데이트 함수
      *
-     * @param tsid 조직 고유번호를 입력합니다.
+     * @param id 조직 고유번호를 입력합니다.
      * @param orgEntity 조직 업데이트에 필요한 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
@@ -119,20 +121,20 @@ public class OrgController {
      *
      * Author : taking(taking@duck.com)
      */
-    @PatchMapping("{tsid}")
+    @PatchMapping("{id}")
     @Operation(summary = "조직 업데이트", description = "특정 조직을 업데이트합니다.")
-    public ResponseEntity<?> updateOrgById(@PathVariable("tsid") Long tsid, @RequestBody OrgEntity.UpdateDto orgEntity) {
+    public ResponseEntity<?> updateOrgById(@PathVariable("id") String id, @RequestBody OrgEntity.UpdateDto orgEntity) {
 
-        orgService.updateById(tsid, orgEntity);
+        orgService.updateById(id, orgEntity);
 
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
-        return new ResponseEntity<>(orgService.findById(tsid), new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(orgService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
      * [OrgController] 특정 조직 조회 함수
      *
-     * @param tsid 조직 고유번호를 입력합니다.
+     * @param id 조직 고유번호를 입력합니다.
      * @return
      * <pre>
      * true  : 특정 조직 정보를 반환합니다.
@@ -141,20 +143,20 @@ public class OrgController {
      *
      * Author : taking(taking@duck.com)
      */
-    @GetMapping("{tsid}")
+    @GetMapping("{id}")
     @Operation(summary = "ID로 조직 찾기", description = "조직을 조회합니다.")
-    public ResponseEntity<?> findByOrgId(@PathVariable("tsid") Long tsid) {
+    public ResponseEntity<?> findByOrgId(@PathVariable("id") String id) {
 
         log.info("[OrgController] findByOrgId...!");
 
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
-        return new ResponseEntity<>(orgService.findById(tsid), new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(orgService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
      * [OrgController] 특정 조직 삭제 함수
      *
-     * @param tsid 조직 고유번호를 입력합니다.
+     * @param id 조직 고유번호를 입력합니다.
      * @return
      * <pre>
      * true  : 특정 조직 삭제처리합니다.
@@ -165,11 +167,11 @@ public class OrgController {
      */
     @DeleteMapping("{tsid}")
     @Operation(summary = "조직 삭제", description = "조직을 삭제합니다.")
-    public ResponseEntity<?> deleteOrganization(@PathVariable("tsid") Long tsid) {
+    public ResponseEntity<?> deleteOrganization(@PathVariable("id") String id) {
 
         log.info("[UserController] deleteUser...!");
 
-        orgService.deleteById(tsid);
+        orgService.deleteById(id);
 
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);

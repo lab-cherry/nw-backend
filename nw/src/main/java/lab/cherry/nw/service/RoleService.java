@@ -4,6 +4,7 @@ import lab.cherry.nw.model.RoleEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -19,7 +20,7 @@ public interface RoleService {
     List<RoleEntity> getRoles();
     RoleEntity createRole(RoleEntity.CreateDto roleCreateDto);
     void updateRole(RoleEntity user);
-    void deleteRole(Long id);
-    RoleEntity findById(Long id);
+    void deleteRole(String id);
+    RoleEntity findById(String id);
     RoleEntity findByName(String name);
 }

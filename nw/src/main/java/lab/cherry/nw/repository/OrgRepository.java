@@ -3,14 +3,11 @@ package lab.cherry.nw.repository;
 import lab.cherry.nw.model.OrgEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -21,29 +18,17 @@ import java.util.Optional;
  * Related : spring-boot-starter-data-jpa
  * </pre>
  */
-@Repository
-public interface OrgRepository extends JpaRepository<OrgEntity, Long> {
+//@Repository
+public interface OrgRepository extends MongoRepository<OrgEntity, UUID> {
 
-    @Override
-    @Query("select o from OrgEntity o WHERE o.id = ?1")
-    Optional<OrgEntity> findById(Long id);
+    Page<OrgEntity> findAll(Pageable pageable);
 
-    @Query("select o from OrgEntity o WHERE o.name = ?1")
-    Optional<OrgEntity> findByName(String name);
+    Page<OrgEntity> findPageByName(String orgname, Pageable pageable);
 
-    @Query("select o from OrgEntity o WHERE o.name = ?1")
-    Page<OrgEntity> findPageByName(String name, Pageable pageable);
+    Optional<OrgEntity> findById(String id);
 
-    @Override
-    @Query("select o from OrgEntity o WHERE o.id = ?1")
-    void deleteById(Long id);
+    Optional<OrgEntity> findByName(String orgname);
 
-    @Modifying
-    @Query("update OrgEntity o set o.name = :name, o.biznum = :biznum, o.contact = :contact where o.id = :id")
-    void updateOrganization(
-            @Param("id") Long id,
-            @Param("name") String name,
-            @Param("biznum") String biznum,
-            @Param("contact") String contact
-    );
+    void deleteById(UUID id);
+
 }

@@ -6,7 +6,7 @@ import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.repository.OrgRepository;
 import lab.cherry.nw.service.OrgService;
-import lab.cherry.nw.util.TsidGenerator;
+import lab.cherry.nw.util.UuidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.UUID;
 
 /**
  * <pre>
@@ -68,12 +69,11 @@ public class OrgServiceImpl implements OrgService {
         checkExistsWithOrgName(orgCreateDto.getName()); // 동일한 이름 중복체크
 
         OrgEntity orgEntity = OrgEntity.builder()
-            .id(TsidGenerator.next())
             .name(orgCreateDto.getName())
             .biznum(orgCreateDto.getBiznum())
             .contact(orgCreateDto.getContact())
             .enabled(true)
-            .created_at(Timestamp.from(instant))
+            .created_at(instant)
             .build();
 
         return orgRepository.save(orgEntity);
@@ -90,17 +90,19 @@ public class OrgServiceImpl implements OrgService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void updateById(Long tsid, OrgEntity.UpdateDto org) {
+    public void updateById(String id, OrgEntity.UpdateDto org) {
 
-        OrgEntity orgEntity = findById(tsid);
+        OrgEntity orgEntity = findById(id);
 
         if (org.getName() != null || org.getBiznum() != null || org.getContact() != null) {
 
-            String orgName = (org.getName() != null) ? org.getName() : orgEntity.getName();
-            String bizNum = (org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum();
-            String contact = (org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum();
+            orgEntity = OrgEntity.builder()
+                .name((org.getName() != null) ? org.getName() : orgEntity.getName())
+                .biznum((org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum())
+                .contact((org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum())
+                .build();
 
-            orgRepository.updateOrganization(tsid, orgName, bizNum, contact);
+            orgRepository.save(orgEntity);
 
         } else {
             log.error("[OrgServiceImpl - udpateOrganization] orgName, bizNum, contact 수정 가능합니다.");
@@ -119,7 +121,7 @@ public class OrgServiceImpl implements OrgService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         orgRepository.delete(orgRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Org with Id " + id + " Not Found.")));
     }
     
@@ -154,7 +156,7 @@ public class OrgServiceImpl implements OrgService {
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public OrgEntity findById(Long id) {
+    public OrgEntity findById(String id) {
         return orgRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Org with Id " + id + " Not Found."));
     }
 

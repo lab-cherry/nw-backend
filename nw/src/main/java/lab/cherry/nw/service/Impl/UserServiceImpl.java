@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * <pre>
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional(readOnly = true)
     public UserEntity findByUserId(String userid) {
-        return userRepository.findByUserId(userid).orElseThrow(() -> new EntityNotFoundException("User with userId " + userid + " Not Found."));
+        return userRepository.findByuserid(userid).orElseThrow(() -> new EntityNotFoundException("User with userId " + userid + " Not Found."));
     }
 
     /**
@@ -79,17 +80,19 @@ public class UserServiceImpl implements UserService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void updateById(Long tsid, UserEntity.UpdateDto user) {
+    public void updateById(String id, UserEntity.UpdateDto user) {
 
-        UserEntity userEntity = findById(tsid);
+        UserEntity userEntity = findById(id);
 
         if (user.getUsername() != null || user.getEmail() != null || user.getPassword() != null) {
 
-            String username = (user.getUsername() != null) ? user.getUsername() : userEntity.getUsername();
-            String email = (user.getEmail() != null) ? user.getEmail() : userEntity.getEmail();
-            String password = (user.getPassword() != null) ? passwordEncoder.encode(user.getPassword()) : userEntity.getPassword();
+            userEntity = UserEntity.builder()
+                .username((user.getUsername() != null) ? user.getUsername() : userEntity.getUsername())
+                .email((user.getEmail() != null) ? user.getEmail() : userEntity.getEmail())
+                .password((user.getPassword() != null) ? passwordEncoder.encode(user.getPassword()) : userEntity.getPassword())
+                .build();
 
-            userRepository.updateUser(tsid, username, email, password);
+            userRepository.save(userEntity);
 
         } else {
             log.error("[UserServiceImpl - udpateUser] userName, userEmail, userPassword만 수정 가능합니다.");
@@ -100,7 +103,7 @@ public class UserServiceImpl implements UserService {
     /**
      * [UserServiceImpl] 사용자 삭제 함수
      *
-     * @param tsid 삭제할 사용자의 식별자입니다.
+     * @param id 삭제할 사용자의 식별자입니다.
      * @throws EntityNotFoundException 해당 ID의 사용자 정보가 없을 경우 예외 처리 발생
      * <pre>
      * 입력한 id를 가진 사용자 정보를 삭제합니다.
@@ -108,8 +111,8 @@ public class UserServiceImpl implements UserService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void deleteById(Long tsid) {
-        userRepository.delete(userRepository.findById(tsid).orElseThrow(() -> new EntityNotFoundException("User with Id " + tsid + " Not Found.")));
+    public void deleteById(String id) {
+        userRepository.delete(userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with Id " + id + " Not Found.")));
     }
 
     /**
@@ -125,12 +128,12 @@ public class UserServiceImpl implements UserService {
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public UserEntity findById(Long id) {
+    public UserEntity findById(String id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with Id " + id + " Not Found."));
     }
 
     @Transactional(readOnly = true)
     public Page<UserEntity> findPageByUserId(String userid, Pageable pageable) {
-        return userRepository.findPageByUserId(userid, pageable);
+        return userRepository.findPageByUserid(userid, pageable);
     }
 }

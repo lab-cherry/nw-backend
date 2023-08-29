@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import lab.cherry.nw.model.UserEntity;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -18,9 +19,9 @@ import java.util.List;
 @Component
 public interface UserService {
     Page<UserEntity> getUsers(Pageable pageable);
-    UserEntity findById(Long tsid);
+    UserEntity findById(String id);
     UserEntity findByUserId(String userid);
-    void updateById(Long tsid, UserEntity.UpdateDto user);
-    void deleteById(Long tsid);
+    void updateById(String id, UserEntity.UpdateDto user);
+    void deleteById(String id);
     Page<UserEntity> findPageByUserId(String userid, Pageable pageable);
 }

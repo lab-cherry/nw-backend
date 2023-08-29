@@ -32,7 +32,7 @@ public class UnauthorizedHandler implements AuthenticationEntryPoint {
      * }
      * </pre>
      *
-     * @author taking(taking@duck.com)
+     * Author : taking(taking@duck.com)
      *
      */
     @Override

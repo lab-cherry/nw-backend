@@ -1,7 +1,5 @@
-spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
-spring.datasource.url=jdbc:mariadb://${DATABASE_HOST:nw-db}:${DATABASE_PORT:-3306}/${DATABASE_NAME:-nw}
-spring.datasource.username=${DATABASE_USERID}
-spring.datasource.password=${DATABASE_USERPASS}
+# MongoDB connection properties
+spring.data.mongodb.uri=mongodb://${DATABASE_USERID:-nw}:${DATABASE_USERPASS:-nw}@${DATABASE_HOST:nw-db}:${DATABASE_PORT:27017}/${DATABASE_NAME:-nw}?authSource=admin
 
 spring.jpa.open-in-view=false
 spring.jpa.show-sql=true

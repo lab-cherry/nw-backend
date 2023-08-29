@@ -7,17 +7,14 @@ import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.OrgRepository;
 import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.repository.UserRepository;
-import lab.cherry.nw.util.TsidGenerator;
+import lab.cherry.nw.util.UuidGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -31,12 +28,10 @@ public class Initalizer implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
 
-        System.out.println("[#1] Init Roles");
 
         if(roleRepository.findByName("ROLE_ADMIN").isEmpty()) {
 
             RoleEntity roleEntity = RoleEntity.builder()
-                .id(TsidGenerator.next())
                 .name("ROLE_ADMIN")
                 .build();
             
@@ -47,38 +42,31 @@ public class Initalizer implements ApplicationRunner {
         if(roleRepository.findByName("ROLE_USER").isEmpty()) {
 
             RoleEntity roleEntity = RoleEntity.builder()
-                .id(TsidGenerator.next())
                 .name("ROLE_USER")
                 .build();
 
             roleRepository.save(roleEntity);
         }
-
-        System.out.println("[#2] Init Organization");
         
         if(orgRepository.findByName("DEFAULT").isEmpty()) {
 
             Instant instant = Instant.now();
             OrgEntity orgEntity = OrgEntity.builder()
-                    .id(TsidGenerator.next())
                     .name("DEFAULT")
                     .biznum("123-45-67890")
                     .contact("02-0000-0000")
                     .enabled(true)
-                    .created_at(Timestamp.from(instant))
+                    .created_at(instant)
                     .build();
 
             orgRepository.save(orgEntity);
         }
         
-        System.out.println("[#3] Init Users");
-        
-        if(userRepository.findByUserId("admin").isEmpty()) {
+        if(userRepository.findByuserid("admin").isEmpty()) {
 
             RoleEntity roleEntity = roleRepository.findByName("ROLE_ADMIN").get();
             
             userRepository.save(UserEntity.builder()
-                .id(TsidGenerator.next())
                 .userid("admin")
                 .username("관리자")
                 .password(passwordEncoder.encode("admin"))
@@ -89,12 +77,11 @@ public class Initalizer implements ApplicationRunner {
         }
         
         // TODO: 최종 개발 완료 후 삭제 처리 예정
-        if(userRepository.findByUserId("cherrylab").isEmpty()) {
+        if(userRepository.findByuserid("cherrylab").isEmpty()) {
 
             RoleEntity roleEntity = roleRepository.findByName("ROLE_USER").get();
         
             userRepository.save(UserEntity.builder()
-                .id(TsidGenerator.next())
                 .userid("cherrylab")
                 .username("체리랩")
                 .password(passwordEncoder.encode("cherrylab"))
