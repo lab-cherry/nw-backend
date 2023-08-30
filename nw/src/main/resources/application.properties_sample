@@ -1,20 +1,16 @@
-spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
-spring.datasource.url=jdbc:mariadb://databaseURI:databasePort/databaseName
-spring.datasource.username=databaseConnUserName
-spring.datasource.password=databaseConnUserPass
-
-spring.jpa.open-in-view=false
-spring.jpa.show-sql=true
-spring.jpa.hibernate.ddl-auto=update
-# Production?? validate(???? ???? ?? ??????? ??), none(???? ??)
+# MongoDB connection properties
+spring.data.mongodb.uri=mongodb://databaseUserName:databaseUserPass@databaseURI:databasePort/databaseName?authSource=admin
+spring.jackson.default-property-inclusion=NON_NULL
+# logging.level.ROOT=DEBUG
 
 #set your port
 server.port=8888
 #server.error.include-message=always
+server.servlet.encoding.charset=UTF-8
+server.servlet.encoding.force=true
 
 # Swagger springdoc-ui Configuration
-springdoc.default-consumes-media-type=application/json;charset=UTF-8
-springdoc.default-produces-media-type=application/json;charset=UTF-8
+spring.messages.encoding=UTF-8
 springdoc.api-docs.path=/docs/json
 springdoc.swagger-ui.path=/docs
 springdoc.api-docs.groups.enabled=true

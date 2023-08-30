@@ -1,20 +1,23 @@
 package lab.cherry.nw.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,66 +30,60 @@ import java.util.Set;
  * </pre>
  */
 @Getter
-@NoArgsConstructor @AllArgsConstructor
-@Entity
 @Builder
-@Table(name = "`users`",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
-                @UniqueConstraint(columnNames = "email")
-        })
+@NoArgsConstructor @AllArgsConstructor
+@Document(collection = "users")
+@JsonPropertyOrder({ "id", "userId", "userName", "userEmail", "userRole", "userEnabled", "userRole", "userOrgs", "created_at" })
 public class UserEntity implements Serializable {
 
     @Id
-    @JsonProperty("userId")
-    @Schema(title = "사용자 고유번호", example = "38352658567418867")
-    private Long id;
+    @JsonProperty("userSeq")
+    @Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
+    private String id;
 
     @NotNull
-    @Column(name = "username")
+    @JsonProperty("userId")
+    @Schema(title = "사용자 아이디", example = "admin")
+    @Size(min = 4, max = 10, message = "Minimum userId length: 4 characters")
+    private String userid;
+
+    @NotNull
     @JsonProperty("userName")
     @Schema(title = "사용자 이름", example = "홍길동")
-    @Size(min = 4, max = 255, message = "Minimum username length: 4 characters")
+    @Size(min = 2, max = 10, message = "Minimum username length: 4 characters")
     private String username;
 
     @NotNull
-    @Column(name = "email")
     @JsonProperty("userEmail")
     @Schema(title = "사용자 이메일", example = "test@test.com")
     @Email(message = "Email Should Be Valid")
     private String email;
 
     @NotNull
-    @Column(name = "password")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
     @Size(min = 3, message = "Minimum password length: 8 characters")
     private String password;
 
-    @Column(name = "enabled")
     @JsonProperty("userEnabled")
     @Schema(title = "사용자 활성화 여부", example = "true")
     private boolean enabled;
 
-    @Schema(title = "사용자 생성 시간", example = "2023-07-04T12:00:00.000+00:00")
-    @CreationTimestamp
-    private Timestamp created_at;
+    @JsonProperty("created_at")
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
+    @Schema(title = "사용자 생성 시간", example = "2023-07-04 12:00:00")
+    private Instant created_at;
 
+    @DBRef
+    @JsonProperty("userRole")
+    @Schema(title = "사용자 권한 정보", example = "ROLE_USER")
+    private RoleEntity role;
+
+    @DBRef
     @Builder.Default
-    @JsonProperty("userRoles")
-    @Schema(title = "사용자 권한 정보", example = "['ROLE_USER']")
-//    @ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @ManyToMany(fetch=FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(
-                    name = "user_id",referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_id",referencedColumnName = "id"
-            )
-    )
-    private Set<RoleEntity> roles  = new HashSet<>();
+    @JsonProperty("userOrgs")
+    @Schema(title = "Org 정보", example = "더모멘트")
+    private Set<OrgEntity> orgs = new HashSet<>();
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -96,19 +93,24 @@ public class UserEntity implements Serializable {
     public static class RegisterDto {
 
         @NotBlank
+        @Schema(title = "사용자 아이디", example = "admin")
+        @Size(min = 4, max = 10)
+        private String userid;
+
+        @NotBlank
         @Schema(title = "사용자 이름", example = "홍길동")
-        @Size(min = 3, max = 20)
+        @Size(min = 2, max = 10, message = "Minimum username length: 4 characters")
         private String username;
 
         @NotBlank
         @Email
-        @Schema(title = "사용자 이메일", example = "test@test.com")
+        @Schema(title = "사용자 이메일", example = "admin@innogrid.com")
         @Size(min = 3, max = 40)
         private String email;
 
         @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
-        @Size(min = 3, max = 40)
+        @Size(min = 3, message = "Minimum password length: 8 characters")
         private String password;
     }
 
@@ -118,9 +120,9 @@ public class UserEntity implements Serializable {
     public static class LoginDto {
 
         @NotBlank
-        @Schema(title = "사용자 이름", example = "홍길동")
-        @Size(min = 4, max = 255, message = "Minimum username length: 4 characters")
-        private String username;
+        @Schema(title = "사용자 아이디", example = "admin")
+        @Size(min = 4, max = 10, message = "Minimum admin length: 4 characters")
+        private String userid;
 
         @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
@@ -133,23 +135,18 @@ public class UserEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class UpdateDto {
 
-        @NotBlank
-        @Schema(title = "사용자 이름", example = "홍길동")
-        @Size(min = 3, max = 20)
+        @Schema(title = "사용자 이름", example = "관리자")
+        @Size(min = 2, max = 10)
         private String username;
 
-        @NotBlank
-        @Schema(title = "사용자 이메일", example = "test@test.com")
+        @Schema(title = "사용자 이메일", example = "admin@innogrid.com")
         @Email
         @Size(min = 3, max = 40)
         private String email;
 
-        @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, max = 40)
         private String password;
 
-        @Schema(title = "사용자 권한 정보", example = "['ROLE_USER']")
-        private String[] roles;
     }
 }

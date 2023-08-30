@@ -18,18 +18,18 @@ import lombok.ToString;
 public enum ErrorCode {
 
     // Common
-    RUNTIME_EXCEPTION(400, "Bad Request."),
-    INVALID_INPUT_VALUE(400, "Invalid Input Value."),
-    ENTITY_NOT_FOUND(400, "Entity Not Found"),
-    METHOD_NOT_ALLOWED(405, "Method not Allowed."),
-    INVALID_TYPE_VALUE(400, "Invalid Type Value."),
-    INVALID_USERNAME(400, "Invalid username/password supplied."),
-    INTERNAL_SERVER_ERROR(500, "Internal Server Error."),
-    FORBIDDEN(403, "Forbidden."),
-    NOT_FOUND(404, "Not Found."),
-    HANDLE_ACCESS_DENIED(403, "Access is Denied."),
-    ACCESS_DENIED_EXCEPTION(401, "Unauthorized."),
-    DUPLICATE(409, "Already Exist.");
+    RUNTIME_EXCEPTION(400, "잘못된 요청입니다."),
+    INVALID_INPUT_VALUE(400, "유효하지 않는 입력 값입니다."),
+    ENTITY_NOT_FOUND(400, "데이터를 찾을 수 없습니다."),
+    METHOD_NOT_ALLOWED(405, "허용되지 않는 메소드입니다."),
+    INVALID_TYPE_VALUE(400, "유효하지 않은 유형 값입니다."),
+    INVALID_USERNAME(400, "잘못된 사용자 이름/비밀번호를 입력했습니다."),
+    INTERNAL_SERVER_ERROR(500, "서버에 문제가 발생했습니다."),
+    NOT_FOUND(404, "찾을 수 없습니다."),
+    FORBIDDEN(403, "접근 권한이 없어 거부되었습니다."),
+    ACCESS_DENIED_EXCEPTION(401, "인증 정보가 유효하지 않습니다."),
+    DUPLICATE(409, "중복된 데이터가 있습니다."),
+    NO_BODY(400, "파라미터 값이 입력되지 않았습니다.");
 
     private final int status;
     private final String message;

@@ -1,15 +1,19 @@
 package lab.cherry.nw.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.Instant;
 
 /**
  * <pre>
@@ -20,30 +24,37 @@ import java.util.Set;
  * </pre>
  */
 @Getter
-@NoArgsConstructor @AllArgsConstructor
-@Entity
 @Builder
-@Table(name = "`roles`",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "name")
-        })
+@NoArgsConstructor @AllArgsConstructor
+@Document(collection = "roles")
 public class RoleEntity implements Serializable {
 
     @Id
-    @JsonProperty("roleId")
-    @Schema(title = "권한 고유번호", example = "1")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    @JsonProperty("roleSeq")
+    @Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
+    private String id;
 
     @NotNull
-    @Column(name = "name")
     @JsonProperty("roleName")
     @Schema(title = "권한 이름", example = "ROLE_USER")
     private String name;
 
-    @Builder.Default
-    @JsonIgnore
-    @Schema(title = "사용자 정보")
-    @ManyToMany(mappedBy = "roles", fetch=FetchType.EAGER)
-    private Set<UserEntity> users = new HashSet<>();
+    @JsonProperty("created_at")
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
+    @Schema(title = "권한 생성 시간", example = "2023-07-04 12:00:00")
+    private Instant created_at;
+
+    //////////////////////////////////////////////////////////////////////////
+
+    @Getter
+    @Builder
+    @NoArgsConstructor @AllArgsConstructor
+    public static class CreateDto {
+
+        @Schema(title = "권한 이름", example = "ADMIN")
+        @Size(min = 4, max = 20, message = "Minimum name length: 4 characters")
+        private String name;
+
+    }
+
 }

@@ -1,14 +1,12 @@
 package lab.cherry.nw.repository;
 
-import com.github.f4b6a3.tsid.Tsid;
 import lab.cherry.nw.model.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -19,23 +17,16 @@ import java.util.Optional;
  * Related : spring-boot-starter-data-jpa, UserServiceImpl, AuthServiceImpl, CustomUserDetailsService
  * </pre>
  */
-@Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+//@Repository
+public interface UserRepository extends MongoRepository<UserEntity, UUID> {
 
-    @Query("select u from UserEntity u LEFT JOIN FETCH u.roles WHERE u.username = ?1")
-    Optional<UserEntity> findByUserName(String username);
+    Page<UserEntity> findAll(Pageable pageable);
 
-    @Override
-    @Query("select u from UserEntity u LEFT JOIN FETCH u.roles")
-    List<UserEntity> findAll();
+    Page<UserEntity> findPageByUserid(String userid, Pageable pageable);
 
-    @Override
-    @Query("select u from UserEntity u WHERE u.id = ?1")
-    void deleteById(Long id);
+    Optional<UserEntity> findById(String id);
 
-//    @Override
-//    @Query("select u from UserEntity u LEFT JOIN FETCH u.roles WHERE u.id = ?1")
-//    Optional<UserEntity> findById(Long id);
+    Optional<UserEntity> findByuserid(String userid);
 
-    boolean existsByUsername(String username);
+    Optional<UserEntity> findByUsername(String username);
 }
