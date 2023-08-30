@@ -1,0 +1,40 @@
+# MongoDB connection properties
+spring.data.mongodb.uri=mongodb://databaseUserName:databaseUserPass@databaseURI:databasePort/databaseName?authSource=admin
+spring.jackson.default-property-inclusion=NON_NULL
+# logging.level.ROOT=DEBUG
+
+# Redis connection properties
+spring.data.redis.host=redisHostAddress
+spring.data.redis.port=redisHostPort
+
+#set your port
+server.port=8888
+#server.error.include-message=always
+server.servlet.encoding.charset=UTF-8
+server.servlet.encoding.force=true
+
+# Swagger springdoc-ui Configuration
+spring.messages.encoding=UTF-8
+springdoc.api-docs.path=/docs/json
+springdoc.swagger-ui.path=/docs
+springdoc.api-docs.groups.enabled=true
+springdoc.cache.disabled=true
+springdoc.swagger-ui.tags-sorter=alpha
+springdoc.swagger-ui.operations-sorter=alpha
+
+# App Properties
+#echo 'com-innogrid-medge-project-rndplan-dev-1team-secret-base-by-taking'|base64
+lab.cherry.nw.jwtSecret= 29tLWlubm9ncmlkLW1lZGdlLXByb2plY3Qtcm5kcGxhbi1kZXYtMXRlYW0tc2VjcmV0LWJhc2UtYnktdGFrYWluZwo=
+lab.cherry.nw.jwtExpirationMs= 86400000
+
+#Email
+spring.mail.host=smtp.localhost.com
+spring.mail.port=587
+spring.mail.properties.debug=true
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.ssl.enable= false
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+
+spring.mail.username=userName
+spring.mail.password=passWord
