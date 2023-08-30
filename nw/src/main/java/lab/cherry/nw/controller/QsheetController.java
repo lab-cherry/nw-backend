@@ -1,7 +1,13 @@
 package lab.cherry.nw.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lab.cherry.nw.error.ErrorResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.QsheetEntity;
 import lab.cherry.nw.service.QsheetService;
@@ -60,94 +66,42 @@ public class QsheetController {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by(Common.getOrder(sort)));
 
-    Page<QsheetEntity> userEntity;
-    if(userid == null) {
-        userEntity = qsheetService.getUsers(pageable);
-    } else {
-//        userEntity = qsheetService.findPageByUserId(userid, pageable);
+    Page<QsheetEntity> qsheetEntity;
+    if(userid == null && orgid==null) {
+        qsheetEntity = qsheetService.getQsheets(pageable);
+    } else if(userid != null && orgid==null) {
+        qsheetEntity = qsheetService.findPageByUserId(userid, pageable);
+    } else{
+        qsheetEntity = qsheetService.findPageByOrgId(orgid, pageable);
     }
-        return new ResponseEntity<>(qsheetService, new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(qsheetEntity, new HttpHeaders(), HttpStatus.OK);
     }
-//
-//    // TODO: 업데이트 필요
-//    /**
-//     * [QsheetController] 큐시트 업데이트 함수
-//     *
-//     * @param id 큐시트 고유번호를 입력합니다.
-//     * @param qsheetDetail 큐시트 업데이트에 필요한 정보를 담고 있는 객체입니다.
-//     * @return
-//     * <pre>
-//     * true  : 업데이트된 큐시트 정보를 반환합니다.
-//     * false : 에러(400, 404)를 반환합니다.
-//     * </pre>
-//     *
-//     * Author : yby654(yby654@github.com)
-//     */
-//    @PatchMapping("{id}")
-//    @Operation(summary = "큐시트 업데이트", description = "특정 큐시트을 업데이트합니다.")
-//    public ResponseEntity<?> updateQsheetById(@PathVariable("id") Long id,
-//            @RequestBody QsheetEntity qsheetDetail) {
-////        Map<String, Object> map = new LinkedHashMap<>();
-//
-////        UserEntity user = userService.findById(id);
-//
-////        try {
-////            UserEntity user = userService.findById(id);
-//////            user.setUsername(userDetail.getUsername());
-//////            user.setPassword(userDetail.getPassword());
-//        qsheetService.updateQsheet(qsheetDetail);
-////            map.put("status", 1);
-////            map.put("data", userService.findById(id));
-////            return new ResponseEntity<>(map, HttpStatus.OK);
-////        } catch (Exception ex) {
-////            final ErrorResponse response = ErrorResponse.of(ErrorCode.ENTITY_NOT_FOUND);
-////            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-////        }
-//
-////        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
-//        return new ResponseEntity<>(qsheetService.findById(id), new HttpHeaders(), HttpStatus.OK);
-//    }
-//
-//    /**
-//     * [QsheetController] 특정 큐시트 조회 함수
-//     *
-//     * @param id 큐시트 고유번호를 입력합니다.
-//     * @return
-//     * <pre>
-//     * true  : 특정 큐시트 정보를 반환합니다.
-//     * false : 에러(400, 404)를 반환합니다.
-//     * </pre>
-//     *
-//     * Author : yby654(yby654@github.com)
-//     */
-//    @GetMapping("{id}")
-//    @Operation(summary = "ID로 큐시트 찾기", description = "큐시트을 조회합니다.")
-//    public ResponseEntity<?> findByQsheetId(@PathVariable("id") Long id) {
-//        log.info("[QsheetController] findByQsheetId...!");
-//
-////        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
-//        return new ResponseEntity<>(qsheetService.findById(id), new HttpHeaders(), HttpStatus.OK);
-//    }
-//
-//    /**
-//     * [QsheetController] 특정 큐시트 삭제 함수
-//     *
-//     * @param id 큐시트 고유번호를 입력합니다.
-//     * @return
-//     * <pre>
-//     * true  : 특정 큐시트 삭제처리합니다.
-//     * false : 에러(400, 404)를 반환합니다.
-//     * </pre>
-//     *
-//     * Author : yby654(yby654@github.com)
-//     */
-//    @DeleteMapping("{id}")
-//    @Operation(summary = "큐시트 삭제", description = "큐시트을 삭제합니다.")
-//    public ResponseEntity<?> deleteQsheet(@PathVariable("id") Long id) {
-//        log.info("[UserController] deleteUser...!");
-//        qsheetService.deleteQsheet(id);
-//
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
-//        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
-//    }
+
+    /**
+     * [QsheetController] 큐시트 생성 함수
+     * <pre>
+     * @param qsheetCreateDto 큐시트 생성에 필요한 큐시트 정보를 담고 있는 객체입니다.
+     * @return
+     * true  : 업데이트된 사용자 정보를 반환합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : yby654(yby654@github.com)
+     */
+    @PostMapping("")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "큐시트 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+            @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @Operation(summary = "Qsheet 생성", description = "Qsheet를 추가합니다.")
+    public ResponseEntity<?> createMH(@Valid @RequestBody QsheetEntity.CreateDto qsheetCreateDto) {
+        log.info("[QsheetController] createQsheet...!");
+        qsheetService.createQsheet(qsheetCreateDto);
+
+        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+    }
+
+
+
 }

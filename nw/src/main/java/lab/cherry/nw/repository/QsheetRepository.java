@@ -22,12 +22,11 @@ public interface QsheetRepository extends MongoRepository<QsheetEntity, UUID> {
     Page<QsheetEntity> findAll(Pageable pageable);
 
     Page<QsheetEntity> findPageByUserid(String userid, Pageable pageable);
+    Page<QsheetEntity> findPageByOrgid(String orgid, Pageable pageable);
 
     Optional<QsheetEntity> findById(String id);
 
     Optional<QsheetEntity> findByuserid(String userid);
-
-    Optional<QsheetEntity> findByUsername(String username);
 
     void deleteById(UUID id);
 }

@@ -37,9 +37,19 @@ import java.util.Set;
 public class QsheetEntity implements Serializable {
 
     @Id
-    @JsonProperty("id")
+    @JsonProperty("qsheetSeq")
     @Schema(title = "큐시트 고유번호", example = "38352658567418867") // (Long) Tsid
-    private Long id;
+    private String id;
+
+    @DBRef
+    @JsonProperty("user")
+    @Schema(title = "유저 고유번호", example = "38352658567418867") // (Long) Tsid
+    private UserEntity user;
+
+    @DBRef
+    @JsonProperty("org")
+    @Schema(title = "조직 고유번호", example = "38352658567418867") // (Long) Tsid
+    private OrgEntity org;
 
     @JsonProperty("name")
     @Schema(title = "큐시트 이름", example = "최해리_230824")
@@ -48,8 +58,7 @@ public class QsheetEntity implements Serializable {
 
 
     @JsonProperty("opening")
-    @Schema(title = "개식사", example = "")
-    @Size(min = 4, max = 255, message = "Minimum biznum length: 4 characters")
+    @Schema(title = "개식사", example = "true")
     private ContentField opening ;
 
 //
@@ -117,13 +126,18 @@ public class QsheetEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class CreateDto {
 
-        @Schema(title = "큐시트 이름", example = "")
-        @Size(min = 4, max = 20, message = "Minimum name length: 4 characters")
+        @Schema(title = "유저", example = "38352658567418867")
+        private String userSeq;
+
+        @Schema(title = "조직", example = "38352658567418867")
+        private String orgSeq;
+
+        @Schema(title = "큐시트 이름", example = "최해리_230824")
+        @Size(min = 4, max = 20)
         private String name;
 
-        @Schema(title = "개식사", example = "")
-        @Size(min = 4, max = 40, message = "Minimum biznum length: 4 characters")
-        private String opening;
+        @Schema(title = "개식사", example = "true")
+        private ContentField opening;
 //
 //        @Schema(title = "화촉점화", example = "")
 //        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")

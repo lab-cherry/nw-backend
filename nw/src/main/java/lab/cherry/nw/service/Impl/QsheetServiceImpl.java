@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 /**
  * <pre>
@@ -41,52 +42,44 @@ public class QsheetServiceImpl implements QsheetService {
      * @return DB에서 전체 큐시트 정보 목록을 리턴합니다.
      * @throws EntityNotFoundException 큐시트 정보가 없을 경우 예외 처리 발생
      * <pre>
-     * 전체 큐시트를 조회하여, 사용자 정보 목록을 반환합니다.
+     * 전체 큐시트를 조회하여, 큐시트 목록을 반환합니다.
      * </pre>
      *
-     * Author : taking(taking@duck.com)
+     * Author : yby654(yby654@github.com)
      */
     @Transactional(readOnly = true)
     @Override
-   public Page<QsheetEntity> getUsers(Pageable pageable) {
+   public Page<QsheetEntity> getQsheets(Pageable pageable) {
         return qsheetRepository.findAll(pageable);
         //        return EntityNotFoundException.requireNotEmpty(userRepository.findAll(pageable), "Users Not Found");
     }
 //
-//    /**
-//     * [QsheetServiceImpl] 큐시트 생성 함수
-//     *
-//     * @param qheetCreateDto 큐시트 생성에 필요한 큐시트 등록 정보를 담은 개체입니다.
-//     * @return 생성된 큐시트 정보를 리턴합니다.
-//     * @throws CustomException 중복된 이름에 대한 예외 처리 발생
-//     * <pre>
-//     * 큐시트을 등록합니다.
-//     * </pre>
-//     *
-//     * Author : taking(taking@duck.com)
-//     */
-//    public QsheetEntity createQsheet(QsheetEntity.CreateDto qheetCreateDto) {
-//
+    /**
+     * [QsheetServiceImpl] 큐시트 생성 함수
+     *
+     * @param qsheetCreateDto 큐시트 생성에 필요한 큐시트 등록 정보를 담은 개체입니다.
+     * @return 생성된 큐시트 정보를 리턴합니다.
+     * @throws CustomException 중복된 이름에 대한 예외 처리 발생
+     * <pre>
+     * 큐시트을 등록합니다.
+     * </pre>
+     *
+     * Author : yby654(yby654@github.com)
+     */
+    public void createQsheet(QsheetEntity.CreateDto qsheetCreateDto) {
+
 //        Instant instant = Instant.now();
-//        checkExistsWithQsheetName(qheetCreateDto.getName()); // 동일한 이름 중복체크
-//
-//        QsheetEntity qsheetEntity = QsheetEntity.builder()
-//            .id(TsidGenerator.next())
-//            .name(qheetCreateDto.getName())
-//            .opening(qheetCreateDto.getOpening())
-//            .light(qheetCreateDto.getLight())
-//        .bride_entrance(qheetCreateDto.getBride_entrance())
-//        .groom_entrance(qheetCreateDto.getGroom_entrance())
-//        .bow(qheetCreateDto.getBow())
-//        .vow(qheetCreateDto.getVow())
-//        .declaration(qheetCreateDto.getDeclaration())
-//        .song(qheetCreateDto.getSong())
-//        .greeting(qheetCreateDto.getGreeting())
-//        .parade(qheetCreateDto.getParade())
-//            .build();
-//
-//        return qsheetRepository.save(qsheetEntity);
-//    }
+        UserEntity userEntity = userRepository.findById(qsheetCreateDto.getUserSeq());
+        OrgEntity orgEntity = orgRepository.findById(qsheetCreateDto.getOrgSeq());
+
+
+        QsheetEntity qsheetEntity = QsheetEntity.builder()
+            .user(userEntity)
+            .org(orgEntity)
+            .name(qsheetCreateDto.getName())
+            .opening(new QsheetEntity.ContentField())
+        qsheetRepository.save(qsheetEntity);
+    }
 //
 //    /**
 //     * [QsheetServiceImpl] 큐시트 수정 함수
@@ -97,7 +90,7 @@ public class QsheetServiceImpl implements QsheetService {
 //     * 특정 큐시트에 대한 정보를 수정합니다.
 //     * </pre>
 //     *
-//     * Author : taking(taking@duck.com)
+//     * Author : yby654(yby654@github.com)
 //     */
 //    public void updateQsheet(QsheetEntity org) {
 //        findByName(org.getName());
@@ -113,7 +106,7 @@ public class QsheetServiceImpl implements QsheetService {
 //     * 입력한 id를 가진 큐시트 정보를 삭제합니다.
 //     * </pre>
 //     *
-//     * Author : taking(taking@duck.com)
+//     * Author : yby654(yby654@github.com)
 //     */
 //    public void deleteQsheet(Long id) {
 //        qsheetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Qsheet with Id " + id + " Not Found."));
@@ -129,7 +122,7 @@ public class QsheetServiceImpl implements QsheetService {
 //     * 입력된 큐시트 이름으로 이미 등록된 큐시트이 있는지 확인합니다.
 //     * </pre>
 //     *
-//     * Author : taking(taking@duck.com)
+//     * Author : yby654(yby654@github.com)
 //     */
 //    @Transactional(readOnly = true)
 //    public void checkExistsWithQsheetName(String name) {
@@ -148,7 +141,7 @@ public class QsheetServiceImpl implements QsheetService {
 //     * 입력한 name에 해당하는 큐시트 정보를 조회합니다.
 //     * </pre>
 //     *
-//     * Author : taking(taking@duck.com)
+//     * Author : yby654(yby654@github.com)
 //     */
 //    @Transactional(readOnly = true)
 //    public QsheetEntity findByName(String name) {
@@ -165,10 +158,25 @@ public class QsheetServiceImpl implements QsheetService {
 //     * 입력한 id에 해당하는 큐시트 정보를 조회합니다.
 //     * </pre>
 //     *
-//     * Author : taking(taking@duck.com)
+//     * Author : yby654(yby654@github.com)
 //     */
 //    @Transactional(readOnly = true)
 //    public QsheetEntity findById(Long id) {
 //        return qsheetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Qsheet with Id " + id + " Not Found."));
 //    }
+
+    @Transactional(readOnly = true)
+    public QsheetEntity findById(String id) {
+        return qsheetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Qsheet with Id " + id + " Not Found."));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable) {
+        return qsheetRepository.findPageByUserid(userid, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable) {
+        return qsheetRepository.findPageByOrgid(orgid, pageable);
+    }
 }

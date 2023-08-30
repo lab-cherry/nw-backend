@@ -17,12 +17,16 @@ import java.util.List;
  */
 @Component
 public interface QsheetService {
- Page<QsheetEntity> getUsers(Pageable pageable);
+ Page<QsheetEntity> getQsheets(Pageable pageable);
+
 // QsheetEntity findById(String id);
 // QsheetEntity findByUserId(String userid);
+// QsheetEntity findByOrgId(String orgid);
+
+ void createQsheet(QsheetEntity.CreateDto qsheetCreateDto);
 // void deleteById(String id);
-// Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable);
-// Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable);
+ Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable);
+ Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable);
 
 // void updateOrgById(String id, List<String> orgIds);
 }
