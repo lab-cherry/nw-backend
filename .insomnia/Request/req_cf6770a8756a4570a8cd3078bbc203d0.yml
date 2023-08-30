@@ -1,0 +1,25 @@
+_id: req_cf6770a8756a4570a8cd3078bbc203d0
+type: Request
+parentId: wrk_eb00d98384a44d42b94205345312123f
+modified: 1693361856260
+created: 1693045861022
+url: "{{ _.scheme }}://{{ _.host }}:{{ _.port }}/api/v1/user?userid=consine2c"
+name: "[User] 사용자 목록 조회"
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: User-Agent
+    value: Insomnia/2023.5.6
+authentication:
+  type: bearer
+  token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjaGVycnlsYWIiLCJpZCI6ImNoZXJyeWxhYiIsIm5hbWUiOiLssrTrpqzrnqkiLCJyb2xlcyI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjkzMjkxNzIxLCJleHAiOjE2OTMzNzgxMjF9.LmheE5q2I0vFwl8DHBgQfJ0lXXwWFTbX4E5FSv7rwiYtsL3j1wtW_2bKzZiUsvwP12dlRgslRE7Cp1bkUnZpZA
+metaSortKey: -1692758435353
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,33 @@
+_id: req_f069b260dfde4479884baf04af19b5d7
+type: Request
+parentId: wrk_eb00d98384a44d42b94205345312123f
+modified: 1693361865509
+created: 1693060691299
+url: "{{ _.scheme }}://{{ _.host }}:{{ _.port
+  }}/api/v1/user/64ed8e354a53ed291179900c"
+name: "[User] 사용자 업데이트"
+description: ""
+method: PATCH
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"username": "체리랩화이팅"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: User-Agent
+    value: Insomnia/2023.5.6
+authentication:
+  type: bearer
+  token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjaGVycnlsYWIiLCJpZCI6ImNoZXJyeWxhYiIsIm5hbWUiOiLssrTrpqzrnqkiLCJyb2xlcyI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjkzMjkwMDIyLCJleHAiOjE2OTMzNzY0MjJ9.STgnmh3Stg3D8m6UEvZDSxtyTVo73rR6Ke1P-6J2SVOz9Kg0B0ZUIKnLaZJxRjcXftfwoxwjzv12idtn-Pf-9w
+metaSortKey: -1692758435340.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

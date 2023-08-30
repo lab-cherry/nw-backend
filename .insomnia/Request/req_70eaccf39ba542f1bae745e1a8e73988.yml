@@ -1,0 +1,32 @@
+_id: req_70eaccf39ba542f1bae745e1a8e73988
+type: Request
+parentId: wrk_eb00d98384a44d42b94205345312123f
+modified: 1693361835949
+created: 1692758435453
+url: "{{ _.scheme }}://{{ _.host }}:{{ _.port }}/api/auth/login"
+name: "[Auth] 로그인"
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"userid": "cherrylab",
+    	"password": "cherrylab"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: User-Agent
+    value: Insomnia/2023.5.5
+    id: pair_35e2b88aa20c4e4f8dd16d53635766aa
+authentication: {}
+metaSortKey: -1692758435453
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
