@@ -29,6 +29,4 @@ public interface UserRepository extends MongoRepository<UserEntity, UUID> {
     Optional<UserEntity> findByuserid(String userid);
 
     Optional<UserEntity> findByUsername(String username);
-
-    void deleteById(UUID id);
 }

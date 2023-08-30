@@ -29,7 +29,5 @@ public interface OrgRepository extends MongoRepository<OrgEntity, UUID> {
 
     Optional<OrgEntity> findByName(String orgname);
 
-    void deleteById(UUID id);
-
     List<OrgEntity> findAllById(List<String> orgIds);
 }

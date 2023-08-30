@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * <pre>
@@ -68,7 +69,7 @@ public class RoleServiceImpl implements RoleService {
         checkExistsWithRoleName(roleCreateDto.getName()); // 동일한 이름 중복체크
 
         RoleEntity roleEntity = RoleEntity.builder()
-            .name("ROLE_" + roleCreateDto.getName())
+            .name("ROLE_" + roleCreateDto.getName().toUpperCase())
             .created_at(instant)
             .build();
 

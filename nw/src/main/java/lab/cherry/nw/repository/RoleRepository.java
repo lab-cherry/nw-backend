@@ -22,12 +22,10 @@ public interface RoleRepository extends MongoRepository<RoleEntity, UUID> {
 
     Page<RoleEntity> findAll(Pageable pageable);
 
-    Page<RoleEntity> findPageByName(String orgname, Pageable pageable);
+    Page<RoleEntity> findPageByName(String rolename, Pageable pageable);
 
     Optional<RoleEntity> findById(String id);
 
-    Optional<RoleEntity> findByName(String orgname);
-
-    void deleteById(UUID id);
+    Optional<RoleEntity> findByName(String rolename);
 
 }

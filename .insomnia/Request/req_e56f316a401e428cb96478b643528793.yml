@@ -1,0 +1,32 @@
+_id: req_e56f316a401e428cb96478b643528793
+type: Request
+parentId: wrk_eb00d98384a44d42b94205345312123f
+modified: 1693148003894
+created: 1693147925817
+url: "{{ _.scheme }}://{{ _.host }}:{{ _.port }}/api/v1/org/483649357917136603"
+name: "[Org] 조직 수정"
+description: ""
+method: PATCH
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"biznum": "220-87-36743"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: User-Agent
+    value: Insomnia/2023.5.6
+authentication:
+  type: bearer
+  token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjaGVycnlsYWIiLCJpZCI6ImNoZXJyeWxhYiIsIm5hbWUiOiLssrTrpqzrnqkiLCJyb2xlcyI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjkzMTQ3OTk5LCJleHAiOjE2OTMyMzQzOTl9.vEe73nMYAVJSTtsF3TD6n1FwSykLlNbz8nHL4eI52S6BoYAHkI6te92kSFDBGvuaYbHSxmiOk-brpAtYkCFylA
+metaSortKey: -1692758435053
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

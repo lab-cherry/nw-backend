@@ -1,0 +1,27 @@
+_id: req_1d1353465c594b8b99d64b24219a839d
+type: Request
+parentId: wrk_eb00d98384a44d42b94205345312123f
+modified: 1693306613283
+created: 1693148728680
+url: "{{ _.scheme }}://{{ _.host }}:{{ _.port
+  }}/api/v1/org/64edcee6a33eb67b581c9061"
+name: "[Org] 조직 삭제"
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers:
+  - name: User-Agent
+    value: Insomnia/2023.5.5
+    id: pair_35e2b88aa20c4e4f8dd16d53635766aa
+authentication:
+  type: bearer
+  token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjaGVycnlsYWIiLCJpZCI6ImNoZXJyeWxhYiIsIm5hbWUiOiLssrTrpqzrnqkiLCJyb2xlcyI6eyJhdXRob3JpdHkiOiJST0xFX1VTRVIifSwiaWF0IjoxNjkzMjk0Njc0LCJleHAiOjE2OTMzODEwNzR9.gsoZAclyDzGRpbVT-9yusNSrre6LtwmGYiIQh8w_t4CtExTDwP1iDjrpkbKajgJY43aG9tSeP2bgyzizb55h9A
+metaSortKey: -1692758434953
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
