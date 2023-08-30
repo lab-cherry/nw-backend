@@ -1,4 +1,4 @@
-package lab.cherry.nw.configuration.security.jwt;
+package lab.cherry.nw.error.handler;
 
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.util.FormatConverter;
@@ -33,7 +33,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
      * }
      * </pre>
      *
-     * @author taking(taking@duck.com)
+     * Author : taking(taking@duck.com)
      *
      */
     @Override

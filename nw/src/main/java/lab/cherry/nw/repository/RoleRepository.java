@@ -1,8 +1,12 @@
 package lab.cherry.nw.repository;
 
 import lab.cherry.nw.model.RoleEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -13,7 +17,15 @@ import org.springframework.stereotype.Repository;
  * Related : spring-boot-starter-data-jpa
  * </pre>
  */
-@Repository
-public interface RoleRepository extends JpaRepository<RoleEntity, Integer> {
-    RoleEntity findByName(String name);
+//@Repository
+public interface RoleRepository extends MongoRepository<RoleEntity, UUID> {
+
+    Page<RoleEntity> findAll(Pageable pageable);
+
+    Page<RoleEntity> findPageByName(String rolename, Pageable pageable);
+
+    Optional<RoleEntity> findById(String id);
+
+    Optional<RoleEntity> findByName(String rolename);
+
 }

@@ -24,101 +24,121 @@ plugins {
 ### Dependencies
 #### Common
 ```
-  dependencies {
-        compileOnly 'org.projectlombok:lombok:1.18.26'
-        annotationProcessor 'org.projectlombok:lombok:1.18.26'
-        testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.2'
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-        developmentOnly 'org.springframework.boot:spring-boot-devtools:3.0.2'
-    }
+dependencies {
+  compileOnly 'org.projectlombok:lombok:1.18.26'
+  annotationProcessor 'org.projectlombok:lombok:1.18.26'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.2'
+  testImplementation 'org.mockito:mockito-core:2.8.8'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+  developmentOnly 'org.springframework.boot:spring-boot-devtools:3.0.2'
+}
 ```
 #### Project
 ```
 dependencies {
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '3.0.2'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: '3.0.2'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.0.2'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.0.2'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.2'
-    runtimeOnly group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.1.2'
+  implementation 'org.springframework.boot:spring-boot-starter-web:3.0.2'
+  implementation 'org.springframework.boot:spring-boot-starter-security:3.0.2'
+  implementation 'org.springframework.security:spring-security-config:6.0.1'
+  implementation 'org.springframework.boot:spring-boot-starter-data-mongodb:2.5.4'
+  implementation 'org.mongodb:mongodb-driver-sync:4.8.2'
+  implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.2'
+  implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+  implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+  runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+  runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
 ```
 
 #### Tree
 ```
-ubuntu@oracle:~/nw-backend$ tree .
+taking@develop:~/nw-backend$ tree .
 .
-├── README.md
-├── nw
-│   ├── build.gradle
-│   └── src
-│       └── main
-│          ├── java
-│          │   └── lab
-│          │      └── cherry
-│          │          └── nw
-│          │              ├── NwApplication.java
-│          │              ├── configuration
-│          │              │   ├── bean
-│          │              │   │   ├── BeanConfig.java
-│          │              │   │   └── CorsConfig.java
-│          │              │   └── security
-│          │              │      ├── WebSecurityConfiguration.java
-│          │              │      └── jwt
-│          │              │          ├── CustomAccessDeniedHandler.java
-│          │              │          ├── JwtFilter.java
-│          │              │          └── UnauthorizedHandler.java
-│          │              ├── controller
-│          │              │   ├── AuthController.java
-│          │              │   └── UserController.java
-│          │              ├── error
-│          │              │   ├── ErrorResponse.java
-│          │              │   ├── enums
-│          │              │   │   └── ErrorCode.java
-│          │              │   ├── exception
-│          │              │   │   ├── CustomException.java
-│          │              │   │   └── EntityNotFoundException.java
-│          │              │   └── handler
-│          │              │      └── GlobalExceptionHandler.java
-│          │              ├── model
-│          │              │   ├── BaseEntity.java
-│          │              │   ├── RoleEntity.java
-│          │              │   ├── UserEntity.java
-│          │              │   └── dto
-│          │              │      ├── UserLoginDto.java
-│          │              │      └── UserRegisterDto.java
-│          │              ├── repository
-│          │              │   ├── RoleRepository.java
-│          │              │   └── UserRepository.java
-│          │              ├── service
-│          │              │   ├── AuthService.java
-│          │              │   ├── Impl
-│          │              │   │   ├── AuthServiceImpl.java
-│          │              │   │   └── UserServiceImpl.java
-│          │              │   ├── UserService.java
-│          │              │   └── security
-│          │              │      └── CustomUserDetailsService.java
-│          │              └── util
-│          │                  ├── FormatConverter.java
-│          │                  └── Security
-│          │                      ├── AccessToken.java
-│          │                      ├── SecretKey.java
-│          │                      └── jwt
-│          │                          ├── IJwtTokenHelper.java
-│          │                          ├── IJwtTokenProvider.java
-│          │                          ├── JwtTokenHelper.java
-│          │                          └── JwtTokenProvider.java
-│          └── resources
-│              ├── application.properties_sample
-│              └── static
-│                  └── index.html
-├── .gitignore
-├── application.proerties_docker
-├── docker-compose.yml
 ├── Dockerfile
+├── LICENSE
+├── MAINTAINERS.md
+├── README.md
+├── application.properties_docker
 ├── build.gradle
+├── docker-compose.yml
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── nw
+│   ├── build.gradle
+│   └── src
+│       └── main
+│           ├── java
+│           │   └── lab
+│           │       └── cherry
+│           │           └── nw
+│           │               ├── NwApplication.java
+│           │               ├── configuration
+│           │               │   ├── Initalizer.java
+│           │               │   ├── WebSecurityConfiguration.java
+│           │               │   ├── bean
+│           │               │   │   ├── BeanConfig.java
+│           │               │   │   ├── MongoConfig.java
+│           │               │   │   └── OpenApiConfig.java
+│           │               │   └── filter
+│           │               │       ├── JwtFilter.java
+│           │               │       └── RequestLoggingFilter.java
+│           │               ├── controller
+│           │               │   ├── AuthController.java
+│           │               │   ├── OrgController.java
+│           │               │   └── UserController.java
+│           │               ├── error
+│           │               │   ├── ErrorResponse.java
+│           │               │   ├── ResultResponse.java
+│           │               │   ├── enums
+│           │               │   │   ├── ErrorCode.java
+│           │               │   │   └── SuccessCode.java
+│           │               │   ├── exception
+│           │               │   │   ├── CustomException.java
+│           │               │   │   └── EntityNotFoundException.java
+│           │               │   └── handler
+│           │               │       ├── CustomAccessDeniedHandler.java
+│           │               │       ├── GlobalExceptionHandler.java
+│           │               │       └── UnauthorizedHandler.java
+│           │               ├── model
+│           │               │   ├── OrgEntity.java
+│           │               │   ├── RoleEntity.java
+│           │               │   └── UserEntity.java
+│           │               ├── repository
+│           │               │   ├── OrgRepository.java
+│           │               │   ├── RoleRepository.java
+│           │               │   └── UserRepository.java
+│           │               ├── service
+│           │               │   ├── AuthService.java
+│           │               │   ├── Impl
+│           │               │   │   ├── AuthServiceImpl.java
+│           │               │   │   ├── OrgServiceImpl.java
+│           │               │   │   ├── RoleServiceImpl.java
+│           │               │   │   ├── TokenServiceImpl.java
+│           │               │   │   └── UserServiceImpl.java
+│           │               │   ├── OrgService.java
+│           │               │   ├── RoleService.java
+│           │               │   ├── TokenService.java
+│           │               │   ├── UserService.java
+│           │               │   └── security
+│           │               │       └── CustomUserDetailsService.java
+│           │               └── util
+│           │                   ├── Common.java
+│           │                   ├── FormatConverter.java
+│           │                   └── Security
+│           │                       ├── AccessToken.java
+│           │                       └── SecretKey.java
+│           └── resources
+│               ├── application.properties
+│               ├── application.properties_sample
+│               └── static
+│                   └── index.html
 └── settings.gradle
+
+26 directories, 57 files
 ```
 
 

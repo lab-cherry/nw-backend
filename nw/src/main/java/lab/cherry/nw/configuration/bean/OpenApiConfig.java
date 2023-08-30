@@ -1,4 +1,4 @@
-package lab.cherry.nw.configuration.openAPI;
+package lab.cherry.nw.configuration.bean;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

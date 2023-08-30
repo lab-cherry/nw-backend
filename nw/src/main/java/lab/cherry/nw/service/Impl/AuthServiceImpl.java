@@ -1,24 +1,23 @@
 package lab.cherry.nw.service.Impl;
 
+import lab.cherry.nw.error.enums.ErrorCode;
+import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.AuthService;
+import lab.cherry.nw.service.TokenService;
 import lab.cherry.nw.util.Security.AccessToken;
-import lab.cherry.nw.util.Security.jwt.IJwtTokenProvider;
-import lab.cherry.nw.error.enums.ErrorCode;
-import lab.cherry.nw.error.exception.CustomException;
-import lab.cherry.nw.util.TsidGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -35,7 +34,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final IJwtTokenProvider iJwtTokenProvider;
+    private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -55,24 +54,26 @@ public class AuthServiceImpl implements AuthService {
     public AccessToken register(UserEntity.RegisterDto userRegisterDto) {
 
         Instant instant = Instant.now();
-        checkExistsWithUserName(userRegisterDto.getUsername()); // 동일한 이름 중복체크
+        checkExistsWithUserId(userRegisterDto.getUserid()); // 동일한 이름 중복체크
+
+        RoleEntity roleEntity = roleRepository.findByName("ROLE_USER").get();
 
         UserEntity userEntity = UserEntity.builder()
-            .id(TsidGenerator.next())
+            .userid(userRegisterDto.getUserid())
             .username(userRegisterDto.getUsername())
             .email(userRegisterDto.getEmail())
             .password(passwordEncoder.encode(userRegisterDto.getPassword()))
-            .roles(getRoles(new String[]{"ROLE_USER"}))  // 기본적으로 회원가입 시, ROLE_USER 를 할당한다.
+            .role(roleEntity)
             .enabled(true)
-            .created_at(Timestamp.from(instant))
+            .created_at(instant)
             .build();
 
         userRepository.save(userEntity);
 
-        String username = userEntity.getUsername();
-        Set<RoleEntity> roles = userEntity.getRoles();
+        String userid = userEntity.getUserid();
+        RoleEntity role = userEntity.getRole();
 
-        return iJwtTokenProvider.createJwtToken(username,roles);
+        return tokenService.generateJwtToken(userid,role);
     }
 
     /**
@@ -88,32 +89,36 @@ public class AuthServiceImpl implements AuthService {
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public AccessToken login(UserEntity.LoginDto userLoginDto) {
-        if(userLoginDto == null) {  // Body 값이 비어 있을 경우, 예외처리
-            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 입력 값이 유효하지 않음
-        }
+    public AccessToken.Get login(UserEntity.LoginDto userLoginDto) {
 
         authenticateByIdAndPassword(userLoginDto);
 
-        Set<RoleEntity> roles = userRepository.findByUserName(userLoginDto.getUsername()).get().getRoles();
-        return iJwtTokenProvider.createJwtToken(userLoginDto.getUsername(), roles);
+        Optional<UserEntity> userEntity = userRepository.findByuserid(userLoginDto.getUserid());
+        AccessToken accessToken = tokenService.generateJwtToken(userLoginDto.getUserid(), userEntity.get().getRole());
+
+        return AccessToken.Get.builder()
+            .accessToken(accessToken.getAccessToken())
+            .userId(userEntity.get().getUserid())
+            .userName(userEntity.get().getUsername())
+            .userRole(userEntity.get().getRole())
+            .build();
 
     }
 
     /**
      * [AuthServiceImpl] 아이디 중복 체크 함수
      *
-     * @param username 중복 체크에 필요한 사용자 이름 객체입니다.
-     * @throws CustomException 사용자의 이름이 중복된 경우 예외 처리 발생
+     * @param userid 중복 체크에 필요한 사용자 아이디 객체입니다.
+     * @throws CustomException 사용자의 아이디가 중복된 경우 예외 처리 발생
      * <pre>
-     * 입력된 사용자 이름으로 이미 등록된 사용자가 있는지 확인합니다.
+     * 입력된 사용자 아아디로 이미 등록된 사용자가 있는지 확인합니다.
      * </pre>
      *
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public void checkExistsWithUserName(String username) {
-        if (userRepository.findByUserName(username).isPresent()) {
+    public void checkExistsWithUserId(String userid) {
+        if (userRepository.findByuserid(userid).isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE); // 사용자 아이디가 중복됨
         }
     }
@@ -130,10 +135,16 @@ public class AuthServiceImpl implements AuthService {
      * Author : taking(taking@duck.com)
      */
     private void authenticateByIdAndPassword(UserEntity.LoginDto userLoginDto) {
-        UserEntity user = userRepository.findByUserName(userLoginDto.getUsername())
+
+        if(userLoginDto == null) {  // Body 값이 비어 있을 경우, 예외처리
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 입력 값이 유효하지 않음
+        }
+
+        UserEntity user = userRepository.findByuserid(userLoginDto.getUserid())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));   // 로그인 정보가 유효하지 않음
 
         if(!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+            log.error("{} Account Password is Corrent!", userLoginDto.getUserid());
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 로그인 정보가 정확하지 않음
         }
     }
@@ -150,10 +161,16 @@ public class AuthServiceImpl implements AuthService {
      * Author : taking(taking@duck.com)
      */
     private Set<RoleEntity> getRoles(String [] roles){
-        Set<RoleEntity> userRoles = new HashSet<>();
-        for(String role : roles) {
-            userRoles.add(roleRepository.findByName(role));
+    Set<RoleEntity> userRoles = new HashSet<>();
+    for (String role : roles) {
+        Optional<RoleEntity> optionalRole = roleRepository.findByName(role);
+        if (optionalRole.isPresent()) {
+            userRoles.add(optionalRole.get()); // Extract the RoleEntity from Optional
+        } else {
+            // Handle the case when role is not found
+            // You can throw an exception or perform other error handling
         }
-        return userRoles;
+    }
+    return userRoles;
     }
 }

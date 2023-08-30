@@ -88,7 +88,9 @@ public class AuthController {
     })
     public ResponseEntity<?> login(@Valid @RequestBody(required = false) UserEntity.LoginDto userLoginDto) {
 
-        AccessToken accessToken =  authService.login(userLoginDto);
+            log.error("{} {}", userLoginDto.getUserid(), userLoginDto.getPassword());
+
+        AccessToken.Get accessToken =  authService.login(userLoginDto);
 
 //         Header 에 등록
 //        HttpHeaders httpHeaders = new HttpHeaders();
@@ -98,9 +100,9 @@ public class AuthController {
     }
 
     /**
-     * [AuthController] 사용자 이름 중복 체크 함수
+     * [AuthController] 사용자 아이디 중복 체크 함수
      *
-     * @param username 사용자 이름을 입력합니다.
+     * @param userid 사용자 아이디를 입력합니다.
      * @return boolean
      * <pre>
      * true  : 특정 사용자를 삭제처리합니다.
@@ -109,12 +111,12 @@ public class AuthController {
      *
      * Author : taking(taking@duck.com)
      */
-    @GetMapping("/check/{username}")
+    @GetMapping("/check/{userid}")
     @Operation(summary = "사용자 아이디 중복체크", description = "사용자 아이디를 중복체크합니다.")
-    public ResponseEntity<?> existUsername(@PathVariable("username") String username) {
+    public ResponseEntity<?> existUserId(@PathVariable("userid") String userid) {
         log.info("[UserController] existUsername...!");
 
-        authService.checkExistsWithUserName(username);
+        authService.checkExistsWithUserId(userid);
 
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
