@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,16 +37,19 @@ public class OrgEntity implements Serializable {
     @Schema(title = "조직 조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
+    @NotNull
     @JsonProperty("orgName")
     @Schema(title = "조직 이름", example = "더모멘트")
     @Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
     private String name;
 
+    @NotNull
     @JsonProperty("orgBiznum")
     @Schema(title = "조직 사업자번호", example = "123-45-67890")
     @Size(min = 4, max = 255, message = "Minimum biznum length: 4 characters")
     private String biznum;
 
+    @NotNull
     @JsonProperty("orgContact")
     @Schema(title = "조직 연락처", example = "02-0000-0000")
     @Size(min = 4, max = 255, message = "Minimum contact length: 4 characters")
@@ -73,14 +78,17 @@ public class OrgEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class CreateDto {
 
+        @NotBlank
         @Schema(title = "조직 이름", example = "더모멘트")
         @Size(min = 4, max = 20, message = "Minimum name length: 4 characters")
         private String name;
 
+        @NotBlank
         @Schema(title = "조직 사업자번호", example = "123-45-67890")
         @Size(min = 4, max = 40, message = "Minimum biznum length: 4 characters")
         private String biznum;
 
+        @NotBlank
         @Schema(title = "조직 연락처", example = "02-0000-0000")
         @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
         private String contact;
