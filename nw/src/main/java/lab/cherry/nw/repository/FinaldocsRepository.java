@@ -23,8 +23,8 @@ import java.util.UUID;
 public interface FinaldocsRepository extends MongoRepository<FinaldocsEntity, UUID> {
 
     Page<FinaldocsEntity> findAll(Pageable pageable);
-
-    Page<FinaldocsEntity> findPageByName(String orgname, Pageable pageable);
+//
+//    Page<FinaldocsEntity> findPageByName(String orgname, Pageable pageable);
 
     Optional<FinaldocsEntity> findById(String id);
 

@@ -11,6 +11,7 @@ import lab.cherry.nw.error.ErrorResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.FinaldocsEntity;
 import lab.cherry.nw.model.OrgEntity;
+import lab.cherry.nw.service.FinaldocsService;
 import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.util.Common;
@@ -39,12 +40,11 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/fianl")
+@RequestMapping("/api/v1/fianldocs")
 @Tag(name = "Finaldocs", description = "Finaldocs API Document")
 public class FinaldocsController {
 
-    private final Finaldocs finaldocs;
-
+    private final FinaldocsService finaldocsService;
     /**
      * [FinaldocsController] 전체 조직 목록 함수
      *
@@ -60,15 +60,15 @@ public class FinaldocsController {
             @RequestParam(defaultValue = "5") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
 
-        log.info("retrieve all orgs controller...!");
+        log.info("retrieve all finaldocs controller...!");
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Common.getOrder(sort)));
 
         Page<FinaldocsEntity> finaldocsEntity;
         if(name == null) {
-                finaldocsEntity = finaldocs.getOrganizations(pageable);
+                finaldocsEntity = finaldocsService.getFinaldocs(pageable);
         } else {
-                finaldocsEntity = finaldocs.findPageByName(name, pageable);
+                finaldocsEntity = finaldocsService.findPageByName(name, pageable);
         }
 
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
@@ -79,7 +79,7 @@ public class FinaldocsController {
     /**
      * [OrgController] 조직 생성 함수
      *
-     * @param orgCreateDto 생성에 필요한 조직 정보를 담고 있는 객체입니다.
+     * @param finaldocsCreateDto 생성에 필요한 조직 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
      * true  : 성공(200)을 반환합니다.
@@ -94,17 +94,17 @@ public class FinaldocsController {
             @ApiResponse(responseCode = "200", description = "조직 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<?> createOrganization(@Valid @RequestBody(required = false) OrgEntity.CreateDto orgCreateDto) {
+    public ResponseEntity<?> createFinaldocs(@Valid @RequestBody(required = false) FinaldocsEntity.CreateDto finaldocsCreateDto) {
 
-        log.info("[OrgController] createOrganization...!");
+        log.info("[FinaldocksController] createFinaldocs...!");
 
-        OrgEntity orgEntity =  orgService.createOrganization(orgCreateDto);
+        FinaldocsEntity finaldocsEntity =  finaldocsService.createFinaldocs(finaldocsCreateDto);
 
         //         Header 에 등록
         //        HttpHeaders httpHeaders = new HttpHeaders();
         //        httpHeaders.add("Authorization", "Bearer " + accessToken.getToken());
 
-        return new ResponseEntity<>(orgEntity, new HttpHeaders(), HttpStatus.OK);
+            return new ResponseEntity<>(finaldocsEntity, new HttpHeaders(), HttpStatus.OK);
     }
 
 
@@ -121,17 +121,17 @@ public class FinaldocsController {
      *
      * Author : taking(taking@duck.com)
      */
-    @PatchMapping("{id}")
-    @Operation(summary = "조직 업데이트", description = "특정 조직을 업데이트합니다.")
-    public ResponseEntity<?> updateOrgById(@PathVariable("id") String id, @RequestBody OrgEntity.UpdateDto orgEntity) {
-
-        log.info("[OrgController] updateOrgById...!");
-
-        orgService.updateById(id, orgEntity);
-
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
-        return new ResponseEntity<>(orgService.findById(id), new HttpHeaders(), HttpStatus.OK);
-    }
+//    @PatchMapping("{id}")
+//    @Operation(summary = "최종 확인서 업데이트", description = "특정 최종 확인서를 업데이트합니다.")
+//    public ResponseEntity<?> updateOrgById(@PathVariable("id") String id, @RequestBody OrgEntity.UpdateDto orgEntity) {
+//
+//        log.info("[OrgController] updateOrgById...!");
+//
+//        orgService.updateById(id, orgEntity);
+//
+////        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+//        return new ResponseEntity<>(orgService.findById(id), new HttpHeaders(), HttpStatus.OK);
+//    }
 
     /**
      * [OrgController] 특정 조직 조회 함수
@@ -146,13 +146,13 @@ public class FinaldocsController {
      * Author : taking(taking@duck.com)
      */
     @GetMapping("{id}")
-    @Operation(summary = "ID로 조직 찾기", description = "조직을 조회합니다.")
-    public ResponseEntity<?> findByOrgId(@PathVariable("id") String id) {
+    @Operation(summary = "ID로 최종확인서 찾기", description = "최종확인서를 조회합니다.")
+    public ResponseEntity<?> findByFinaldocs(@PathVariable("id") String id) {
 
-        log.info("[OrgController] findByOrgId...!");
+        log.info("[FinaldocsController] findByFinaldocsId...!");
 
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
-        return new ResponseEntity<>(orgService.findById(id), new HttpHeaders(), HttpStatus.OK);
+            return new ResponseEntity<>(finaldocsService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
@@ -168,12 +168,12 @@ public class FinaldocsController {
      * Author : taking(taking@duck.com)
      */
     @DeleteMapping("{id}")
-    @Operation(summary = "조직 삭제", description = "조직을 삭제합니다.")
-    public ResponseEntity<?> deleteOrganization(@PathVariable("id") String id) {
+    @Operation(summary = "최종 확인서 삭제", description = "최종 확인서를 삭제합니다.")
+    public ResponseEntity<?> deleteFinaldocs(@PathVariable("id") String id) {
 
-        log.info("[UserController] deleteOrganization...!");
+        log.info("[FinaldocsController] deleteFinaldocs...!");
 
-        orgService.deleteById(id);
+        finaldocsService.deleteById(id);
 
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);

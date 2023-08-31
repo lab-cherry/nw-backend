@@ -21,5 +21,5 @@ public interface FinaldocsService {
 //    void updateById(String id, FinaldocsEntity.UpdateDto org);
     FinaldocsEntity findById(String id);
     void deleteById(String id);
-    Page<FinaldocsEntity> findPageByName(String name, Pageable pageable);
+//    Page<FinaldocsEntity> findPageByName(String name, Pageable pageable);
 }

@@ -149,8 +149,8 @@ public class FinaldocsServiceImpl implements FinaldocsService {
     }
 
 
-    @Transactional(readOnly = true)
-    public Page<FinaldocsEntity> findPageByName(String name, Pageable pageable) {
-        return finaldocsRepository.findPageByName(name, pageable);
-    }
+//    @Transactional(readOnly = true)
+//    public Page<FinaldocsEntity> findPageById(String id, Pageable pageable) {
+//        return finaldocsRepository.findPageByName(name, pageable);
+//    }
 }
