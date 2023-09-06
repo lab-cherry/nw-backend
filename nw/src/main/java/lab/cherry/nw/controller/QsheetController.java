@@ -8,10 +8,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lab.cherry.nw.error.ErrorResponse;
+import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.QsheetEntity;
 import lab.cherry.nw.service.QsheetService;
-import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +19,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.QSort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <pre>
@@ -43,7 +43,6 @@ import java.util.Map;
 @RequestMapping("/api/v1/qsheet")
 @Tag(name = "Qsheet", description = "Qsheet API Document")
 public class QsheetController {
-
     private final QsheetService qsheetService;
 
     /**
@@ -74,6 +73,9 @@ public class QsheetController {
     } else{
         qsheetEntity = qsheetService.findPageByOrgId(orgid, pageable);
     }
+        for (QsheetEntity qsheet : qsheetEntity) {
+            qsheet.sortDataByOrderIndex();
+        }
         return new ResponseEntity<>(qsheetEntity, new HttpHeaders(), HttpStatus.OK);
     }
 

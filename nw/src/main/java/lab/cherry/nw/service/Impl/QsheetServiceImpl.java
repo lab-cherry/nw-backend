@@ -1,13 +1,8 @@
 package lab.cherry.nw.service.Impl;
 
-import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
-import lab.cherry.nw.model.OrgEntity;
-import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.model.QsheetEntity;
-import lab.cherry.nw.repository.OrgRepository;
-import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.repository.QsheetRepository;
 import lab.cherry.nw.service.QsheetService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.util.List;
+import java.util.Map;
 /**
  * <pre>
  * ClassName : QsheetServiceImpl
@@ -34,8 +28,6 @@ import java.util.List;
 public class QsheetServiceImpl implements QsheetService {
 
     private final QsheetRepository qsheetRepository;
-    private final UserRepository userRepository;
-    private final OrgRepository orgRepository;
     /**
      * [QsheetServiceImpl] 전체 큐시트 조회 함수
      *
@@ -49,10 +41,12 @@ public class QsheetServiceImpl implements QsheetService {
      */
     @Transactional(readOnly = true)
     @Override
-   public Page<QsheetEntity> getQsheets(Pageable pageable) {
-        return qsheetRepository.findAll(pageable);
-        //        return EntityNotFoundException.requireNotEmpty(userRepository.findAll(pageable), "Users Not Found");
-    }
+    public Page<QsheetEntity> getQsheets(Pageable pageable) {
+    return qsheetRepository.findAll(pageable);
+    //        return EntityNotFoundException.requireNotEmpty(orgRepository.findAll(), "Roles Not Found");
+}
+
+
 //
     /**
      * [QsheetServiceImpl] 큐시트 생성 함수
@@ -69,15 +63,25 @@ public class QsheetServiceImpl implements QsheetService {
     public void createQsheet(QsheetEntity.CreateDto qsheetCreateDto) {
 
 //        Instant instant = Instant.now();
-        UserEntity userEntity = userRepository.findById(qsheetCreateDto.getUserSeq());
-        OrgEntity orgEntity = orgRepository.findById(qsheetCreateDto.getOrgSeq());
-
+//        UserEntity userEntity = userRepository.findById(qsheetCreateDto.getUserSeq());
+//        OrgEntity orgEntity = orgRepository.findById(qsheetCreateDto.getOrgSeq());
+//       JsonNodeFactory factory = JsonNodeFactory.instance;
+//       ObjectNode objectNode = factory.objectNode();
+//        objectNode.put("data", qsheetCreateDto.getData());
+        log.error("qsheetCreateDto :  {} ", qsheetCreateDto.getData());
 
         QsheetEntity qsheetEntity = QsheetEntity.builder()
-            .user(userEntity)
-            .org(orgEntity)
             .name(qsheetCreateDto.getName())
-            .opening(new QsheetEntity.ContentField())
+            .data(qsheetCreateDto.getData())
+//            .opening(QsheetEntity.ContentField.builder()
+//                        .orderIndex(qsheetCreateDto.getOpening().getOrderIndex())
+//                        .content(qsheetCreateDto.getOpening().getContent())
+//                        .build())
+//            .light(QsheetEntity.ContentField.builder()
+//                        .orderIndex(qsheetCreateDto.getLight().getOrderIndex())
+//                        .content(qsheetCreateDto.getLight().getContent())
+//                        .build())
+            .build();
         qsheetRepository.save(qsheetEntity);
     }
 //
@@ -179,4 +183,5 @@ public class QsheetServiceImpl implements QsheetService {
     public Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable) {
         return qsheetRepository.findPageByOrgid(orgid, pageable);
     }
+    
 }
