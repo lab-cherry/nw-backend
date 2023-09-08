@@ -19,8 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.querydsl.QSort;
-import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -103,7 +101,31 @@ public class QsheetController {
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
+    /**
+     * [QsheetController] 큐시트 수정 함수
+     * <pre>
+     * @param id 사용자 고유번호를 입력합니다.
+     * @param qsheetUpdateDto 사용자 업데이트에 필요한 사용자 정보를 담고 있는 객체입니다.
+     * @return
+     * true  : 업데이트된 큐시 정보를 반환합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : yby654(yby654@github.com)
+     */
+    @PatchMapping("{id}")
+     @Operation(summary = "큐시트 업데이트", description = "특정 큐시트를 업데이트합니다.")
+    public ResponseEntity<?> updateById(
+            @PathVariable("id") String id,
+            @RequestBody QsheetEntity.UpdateDto qsheetUpdateDto) {
 
+        log.info("[UserController] updateUser...!");
+
+        qsheetService.updateById(id, qsheetUpdateDto);
+
+        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+    }
 
 
 }

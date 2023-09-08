@@ -1,5 +1,6 @@
 package lab.cherry.nw.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -40,14 +42,15 @@ public class QsheetEntity implements Serializable {
     private String id;
 
     @DBRef
-    @JsonProperty("user")
+    @JsonProperty("userSeq")
     @Schema(title = "유저 고유번호", example = "38352658567418867") // (Long) Tsid
     private UserEntity userid;
 
     @DBRef
-    @JsonProperty("org")
-    @Schema(title = "조직 고유번호", example = "38352658567418867") // (Long) Tsid
+    @JsonProperty("orgid")
+    @Schema(title = "조직 정보", example = "더글로리") // (Long) Tsid
     private OrgEntity orgid;
+
 
     @JsonProperty("name")
     @Schema(title = "큐시트 이름", example = "최해리_230824")
@@ -56,6 +59,17 @@ public class QsheetEntity implements Serializable {
 
     @JsonProperty("data")
     private Map<String, ItemData> data;
+
+    @JsonProperty("created_at")
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
+    @Schema(title = "큐시트 생성 시간", example = "2023-07-04 12:00:00")
+    private Instant created_at;
+
+    @JsonProperty("updated_at")
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
+    @Schema(title = "큐시트 업데이트 시간", example = "2023-07-04 12:00:00")
+    private Instant updated_at;
+
 
     @Getter
     @Builder
@@ -125,6 +139,8 @@ public class QsheetEntity implements Serializable {
         @Schema(title = "큐시트 이름", example = "최해리_230824")
         @Size(min = 4, max = 20)
         private String name;
+        private String userSeq;
+        private String orgSeq;
         private Map<String, ItemData> data;
     }
 
@@ -140,6 +156,12 @@ public class QsheetEntity implements Serializable {
                         LinkedHashMap::new
                 ));
         }
+    }
+    @Getter
+    @Builder
+    @NoArgsConstructor @AllArgsConstructor
+    public static class UpdateDto {
+        private Map<String, ItemData> data;
     }
 
 

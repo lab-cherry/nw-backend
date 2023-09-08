@@ -2,9 +2,13 @@ package lab.cherry.nw.service.Impl;
 
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
+import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.QsheetEntity;
+import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.QsheetRepository;
+import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.QsheetService;
+import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -12,7 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
+import java.time.Instant;
+
 /**
  * <pre>
  * ClassName : QsheetServiceImpl
@@ -28,6 +33,9 @@ import java.util.Map;
 public class QsheetServiceImpl implements QsheetService {
 
     private final QsheetRepository qsheetRepository;
+    private final UserService userService;
+    private final OrgService orgService;
+    private final QsheetService qsheetService;
     /**
      * [QsheetServiceImpl] 전체 큐시트 조회 함수
      *
@@ -61,45 +69,50 @@ public class QsheetServiceImpl implements QsheetService {
      * Author : yby654(yby654@github.com)
      */
     public void createQsheet(QsheetEntity.CreateDto qsheetCreateDto) {
-
-//        Instant instant = Instant.now();
-//        UserEntity userEntity = userRepository.findById(qsheetCreateDto.getUserSeq());
-//        OrgEntity orgEntity = orgRepository.findById(qsheetCreateDto.getOrgSeq());
-//       JsonNodeFactory factory = JsonNodeFactory.instance;
-//       ObjectNode objectNode = factory.objectNode();
-//        objectNode.put("data", qsheetCreateDto.getData());
-        log.error("qsheetCreateDto :  {} ", qsheetCreateDto.getData());
-
+        Instant instant = Instant.now();
+        UserEntity userEntity = userService.findById(qsheetCreateDto.getUserSeq());
+        OrgEntity orgEntity = null;
+        if (qsheetCreateDto.getOrgSeq() != null){
+            orgEntity = orgService.findById(qsheetCreateDto.getOrgSeq());
+        }
         QsheetEntity qsheetEntity = QsheetEntity.builder()
+            .userid(userEntity)
+            .orgid(orgEntity)
             .name(qsheetCreateDto.getName())
             .data(qsheetCreateDto.getData())
-//            .opening(QsheetEntity.ContentField.builder()
-//                        .orderIndex(qsheetCreateDto.getOpening().getOrderIndex())
-//                        .content(qsheetCreateDto.getOpening().getContent())
-//                        .build())
-//            .light(QsheetEntity.ContentField.builder()
-//                        .orderIndex(qsheetCreateDto.getLight().getOrderIndex())
-//                        .content(qsheetCreateDto.getLight().getContent())
-//                        .build())
+            .created_at(instant)
             .build();
         qsheetRepository.save(qsheetEntity);
     }
-//
-//    /**
-//     * [QsheetServiceImpl] 큐시트 수정 함수
-//     *
-//     * @param org 큐시트 수정에 필요한 정보를 담은 개체입니다.
-//     * @throws EntityNotFoundException 큐시트 정보가 없을 경우 예외 처리 발생
-//     * <pre>
-//     * 특정 큐시트에 대한 정보를 수정합니다.
-//     * </pre>
-//     *
-//     * Author : yby654(yby654@github.com)
-//     */
-//    public void updateQsheet(QsheetEntity org) {
-//        findByName(org.getName());
-//        qsheetRepository.save(org);
-//    }
+
+    /**
+     * [QsheetServiceImpl] 큐시트 수정 함수
+     *
+     * @param id 조회할 사용자의 고유번호입니다.
+     * @param qsheetUpdateDto 사용자 수정에 필요한 사용자 정보를 담은 개체입니다.
+     * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 특정 사용자에 대해 사용자 정보를 수정합니다.
+     * </pre>
+     *
+     * Author : yby654(yby654@github.com)
+     */
+    public void updateById(String id, QsheetEntity.UpdateDto qsheetUpdateDto) {
+        QsheetEntity qsheetEntity = qsheetService.findById(id);
+
+//        if (qsheetEntity.getUsername() != null || qsheetEntity.getEmail() != null || user.getPassword() != null) {
+
+            qsheetEntity = QsheetEntity.builder()
+                .data(qsheetUpdateDto.getData())
+                .build();
+
+            qsheetRepository.save(qsheetEntity);
+
+//        } else {
+//            log.error("[UserServiceImpl - udpateUser] userName, userEmail, userPassword만 수정 가능합니다.");
+//            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+//        }
+    }
 //
 //    /**
 //     * [QsheetServiceImpl] 큐시트 삭제 함수

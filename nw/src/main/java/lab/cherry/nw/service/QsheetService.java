@@ -19,11 +19,12 @@ import java.util.List;
 public interface QsheetService {
  Page<QsheetEntity> getQsheets(Pageable pageable);
 
-// QsheetEntity findById(String id);
+ QsheetEntity findById(String id);
 // QsheetEntity findByUserId(String userid);
 // QsheetEntity findByOrgId(String orgid);
 
  void createQsheet(QsheetEntity.CreateDto qsheetCreateDto);
+ void updateById(String id, QsheetEntity.UpdateDto updateDto);
 // void deleteById(String id);
  Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable);
  Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable);
