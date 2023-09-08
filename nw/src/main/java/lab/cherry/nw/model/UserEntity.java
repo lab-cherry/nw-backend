@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,21 +41,25 @@ public class UserEntity implements Serializable {
     @Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
+    @NotNull
     @JsonProperty("userId")
     @Schema(title = "사용자 아이디", example = "admin")
     @Size(min = 4, max = 10, message = "Minimum userId length: 4 characters")
     private String userid;
 
+    @NotNull
     @JsonProperty("userName")
     @Schema(title = "사용자 이름", example = "홍길동")
     @Size(min = 2, max = 10, message = "Minimum username length: 4 characters")
     private String username;
 
+    @NotNull
     @JsonProperty("userEmail")
     @Schema(title = "사용자 이메일", example = "test@test.com")
     @Email(message = "Email Should Be Valid")
     private String email;
 
+    @NotNull
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
     @Size(min = 3, message = "Minimum password length: 8 characters")
@@ -86,19 +92,23 @@ public class UserEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class RegisterDto {
 
+        @NotBlank
         @Schema(title = "사용자 아이디", example = "admin")
         @Size(min = 4, max = 10)
         private String userid;
 
+        @NotBlank
         @Schema(title = "사용자 이름", example = "홍길동")
         @Size(min = 2, max = 10, message = "Minimum username length: 4 characters")
         private String username;
 
+        @NotBlank
         @Email
         @Schema(title = "사용자 이메일", example = "admin@innogrid.com")
         @Size(min = 3, max = 40)
         private String email;
 
+        @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, message = "Minimum password length: 8 characters")
         private String password;
@@ -109,10 +119,12 @@ public class UserEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class LoginDto {
 
+        @NotBlank
         @Schema(title = "사용자 아이디", example = "admin")
         @Size(min = 4, max = 10, message = "Minimum admin length: 4 characters")
         private String userid;
 
+        @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, message = "Minimum password length: 8 characters")
         private String password;
