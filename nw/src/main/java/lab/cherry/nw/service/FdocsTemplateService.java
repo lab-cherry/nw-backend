@@ -1,7 +1,6 @@
 package lab.cherry.nw.service;
 
 import lab.cherry.nw.model.FinaldocsEntity;
-import lab.cherry.nw.model.OrgEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
  * </pre>
  */
 @Component
-public interface FinaldocsService {
+public interface FdocsTemplateService {
     Page<FinaldocsEntity> getFinaldocs(Pageable pageable);
     FinaldocsEntity createFinaldocs(FinaldocsEntity.CreateDto finaldocsCreateDto);
 //    void updateById(String id, FinaldocsEntity.UpdateDto org);

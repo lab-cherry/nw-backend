@@ -1,6 +1,5 @@
 package lab.cherry.nw.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,8 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-
 /**
  * <pre>
  * ClassName : FinaldocsController
@@ -43,7 +40,7 @@ import java.io.File;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/fianldocs")
 @Tag(name = "Finaldocs", description = "Finaldocs API Document")
-public class FinaldocsController {
+public class FdocsTemplateController {
 
     private final FinaldocsService finaldocsService;
     /**

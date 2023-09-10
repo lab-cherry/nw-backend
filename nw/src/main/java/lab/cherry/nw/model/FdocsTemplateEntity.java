@@ -4,21 +4,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.time.Instant;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * <pre>
@@ -33,7 +28,7 @@ import java.util.Set;
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "finaldocs")
 @JsonPropertyOrder({ "id", "finaldocsName","groom", "bride", "hallname", "weddingDatename", "guaranteePerson", "hallFee", "weddingPicture", "dresshelper", "mc" , "bus", "bouqet"  , "photo" , "officiant", "pyebaek","etc" })
-public class FinaldocsEntity implements Serializable {
+public class FdocsTemplateEntity implements Serializable {
 
     @Id
     @JsonProperty("finaldocsSeq")

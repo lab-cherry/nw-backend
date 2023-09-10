@@ -2,14 +2,10 @@ package lab.cherry.nw.service.Impl;
 
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.FinaldocsEntity;
-import lab.cherry.nw.model.OrgEntity;
-import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.FinaldocsRepository;
 import lab.cherry.nw.service.FinaldocsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-//import netscape.javascript.JSObject;
-//import org.json.simple.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,7 +25,7 @@ import java.time.Instant;
 @Service("FinalServiceImpl")
 @Transactional
 @RequiredArgsConstructor
-public class FinaldocsServiceImpl implements FinaldocsService {
+public class FdocsTemplateServiceImpl implements FinaldocsService {
 
     private final FinaldocsRepository finaldocsRepository;
 
