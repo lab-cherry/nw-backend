@@ -119,12 +119,12 @@ public class QsheetController {
             @PathVariable("id") String id,
             @RequestBody QsheetEntity.UpdateDto qsheetUpdateDto) {
 
-        log.info("[UserController] updateUser...!");
+        log.info("[QsheetController] updateQsheet...!");
 
         qsheetService.updateById(id, qsheetUpdateDto);
 
-        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
-        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+//        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+        return new ResponseEntity<>(qsheetService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 
 

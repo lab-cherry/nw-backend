@@ -164,6 +164,12 @@ public class QsheetEntity implements Serializable {
         private Map<String, ItemData> data;
     }
 
+    public void updateFromDto(UpdateDto updateDto) {
+        if (updateDto.getData() != null) {
+            this.data = updateDto.getData();
+        }
+    }
+
 
         //
     //        @Schema(title = "화촉점화", example = "")

@@ -1,5 +1,6 @@
 package lab.cherry.nw.service.Impl;
 
+import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.OrgEntity;
@@ -35,7 +36,6 @@ public class QsheetServiceImpl implements QsheetService {
     private final QsheetRepository qsheetRepository;
     private final UserService userService;
     private final OrgService orgService;
-    private final QsheetService qsheetService;
     /**
      * [QsheetServiceImpl] 전체 큐시트 조회 함수
      *
@@ -88,8 +88,8 @@ public class QsheetServiceImpl implements QsheetService {
     /**
      * [QsheetServiceImpl] 큐시트 수정 함수
      *
-     * @param id 조회할 사용자의 고유번호입니다.
-     * @param qsheetUpdateDto 사용자 수정에 필요한 사용자 정보를 담은 개체입니다.
+     * @param id 조회할 큐시트의 고유번호입니다.
+     * @param qsheetUpdateDto 큐시트 수정에 필요한 사용자 정보를 담은 개체입니다.
      * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
      * <pre>
      * 특정 사용자에 대해 사용자 정보를 수정합니다.
@@ -98,20 +98,28 @@ public class QsheetServiceImpl implements QsheetService {
      * Author : yby654(yby654@github.com)
      */
     public void updateById(String id, QsheetEntity.UpdateDto qsheetUpdateDto) {
-        QsheetEntity qsheetEntity = qsheetService.findById(id);
+        Instant instant = Instant.now();
+        QsheetEntity qsheetEntity = findById(id);
 
-//        if (qsheetEntity.getUsername() != null || qsheetEntity.getEmail() != null || user.getPassword() != null) {
+        if (qsheetEntity.getData() != null ) {
+            log.error("qsheetEntity : {} ", qsheetEntity);
+            log.error("qsheetUpdateDto.getData() : {} ", qsheetUpdateDto.getData());
+            qsheetEntity.updateFromDto(qsheetUpdateDto);
 
-            qsheetEntity = QsheetEntity.builder()
-                .data(qsheetUpdateDto.getData())
-                .build();
+            qsheetRepository.save(qsheetEntity);
+//            qsheetEntity = QsheetEntity.builder()
+//                .id(id)
+//                .data(qsheetUpdateDto.getData())
+//                .created_at(qsheetEntity.getCreated_at())
+//                .updated_at(instant)
+//                .build();
 
             qsheetRepository.save(qsheetEntity);
 
-//        } else {
-//            log.error("[UserServiceImpl - udpateUser] userName, userEmail, userPassword만 수정 가능합니다.");
-//            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
-//        }
+        } else {
+            log.error("[QsheetServiceImpl - udpateQsheet] data 만 수정 가능합니다.");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+        }
     }
 //
 //    /**
@@ -165,23 +173,18 @@ public class QsheetServiceImpl implements QsheetService {
 //        return qsheetRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Qsheet with Name " + name + " Not Found."));
 //    }
 //
-//    /**
-//     * [QsheetServiceImpl] ID로 큐시트 조회 함수
-//     *
-//     * @param id 조회할 큐시트의 식별자입니다.
-//     * @return 주어진 식별자에 해당하는 큐시트 정보
-//     * @throws EntityNotFoundException 해당 ID의 큐시트 정보가 없을 경우 예외 처리 발생
-//     * <pre>
-//     * 입력한 id에 해당하는 큐시트 정보를 조회합니다.
-//     * </pre>
-//     *
-//     * Author : yby654(yby654@github.com)
-//     */
-//    @Transactional(readOnly = true)
-//    public QsheetEntity findById(Long id) {
-//        return qsheetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Qsheet with Id " + id + " Not Found."));
-//    }
-
+    /**
+     * [QsheetServiceImpl] ID로 큐시트 조회 함수
+     *
+     * @param id 조회할 큐시트의 식별자입니다.
+     * @return 주어진 식별자에 해당하는 큐시트 정보
+     * @throws EntityNotFoundException 해당 ID의 큐시트 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 입력한 id에 해당하는 큐시트 정보를 조회합니다.
+     * </pre>
+     *
+     * Author : yby654(yby654@github.com)
+     */
     @Transactional(readOnly = true)
     public QsheetEntity findById(String id) {
         return qsheetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Qsheet with Id " + id + " Not Found."));
