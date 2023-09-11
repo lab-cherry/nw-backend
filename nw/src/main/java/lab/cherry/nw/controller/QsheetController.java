@@ -126,6 +126,28 @@ public class QsheetController {
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(qsheetService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
+    /**
+     * [QsheetController] 특정 큐시트 삭제 함수
+     *
+     * @param id 큐시트 고유번호를 입력합니다.
+     * @return
+     * <pre>
+     * true  : 특정 큐시트를 삭제처리합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : yby654(yby654@github.com)
+     */
+    @DeleteMapping("{id}")
+    @Operation(summary = "큐시트 삭제", description = "큐시트를 삭제합니다.")
+    public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
 
+        log.info("[UserController] deleteUser...!");
+
+        qsheetService.deleteById(id);
+
+        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+    }
 
 }

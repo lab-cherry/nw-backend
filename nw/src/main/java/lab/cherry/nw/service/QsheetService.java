@@ -25,7 +25,7 @@ public interface QsheetService {
 
  void createQsheet(QsheetEntity.CreateDto qsheetCreateDto);
  void updateById(String id, QsheetEntity.UpdateDto updateDto);
-// void deleteById(String id);
+ void deleteById(String id);
  Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable);
  Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable);
 

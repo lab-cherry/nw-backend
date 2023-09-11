@@ -122,22 +122,23 @@ public class QsheetServiceImpl implements QsheetService {
         }
     }
 //
-//    /**
-//     * [QsheetServiceImpl] 큐시트 삭제 함수
-//     *
-//     * @param id 삭제할 큐시트의 식별자입니다.
-//     * @throws EntityNotFoundException 해당 ID의 큐시트 정보가 없을 경우 예외 처리 발생
-//     * <pre>
-//     * 입력한 id를 가진 큐시트 정보를 삭제합니다.
-//     * </pre>
-//     *
-//     * Author : yby654(yby654@github.com)
-//     */
-//    public void deleteQsheet(Long id) {
-//        qsheetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Qsheet with Id " + id + " Not Found."));
-//        qsheetRepository.deleteById(id);
-//    }
-//
+    /**
+     * [QsheetServiceImpl] 큐시트 삭제 함수
+     *
+     * @param id 삭제할 큐시트의 식별자입니다.
+     * @throws EntityNotFoundException 해당 ID의 큐시트 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 입력한 id를 가진 큐시트 정보를 삭제합니다.
+     * </pre>
+     *
+     * Author : yby654(yby654@github.com)
+     */
+     public void deleteById(String id) {
+        qsheetRepository.delete(qsheetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with Id " + id + " Not Found.")));
+    }
+
+
+
 //    /**
 //     * [QsheetServiceImpl] 큐시트 이름 중복 체크 함수
 //     *
