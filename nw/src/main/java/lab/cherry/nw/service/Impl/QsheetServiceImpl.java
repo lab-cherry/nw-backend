@@ -22,7 +22,7 @@ import java.time.Instant;
 /**
  * <pre>
  * ClassName : QsheetServiceImpl
- * Type : class
+ * Type : class0.20
  * Description : 큐시트와 관련된 서비스 구현과 관련된 함수를 포함하고 있는 클래스입니다.
  * Related : spring-boot-starter-data-jpa
  * </pre>
