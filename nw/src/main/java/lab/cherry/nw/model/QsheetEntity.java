@@ -76,49 +76,10 @@ public class QsheetEntity implements Serializable {
     public static class ItemData {
         private int orderIndex;
         private String content;
+        private String actor;
+        private String note;
+        private String filePath;
     }
-    //
-    //    @JsonProperty("light")
-    //    @Schema(title = "화촉점화", example = "")
-    //    @Size(min = 4, max = 255, message = "Minimum contact length: 4 characters")
-    //    private String light;
-    //
-    //    @JsonProperty("groom_entrance")
-    //    @Schema(title = "신랑입장", example = "")
-    //    private String groom_entrance;
-    //
-    //    @JsonProperty("bride_entrance")
-    //    @Schema(title = "신부입장", example = "")
-    //    private String bride_entrance;
-    //
-    //
-    //    @JsonProperty("bow")
-    //    @Schema(title = "맞절", example = "")
-    //    private String bow;
-    //
-    //    @JsonProperty("vow")
-    //    @Schema(title = "혼인서약", example = "")
-    //    private String vow;
-    //
-    //
-    //    @JsonProperty("declaration")
-    //    @Schema(title = "성혼선언", example = "")
-    //    private String declaration;
-    //
-    //
-    //    @JsonProperty("song")
-    //    @Schema(title = "축가", example = "")
-    //    private String song;
-    //
-    //
-    //    @JsonProperty("greeting")
-    //    @Schema(title = "인사", example = "")
-    //    private String greeting;
-    //
-    //
-    //    @JsonProperty("parade")
-    //    @Schema(title = "행진", example = "")
-    //    private String parade;
 
 
     // TODO: Permission Entity
@@ -164,48 +125,12 @@ public class QsheetEntity implements Serializable {
         private Map<String, ItemData> data;
     }
 
-    public void updateFromDto(UpdateDto updateDto) {
+     public void updateFromDto(UpdateDto updateDto) {
         if (updateDto.getData() != null) {
             this.data = updateDto.getData();
+            this.updated_at = Instant.now();
         }
     }
 
-
-        //
-    //        @Schema(title = "화촉점화", example = "")
-    //        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-    //        private String light;
-    //
-    //        @Schema(title = "신랑 입장", example = "")
-    //        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-    //        private String groom_entrance;
-    //
-    //        @Schema(title = "신부입장", example = "")
-    //        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-    //        private String bride_entrance;
-    //
-    //        @Schema(title = "맞절", example = "")
-    //        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-    //        private String bow;
-    //
-    //        @Schema(title = "혼인서약", example = "")
-    //        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-    //        private String vow;
-    //
-    //        @Schema(title = "성혼선언", example = "")
-    //        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-    //        private String declaration;
-    //
-    //        @Schema(title = "축가", example = "")
-    //        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-    //        private String song;
-    //
-    //        @Schema(title = "인사", example = "")
-    //        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-    //        private String greeting;
-    //
-    //        @Schema(title = "행진", example = "")
-    //        @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-    //        private String parade;
 
 }

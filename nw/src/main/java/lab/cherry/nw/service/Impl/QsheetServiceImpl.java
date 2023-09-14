@@ -98,14 +98,13 @@ public class QsheetServiceImpl implements QsheetService {
      * Author : yby654(yby654@github.com)
      */
     public void updateById(String id, QsheetEntity.UpdateDto qsheetUpdateDto) {
-        Instant instant = Instant.now();
+//        Instant instant = Instant.now();
         QsheetEntity qsheetEntity = findById(id);
 
         if (qsheetEntity.getData() != null ) {
             log.error("qsheetEntity : {} ", qsheetEntity);
             log.error("qsheetUpdateDto.getData() : {} ", qsheetUpdateDto.getData());
             qsheetEntity.updateFromDto(qsheetUpdateDto);
-
             qsheetRepository.save(qsheetEntity);
 //            qsheetEntity = QsheetEntity.builder()
 //                .id(id)

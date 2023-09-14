@@ -150,4 +150,26 @@ public class QsheetController {
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
 
+    /**
+     * [QsheetController] 특정 역할 조회 함수
+     *
+     * @param id 큐시트 고유번호를 입력합니다.
+     * @return
+     * <pre>
+     * true  : 특정 큐시트 정보를 반환합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : yby654(yby654@github.com)
+     */
+    @GetMapping("{id}")
+    @Operation(summary = "ID로 역할 찾기", description = "큐시트를 조회합니다.")
+    public ResponseEntity<?> findByQsheetId(@PathVariable("id") String id) {
+
+        log.info("[QsheetController] findByQsheetId...!");
+
+        //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
+        return new ResponseEntity<>(qsheetService.findById(id), new HttpHeaders(), HttpStatus.OK);
+    }
+
 }
