@@ -1,8 +1,11 @@
 package lab.cherry.nw.service.Impl;
 
 import lab.cherry.nw.error.exception.EntityNotFoundException;
+import lab.cherry.nw.model.FdocsTemplateEntity;
 import lab.cherry.nw.model.FinaldocsEntity;
+import lab.cherry.nw.repository.FdocsTemplateRepository;
 import lab.cherry.nw.repository.FinaldocsRepository;
+import lab.cherry.nw.service.FdocsTemplateService;
 import lab.cherry.nw.service.FinaldocsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +25,12 @@ import java.time.Instant;
  * </pre>
  */
 @Slf4j
-@Service("FinalServiceImpl")
+@Service("fdocsTemplateServiceImpl")
 @Transactional
 @RequiredArgsConstructor
-public class FdocsTemplateServiceImpl implements FinaldocsService {
+public class FdocsTemplateServiceImpl implements FdocsTemplateService {
 
-    private final FinaldocsRepository finaldocsRepository;
+    private final FdocsTemplateRepository fdocsTemplateRepository;
 
     /**
      * [FinaldocsServiceImpl] 최종 확인서 조회 함수
@@ -42,9 +45,9 @@ public class FdocsTemplateServiceImpl implements FinaldocsService {
      */
     @Transactional(readOnly = true)
     @Override
-    public Page<FinaldocsEntity> getFinaldocs(Pageable pageable) {
+    public Page<FdocsTemplateEntity> getFdocsTemplate(Pageable pageable) {
 
-        return finaldocsRepository.findAll(pageable);
+        return fdocsTemplateRepository.findAll(pageable);
 
 
         //        return EntityNotFoundException.requireNotEmpty(finaldocsRepository.findAll(), "Fianldocs Not Found");
@@ -61,31 +64,31 @@ public class FdocsTemplateServiceImpl implements FinaldocsService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public FinaldocsEntity createFinaldocs(FinaldocsEntity.CreateDto finaldocsCreateDto) {
+    public FdocsTemplateEntity createFdocsTemplate(FdocsTemplateEntity.CreateDto fdocsTelpateCreateDto) {
 
         Instant instant = Instant.now();
 
 
-        FinaldocsEntity finaldocsEntity = FinaldocsEntity.builder()
-            .name(finaldocsCreateDto.getName())
-            .groom(finaldocsCreateDto.getGroom())
-            .bride(finaldocsCreateDto.getBride())
-            .weddingDatename(finaldocsCreateDto.getWeddingDatename())
-            .guaranteePerson(finaldocsCreateDto.getGuaranteePerson())
-            .hallFee(finaldocsCreateDto.getHallFee())
-            .weddingPicture(finaldocsCreateDto.getWeddingPicture())
-            .dresshelper(finaldocsCreateDto.getDresshelper())
-            .mc(finaldocsCreateDto.getMc())
-            .guaranteePerson(finaldocsCreateDto.getGuaranteePerson())
-            .photo(finaldocsCreateDto.getPhoto())
-            .bus(finaldocsCreateDto.isBus())
-            .bouqet(finaldocsCreateDto.isBouqet())
-            .officiant(finaldocsCreateDto.isOfficiant())
-            .pyebaek(finaldocsCreateDto.isPyebaek())
-            .etc(finaldocsCreateDto.getEtc())
+        FdocsTemplateEntity finaldocsEntity = FdocsTemplateEntity.builder()
+            .name(fdocsTelpateCreateDto.getName())
+            .groom(fdocsTelpateCreateDto.getGroom())
+            .bride(fdocsTelpateCreateDto.getBride())
+            .weddingDatename(fdocsTelpateCreateDto.getWeddingDatename())
+            .guaranteePerson(fdocsTelpateCreateDto.getGuaranteePerson())
+            .hallFee(fdocsTelpateCreateDto.getHallFee())
+            .weddingPicture(fdocsTelpateCreateDto.getWeddingPicture())
+            .dresshelper(fdocsTelpateCreateDto.getDresshelper())
+            .mc(fdocsTelpateCreateDto.getMc())
+            .guaranteePerson(fdocsTelpateCreateDto.getGuaranteePerson())
+            .photo(fdocsTelpateCreateDto.getPhoto())
+            .bus(fdocsTelpateCreateDto.isBus())
+            .bouqet(fdocsTelpateCreateDto.isBouqet())
+            .officiant(fdocsTelpateCreateDto.isOfficiant())
+            .pyebaek(fdocsTelpateCreateDto.isPyebaek())
+            .etc(fdocsTelpateCreateDto.getEtc())
             .build();
 
-        return finaldocsRepository.save(finaldocsEntity);
+        return fdocsTemplateRepository.save(finaldocsEntity);
     }
     
     /**
@@ -132,7 +135,7 @@ public class FdocsTemplateServiceImpl implements FinaldocsService {
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
     public void deleteById(String id) {
-        finaldocsRepository.delete(finaldocsRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Fianldocs with Id " + id + " Not Found.")));
+        fdocsTemplateRepository.delete(fdocsTemplateRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Fianldocs with Id " + id + " Not Found.")));
     }
 
 
@@ -156,8 +159,8 @@ public class FdocsTemplateServiceImpl implements FinaldocsService {
 
 
     @Transactional(readOnly = true)
-    public FinaldocsEntity findById(String id) {
-        return finaldocsRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("finaldocs with Id " + id + " Not Found."));
+    public FdocsTemplateEntity findById(String id) {
+        return fdocsTemplateRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("finaldocs with Id " + id + " Not Found."));
     }
 
     /**
@@ -173,18 +176,18 @@ public class FdocsTemplateServiceImpl implements FinaldocsService {
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public FinaldocsEntity findByName(String name) {
-        return finaldocsRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Org with Name " + name + " Not Found."));
+    public FdocsTemplateEntity findByName(String name) {
+        return fdocsTemplateRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Org with Name " + name + " Not Found."));
     }
 
     @Transactional(readOnly = true)
-    public Page<FinaldocsEntity> findPageByName(String name, Pageable pageable) {
-        return finaldocsRepository.findPageByName(name, pageable);
+    public Page<FdocsTemplateEntity> findPageByName(String name, Pageable pageable) {
+        return fdocsTemplateRepository.findPageByName(name, pageable);
     }
 
 
     @Transactional(readOnly = true)
-    public Page<FinaldocsEntity> findPageById(String id, Pageable pageable) {
-        return finaldocsRepository.findPageById(id, pageable);
+    public Page<FdocsTemplateEntity> findPageById(String id, Pageable pageable) {
+        return fdocsTemplateRepository.findPageById(id, pageable);
     }
 }

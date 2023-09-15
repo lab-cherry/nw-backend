@@ -26,7 +26,7 @@ import java.time.Instant;
  * </pre>
  */
 @Slf4j
-@Service("FinalServiceImpl")
+@Service("finaldocsServiceImpl")
 @Transactional
 @RequiredArgsConstructor
 public class FinaldocsServiceImpl implements FinaldocsService {

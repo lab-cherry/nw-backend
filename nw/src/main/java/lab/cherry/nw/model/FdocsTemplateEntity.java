@@ -31,12 +31,12 @@ import java.util.Map;
 public class FdocsTemplateEntity implements Serializable {
 
     @Id
-    @JsonProperty("finaldocsSeq")
-    @Schema(title = "최종확인서 고유번호", example = "64ed89aa9e813b5ab16da6de")
+    @JsonProperty("fdocstmlSeq")
+    @Schema(title = "최종확인서 템플릿 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
 
-    @JsonProperty("finaldocsName")
+    @JsonProperty("fdocstmlName")
     @Schema(title = "최종확인서 이름", example = "문서1")
     @Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
     private String name;

@@ -1,5 +1,6 @@
 package lab.cherry.nw.repository;
 
+import lab.cherry.nw.model.FdocsTemplateEntity;
 import lab.cherry.nw.model.FinaldocsEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,17 +20,17 @@ import java.util.UUID;
  * </pre>
  */
 //@Repository
-public interface FdocsTemplateRepository extends MongoRepository<FinaldocsEntity, UUID> {
+public interface FdocsTemplateRepository extends MongoRepository<FdocsTemplateEntity, UUID> {
 
-    Page<FinaldocsEntity> findAll(Pageable pageable);
+    Page<FdocsTemplateEntity> findAll(Pageable pageable);
 
-    Page<FinaldocsEntity> findPageByName(String finaldocsName, Pageable pageable);
+    Page<FdocsTemplateEntity> findPageByName(String fdocsTemplateName, Pageable pageable);
 
-    Page<FinaldocsEntity> findPageById(String id, Pageable pageable);
+    Page<FdocsTemplateEntity> findPageById(String id, Pageable pageable);
 
-    Optional<FinaldocsEntity> findById(String id);
+    Optional<FdocsTemplateEntity> findById(String id);
 
-    Optional<FinaldocsEntity> findByName(String finaldocsName);
+    Optional<FdocsTemplateEntity> findByName(String fdocsTemplateName);
 
-    List<FinaldocsEntity> findAllById(List<String> orgIds);
+    List<FdocsTemplateEntity> findAllById(List<String> orgIds);
 }

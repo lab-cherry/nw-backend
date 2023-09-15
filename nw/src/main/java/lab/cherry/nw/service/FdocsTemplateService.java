@@ -1,5 +1,6 @@
 package lab.cherry.nw.service;
 
+import lab.cherry.nw.model.FdocsTemplateEntity;
 import lab.cherry.nw.model.FinaldocsEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,12 +16,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public interface FdocsTemplateService {
-    Page<FinaldocsEntity> getFinaldocs(Pageable pageable);
-    FinaldocsEntity createFinaldocs(FinaldocsEntity.CreateDto finaldocsCreateDto);
+    Page<FdocsTemplateEntity> getFdocsTemplate(Pageable pageable);
+    FdocsTemplateEntity createFdocsTemplate(FdocsTemplateEntity.CreateDto fdocsTemplateCreateDto);
 //    void updateById(String id, FinaldocsEntity.UpdateDto org);
-    FinaldocsEntity findById(String id);
-    FinaldocsEntity findByName(String name);
+    FdocsTemplateEntity findById(String id);
+    FdocsTemplateEntity findByName(String name);
     void deleteById(String id);
-    Page<FinaldocsEntity> findPageByName(String name, Pageable pageable);
-    Page<FinaldocsEntity> findPageById(String id, Pageable pageable);
+    Page<FdocsTemplateEntity> findPageByName(String name, Pageable pageable);
+    Page<FdocsTemplateEntity> findPageById(String id, Pageable pageable);
 }
