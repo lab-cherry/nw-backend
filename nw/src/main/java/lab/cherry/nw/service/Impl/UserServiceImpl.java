@@ -7,6 +7,7 @@ import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.OrgRepository;
 import lab.cherry.nw.repository.UserRepository;
+import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * <pre>
@@ -33,14 +32,14 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final OrgRepository orgRepository;
+	private final OrgRepository orgRepository;
+	private final OrgService orgService;
     private final PasswordEncoder passwordEncoder;
 
     /**
      * [UserServiceImpl] 전체 사용자 조회 함수
      *
      * @return DB에서 전체 사용자 정보 목록을 리턴합니다.
-     * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
      * <pre>
      * 전체 사용자를 조회하여, 사용자 정보 목록을 반환합니다.
      * </pre>
@@ -109,7 +108,7 @@ public class UserServiceImpl implements UserService {
      * [UserServiceImpl] 사용자 조직 수정 함수
      *
      * @param id 조회할 사용자의 고유번호입니다.
-     * @param orgIds 사용자의 조직 정보고유아이번호를 가진 객체입니다.를 담은 리스트입니다.
+     * @param orgId 사용자의 조직 정보고유아이번호를 가진 객체입니다.를 담은 리스트입니다.
      * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
      * <pre>
      * 특정 사용자에 대해 사용자 정보를 수정합니다.
@@ -117,15 +116,29 @@ public class UserServiceImpl implements UserService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void updateOrgById(String id, List<String> orgIds) {
+    public void updateOrgById(String id, String orgId) {
 
         UserEntity userEntity = findById(id);
 
-        List<OrgEntity> selectedOrgs = orgRepository.findAllById(orgIds);
-        userEntity.getOrgs().clear();  // 기존 org 정보 모두 삭제
-        userEntity.getOrgs().addAll(selectedOrgs);  // 새로 선택된 org 정보 추가
+        if (orgId != null) {
 
-        userRepository.save(userEntity);
+		    OrgEntity orgEntity = orgService.findById(orgId);
+
+            userEntity = UserEntity.builder()
+                .id(userEntity.getId())
+                .userid(userEntity.getUserid())
+                .username(userEntity.getUsername())
+                .email(userEntity.getEmail())
+                .password(userEntity.getPassword())
+                .org(orgEntity)
+                .build();
+
+            userRepository.save(userEntity);
+
+        } else {
+			log.error("[UserServiceImpl - updateOrgById] orgId 만 입력 가능합니다.");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+		}
     }
 
 

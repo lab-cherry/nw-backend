@@ -80,10 +80,10 @@ public class UserEntity implements Serializable {
     private RoleEntity role;
 
     @DBRef
-    @Builder.Default
-    @JsonProperty("userOrgs")
+    @JsonProperty("userOrg")
     @Schema(title = "Org 정보", example = "더모멘트")
-    private Set<OrgEntity> orgs = new HashSet<>();
+//    private Set<OrgEntity> orgs = new HashSet<>();
+	private OrgEntity org;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -95,23 +95,23 @@ public class UserEntity implements Serializable {
         @NotBlank
         @Schema(title = "사용자 아이디", example = "admin")
         @Size(min = 4, max = 10)
-        private String userid;
+        private String userId;
 
         @NotBlank
         @Schema(title = "사용자 이름", example = "홍길동")
         @Size(min = 2, max = 10, message = "Minimum username length: 4 characters")
-        private String username;
+        private String userName;
 
         @NotBlank
         @Email
-        @Schema(title = "사용자 이메일", example = "admin@innogrid.com")
+        @Schema(title = "사용자 이메일", example = "admin@nw.com")
         @Size(min = 3, max = 40)
-        private String email;
+        private String userEmail;
 
         @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, message = "Minimum password length: 8 characters")
-        private String password;
+        private String userPassword;
     }
 
     @Getter
@@ -122,12 +122,12 @@ public class UserEntity implements Serializable {
         @NotBlank
         @Schema(title = "사용자 아이디", example = "admin")
         @Size(min = 4, max = 10, message = "Minimum admin length: 4 characters")
-        private String userid;
+        private String userId;
 
         @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, message = "Minimum password length: 8 characters")
-        private String password;
+        private String userPassword;
     }
 
     @Getter
@@ -147,6 +147,10 @@ public class UserEntity implements Serializable {
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, max = 40)
         private String password;
+
+		@Schema(title = "사용자 조직", example = "")
+        @Size(min = 3, max = 40)
+        private String orgId;
 
     }
 }

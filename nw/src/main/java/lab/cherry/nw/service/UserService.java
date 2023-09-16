@@ -1,10 +1,9 @@
 package lab.cherry.nw.service;
 
+import lab.cherry.nw.model.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import lab.cherry.nw.model.UserEntity;
-import java.util.List;
 
 
 /**
@@ -19,10 +18,10 @@ import java.util.List;
 public interface UserService {
     Page<UserEntity> getUsers(Pageable pageable);
     UserEntity findById(String id);
-    UserEntity findByUserId(String userid);
+	UserEntity findByUserId(String userid);
     void updateById(String id, UserEntity.UpdateDto user);
     void deleteById(String id);
     Page<UserEntity> findPageByUserId(String userid, Pageable pageable);
 
-    void updateOrgById(String id, List<String> orgIds);
+	void updateOrgById(String id, String orgId);
 }

@@ -34,7 +34,7 @@ public class OrgEntity implements Serializable {
 
     @Id
     @JsonProperty("orgSeq")
-    @Schema(title = "조직 조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
+    @Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
     @NotNull
