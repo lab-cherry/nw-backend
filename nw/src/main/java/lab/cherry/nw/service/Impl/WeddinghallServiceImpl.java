@@ -106,33 +106,33 @@ public class WeddinghallServiceImpl implements WeddinghallService {
 		return weddinghallRepository.save(weddinghallEntity);
 	}
 
-
-	/**
-     * [WeddinghallServiceImpl] 웨딩홀(예식장) 이미지 수정 함수
-     *
-     * @param id 조회할 웨딩홀(예식장)의 고유번호입니다.
-     * @param imageFiles 큐시트 수정에 필요한 사용자 정보를 담은 개체입니다.
-     * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
-     * <pre>
-     * 특정 웨딩홀(예식장)에 대해 웨딩홀(예식장) 정보를 수정합니다.
-     * </pre>
-     *
-     * Author : yby654(yby654@github.com)
-     */
-    public void updateById(String id, List<MultipartFile> imageFiles) {
-		//        Instant instant = Instant.now();
-		WeddinghallEntity weddinghallEntity = findById(id);
-
-		if (imageFiles != null) {
-			weddinghallEntity = WeddinghallEntity.builder()
-					
-					.build();
-			weddinghallRepository.save(weddinghallEntity);
-		} else {
-			log.error("[QsheetServiceImpl - udpateQsheet] data 만 수정 가능합니다.");
-			throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
-		}
-	}
+//
+//	/**
+//     * [WeddinghallServiceImpl] 웨딩홀(예식장) 이미지 수정 함수
+//     *
+//     * @param id 조회할 웨딩홀(예식장)의 고유번호입니다.
+//     * @param imageFiles 큐시트 수정에 필요한 사용자 정보를 담은 개체입니다.
+//     * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
+//     * <pre>
+//     * 특정 웨딩홀(예식장)에 대해 웨딩홀(예식장) 정보를 수정합니다.
+//     * </pre>
+//     *
+//     * Author : yby654(yby654@github.com)
+//     */
+//    public void updateById(String id, List<MultipartFile> imageFiles) {
+//		//        Instant instant = Instant.now();
+//		WeddinghallEntity weddinghallEntity = findById(id);
+//
+//		if (imageFiles != null) {
+//			weddinghallEntity = WeddinghallEntity.builder()
+//					
+//					.build();
+//			weddinghallRepository.save(weddinghallEntity);
+//		} else {
+//			log.error("[QsheetServiceImpl - udpateQsheet] data 만 수정 가능합니다.");
+//			throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+//		}
+//	}
 
 
 	@Transactional(readOnly = true)
@@ -156,6 +156,23 @@ public class WeddinghallServiceImpl implements WeddinghallService {
 		if (weddinghallRepository.findByName(name).isPresent()) {
 			throw new CustomException(ErrorCode.DUPLICATE); // 조직 이름이 중복됨
 		}
+	}
+
+	/**
+     * [OrgServiceImpl] ID로 조직 조회 함수
+     *
+     * @param id 조회할 조직의 식별자입니다.
+     * @return 주어진 식별자에 해당하는 조직 정보
+     * @throws EntityNotFoundException 해당 ID의 조직 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 입력한 id에 해당하는 조직 정보를 조회합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @Transactional(readOnly = true)
+    public WeddinghallEntity findById(String id) {
+		return weddinghallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Weddinghall with Id " + id + " Not Found."));
 	}
 	
 
