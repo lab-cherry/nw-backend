@@ -24,6 +24,6 @@ public interface WeddinghallService {
 //    void updateById(String id, WeddinghallEntity.UpdateDto weddinghall);
 //    WeddinghallEntity findById(String id);
 //    WeddinghallEntity findByName(String name);
-//    void deleteById(String id);
+    void deleteById(String id);
     Page<WeddinghallEntity> findPageByName(String name, Pageable pageable);
 }

@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-
 /**
  * <pre>
  * ClassName : UserRepository
@@ -20,11 +19,8 @@ import java.util.Optional;
 public interface UserRepository extends MongoRepository<UserEntity, String> {
 
     Page<UserEntity> findAll(Pageable pageable);
-
     Page<UserEntity> findPageByUserid(String userid, Pageable pageable);
-
     Optional<UserEntity> findById(String id);
-
     Optional<UserEntity> findByuserid(String userid);
 
     Optional<UserEntity> findByUsername(String username);

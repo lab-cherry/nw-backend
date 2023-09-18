@@ -51,8 +51,8 @@ services:
     logging:
       driver: json-file
     environment:
-      MINIO_ACCESS_KEY: nw
-      MINIO_SECRET_KEY: nw
+      MINIO_ACCESS_KEY: admin
+      MINIO_SECRET_KEY: nangmanwedding
     ports:
       - "9000:9000"
       - "9001:9001"

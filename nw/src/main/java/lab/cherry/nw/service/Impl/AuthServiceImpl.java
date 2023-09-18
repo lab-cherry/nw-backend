@@ -64,6 +64,7 @@ public class AuthServiceImpl implements AuthService {
             .username(userRegisterDto.getUserName())
             .email(userRegisterDto.getUserEmail())
             .password(passwordEncoder.encode(userRegisterDto.getUserPassword()))
+			.type((userRegisterDto.getType()) == null ? "user" : userRegisterDto.getType())
             .role(roleEntity)
             .enabled(true)
             .created_at(instant)

@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-
 /**
  * <pre>
  * ClassName : UserService
@@ -22,6 +21,5 @@ public interface UserService {
     void updateById(String id, UserEntity.UpdateDto user);
     void deleteById(String id);
     Page<UserEntity> findPageByUserId(String userid, Pageable pageable);
-
 	void updateOrgById(String id, String orgId);
 }

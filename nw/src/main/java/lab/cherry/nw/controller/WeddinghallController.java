@@ -8,11 +8,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lab.cherry.nw.error.ErrorResponse;
+import lab.cherry.nw.error.ResultResponse;
+import lab.cherry.nw.error.enums.SuccessCode;
+import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.model.WeddinghallEntity;
 import lab.cherry.nw.service.FileService;
+import lab.cherry.nw.service.MinioService;
+import lab.cherry.nw.service.UserService;
 import lab.cherry.nw.service.WeddinghallService;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,6 +53,8 @@ public class WeddinghallController {
     
     private final WeddinghallService weddinghallService;
 	private final FileService fileService;
+	private final MinioService minioService;
+	private final UserService userService;
     
     /**
      * [WeddinghallController] 웨딩홀 목록 함수
@@ -78,7 +86,6 @@ public class WeddinghallController {
         return new ResponseEntity<>(userEntity, new HttpHeaders(), HttpStatus.OK);
     }
     
-
     /**
      * [WeddinghallController] 웨딩홀(예식장) 생성 함수
      *
@@ -91,7 +98,7 @@ public class WeddinghallController {
      *
      * Author : taking(taking@duck.com)
      */
-    @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
     @Operation(summary = "웨딩홀(예식장) 생성", description = "웨딩홀(예식장)을 생성합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "웨딩홀(예식장) 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
@@ -111,10 +118,51 @@ public class WeddinghallController {
         return new ResponseEntity<>(weddinghallEntity, new HttpHeaders(), HttpStatus.OK);
     }
 	
-	@GetMapping("test")
-	public ResponseEntity<?> getFile() {
-		
-		return new ResponseEntity<>(fileService.getAllFiles(), new HttpHeaders(), HttpStatus.OK);
+	/**
+     * [WeddinghallController] 특정 웨딩홀(예식장) 삭제 함수
+     *
+     * @param id 웨딩홀(예식장) 고유번호를 입력합니다.
+     * @return
+     * <pre>
+     * true  : 특정 웨딩홀(예식장)를 삭제처리합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @DeleteMapping("{id}")
+    @Operation(summary = "웨딩홀(예식장) 삭제", description = "웨딩홀(예식장)를 삭제합니다.")
+    public ResponseEntity<?> deleteWeddinghall(@PathVariable("id") String id) {
+
+		log.info("[UserController] deleteUser...!");
+
+		weddinghallService.deleteById(id);
+
+		final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
 	}
-    
+
+	@SneakyThrows
+	@GetMapping("test")
+    public ResponseEntity<?> test() {
+
+		minioService.createBucketIfNotExists("test");
+		minioService.createGlobalPolicy("test");
+		minioService.setBucketPolicy("test");
+
+		UserEntity user = userService.findById("64f82e492948d933edfaa9c0");
+
+		minioService.newUser(user);
+		minioService.setUserPolicy("test", "64f82e492948d933edfaa9c0");
+
+//		String test = minioService.getPresignedURL("6506ebb61b6deb1602d85c35", "/관리/더 글로리/IMG_61E29A079818-1.jpeg");
+//		return new ResponseEntity<>(test, new HttpHeaders(), HttpStatus.OK);
+
+		return new ResponseEntity<>(minioService.listUsers(), new HttpHeaders(), HttpStatus.OK);
+
+//		final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+//		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+	}
+
+
 }

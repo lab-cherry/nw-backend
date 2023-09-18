@@ -1,24 +1,14 @@
 package lab.cherry.nw.service;
 
-import com.mongodb.client.gridfs.GridFSFindIterable;
-import com.mongodb.client.gridfs.model.GridFSFile;
-import io.minio.errors.MinioException;
 import lab.cherry.nw.model.FileEntity;
-import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.gridfs.GridFsResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 
 /**
  * <pre>
@@ -31,13 +21,11 @@ import java.util.Optional;
 @Component
 public interface FileService {
 
+	List<String> uploadFiles(Map<String, String> info, List<MultipartFile> files);
 	Page<FileEntity> getFiles(Pageable pageable);
-	List<String> uploadFiles(Map<String, String> info, List<MultipartFile> files) throws IOException, MinioException, InvalidKeyException, NoSuchAlgorithmException;
-	Optional<GridFSFile> getFileById(ObjectId fileId);
-	Optional<GridFSFile> getFileByName(String filename);
-	GridFSFindIterable getAllFiles();
-	void deleteFile(ObjectId fileId);
-	GridFsResource getResource(GridFSFile gridFSFile);
-	HttpHeaders downloadFile(String fileId);
+//	Page<FileEntity> findPageByUserId(String userid, Pageable pageable);
+//	Page<FileEntity> findPageByOrgId(String orgid, Pageable pageable);
 	Page<FileEntity> findPageByName(String name, Pageable pageable);
+	void deleteById(String id);
+	InputStream downloadFile(String orgId, String path);
 }

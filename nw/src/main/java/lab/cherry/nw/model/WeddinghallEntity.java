@@ -3,11 +3,9 @@ package lab.cherry.nw.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.mongodb.client.gridfs.model.GridFSFile;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,14 +13,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.awt.*;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,8 +65,7 @@ public class WeddinghallEntity implements Serializable {
     
 	@JsonProperty("images")
     @Schema(title = "웨딩홀(예식장) 이미지")
-    @Transient
-    private List<GridFSFile> images;
+    private List<String> images;
 
     @JsonProperty("created_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
@@ -110,6 +104,4 @@ public class WeddinghallEntity implements Serializable {
 		private Integer interval;
 		
 	}
-	
-	
 }

@@ -32,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-	private final OrgRepository orgRepository;
 	private final OrgService orgService;
     private final PasswordEncoder passwordEncoder;
 

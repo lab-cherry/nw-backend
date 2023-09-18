@@ -1,7 +1,6 @@
 package lab.cherry.nw.repository;
 
 import lab.cherry.nw.model.FileEntity;
-import lab.cherry.nw.model.OrgEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -22,9 +21,9 @@ import java.util.Optional;
 public interface FileRepository extends MongoRepository<FileEntity, String> {
 
 	Page<FileEntity> findAll(Pageable pageable);
+	Page<FileEntity> findPageByOrgid(String orgid, Pageable pageable);
 
 	Page<FileEntity> findPageByName(String filename, Pageable pageable);
-
 	Optional<FileEntity> findById(String id);
 
 	Optional<FileEntity> findByName(String orgname);

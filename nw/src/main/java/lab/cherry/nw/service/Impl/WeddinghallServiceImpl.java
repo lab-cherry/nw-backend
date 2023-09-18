@@ -1,6 +1,9 @@
 package lab.cherry.nw.service.Impl;
 
 import io.minio.errors.MinioException;
+import lab.cherry.nw.error.enums.ErrorCode;
+import lab.cherry.nw.error.exception.CustomException;
+import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.WeddinghallEntity;
 import lab.cherry.nw.repository.WeddinghallRepository;
@@ -18,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,53 +77,101 @@ public class WeddinghallServiceImpl implements WeddinghallService {
 		
 		log.error("[#0] in createWeddinghall");
 		
-		String orgName = weddinghallCreateDto.getOrg();
-		OrgEntity orgEntity = orgService.findByName(orgName);
+		checkExistsWithWeddingHallName(weddinghallCreateDto.getName());	// 중복 체크
+
+		String orgId = weddinghallCreateDto.getOrg();
+		OrgEntity orgEntity = orgService.findById(orgId);
 		
 		// 파일 업로드 시, 구분하기 위한 정보 입력
 		// {org_objectId}/웨딩홀/{weddinghallName}/profile.jpg
 		// {org_objectId}/고객/{userName}/문서.xlsx
 		Map<String, String> info = new HashMap<>();
-		info.put("name", weddinghallCreateDto.getName());
+		info.put("type", weddinghallCreateDto.getName());
 		info.put("org", weddinghallCreateDto.getOrg());
-        List<String> fileObjectIds = null;
-        try {
-            fileObjectIds = fileService.uploadFiles(info, imageFiles);
-        } catch (IOException | MinioException | InvalidKeyException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+
+		// 업로드한 파일의 ObjectId 를 List로 반환
+        List<String> fileObjectIds = fileService.uploadFiles(info, imageFiles);
 
         log.error("[#1] imageFileIds = {}", fileObjectIds);
 		
-		log.error("[#2] fileService.getFileByName = {}", fileService.getFileByName(weddinghallCreateDto.getName()));
-//		
-//		// 이미지의 DBRef를 WeddinghallEntity에 추가
-//		List<GridFSFile> images = new ArrayList<>(); // 이미지 목록을 초기화
-//		for (String fileObjectId : fileObjectIds) {
-//			log.error("[#3] {}", fileService.getFileById(fileObjectId));
-//			Optional<GridFSFile> image = fileService.getFileById(fileObjectId);
-//		    if (image != null) {
-//		        images.add(image.get());
-//			}
-//		}
-//
-//		WeddinghallEntity weddinghallEntity = WeddinghallEntity.builder()
-//			.id(objectId.toString())
-//            .name(weddinghallCreateDto.getName())
-//			.max_person(weddinghallCreateDto.getMaxPerson())
-//			.org(orgRepository.findByName(weddinghallCreateDto.getOrg()).get())
-//			.interval(weddinghallCreateDto.getInterval())
-//			.images(images)
-//            .created_at(Instant.now())
-//            .build();
-//		
-//		return weddinghallRepository.save(weddinghallEntity);
-		return null;
+		WeddinghallEntity weddinghallEntity = WeddinghallEntity.builder()
+            .name(weddinghallCreateDto.getName())
+			.max_person(weddinghallCreateDto.getMaxPerson())
+			.org(orgEntity)
+			.interval(weddinghallCreateDto.getInterval())
+			.images(fileObjectIds)
+            .created_at(Instant.now())
+            .build();
+
+		return weddinghallRepository.save(weddinghallEntity);
 	}
+
+
+	/**
+     * [WeddinghallServiceImpl] 웨딩홀(예식장) 이미지 수정 함수
+     *
+     * @param id 조회할 웨딩홀(예식장)의 고유번호입니다.
+     * @param imageFiles 큐시트 수정에 필요한 사용자 정보를 담은 개체입니다.
+     * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 특정 웨딩홀(예식장)에 대해 웨딩홀(예식장) 정보를 수정합니다.
+     * </pre>
+     *
+     * Author : yby654(yby654@github.com)
+     */
+    public void updateById(String id, List<MultipartFile> imageFiles) {
+		//        Instant instant = Instant.now();
+		WeddinghallEntity weddinghallEntity = findById(id);
+
+		if (imageFiles != null) {
+			weddinghallEntity = WeddinghallEntity.builder()
+					
+					.build();
+			weddinghallRepository.save(weddinghallEntity);
+		} else {
+			log.error("[QsheetServiceImpl - udpateQsheet] data 만 수정 가능합니다.");
+			throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+		}
+	}
+
 
 	@Transactional(readOnly = true)
     public Page<WeddinghallEntity> findPageByName(String name, Pageable pageable) {
 		return weddinghallRepository.findPageByName(name, pageable);
 	}
+
+	/**
+     * [WeddinghallServiceImpl] 조직 이름 중복 체크 함수
+     *
+     * @param name 중복 체크에 필요한 조직 이름 객체입니다.
+     * @throws CustomException 조직의 이름이 중복된 경우 예외 처리 발생
+     * <pre>
+     * 입력된 조직 이름으로 이미 등록된 조직이 있는지 확인합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @Transactional(readOnly = true)
+    public void checkExistsWithWeddingHallName(String name) {
+		if (weddinghallRepository.findByName(name).isPresent()) {
+			throw new CustomException(ErrorCode.DUPLICATE); // 조직 이름이 중복됨
+		}
+	}
 	
+
+	/**
+     * [WeddinghallServiceImpl] 웨딩홀(예식장) 삭제 함수
+     *
+     * @param id 삭제할 웨딩홀(예식장)의 식별자입니다.
+     * @throws EntityNotFoundException 해당 ID의 웨딩홀(예식장) 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 입력한 id를 가진 웨딩홀(예식장) 정보를 삭제합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    public void deleteById(String id) {
+		weddinghallRepository.delete(weddinghallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Weddinghall with Id " + id + " Not Found.")));
+	}
+
 }

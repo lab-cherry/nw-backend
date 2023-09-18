@@ -1,6 +1,7 @@
 package lab.cherry.nw.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +15,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.List;
 
 /**
  * <pre>
@@ -28,7 +28,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "files")
-@JsonPropertyOrder({ "fileSeq", "fileName", "fileType", "data", "created_at" })
+@JsonPropertyOrder({ "fileSeq", "fileName", "fileType", "fileExt", "filePath", "fileSize", "userId", "orgId", "created_at" })
 public class FileEntity implements Serializable {
 
 	@Id
@@ -43,20 +43,33 @@ public class FileEntity implements Serializable {
 
 	@NotNull
     @JsonProperty("fileType")
-    @Schema(title = "파일 타입", example = "image")
+    @Schema(title = "파일 타입", example = "image/jpeg")
     private String type;
-	
+
+	@JsonIgnore
+	@NotNull
+//    @JsonProperty("fileExt")
+    @Schema(title = "파일 확장자", example = "png")
+    private String ext;
+
+	@NotNull
+    @JsonProperty("filePath")
+    @Schema(title = "파일 경로", example = "관리/더 글로리/IMG_61E29A079818-1.jpeg")
+    private String path;
+
 	@NotNull
     @JsonProperty("fileSize")
     @Schema(title = "파일 사이즈", example = "20MB")
     private String size;
 
-//	
-//	@DBRef
-//	private OrgEntity org;
-//
-//	@DBRef
-//	private WeddinghallEntity weddinghall;
+    @JsonProperty("userId")
+    @Schema(title = "사용자 아이디", example = "admin")
+	private String userid;
+
+	@NotNull
+    @JsonProperty("orgId")
+    @Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6dd")
+	private String orgid;
 
 	@JsonProperty("created_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
