@@ -5,7 +5,6 @@ import lab.cherry.nw.configuration.filter.RequestLoggingFilter;
 import lab.cherry.nw.error.handler.CustomAccessDeniedHandler;
 import lab.cherry.nw.error.handler.UnauthorizedHandler;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -60,7 +59,8 @@ public class WebSecurityConfiguration {
                     "/swagger-resources",
                     "/swagger-resources/**",
                     "/swagger-ui/**",
-                    "/swagger-ui.html"
+                    "/swagger-ui.html",
+					"/api/v1/file/download/**"	// TODO: download/{orgId} 에 대해 각 orgId 소속만 접근 가능하는 기능 추가 필요
             )
               .permitAll()
             .requestMatchers("/api/v1/**").hasAnyRole("ADMIN", "USER") // spring boot 에서 ROLE_ 은 자동으로 붙음

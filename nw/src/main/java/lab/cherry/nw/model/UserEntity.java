@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,8 +18,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * <pre>
@@ -33,7 +31,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "users")
-@JsonPropertyOrder({ "id", "userId", "userName", "userEmail", "userRole", "userEnabled", "userRole", "userOrgs", "created_at" })
+@JsonPropertyOrder({ "id", "userId", "userName", "userEmail", "userRole", "userType", "userEnabled", "userRole", "userOrgs", "created_at" })
 public class UserEntity implements Serializable {
 
     @Id
@@ -65,6 +63,10 @@ public class UserEntity implements Serializable {
     @Size(min = 3, message = "Minimum password length: 8 characters")
     private String password;
 
+	@JsonProperty("userType")
+	@Schema(title = "타입", example = "user | org")
+	private String type;
+
     @JsonProperty("userEnabled")
     @Schema(title = "사용자 활성화 여부", example = "true")
     private boolean enabled;
@@ -80,10 +82,10 @@ public class UserEntity implements Serializable {
     private RoleEntity role;
 
     @DBRef
-    @Builder.Default
-    @JsonProperty("userOrgs")
+    @JsonProperty("userOrg")
     @Schema(title = "Org 정보", example = "더모멘트")
-    private Set<OrgEntity> orgs = new HashSet<>();
+//    private Set<OrgEntity> orgs = new HashSet<>();
+	private OrgEntity org;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -95,23 +97,26 @@ public class UserEntity implements Serializable {
         @NotBlank
         @Schema(title = "사용자 아이디", example = "admin")
         @Size(min = 4, max = 10)
-        private String userid;
+        private String userId;
 
         @NotBlank
         @Schema(title = "사용자 이름", example = "홍길동")
         @Size(min = 2, max = 10, message = "Minimum username length: 4 characters")
-        private String username;
+        private String userName;
 
         @NotBlank
         @Email
-        @Schema(title = "사용자 이메일", example = "admin@innogrid.com")
+        @Schema(title = "사용자 이메일", example = "admin@nw.com")
         @Size(min = 3, max = 40)
-        private String email;
+        private String userEmail;
+
+        @Schema(title = "타입", example = "user | org")
+        private String type;
 
         @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, message = "Minimum password length: 8 characters")
-        private String password;
+        private String userPassword;
     }
 
     @Getter
@@ -122,12 +127,12 @@ public class UserEntity implements Serializable {
         @NotBlank
         @Schema(title = "사용자 아이디", example = "admin")
         @Size(min = 4, max = 10, message = "Minimum admin length: 4 characters")
-        private String userid;
+        private String userId;
 
         @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, message = "Minimum password length: 8 characters")
-        private String password;
+        private String userPassword;
     }
 
     @Getter
@@ -147,6 +152,10 @@ public class UserEntity implements Serializable {
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, max = 40)
         private String password;
+
+		@Schema(title = "사용자 조직", example = "")
+        @Size(min = 3, max = 40)
+        private String orgId;
 
     }
 }

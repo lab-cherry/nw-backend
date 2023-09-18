@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,7 +34,7 @@ public class OrgEntity implements Serializable {
 
     @Id
     @JsonProperty("orgSeq")
-    @Schema(title = "조직 조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
+    @Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
     @NotNull
