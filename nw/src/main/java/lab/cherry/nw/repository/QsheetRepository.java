@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 import java.util.UUID;
 
-
 /**
  * <pre>
  * ClassName : QsheetRepository
@@ -20,14 +19,11 @@ import java.util.UUID;
 public interface QsheetRepository extends MongoRepository<QsheetEntity, UUID> {
 
     Page<QsheetEntity> findAll(Pageable pageable);
-
     Page<QsheetEntity> findPageByUserid(String userid, Pageable pageable);
     Page<QsheetEntity> findPageByOrgid(String orgid, Pageable pageable);
 
     Optional<QsheetEntity> findById(String id);
 
     Optional<QsheetEntity> findByuserid(String userid);
-  
-
     void deleteById(UUID id);
 }

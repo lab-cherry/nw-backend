@@ -11,14 +11,15 @@ import lab.cherry.nw.service.TokenService;
 import lab.cherry.nw.util.Security.AccessToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <pre>
@@ -54,15 +55,16 @@ public class AuthServiceImpl implements AuthService {
     public AccessToken register(UserEntity.RegisterDto userRegisterDto) {
 
         Instant instant = Instant.now();
-        checkExistsWithUserId(userRegisterDto.getUserid()); // 동일한 이름 중복체크
+        checkExistsWithUserId(userRegisterDto.getUserId()); // 동일한 이름 중복체크
 
         RoleEntity roleEntity = roleRepository.findByName("ROLE_USER").get();
 
         UserEntity userEntity = UserEntity.builder()
-            .userid(userRegisterDto.getUserid())
-            .username(userRegisterDto.getUsername())
-            .email(userRegisterDto.getEmail())
-            .password(passwordEncoder.encode(userRegisterDto.getPassword()))
+            .userid(userRegisterDto.getUserId())
+            .username(userRegisterDto.getUserName())
+            .email(userRegisterDto.getUserEmail())
+            .password(passwordEncoder.encode(userRegisterDto.getUserPassword()))
+			.type((userRegisterDto.getType()) == null ? "user" : userRegisterDto.getType())
             .role(roleEntity)
             .enabled(true)
             .created_at(instant)
@@ -93,8 +95,8 @@ public class AuthServiceImpl implements AuthService {
 
         authenticateByIdAndPassword(userLoginDto);
 
-        Optional<UserEntity> userEntity = userRepository.findByuserid(userLoginDto.getUserid());
-        AccessToken accessToken = tokenService.generateJwtToken(userLoginDto.getUserid(), userEntity.get().getRole());
+        Optional<UserEntity> userEntity = userRepository.findByuserid(userLoginDto.getUserId());
+        AccessToken accessToken = tokenService.generateJwtToken(userLoginDto.getUserId(), userEntity.get().getRole());
 
         return AccessToken.Get.builder()
             .accessToken(accessToken.getAccessToken())
@@ -140,11 +142,11 @@ public class AuthServiceImpl implements AuthService {
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 입력 값이 유효하지 않음
         }
 
-        UserEntity user = userRepository.findByuserid(userLoginDto.getUserid())
+        UserEntity user = userRepository.findByuserid(userLoginDto.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));   // 로그인 정보가 유효하지 않음
 
-        if(!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
-            log.error("{} Account Password is Corrent!", userLoginDto.getUserid());
+        if(!passwordEncoder.matches(userLoginDto.getUserPassword(), user.getPassword())) {
+            log.error("{} Account Password is Corrent!", userLoginDto.getUserId());
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 로그인 정보가 정확하지 않음
         }
     }
@@ -173,4 +175,15 @@ public class AuthServiceImpl implements AuthService {
     }
     return userRoles;
     }
+
+	public UserEntity myInfo() {
+
+		Map<String, Object> info = new HashMap<>();
+
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		Authentication authentication = securityContext.getAuthentication();
+
+		UserEntity user = userRepository.findByuserid(authentication.getName()).get();
+		return user;
+	}
 }
