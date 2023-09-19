@@ -25,6 +25,7 @@ public interface BookmarkService {
  BookmarkEntity findByUserId(ObjectId userId);
  void createBookmark(BookmarkEntity.CreateDto bookmarkCreateDto);
  void updateById(String id, BookmarkEntity.UpdateDto updateDto);
+// void updateByUserId(String userid, BookmarkEntity.UpdateDto updateDto);
  void deleteById(String id);
 
     Page<BookmarkEntity> findPageByUserId(String userid, Pageable pageable);

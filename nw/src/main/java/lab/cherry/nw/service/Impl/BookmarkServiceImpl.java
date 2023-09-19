@@ -35,7 +35,6 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
     private final UserService userService;
-    private final OrgService orgService;
     /**
      * [BookmarkServiceImpl] 전체 북마크 조회 함수
      *
@@ -63,15 +62,17 @@ public class BookmarkServiceImpl implements BookmarkService {
      * @return 생성된 북마크 정보를 리턴합니다.
      * @throws CustomException 중복된 이름에 대한 예외 처리 발생
      * <pre>
-     * 북마크을 등록합니다.
+     * 북마크를 등록합니다.
      * </pre>
      *
      * Author : yby654(yby654@github.com)
      */
     public void createBookmark(BookmarkEntity.CreateDto bookmarkCreateDto) {
         Instant instant = Instant.now();
+		checkExistsWithBookmarkName(bookmarkCreateDto.getUserSeq());
         UserEntity userEntity = userService.findById(bookmarkCreateDto.getUserSeq());
         BookmarkEntity bookmarkEntity = BookmarkEntity.builder()
+			.id(bookmarkCreateDto.getUserSeq())
             .userid(userEntity)
             .data(bookmarkCreateDto.getData())
             .created_at(instant)
@@ -84,15 +85,14 @@ public class BookmarkServiceImpl implements BookmarkService {
      *
      * @param id 조회할 북마크의 고유번호입니다.
      * @param bookmarkUpdateDto 북마크 수정에 필요한 사용자 정보를 담은 개체입니다.
-     * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
+     * @throws EntityNotFoundException 북마크 정보가 없을 경우 예외 처리 발생
      * <pre>
-     * 특정 사용자에 대해 사용자 정보를 수정합니다.
+     * 특정 북마크 대해 북마크 정보를 수정합니다.
      * </pre>
      *
      * Author : yby654(yby654@github.com)
      */
     public void updateById(String id, BookmarkEntity.UpdateDto bookmarkUpdateDto) {
-//        Instant instant = Instant.now();
         BookmarkEntity bookmarkEntity = findById(id);
 
         if (bookmarkEntity.getData() != null ) {
@@ -107,6 +107,35 @@ public class BookmarkServiceImpl implements BookmarkService {
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
         }
     }
+//	/**
+//     * [BookmarkServiceImpl] 북마크 수정 함수
+//     *
+//     * @param userid 조회할 유저의 고유번호입니다.
+//     * @param bookmarkUpdateDto 북마크 수정에 필요한 사용자 정보를 담은 개체입니다.
+//     * @throws EntityNotFoundException 북마크 정보가 없을 경우 예외 처리 발생
+//     * <pre>
+//     * 특정 북마크에 대해 북마크 정보를 수정합니다.
+//     * </pre>
+//     *
+//     * Author : yby654(yby654@github.com)
+//     */
+//    public void updateByUserId(String userid, BookmarkEntity.UpdateDto bookmarkUpdateDto) {
+//		ObjectId objectId = new ObjectId(userid);
+//		BookmarkEntity bookmarkEntity = findByUserId(objectId);
+//
+//		if (bookmarkEntity.getData() != null ) {
+//			log.error("bookmarkEntity : {} ", bookmarkEntity);
+//			log.error("bookmarkUpdateDto.getData() : {} ", bookmarkUpdateDto.getData());
+//			bookmarkEntity.updateFromDto(bookmarkUpdateDto);
+//			bookmarkRepository.save(bookmarkEntity);
+//
+//
+//		} else {
+//			log.error("[BookmarkServiceImpl - udpateBookmark] data 만 수정 가능합니다.");
+//			throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+//		}
+//	}
+	//
 //
     /**
      * [BookmarkServiceImpl] 북마크 삭제 함수
@@ -136,12 +165,15 @@ public class BookmarkServiceImpl implements BookmarkService {
 //     *
 //     * Author : yby654(yby654@github.com)
 //     */
-//    @Transactional(readOnly = true)
-//    public void checkExistsWithBookmarkName(String name) {
-//        if (bookmarkRepository.findByName(name).isPresent()) {
-//            throw new CustomException(ErrorCode.DUPLICATE); // 북마크 이름이 중복됨
-//        }
-//    }
+    @Transactional(readOnly = true)
+    public void checkExistsWithBookmarkName(String id) {
+		ObjectId objectId = new ObjectId(id);
+//		log.error("error1 : {} " ,bookmarkRepository.findByUserid(objectId));
+//		log.error("error2 : {} " ,bookmarkRepository.findByUserid(objectId).isPresent());
+	if (bookmarkRepository.findByUserid(objectId).isPresent()) {
+            throw new CustomException(ErrorCode.DUPLICATE); // 북마크생성 유저가 중복됨
+        }
+    }
 //
 //    /**
 //     * [BookmarkServiceImpl] NAME으로 북마크 조회 함수

@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "bookmark")
+@JsonPropertyOrder({ "id", "userid"})
 public class BookmarkEntity implements Serializable {
 
     @Id
@@ -41,8 +42,8 @@ public class BookmarkEntity implements Serializable {
     private String id;
 
     @DBRef
-    @JsonProperty("userSeq")
-    @Schema(title = "유저 고유번호", example = "38352658567418867") // (Long) Tsid
+    @JsonProperty("user")
+	@Schema(title = "유저 고유번호", example = "38352658567418867") // (Long) Tsid
     private UserEntity userid;
 
     @JsonProperty("data")

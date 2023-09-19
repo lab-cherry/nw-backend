@@ -66,11 +66,11 @@ public class BookmarkController {
     Page<BookmarkEntity> bookmarkEntity;
     if(userid == null) {
         bookmarkEntity = bookmarkService.getBookmarks(pageable);
-    } else{
+    } else  {
         bookmarkEntity = bookmarkService.findPageByUserId(userid, pageable);
     }
         return new ResponseEntity<>(bookmarkEntity, new HttpHeaders(), HttpStatus.OK);
-    }
+	}
 
     /**
      * [BookmarkController] 북마크 생성 함수
@@ -108,7 +108,7 @@ public class BookmarkController {
      *
      * Author : yby654(yby654@github.com)
      */
-    @PatchMapping("{id}")
+    @PatchMapping("/user/{id}")
      @Operation(summary = "북마크 업데이트", description = "특정 북마크를 업데이트합니다.")
     public ResponseEntity<?> updateById(
             @PathVariable("id") String id,
@@ -121,6 +121,31 @@ public class BookmarkController {
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(bookmarkService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
+//	/**
+//     * [BookmarkController] 북마크 수정 함수
+//     * <pre>
+//     * @param userid 유저 고유번호를 입력합니다.
+//     * @param bookmarkUpdateDto 북마크 업데이트에 필요한 북마크 정보를 담고 있는 객체입니다.
+//     * @return
+//     * true  : 업데이트된 큐시 정보를 반환합니다.
+//     * false : 에러(400, 404)를 반환합니다.
+//     * </pre>
+//     *
+//     * Author : yby654(yby654@github.com)
+//     */
+//	@PatchMapping("/user/{userid}")
+//    @Operation(summary = "북마크 업데이트", description = "특정 북마크를 업데이트합니다.")
+//    public ResponseEntity<?> updateByUserId(
+//			@PathVariable("userid") String userid,
+//			@RequestBody BookmarkEntity.UpdateDto bookmarkUpdateDto) {
+//
+//		log.info("[BookmarkController] updateBookmark...!");
+//		ObjectId objectId = new ObjectId(userid);
+//		bookmarkService.updateByUserId(userid, bookmarkUpdateDto);
+//
+//		//        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+//		return new ResponseEntity<>(bookmarkService.findByUserId(objectId), new HttpHeaders(), HttpStatus.OK);
+//	}
     /**
      * [BookmarkController] 특정 북마크 삭제 함수
      *
@@ -157,7 +182,7 @@ public class BookmarkController {
      *
      * Author : yby654(yby654@github.com)
      */
-    @GetMapping("{id}")
+    @GetMapping("/user/{id}")
     @Operation(summary = "ID로 북마크 찾기", description = "북마크를 조회합니다.")
     public ResponseEntity<?> findByBookmarkId(@PathVariable("id") String id) {
 
@@ -167,14 +192,14 @@ public class BookmarkController {
         return new ResponseEntity<>(bookmarkService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
         
-    @GetMapping("/user/{userid}")
-    @Operation(summary = "User ID로 북마크 찾기", description = "북마크를 조회합니다.")
-    public ResponseEntity<?> findByBookmarkUserId(@PathVariable("userid") String userid) {
-
-        log.info("[BookmarkController] findByBookmarkUserId...!");
-        ObjectId objectId = new ObjectId(userid);
-            //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
-            return new ResponseEntity<>(bookmarkService.findByUserId(objectId), new HttpHeaders(), HttpStatus.OK);
-    }    
+//    @GetMapping("/user/{userid}")
+//    @Operation(summary = "User ID로 북마크 찾기", description = "북마크를 조회합니다.")
+//    public ResponseEntity<?> findByBookmarkUserId(@PathVariable("userid") String userid) {
+//
+//        log.info("[BookmarkController] findByBookmarkUserId...!");
+//        ObjectId objectId = new ObjectId(userid);
+//            //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
+//            return new ResponseEntity<>(bookmarkService.findByUserId(objectId), new HttpHeaders(), HttpStatus.OK);
+//    }
 
 }
