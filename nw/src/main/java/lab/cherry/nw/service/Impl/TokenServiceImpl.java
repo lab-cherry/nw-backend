@@ -48,7 +48,8 @@ public class TokenServiceImpl implements TokenService {
         Claims claims = Jwts.claims().setSubject(userid);
         claims.put("id", user.getUserid());
         claims.put("name", user.getUsername());
-        claims.put("roles",new SimpleGrantedAuthority(role.getName()));
+        claims.put("role", user.getRole());
+		claims.put("org", user.getOrg());
 
         Instant issuedAt = Instant.now();
         Instant validUntil = issuedAt.plusMillis(secretKey.getExpirationInMiliseconds());
@@ -109,7 +110,22 @@ public class TokenServiceImpl implements TokenService {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
-    
+
+
+	public Claims getJwtInfo(String token) {
+		SecretKey secretKey = new SecretKey(jwtSecretKey, jwtExpirationMs);
+
+		Claims claims = Jwts
+			.parserBuilder()
+            .setSigningKey(getSignInKey(secretKey))
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+
+		return claims;
+	}
+
+
     private Key getSignInKey(SecretKey secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey.getSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);

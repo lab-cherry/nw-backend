@@ -6,7 +6,7 @@ COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY nw nw
-COPY application.properties_docker nw/src/resources/application.properties
+COPY application.properties_docker nw/src/main/resources/application.properties
 RUN chmod +x ./gradlew
 RUN ./gradlew bootJar
 RUN ["/bin/bash", "-c", "ls"]
