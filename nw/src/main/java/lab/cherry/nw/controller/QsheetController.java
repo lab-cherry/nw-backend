@@ -82,7 +82,7 @@ public class QsheetController {
      * <pre>
      * @param qsheetCreateDto 큐시트 생성에 필요한 큐시트 정보를 담고 있는 객체입니다.
      * @return
-     * true  : 업데이트된 사용자 정보를 반환합니다.
+     * true  : 업데이트된 큐시트 정보를 반환합니다.
      * false : 에러(400, 404)를 반환합니다.
      * </pre>
      *
@@ -104,8 +104,8 @@ public class QsheetController {
     /**
      * [QsheetController] 큐시트 수정 함수
      * <pre>
-     * @param id 사용자 고유번호를 입력합니다.
-     * @param qsheetUpdateDto 사용자 업데이트에 필요한 사용자 정보를 담고 있는 객체입니다.
+     * @param id 큐시트 고유번호를 입력합니다.
+     * @param qsheetUpdateDto 큐시트 업데이트에 필요한 큐시트 정보를 담고 있는 객체입니다.
      * @return
      * true  : 업데이트된 큐시 정보를 반환합니다.
      * false : 에러(400, 404)를 반환합니다.
@@ -163,7 +163,7 @@ public class QsheetController {
      * Author : yby654(yby654@github.com)
      */
     @GetMapping("{id}")
-    @Operation(summary = "ID로 역할 찾기", description = "큐시트를 조회합니다.")
+    @Operation(summary = "ID로 큐시트 찾기", description = "큐시트를 조회합니다.")
     public ResponseEntity<?> findByQsheetId(@PathVariable("id") String id) {
 
         log.info("[QsheetController] findByQsheetId...!");
