@@ -28,10 +28,10 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * <pre>
- * ClassName : OrgController
+ * ClassName : UserCardController
  * Type : class
- * Description : 조직 목록 조회, 조직 상세 조회, 조직 업데이트, 조직 삭제, 조직 찾기 등 조직과 관련된 함수를 포함하고 있는 클래스입니다.
- * Related : OrgRepository, OrgService, OrgServiceImpl
+ * Description : 고객카드 목록 조회, 고객카드 상세 조회, 고객카드 업데이트, 고객카드 삭제, 고객카드 찾기 등 고객카드와 관련된 함수를 포함하고 있는 클래스입니다.
+ * Related : UserCardRepository, UserCardService, UserCardServiceImpl
  * </pre>
  */
 
@@ -40,18 +40,18 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/userCard")
+@RequestMapping("/nw/api/v1/usercard")
 @Tag(name = "Usercard", description = "Usercard API Document")
 public class UserCardController {
 
     private final UserCardService userCardService;
 
     /**
-     * [UserCardController] 전체 조직 목록 함수
+     * [UserCardController] 전체 고객카드 목록 함수
      *
-     * @return 전체 조직 목록을 반환합니다.
+     * @return 전체 고객카드 목록을 반환합니다.
      *
-     * Author : taking(taking@duck.com)
+     * Author : hhhaeri(yhoo0020@gmail.com)
      */
     @GetMapping("")
     @Operation(summary = "고객카드 목록", description = "고객카드를 조회합니다.")
@@ -78,16 +78,16 @@ public class UserCardController {
 
 
     /**
-     * [UserCardController] 조직 생성 함수
+     * [UserCardController] 고객카드 생성 함수
      *
-     * @param userCardCreateDto 생성에 필요한 조직 정보를 담고 있는 객체입니다.
+     * @param userCardCreateDto 생성에 필요한 고객카드 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
      * true  : 성공(200)을 반환합니다.
      * false : 에러(400)를 반환합니다.
      * </pre>
      *
-     * Author : taking(taking@duck.com)
+     * Author : hhhaeri(yhoo0020@gmail.com)
      */
     @PostMapping("")
     @Operation(summary = "고객카드 생성", description = "고객카드를 생성합니다.")
@@ -110,17 +110,17 @@ public class UserCardController {
 
 
     /**
-     * [UserCardController] 조직 업데이트 함수
+     * [UserCardController] 고객카드 업데이트 함수
      *
-     * @param id 조직 고유번호를 입력합니다.
-     * @param orgEntity 조직 업데이트에 필요한 정보를 담고 있는 객체입니다.
+     * @param id 고객카드 고유번호를 입력합니다.
+     * @param UserCardEntity 고객카드 업데이트에 필요한 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
-     * true  : 업데이트된 조직 정보를 반환합니다.
+     * true  : 업데이트된 고객카드 정보를 반환합니다.
      * false : 에러(400, 404)를 반환합니다.
      * </pre>
      *
-     * Author : taking(taking@duck.com)
+     * Author : hhhaeri(yhoo0020@gmail.com)
      */
     @PatchMapping("{id}")
     @Operation(summary = "고객카드 업데이트", description = "특정 고객카드를 업데이트합니다.")
@@ -144,7 +144,7 @@ public class UserCardController {
      * false : 에러(400, 404)를 반환합니다.
      * </pre>
      *
-     * Author : taking(taking@duck.com)
+     * Author : hhhaeri(yhoo0020@gmail.com)
      */
     @GetMapping("{id}")
     @Operation(summary = "ID로 고객카드 찾기", description = "고객카드를 조회합니다.")
@@ -157,16 +157,16 @@ public class UserCardController {
     }
 
     /**
-     * [UserCardController] 특정 조직 삭제 함수
+     * [UserCardController] 특정 고객카드 삭제 함수
      *
-     * @param id 조직 고유번호를 입력합니다.
+     * @param id 조고객카드직 고유번호를 입력합니다.
      * @return
      * <pre>
-     * true  : 특정 조직 삭제처리합니다.
+     * true  : 특정 고객카드 삭제처리합니다.
      * false : 에러(400, 404)를 반환합니다.
      * </pre>
      *
-     * Author : taking(taking@duck.com)
+     * Author : hhhaeri(yhoo0020@gmail.com)
      */
     @DeleteMapping("{id}")
     @Operation(summary = "고객카드 삭제", description = "고객카드를 삭제합니다.")
