@@ -120,8 +120,6 @@ public class UserEntity implements Serializable {
         @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, message = "Minimum password length: 8 characters")
-        private String password;
-
         private String userPassword;
     }
 
