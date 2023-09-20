@@ -106,14 +106,7 @@ public class QsheetServiceImpl implements QsheetService {
             log.error("qsheetUpdateDto.getData() : {} ", qsheetUpdateDto.getData());
             qsheetEntity.updateFromDto(qsheetUpdateDto);
             qsheetRepository.save(qsheetEntity);
-//            qsheetEntity = QsheetEntity.builder()
-//                .id(id)
-//                .data(qsheetUpdateDto.getData())
-//                .created_at(qsheetEntity.getCreated_at())
-//                .updated_at(instant)
-//                .build();
 
-            qsheetRepository.save(qsheetEntity);
 
         } else {
             log.error("[QsheetServiceImpl - udpateQsheet] data 만 수정 가능합니다.");
