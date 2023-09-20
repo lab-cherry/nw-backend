@@ -71,6 +71,10 @@ public class UserEntity implements Serializable {
     @Schema(title = "사용자 활성화 여부", example = "true")
     private boolean enabled;
 
+    @JsonProperty("emailVerified")
+    @Schema(title = "이메일 인증 여부", example = "true")
+    private Boolean isEmailVerified;
+
     @JsonProperty("created_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
     @Schema(title = "사용자 생성 시간", example = "2023-07-04 12:00:00")
