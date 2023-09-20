@@ -1,13 +1,17 @@
 package lab.cherry.nw.service.Impl;
 
+import io.minio.*;
+import io.minio.errors.MinioException;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.repository.OrgRepository;
+import lab.cherry.nw.service.MinioService;
 import lab.cherry.nw.service.OrgService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,13 +33,13 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class OrgServiceImpl implements OrgService {
 
-    private final OrgRepository orgRepository;
+	private final MinioService minioService;
+	private final OrgRepository orgRepository;
 
     /**
      * [OrgServiceImpl] 전체 조직 조회 함수
      *
      * @return DB에서 전체 조직 정보 목록을 리턴합니다.
-     * @throws EntityNotFoundException 조직 정보가 없을 경우 예외 처리 발생
      * <pre>
      * 전체 조직를 조회하여, 사용자 정보 목록을 반환합니다.
      * </pre>
@@ -62,11 +66,27 @@ public class OrgServiceImpl implements OrgService {
      * Author : taking(taking@duck.com)
      */
     public OrgEntity createOrganization(OrgEntity.CreateDto orgCreateDto) {
+		ObjectId orgId = new ObjectId();
+
+		try {
+			// ObjectId orgId로 Bucket 생성
+			minioService.createBucketIfNotExists(orgId.toString());
+
+			// ObjectId orgId에 해당하는 GlobalPolicy 생성
+			minioService.createGlobalPolicy(orgId.toString());
+
+			// 생성된 Bucket에 Policy 적용
+			minioService.setBucketPolicy(orgId.toString());
+
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
 
         Instant instant = Instant.now();
         checkExistsWithOrgName(orgCreateDto.getName()); // 동일한 이름 중복체크
 
         OrgEntity orgEntity = OrgEntity.builder()
+			.id(orgId.toString())
             .name(orgCreateDto.getName())
             .biznum(orgCreateDto.getBiznum())
             .contact(orgCreateDto.getContact())

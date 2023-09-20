@@ -18,4 +18,5 @@ public interface AuthService {
     AccessToken register(UserEntity.RegisterDto userRegisterDto);
     AccessToken.Get login(UserEntity.LoginDto userLoginDto);
     void checkExistsWithUserId(String userid);
+	UserEntity myInfo();
 }

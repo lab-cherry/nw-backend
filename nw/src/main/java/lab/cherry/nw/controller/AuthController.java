@@ -88,7 +88,7 @@ public class AuthController {
     })
     public ResponseEntity<?> login(@Valid @RequestBody(required = false) UserEntity.LoginDto userLoginDto) {
 
-            log.error("{} {}", userLoginDto.getUserid(), userLoginDto.getPassword());
+            log.error("{} {}", userLoginDto.getUserId(), userLoginDto.getUserPassword());
 
         AccessToken.Get accessToken =  authService.login(userLoginDto);
 
@@ -114,7 +114,7 @@ public class AuthController {
     @GetMapping("/check/{userid}")
     @Operation(summary = "사용자 아이디 중복체크", description = "사용자 아이디를 중복체크합니다.")
     public ResponseEntity<?> existUserId(@PathVariable("userid") String userid) {
-        log.info("[UserController] existUsername...!");
+		log.info("[AuthController] existUserId...!");
 
         authService.checkExistsWithUserId(userid);
 
@@ -122,5 +122,15 @@ public class AuthController {
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
 
+
+
+	@GetMapping("myinfo")
+    @Operation(summary = "사용자 정보 확인", description = "사용자 정보를 확인합니다.")
+    public ResponseEntity<?> myInfo() {
+		log.info("[AuthController] myInfo...!");
+
+//        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+		return new ResponseEntity<>(authService.myInfo(), new HttpHeaders(), HttpStatus.OK);
+	}
 
 }

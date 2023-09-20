@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,7 @@ public class Common {
         } else {
             // sort=[field, direction]
             orders.add(new Sort.Order(getSortDirection(sort[1]), sort[0]));
-        }
+   }
 
         return orders;
     }
@@ -72,4 +73,22 @@ public class Common {
         return Sort.Direction.ASC;
     }
     
+	public static String getFileExtension(MultipartFile file) {
+		if (file == null || file.isEmpty()) {
+			return ""; // 파일이 없을 경우 빈 문자열 반환
+		}
+
+		String originalFilename = file.getOriginalFilename();
+		if (originalFilename == null) {
+			return ""; // 원본 파일 이름이 없을 경우 빈 문자열 반환
+		}
+
+		int lastDotIndex = originalFilename.lastIndexOf(".");
+		if (lastDotIndex >= 0) {
+			// 마지막 점 이후의 문자열을 추출하여 소문자로 반환
+			return originalFilename.substring(lastDotIndex + 1).toLowerCase();
+		} else {
+			return ""; // 확장자가 없을 경우 빈 문자열 반환
+		}
+	}
 }

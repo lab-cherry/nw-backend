@@ -12,9 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.Instant;
 
-import java.util.List;
+import java.time.Instant;
 
 /**
  * <pre>
@@ -36,7 +35,6 @@ public class RoleServiceImpl implements RoleService {
      * [RoleServiceImpl] 전체 역할 조회 함수
      *
      * @return DB에서 전체 역할 정보 목록을 리턴합니다.
-     * @throws EntityNotFoundException 역할 정보가 없을 경우 예외 처리 발생
      * <pre>
      * 전체 역할을 조회하여, 사용자 정보 목록을 반환합니다.
      * </pre>
@@ -68,7 +66,7 @@ public class RoleServiceImpl implements RoleService {
         checkExistsWithRoleName(roleCreateDto.getName()); // 동일한 이름 중복체크
 
         RoleEntity roleEntity = RoleEntity.builder()
-            .name("ROLE_" + roleCreateDto.getName())
+            .name("ROLE_" + roleCreateDto.getName().toUpperCase())
             .created_at(instant)
             .build();
 

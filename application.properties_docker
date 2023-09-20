@@ -1,5 +1,5 @@
 # MongoDB connection properties
-spring.data.mongodb.uri=mongodb://${DATABASE_USERID:-nw}:${DATABASE_USERPASS:-nw}@${DATABASE_HOST:nw-db}:${DATABASE_PORT:27017}/${DATABASE_NAME:-nw}?authSource=admin
+spring.data.mongodb.uri=mongodb://${DATABASE_USERID:-nw}:${DATABASE_USERPASS:-nw}@${DATABASE_HOST:-nw-db}:${DATABASE_PORT:-27017}/${DATABASE_NAME:-nw}?authSource=admin
 spring.jackson.default-property-inclusion=NON_NULL
 # logging.level.ROOT=DEBUG
 
@@ -38,3 +38,13 @@ spring.mail.properties.mail.smtp.starttls.required=true
 
 spring.mail.username=userName
 spring.mail.password=passWord
+
+#echo 'lab-cherry-nw-project-secret-key' | base64
+lab.cherry.nw.jwtSecret= bGFiLWNoZXJyeS1udy1wcm9qZWN0LXNlY3JldC1rZXkK
+lab.cherry.nw.jwtExpirationMs= 86400000
+
+# MinIo Properties
+minio.url=${MINIO_URL:-http://nw-storage:9000}
+minio.access-key=${MINIO_ACCESS_KEY:-admin}
+minio.secret-key=${MINIO_SECRET_KEY:-nangmanwedding}
+

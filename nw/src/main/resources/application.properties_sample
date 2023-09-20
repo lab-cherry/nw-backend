@@ -23,6 +23,7 @@ springdoc.swagger-ui.tags-sorter=alpha
 springdoc.swagger-ui.operations-sorter=alpha
 
 # App Properties
+<<<<<<< HEAD
 #echo 'com-innogrid-medge-project-rndplan-dev-1team-secret-base-by-taking'|base64
 lab.cherry.nw.jwtSecret= 29tLWlubm9ncmlkLW1lZGdlLXByb2plY3Qtcm5kcGxhbi1kZXYtMXRlYW0tc2VjcmV0LWJhc2UtYnktdGFrYWluZwo=
 lab.cherry.nw.jwtExpirationMs= 86400000
@@ -38,3 +39,13 @@ spring.mail.properties.mail.smtp.starttls.required=true
 
 spring.mail.username=userName
 spring.mail.password=passWord
+
+#echo 'lab-cherry-nw-project-secret-key' | base64
+lab.cherry.nw.jwtSecret= bGFiLWNoZXJyeS1udy1wcm9qZWN0LXNlY3JldC1rZXkK
+lab.cherry.nw.jwtExpirationMs= 86400000
+
+# MinIo Properties
+minio.url=http://nw-storage:9000
+minio.access-key={your-access-key}
+minio.secret-key={your-secret-key}
+
