@@ -71,9 +71,9 @@ public class QsheetController {
     } else{
         qsheetEntity = qsheetService.findPageByOrgId(orgid, pageable);
     }
-        for (QsheetEntity qsheet : qsheetEntity) {
-            qsheet.sortDataByOrderIndex();
-        }
+//        for (QsheetEntity qsheet : qsheetEntity) {
+//            qsheet.sortDataByOrderIndex();
+//        }
         return new ResponseEntity<>(qsheetEntity, new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -94,7 +94,7 @@ public class QsheetController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @Operation(summary = "Qsheet 생성", description = "Qsheet를 추가합니다.")
-    public ResponseEntity<?> createMH(@Valid @RequestBody QsheetEntity.CreateDto qsheetCreateDto) {
+    public ResponseEntity<?> createQsheet(@Valid @RequestBody QsheetEntity.CreateDto qsheetCreateDto) {
         log.info("[QsheetController] createQsheet...!");
         qsheetService.createQsheet(qsheetCreateDto);
 

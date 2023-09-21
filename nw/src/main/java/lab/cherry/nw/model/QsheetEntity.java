@@ -3,6 +3,7 @@ package lab.cherry.nw.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.minio.messages.Item;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -47,8 +49,8 @@ public class QsheetEntity implements Serializable {
     private UserEntity userid;
 
     @DBRef
-    @JsonProperty("orgid")
-    @Schema(title = "조직 정보", example = "더글로리") // (Long) Tsid
+    @JsonProperty("orgSeq")
+    @Schema(title = "조직 정보", example = "38352658567418867") // (Long) Tsid
     private OrgEntity orgid;
 
 
@@ -58,7 +60,8 @@ public class QsheetEntity implements Serializable {
     private String name;
 
     @JsonProperty("data")
-    private Map<String, ItemData> data;
+	@Schema(title = "큐시트 내용", example = "") // (Long) Tsid
+    private List<ItemData> data;
 
     @JsonProperty("created_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
@@ -75,6 +78,7 @@ public class QsheetEntity implements Serializable {
     @Builder
     public static class ItemData {
         private int orderIndex;
+		private String process;
         private String content;
         private String actor;
         private String note;
@@ -102,27 +106,27 @@ public class QsheetEntity implements Serializable {
         private String name;
         private String userSeq;
         private String orgSeq;
-        private Map<String, ItemData> data;
+		private List<ItemData> data;
     }
 
-    public void sortDataByOrderIndex() {
-        if (data != null) {
-            data = data.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.comparingInt(ItemData::getOrderIndex)))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
-                ));
-        }
-    }
+//    public void sortDataByOrderIndex() {
+//        if (data != null) {
+//            data = data.entrySet()
+//                .stream()
+//                .sorted(Map.Entry.comparingByValue(Comparator.comparingInt(ItemData::getOrderIndex)))
+//                .collect(Collectors.toMap(
+//                        Map.Entry::getKey,
+//                        Map.Entry::getValue,
+//                        (e1, e2) -> e1,
+//                        LinkedHashMap::new
+//                ));
+//        }
+//    }
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
     public static class UpdateDto {
-        private Map<String, ItemData> data;
+		private List<ItemData> data;
     }
 
      public void updateFromDto(UpdateDto updateDto) {
