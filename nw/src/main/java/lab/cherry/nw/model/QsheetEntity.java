@@ -3,7 +3,6 @@ package lab.cherry.nw.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.minio.messages.Item;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,10 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
@@ -109,6 +105,11 @@ public class QsheetEntity implements Serializable {
 		private List<ItemData> data;
     }
 
+	public void sortDataByOrderIndex() {
+		if (data != null) {
+			data.sort(Comparator.comparingInt(ItemData::getOrderIndex));
+		}
+	}
 //    public void sortDataByOrderIndex() {
 //        if (data != null) {
 //            data = data.entrySet()

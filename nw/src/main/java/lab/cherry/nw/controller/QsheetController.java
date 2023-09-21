@@ -68,12 +68,12 @@ public class QsheetController {
         qsheetEntity = qsheetService.getQsheets(pageable);
     } else if(userid != null && orgid==null) {
         qsheetEntity = qsheetService.findPageByUserId(userid, pageable);
-    } else{
-        qsheetEntity = qsheetService.findPageByOrgId(orgid, pageable);
-    }
-//        for (QsheetEntity qsheet : qsheetEntity) {
-//            qsheet.sortDataByOrderIndex();
-//        }
+	} else{
+		qsheetEntity = qsheetService.findPageByOrgId(orgid, pageable);
+	}
+        for (QsheetEntity qsheet : qsheetEntity) {
+            qsheet.sortDataByOrderIndex();
+        }
         return new ResponseEntity<>(qsheetEntity, new HttpHeaders(), HttpStatus.OK);
     }
 
