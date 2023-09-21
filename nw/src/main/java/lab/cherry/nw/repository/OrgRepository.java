@@ -1,5 +1,6 @@
 package lab.cherry.nw.repository;
 
+import lab.cherry.nw.model.FinaldocsEntity;
 import lab.cherry.nw.model.OrgEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
