@@ -82,7 +82,7 @@ public class WeddinghallEntity implements Serializable {
 	@Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class CreateDto {
+    public static class 	CreateDto {
 
 		@NotBlank(message = "[필수] 웨딩홀(예식장 이름)")
         @Schema(title = "웨딩홀(예식장) 이름", example = "더글로리")

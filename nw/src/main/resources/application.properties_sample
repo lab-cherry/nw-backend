@@ -23,9 +23,8 @@ springdoc.swagger-ui.tags-sorter=alpha
 springdoc.swagger-ui.operations-sorter=alpha
 
 # App Properties
-<<<<<<< HEAD
-#echo 'com-innogrid-medge-project-rndplan-dev-1team-secret-base-by-taking'|base64
-lab.cherry.nw.jwtSecret= 29tLWlubm9ncmlkLW1lZGdlLXByb2plY3Qtcm5kcGxhbi1kZXYtMXRlYW0tc2VjcmV0LWJhc2UtYnktdGFrYWluZwo=
+#echo 'lab-cherry-nw-project-secret-key' | base64
+lab.cherry.nw.jwtSecret= bGFiLWNoZXJyeS1udy1wcm9qZWN0LXNlY3JldC1rZXkK
 lab.cherry.nw.jwtExpirationMs= 86400000
 
 #Email
@@ -33,7 +32,7 @@ spring.mail.host=smtp.localhost.com
 spring.mail.port=587
 spring.mail.properties.debug=true
 spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.ssl.enable= false
+spring.mail.properties.mail.smtp.ssl.enable=false
 spring.mail.properties.mail.smtp.starttls.enable=true
 spring.mail.properties.mail.smtp.starttls.required=true
 

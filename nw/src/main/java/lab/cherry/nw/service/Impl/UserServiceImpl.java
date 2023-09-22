@@ -85,11 +85,14 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = findById(id);
 
-        if (user.getUsername() != null || user.getEmail() != null || user.getPassword() != null) {
+        if (user.getUserName() != null || user.getEmail() != null || user.getPassword() != null) {
+
+			log.error("{}", userEntity.getId());
 
             userEntity = UserEntity.builder()
                 .id(userEntity.getId())
-                .username((user.getUsername() != null) ? user.getUsername() : userEntity.getUsername())
+				.userid(userEntity.getUserid())
+                .username((user.getUserName() != null) ? user.getUserName() : userEntity.getUsername())
                 .email((user.getEmail() != null) ? user.getEmail() : userEntity.getEmail())
                 .password((user.getPassword() != null) ? passwordEncoder.encode(user.getPassword()) : userEntity.getPassword())
                 .build();

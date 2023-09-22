@@ -115,7 +115,7 @@ public class UserEntity implements Serializable {
         private String userEmail;
 
         @Schema(title = "타입", example = "user | org")
-        private String type;
+        private String userType;
 
         @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
@@ -146,7 +146,7 @@ public class UserEntity implements Serializable {
 
         @Schema(title = "사용자 이름", example = "관리자")
         @Size(min = 2, max = 10)
-        private String username;
+        private String userName;
 
         @Schema(title = "사용자 이메일", example = "admin@innogrid.com")
         @Email

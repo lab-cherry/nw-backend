@@ -90,6 +90,7 @@ public class OrgServiceImpl implements OrgService {
             .name(orgCreateDto.getName())
             .biznum(orgCreateDto.getBiznum())
             .contact(orgCreateDto.getContact())
+			.address(orgCreateDto.getAddress())
             .enabled(true)
             .created_at(instant)
             .build();
@@ -112,13 +113,14 @@ public class OrgServiceImpl implements OrgService {
 
         OrgEntity orgEntity = findById(id);
 
-        if (org.getName() != null || org.getBiznum() != null || org.getContact() != null) {
+        if (org.getName() != null || org.getBiznum() != null || org.getContact() != null || org.getAddress() != null) {
 
             orgEntity = OrgEntity.builder()
                 .id(orgEntity.getId())
                 .name((org.getName() != null) ? org.getName() : orgEntity.getName())
                 .biznum((org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum())
-                .contact((org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum())
+                .contact((org.getContact() != null) ? org.getContact() : orgEntity.getContact())
+                .address((org.getAddress() != null) ? org.getAddress() : orgEntity.getAddress())
                 .build();
 
             orgRepository.save(orgEntity);

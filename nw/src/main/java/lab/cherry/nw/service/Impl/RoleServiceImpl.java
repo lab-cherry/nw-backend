@@ -101,7 +101,7 @@ public class RoleServiceImpl implements RoleService {
      */
     @Transactional(readOnly = true)
     public void checkExistsWithRoleName(String name) {
-        if (roleRepository.findByName(name).isPresent()) {
+        if (roleRepository.findByName("ROLE_" + name).isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE); // 조직 이름이 중복됨
         }
     }

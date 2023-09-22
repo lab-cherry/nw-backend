@@ -28,6 +28,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -141,11 +142,6 @@ public class FileServiceImpl implements FileService {
 		return fileRepository.findPageByName(name, pageable);
 	}
 
-//	@Transactional(readOnly = true)
-//    public Page<FileEntity> findPageByUserId(String userid, Pageable pageable) {
-//		return fileRepository.findPageByUserid(userid, pageable);
-//	}
-
 	@Transactional(readOnly = true)
     public Page<FileEntity> findPageByOrgId(String orgid, Pageable pageable) {
 		return fileRepository.findPageByOrgid(orgid, pageable);
@@ -154,6 +150,11 @@ public class FileServiceImpl implements FileService {
 
 	@Transactional(readOnly = true)
     public FileEntity findById(String id) {
-		return fileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("file with Id " + id + " Not Found."));
+		return fileRepository.findByid(id).orElseThrow(() -> new EntityNotFoundException("file with Id " + id + " Not Found."));
+	}
+
+	@Transactional(readOnly = true)
+    public FileEntity findByPath(String path) {
+		return fileRepository.findByPath(path).orElseThrow(() -> new EntityNotFoundException("file with Path " + path + " Not Found."));
 	}
 }
