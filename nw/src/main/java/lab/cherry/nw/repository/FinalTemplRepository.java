@@ -28,6 +28,7 @@ public interface FinalTemplRepository extends MongoRepository<FinalTemplEntity, 
     Page<FinalTemplEntity> findPageById(String id, Pageable pageable);
 
     Optional<FinalTemplEntity> findById(String id);
+	Optional<FinalTemplEntity> findByIdIsNotNull(String id);
 
     Optional<FinalTemplEntity> findByName(String fdocsTemplateName);
 

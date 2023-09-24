@@ -5,10 +5,13 @@ import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.FinalTemplEntity;
 import lab.cherry.nw.model.OrgEntity;
+import lab.cherry.nw.model.ScheduleEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.FinalTemplRepository;
+import lab.cherry.nw.repository.ScheduleRepository;
 import lab.cherry.nw.service.FinalTemplService;
 import lab.cherry.nw.service.OrgService;
+import lab.cherry.nw.service.ScheduleService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,31 +22,36 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <pre>
- * ClassName : FinalTemplServiceImpl
+ * ClassName : ScheduleServiceImpl
  * Type : class
- * Description : 최종확인서 템플릿과 관련된 서비스 구현과 관련된 함수를 포함하고 있는 클래스입니다.
+ * Description : 스케줄표와 관련된 서비스 구현과 관련된 함수를 포함하고 있는 클래스입니다.
  * Related : spring-boot-starter-data-jpa
  * </pre>
  */
 @Slf4j
-@Service("fianlTemplServiceImpl")
+@Service("scheduleServiceImpl")
 @Transactional
 @RequiredArgsConstructor
-public class FinalTemplServiceImpl implements FinalTemplService {
+public class ScheduleServiceImpl implements ScheduleService {
 
     private final FinalTemplRepository finalTemplRepository;
+	private final ScheduleRepository scheduleRepository;
+	private final FinalTemplService finalTemplService;
     private final UserService userService;
     private final OrgService orgService;
 
     /**
-     * [FinalTemplServiceImpl] 최종확인서 템플릿 조회 함수
+     * [FinalTemplServiceImpl] 스케줄표 조회 함수
      *
-     * @return DB에서 최종확인서 템플릿 정보 목록을 리턴합니다.
-     * @throws EntityNotFoundException 최종확인서 템플릿 정보가 없을 경우 예외 처리 발생
+     * @return DB에서 스케줄표 정보 목록을 리턴합니다.
+     * @throws EntityNotFoundException 스케줄표 정보가 없을 경우 예외 처리 발생
      * <pre>
-     * 전체 최종확인서 템플릿 조회하여, 최종 최종확인서 템플릿목록을 반환합니다.
+     * 전체 스케줄표 조회하여, 최종 스케줄표목록을 반환합니다.
      * </pre>
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
@@ -59,42 +67,53 @@ public class FinalTemplServiceImpl implements FinalTemplService {
     }
 
     /**
-     * [FinalTemplServiceImpl] 최종확인서 템플릿 생성 함수
+     * [FinalTemplServiceImpl] 스케줄표 생성 함수
      *
-     * @param finalTemplCreateDto 최종확인서 템플릿 생성에 필요한 조직 등록 정보를 담은 개체입니다.
-     * @return 생성된 최종확인서 템플릿 정보를 리턴합니다.
+     * @param finalTemplCreateDto 스케줄표 생성에 필요한 조직 등록 정보를 담은 개체입니다.
+     * @return 생성된 스케줄표 정보를 리턴합니다.
      * <pre>
-     * 최종확인서 템플릿을 등록합니다.
+     * 스케줄표을 등록합니다.
      * </pre>
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public FinalTemplEntity createFinalTemplate(FinalTemplEntity.CreateDto finalTemplCreateDto) {
+    public ScheduleEntity transColumn(ScheduleEntity.transDto scheduleTransDto) {
 
-        Instant instant = Instant.now();
+        UserEntity userEntity = userService.findById(scheduleTransDto.getUserid());
+        OrgEntity orgEntity = orgService.findById(scheduleTransDto.getOrgid());
+		FinalTemplEntity finalTemplEntity = finalTemplService.findById(scheduleTransDto.getFinalTemplid());
 
-        UserEntity userEntity = userService.findById(finalTemplCreateDto.getUserid());
-        OrgEntity orgEntity = orgService.findById(finalTemplCreateDto.getOrgid());
 
 
-        FinalTemplEntity finaldocsEntity = FinalTemplEntity.builder()
-            .name(finalTemplCreateDto.getName())
-            .content(finalTemplCreateDto.getContent())
+		Map<Object,Object> content = finalTemplEntity.getContent();
+
+		// Null 값을 가진 엔트리만 가져오기
+		Map<Object, Object> nullEntries = new HashMap<>();
+
+		for (Map.Entry<Object, Object> entry : content.entrySet()) {
+			if (!entry.getValue().equals("")) {
+				nullEntries.put(entry.getKey(), entry.getValue());
+			}
+		}
+
+		ScheduleEntity scheduleEntity = ScheduleEntity.builder()
+            .name(scheduleTransDto.getName())
+            .column(nullEntries)
             .userid(userEntity)
             .orgid(orgEntity)
-            .created_at(instant)
             .build();
 
-        return finalTemplRepository.save(finaldocsEntity);
+        return scheduleRepository.save(scheduleEntity);
+
     }
 
     /**
-     * [FinalTemplServiceImpl] 최종확인서 템플릿 수정 함수
+     * [FinalTemplServiceImpl] 스케줄표 수정 함수
      *
-     * @param fianlTempl 최종확인서 템플릿 수정에 필요한 정보를 담은 개체입니다.
-     * @throws EntityNotFoundException 최종확인서 템플릿 정보가 없을 경우 예외 처리 발생
+     * @param fianlTempl 스케줄표 수정에 필요한 정보를 담은 개체입니다.
+     * @throws EntityNotFoundException 스케줄표 정보가 없을 경우 예외 처리 발생
      * <pre>
-     * 특정 최종확인서 템플릿에 대한 정보를 수정합니다.
+     * 특정 스케줄표에 대한 정보를 수정합니다.
      * </pre>
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
@@ -125,12 +144,12 @@ public class FinalTemplServiceImpl implements FinalTemplService {
     }
 
     /**
-     * [FinalTemplServiceImpl] 최종확인서 템플릿  삭제 함수
+     * [FinalTemplServiceImpl] 스케줄표  삭제 함수
      *
-     * @param id 삭제할 최종확인서 템플릿의 식별자입니다.
-     * @throws EntityNotFoundException 해당 ID의 최종확인서 템플릿 정보가 없을 경우 예외 처리 발생
+     * @param id 삭제할 스케줄표의 식별자입니다.
+     * @throws EntityNotFoundException 해당 ID의 스케줄표 정보가 없을 경우 예외 처리 발생
      * <pre>
-     * 입력한 id를 가진 조직 최종확인서 템플릿을 삭제합니다.
+     * 입력한 id를 가진 조직 스케줄표을 삭제합니다.
      * </pre>
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
@@ -142,13 +161,13 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 
 
     /**
-     * [FinalTemplServiceImpl] ID로 최종확인서 템플릿  조회 함수
+     * [FinalTemplServiceImpl] ID로 스케줄표  조회 함수
      *
-     * @param id 조회할 최종확인서 템플릿의 식별자입니다.
+     * @param id 조회할 스케줄표의 식별자입니다.
      * @return 주어진 식별자에 해당하는 조직 정보
-     * @throws EntityNotFoundException 해당 ID의 최종확인서 템플릿 정보가 없을 경우 예외 처리 발생
+     * @throws EntityNotFoundException 해당 ID의 스케줄표 정보가 없을 경우 예외 처리 발생
      * <pre>
-     * 입력한 id에 해당하는 최종확인서 템플릿 정보를 조회합니다.
+     * 입력한 id에 해당하는 스케줄표 정보를 조회합니다.
      * </pre>
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
@@ -161,31 +180,24 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 
     @Transactional(readOnly = true)
     public FinalTemplEntity findById(String id) {
-        return finalTemplRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("finalTempl with Id " + id + " Not Found."));
+        return finalTemplRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("finaldocs with Id " + id + " Not Found."));
     }
 
-
-	@Transactional(readOnly = true)
-	public FinalTemplEntity findByIdNotNull(String id) {
-		return finalTemplRepository.findByIdIsNotNull(id).orElseThrow(() -> new EntityNotFoundException("finalTempl with Id " + id + " Not Found."));
-	}
-
-
-	/**
-     * [FinalTemplServiceImpl] NAME으로 최종확인서 템플릿 조회 함수
+    /**
+     * [FinalTemplServiceImpl] NAME으로 스케줄표 조회 함수
      *
-     * @param name 조회할 최종확인서 템플릿의 이름입니다.
-     * @return 주어진 이름에 해당하는 최종확인서 템플릿  정보를 리턴합니다.
-     * @throws EntityNotFoundException 해당 이름의 최종확인서 템플릿  정보가 없을 경우 예외 처리 발생
+     * @param name 조회할 스케줄표의 이름입니다.
+     * @return 주어진 이름에 해당하는 스케줄표  정보를 리턴합니다.
+     * @throws EntityNotFoundException 해당 이름의 스케줄표  정보가 없을 경우 예외 처리 발생
      * <pre>
-     * 입력한 name에 해당하는 최종확인서 템플릿  정보를 조회합니다.
+     * 입력한 name에 해당하는 스케줄표  정보를 조회합니다.
      * </pre>
      *
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
     public FinalTemplEntity findByName(String name) {
-        return finalTemplRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("finalTempl with Name " + name + " Not Found."));
+        return finalTemplRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Org with Name " + name + " Not Found."));
     }
 
     @Transactional(readOnly = true)
