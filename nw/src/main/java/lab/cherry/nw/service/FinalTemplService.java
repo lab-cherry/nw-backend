@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 @Component
 public interface FinalTemplService {
     Page<FinalTemplEntity> getFinalTemplate(Pageable pageable);
-    FinalTemplEntity createFinalTemplate(FinalTemplEntity.CreateDto fdocsTemplateCreateDto);
-    void updateById(String id, FinalTemplEntity.UpdateDto org);
+    FinalTemplEntity createFinalTemplate(FinalTemplEntity.FinalTemplCreateDto fdocsTemplateCreateDto);
+    void updateById(String id, FinalTemplEntity.FinalTemplUpdateDto org);
     FinalTemplEntity findById(String id);
 	FinalTemplEntity findByIdNotNull(String id);
     FinalTemplEntity findByName(String name);

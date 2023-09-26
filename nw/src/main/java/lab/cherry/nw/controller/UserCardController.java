@@ -95,7 +95,7 @@ public class UserCardController {
             @ApiResponse(responseCode = "200", description = "조직 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<?> createUserCard(@Valid @RequestBody(required = false) UserCardEntity.CreateDto userCardCreateDto) {
+    public ResponseEntity<?> createUserCard(@Valid @RequestBody(required = false) UserCardEntity.UserCardCreateDto userCardCreateDto) {
 
         log.info("[OrgController] createOrganization...!");
 
@@ -124,7 +124,7 @@ public class UserCardController {
      */
     @PatchMapping("{id}")
     @Operation(summary = "고객카드 업데이트", description = "특정 고객카드를 업데이트합니다.")
-    public ResponseEntity<?> updateUserCardById(@PathVariable("id") String id, @RequestBody UserCardEntity.UpdateDto userCardEntity) {
+    public ResponseEntity<?> updateUserCardById(@PathVariable("id") String id, @RequestBody UserCardEntity.UserCardUpdateDto userCardEntity) {
 
         log.info("[OrgController] updateOrgById...!");
 

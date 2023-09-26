@@ -63,7 +63,7 @@ public class UserCardServiceImpl implements UserCardService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public UserCardEntity createUserCard(UserCardEntity.CreateDto userCardCreateDto) {
+    public UserCardEntity createUserCard(UserCardEntity.UserCardCreateDto userCardCreateDto) {
 
         Instant instant = Instant.now();
         UserEntity userEntity = userService.findById(userCardCreateDto.getUserinfo());
@@ -80,7 +80,7 @@ public class UserCardServiceImpl implements UserCardService {
 
         return userCardRepository.save(userCardEntity);
     }
-    
+
     /**
      * [userCardServiceImpl] 고객카드 수정 함수
      *
@@ -92,7 +92,7 @@ public class UserCardServiceImpl implements UserCardService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public void updateById(String id, UserCardEntity.UpdateDto usercard) {
+    public void updateById(String id, UserCardEntity.UserCardUpdateDto usercard) {
 
         UserEntity userEntity = userService.findById(usercard.getUserinfo());
 
@@ -135,7 +135,7 @@ public class UserCardServiceImpl implements UserCardService {
     public void deleteById(String id) {
         userCardRepository.delete(userCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Org with Id " + id + " Not Found.")));
     }
-    
+
 
     /**
      * [userCardServiceImpl] ID로 고객카드 조회 함수

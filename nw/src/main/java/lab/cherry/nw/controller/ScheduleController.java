@@ -122,7 +122,7 @@ public class ScheduleController {
      */
     @PatchMapping("{id}")
     @Operation(summary = "최종 확인서 템플릿 업데이트", description = "특정 최종 확인서 템플릿을 업데이트합니다.")
-    public ResponseEntity<?> updateFinalTemplById(@PathVariable("id") String id, @RequestBody FinalTemplEntity.UpdateDto finaltemplEntity) {
+    public ResponseEntity<?> updateFinalTemplById(@PathVariable("id") String id, @RequestBody FinalTemplEntity.FinalTemplUpdateDto finaltemplEntity) {
 
         log.info("[FinalTemplController] updateFinaltemplById...!");
 

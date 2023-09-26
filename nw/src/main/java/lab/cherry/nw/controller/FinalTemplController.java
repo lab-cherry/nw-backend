@@ -94,7 +94,7 @@ public class FinalTemplController {
             @ApiResponse(responseCode = "200", description = "조직 최종확인서 템플릿 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<?> createFinalTemplate(@Valid @RequestBody(required = false) FinalTemplEntity.CreateDto finalTemplateCreateDto) {
+    public ResponseEntity<?> createFinalTemplate(@Valid @RequestBody(required = false) FinalTemplEntity.FinalTemplCreateDto finalTemplateCreateDto) {
 
         log.info("[FinalTemplController] createFinalTempl...!");
 
@@ -125,7 +125,7 @@ public class FinalTemplController {
      */
     @PatchMapping("{id}")
     @Operation(summary = "최종 확인서 템플릿 업데이트", description = "특정 최종 확인서 템플릿을 업데이트합니다.")
-    public ResponseEntity<?> updateFinalTemplById(@PathVariable("id") String id, @RequestBody FinalTemplEntity.UpdateDto finaltemplEntity) {
+    public ResponseEntity<?> updateFinalTemplById(@PathVariable("id") String id, @RequestBody FinalTemplEntity.FinalTemplUpdateDto finaltemplEntity) {
 
         log.info("[FinalTemplController] updateFinaltemplById...!");
 

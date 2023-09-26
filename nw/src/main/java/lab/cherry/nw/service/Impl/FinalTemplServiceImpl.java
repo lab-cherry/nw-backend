@@ -69,7 +69,7 @@ public class FinalTemplServiceImpl implements FinalTemplService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public FinalTemplEntity createFinalTemplate(FinalTemplEntity.CreateDto finalTemplCreateDto) {
+    public FinalTemplEntity createFinalTemplate(FinalTemplEntity.FinalTemplCreateDto finalTemplCreateDto) {
 
         Instant instant = Instant.now();
 
@@ -99,7 +99,7 @@ public class FinalTemplServiceImpl implements FinalTemplService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public void updateById(String id, FinalTemplEntity.UpdateDto finalTempl) {
+    public void updateById(String id, FinalTemplEntity.FinalTemplUpdateDto finalTempl) {
 
         FinalTemplEntity finalTemplEntity = findById(id);
         UserEntity userEntity = userService.findById(finalTempl.getUserid());

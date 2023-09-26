@@ -94,7 +94,7 @@ public class FinaldocsController {
             @ApiResponse(responseCode = "200", description = "조직 최종확인서 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<?> createFinaldocs(@Valid @RequestBody(required = false) FinaldocsEntity.CreateDto finaldocsCreateDto) {
+    public ResponseEntity<?> createFinaldocs(@Valid @RequestBody(required = false) FinaldocsEntity.FinaldocsCreateDto finaldocsCreateDto) {
 
         log.info("[FinaldocsController] createFinaldocs...!");
 
@@ -125,7 +125,7 @@ public class FinaldocsController {
      */
     @PatchMapping("{id}")
     @Operation(summary = "최종 확인서 업데이트", description = "특정 최종 확인서를 업데이트합니다.")
-    public ResponseEntity<?> updateOrgById(@PathVariable("id") String id, @RequestBody FinaldocsEntity.UpdateDto finaldocsEntity) {
+    public ResponseEntity<?> updateOrgById(@PathVariable("id") String id, @RequestBody FinaldocsEntity.FinaldocsUpdateDto finaldocsEntity) {
 
         log.info("[FinaldocsController] updateFinaldocsById...!");
 

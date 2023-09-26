@@ -72,7 +72,7 @@ public class FinaldocsServiceImpl implements FinaldocsService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public FinaldocsEntity createFinaldocs(FinaldocsEntity.CreateDto finaldocsCreateDto) {
+    public FinaldocsEntity createFinaldocs(FinaldocsEntity.FinaldocsCreateDto finaldocsCreateDto) {
 
         Instant instant = Instant.now();
 
@@ -92,7 +92,7 @@ public class FinaldocsServiceImpl implements FinaldocsService {
 
         return finaldocsRepository.save(finaldocsEntity);
     }
-    
+
     /**
      * [FinaldocsServiceImpl] 최종확인서 수정 함수
      *
@@ -104,7 +104,7 @@ public class FinaldocsServiceImpl implements FinaldocsService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public void updateById(String id, FinaldocsEntity.UpdateDto finaldocs) {
+    public void updateById(String id, FinaldocsEntity.FinaldocsUpdateDto finaldocs) {
 
         FinaldocsEntity finaldocsEntity = findById(id);
         UserEntity userEntity = userService.findById(finaldocs.getUserid());

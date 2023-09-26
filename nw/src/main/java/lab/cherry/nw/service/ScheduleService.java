@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public interface ScheduleService {
     Page<FinalTemplEntity> getFinalTemplate(Pageable pageable);
 	ScheduleEntity transColumn(ScheduleEntity.transDto scheduleTransDto);
-    void updateById(String id, FinalTemplEntity.UpdateDto org);
+    void updateById(String id, FinalTemplEntity.FinalTemplUpdateDto org);
     FinalTemplEntity findById(String id);
     FinalTemplEntity findByName(String name);
     void deleteById(String id);
