@@ -80,7 +80,7 @@ public class QsheetController {
     /**
      * [QsheetController] 큐시트 생성 함수
      * <pre>
-     * @param qsheetCreateDto 큐시트 생성에 필요한 큐시트 정보를 담고 있는 객체입니다.
+     * @param qsheetCreateQsheetDto 큐시트 생성에 필요한 큐시트 정보를 담고 있는 객체입니다.
      * @return
      * true  : 업데이트된 큐시트 정보를 반환합니다.
      * false : 에러(400, 404)를 반환합니다.
@@ -94,9 +94,9 @@ public class QsheetController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @Operation(summary = "Qsheet 생성", description = "Qsheet를 추가합니다.")
-    public ResponseEntity<?> createQsheet(@Valid @RequestBody QsheetEntity.CreateDto qsheetCreateDto) {
+    public ResponseEntity<?> createQsheet(@Valid @RequestBody QsheetEntity.CreateQsheetDto qsheetCreateQsheetDto) {
         log.info("[QsheetController] createQsheet...!");
-        qsheetService.createQsheet(qsheetCreateDto);
+        qsheetService.createQsheet(qsheetCreateQsheetDto);
 
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);

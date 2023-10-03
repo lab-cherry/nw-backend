@@ -59,7 +59,7 @@ public class QsheetServiceImpl implements QsheetService {
     /**
      * [QsheetServiceImpl] 큐시트 생성 함수
      *
-     * @param qsheetCreateDto 큐시트 생성에 필요한 큐시트 등록 정보를 담은 개체입니다.
+     * @param qsheetCreateQsheetDto 큐시트 생성에 필요한 큐시트 등록 정보를 담은 개체입니다.
      * @return 생성된 큐시트 정보를 리턴합니다.
      * @throws CustomException 중복된 이름에 대한 예외 처리 발생
      * <pre>
@@ -68,18 +68,18 @@ public class QsheetServiceImpl implements QsheetService {
      *
      * Author : yby654(yby654@github.com)
      */
-    public void createQsheet(QsheetEntity.CreateDto qsheetCreateDto) {
+    public void createQsheet(QsheetEntity.CreateQsheetDto qsheetCreateQsheetDto) {
         Instant instant = Instant.now();
-        UserEntity userEntity = userService.findById(qsheetCreateDto.getUserSeq());
+        UserEntity userEntity = userService.findById(qsheetCreateQsheetDto.getUserSeq());
         OrgEntity orgEntity = null;
-        if (qsheetCreateDto.getOrgSeq() != null){
-            orgEntity = orgService.findById(qsheetCreateDto.getOrgSeq());
+        if (qsheetCreateQsheetDto.getOrgSeq() != null){
+            orgEntity = orgService.findById(qsheetCreateQsheetDto.getOrgSeq());
         }
         QsheetEntity qsheetEntity = QsheetEntity.builder()
             .userid(userEntity)
             .orgid(orgEntity)
-            .name(qsheetCreateDto.getName())
-            .data(qsheetCreateDto.getData())
+            .name(qsheetCreateQsheetDto.getName())
+            .data(qsheetCreateQsheetDto.getData())
             .created_at(instant)
             .build();
         qsheetRepository.save(qsheetEntity);

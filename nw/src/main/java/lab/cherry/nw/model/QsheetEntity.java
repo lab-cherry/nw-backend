@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,27 +37,27 @@ public class QsheetEntity implements Serializable {
 
     @Id
     @JsonProperty("qsheetSeq")
-    @Schema(title = "큐시트 고유번호", example = "38352658567418867") // (Long) Tsid
+    @Schema(title = "큐시트 고유번호",type="String", example = "38352658567418867") // (Long) Tsid
     private String id;
 
     @DBRef
     @JsonProperty("userSeq")
-    @Schema(title = "유저 고유번호", example = "38352658567418867") // (Long) Tsid
+    @Schema(title = "유저 고유번호", type="String",example = "38352658567418867") // (Long) Tsid
     private UserEntity userid;
 
     @DBRef
     @JsonProperty("orgSeq")
-    @Schema(title = "조직 정보", example = "38352658567418867") // (Long) Tsid
+    @Schema(title = "조직 정보", type="String",example = "38352658567418867") // (Long) Tsid
     private OrgEntity orgid;
 
 
     @JsonProperty("name")
-    @Schema(title = "큐시트 이름", example = "최해리_230824")
+    @Schema(title = "큐시트 이름", type="String",example = "최해리_230824")
     @Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
     private String name;
 
     @JsonProperty("data")
-	@Schema(title = "큐시트 내용", example = "") // (Long) Tsid
+	@Schema(title = "큐시트 내용",type="List", example = "[{'orderIndex':1, }]")
     private List<ItemData> data;
 
     @JsonProperty("created_at")
@@ -95,13 +96,17 @@ public class QsheetEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class CreateDto {
+    public static class CreateQsheetDto {
 
-        @Schema(title = "큐시트 이름", example = "최해리_230824")
+        @Schema(title = "큐시트 데이터", example = "최해리_230824")
         @Size(min = 4, max = 20)
+		@NotNull
         private String name;
+		@Schema(title = "유저 고유번호", example = "38352658567418867")
         private String userSeq;
+		@Schema(title = "조직 고유번호", example = "38352658567418867")
         private String orgSeq;
+		@Schema(title = "데이터", example = "[]")
 		private List<ItemData> data;
     }
 
