@@ -65,7 +65,7 @@ public class OrgServiceImpl implements OrgService {
      *
      * Author : taking(taking@duck.com)
      */
-    public OrgEntity createOrganization(OrgEntity.CreateDto orgCreateDto) {
+    public OrgEntity createOrganization(OrgEntity.OrgCreateDto orgCreateDto) {
 		ObjectId orgId = new ObjectId();
 
 		try {
@@ -109,7 +109,7 @@ public class OrgServiceImpl implements OrgService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void updateById(String id, OrgEntity.UpdateDto org) {
+    public void updateById(String id, OrgEntity.OrgUpdateDto org) {
 
         OrgEntity orgEntity = findById(id);
 

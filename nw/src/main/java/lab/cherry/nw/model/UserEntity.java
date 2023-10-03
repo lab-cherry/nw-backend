@@ -96,7 +96,7 @@ public class UserEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class RegisterDto {
+    public static class UserRegisterDto {
 
         @NotBlank
         @Schema(title = "사용자 아이디", example = "admin")
@@ -126,7 +126,7 @@ public class UserEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class LoginDto {
+    public static class UserLoginDto {
 
         @NotBlank
         @Schema(title = "사용자 아이디", example = "admin")
@@ -142,7 +142,7 @@ public class UserEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class UpdateDto {
+    public static class UserUpdateDto {
 
         @Schema(title = "사용자 이름", example = "관리자")
         @Size(min = 2, max = 10)

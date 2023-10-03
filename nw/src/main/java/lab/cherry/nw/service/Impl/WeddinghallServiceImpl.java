@@ -68,12 +68,12 @@ public class WeddinghallServiceImpl implements WeddinghallService {
      * @param weddinghallCreateDto 웨딩홀(예식장) 생성에 필요한 역할 등록 정보를 담은 개체입니다.
      * @return 생성된 웨딩홀(예식장) 정보를 리턴합니다.
      * <pre>
-     * 역할을 등록합니다.
+     * 웨딩홀(예식장)을 등록합니다.
      * </pre>
      *
      * Author : taking(taking@duck.com)
      */
-    public WeddinghallEntity createWeddinghall(WeddinghallEntity.CreateDto weddinghallCreateDto, List<MultipartFile> imageFiles) {
+    public WeddinghallEntity createWeddinghall(WeddinghallEntity.WeddinghallCreateDto weddinghallCreateDto, List<MultipartFile> imageFiles) {
 		
 		log.error("[#0] in createWeddinghall");
 		
@@ -159,13 +159,13 @@ public class WeddinghallServiceImpl implements WeddinghallService {
 	}
 
 	/**
-     * [OrgServiceImpl] ID로 조직 조회 함수
+     * [WeddinghallServiceImpl] ID로 웨딩홀(예식장) 조회 함수
      *
-     * @param id 조회할 조직의 식별자입니다.
-     * @return 주어진 식별자에 해당하는 조직 정보
-     * @throws EntityNotFoundException 해당 ID의 조직 정보가 없을 경우 예외 처리 발생
+     * @param id 조회할 웨딩홀(예식장)의 식별자입니다.
+     * @return 주어진 식별자에 해당하는 웨딩홀(예식장) 정보
+     * @throws EntityNotFoundException 해당 ID의 웨딩홀(예식장) 정보가 없을 경우 예외 처리 발생
      * <pre>
-     * 입력한 id에 해당하는 조직 정보를 조회합니다.
+     * 입력한 id에 해당하는 웨딩홀(예식장) 정보를 조회합니다.
      * </pre>
      *
      * Author : taking(taking@duck.com)
@@ -188,6 +188,16 @@ public class WeddinghallServiceImpl implements WeddinghallService {
      * Author : taking(taking@duck.com)
      */
     public void deleteById(String id) {
+
+		// 파일 다운로드
+		WeddinghallEntity weddinghallEntity = findById(id);
+
+		List<String> fileObjectIds = weddinghallEntity.getImages();
+
+		if (!fileObjectIds.isEmpty()) {
+			fileService.deleteFiles(weddinghallEntity.getOrg().getId(), fileObjectIds);
+		}
+
 		weddinghallRepository.delete(weddinghallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Weddinghall with Id " + id + " Not Found.")));
 	}
 

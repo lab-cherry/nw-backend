@@ -85,7 +85,7 @@ public class UserController {
     @Operation(summary = "사용자 업데이트", description = "특정 사용자를 업데이트합니다.")
     public ResponseEntity<?> updateUser(
             @PathVariable("id") String id,
-            @RequestBody UserEntity.UpdateDto userEntity) {
+            @RequestBody UserEntity.UserUpdateDto userEntity) {
 
         log.info("[UserController] updateUser...!");
 
@@ -113,7 +113,7 @@ public class UserController {
     @Operation(summary = "사용자 조직 업데이트", description = "특정 사용자의 조직 정보를 업데이트합니다.")
     public ResponseEntity<?> updateUserOrgs(
 		@PathVariable("id") String id,
-		@RequestBody UserEntity.UpdateDto userEntity) {
+		@RequestBody UserEntity.UserUpdateDto userEntity) {
 
             log.info("[UserController] updateUserOrg...!");
 

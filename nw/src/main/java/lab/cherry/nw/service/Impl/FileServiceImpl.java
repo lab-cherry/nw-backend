@@ -81,7 +81,6 @@ public class FileServiceImpl implements FileService {
 						.name(file.getOriginalFilename())
 						.size(FormatConverter.convertInputBytes(file.getSize()))
 						.type(file.getContentType())
-						.ext(Common.getFileExtension(file))
 						.path(filePath)
 						.userid(userName)
 						.orgid(orgId)
@@ -156,5 +155,24 @@ public class FileServiceImpl implements FileService {
 	@Transactional(readOnly = true)
     public FileEntity findByPath(String path) {
 		return fileRepository.findByPath(path).orElseThrow(() -> new EntityNotFoundException("file with Path " + path + " Not Found."));
+	}
+
+	public void deleteFiles(String orgId, List<String> images) {
+
+		for (String image : images) {
+			FileEntity fileEntity = findByPath(image); // checkFileExists
+
+			try {
+				minioService.deleteObject(orgId, image);
+
+				System.out.println("파일 삭제 성공: " + image);
+			} catch (IOException e) {
+				log.error("파일 콘텐츠 확인 중 오류 발생: {}", e.getMessage());
+			} catch (NoSuchAlgorithmException | InvalidKeyException e) {
+				throw new RuntimeException(e);
+			}
+
+			fileRepository.delete(fileRepository.findByPath(image).orElseThrow(() -> new EntityNotFoundException("File with Path " + image + " Not Found.")));
+		}
 	}
 }

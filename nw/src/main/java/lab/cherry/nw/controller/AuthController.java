@@ -61,7 +61,7 @@ public class AuthController {
             @ApiResponse(responseCode = "409", description = "중복된 사용자입니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @Operation(summary = "회원가입", description = "사용자를 추가합니다.")
-    public ResponseEntity<?> register(@Valid @RequestBody UserEntity.RegisterDto userRegisterDto) {
+    public ResponseEntity<?> register(@Valid @RequestBody UserEntity.UserRegisterDto userRegisterDto) {
 
         AccessToken accessToken =  authService.register(userRegisterDto);
         return new ResponseEntity<>(accessToken, new HttpHeaders(), HttpStatus.OK);
@@ -86,7 +86,7 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "400", description = "사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<?> login(@Valid @RequestBody(required = false) UserEntity.LoginDto userLoginDto) {
+    public ResponseEntity<?> login(@Valid @RequestBody(required = false) UserEntity.UserLoginDto userLoginDto) {
 
             log.error("{} {}", userLoginDto.getUserId(), userLoginDto.getUserPassword());
 

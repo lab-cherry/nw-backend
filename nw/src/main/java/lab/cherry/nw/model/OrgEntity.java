@@ -82,7 +82,7 @@ public class OrgEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class CreateDto {
+    public static class OrgCreateDto {
 
         @NotBlank
         @Schema(title = "조직 이름", example = "더모멘트")
@@ -109,7 +109,7 @@ public class OrgEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class UpdateDto {
+    public static class OrgUpdateDto {
 
         @Schema(title = "조직 이름", example = "더모멘트")
         @Size(min = 4, max = 20, message = "Minimum name length: 4 characters")

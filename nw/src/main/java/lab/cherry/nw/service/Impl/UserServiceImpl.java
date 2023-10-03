@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void updateById(String id, UserEntity.UpdateDto user) {
+    public void updateById(String id, UserEntity.UserUpdateDto user) {
 
         UserEntity userEntity = findById(id);
 

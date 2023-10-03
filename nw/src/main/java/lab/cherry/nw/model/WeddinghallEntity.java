@@ -54,7 +54,6 @@ public class WeddinghallEntity implements Serializable {
     @DBRef
     @JsonProperty("org")
     @Schema(title = "Org 정보", example = "더모멘트")
-//    private Set<OrgEntity> orgs = new HashSet<>();
     private OrgEntity org;
 	
 	@NotNull(message = "[필수] 웨딩홀(예식장) 행사 시간 간격")
@@ -82,7 +81,7 @@ public class WeddinghallEntity implements Serializable {
 	@Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class 	CreateDto {
+    public static class WeddinghallCreateDto {
 
 		@NotBlank(message = "[필수] 웨딩홀(예식장 이름)")
         @Schema(title = "웨딩홀(예식장) 이름", example = "더글로리")

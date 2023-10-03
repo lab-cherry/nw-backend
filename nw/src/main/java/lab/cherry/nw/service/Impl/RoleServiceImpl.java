@@ -60,7 +60,7 @@ public class RoleServiceImpl implements RoleService {
      *
      * Author : taking(taking@duck.com)
      */
-    public RoleEntity createRole(RoleEntity.CreateDto roleCreateDto) {
+    public RoleEntity createRole(RoleEntity.RoleCreateDto roleCreateDto) {
 
         Instant instant = Instant.now();
         checkExistsWithRoleName(roleCreateDto.getName()); // 동일한 이름 중복체크

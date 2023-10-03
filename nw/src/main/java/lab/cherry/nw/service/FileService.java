@@ -27,5 +27,7 @@ public interface FileService {
 	FileEntity findById(String id);
 	FileEntity findByPath(String path);
 	void deleteById(String id);
+
 	InputStream downloadFile(String orgId, String path);
+	void deleteFiles(String orgId, List<String> images);
 }

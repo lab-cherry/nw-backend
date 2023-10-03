@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
      *
      * Author : taking(taking@duck.com)
      */
-    public AccessToken register(UserEntity.RegisterDto userRegisterDto) {
+    public AccessToken register(UserEntity.UserRegisterDto userRegisterDto) {
 
         Instant instant = Instant.now();
         checkExistsWithUserId(userRegisterDto.getUserId()); // 동일한 이름 중복체크
@@ -91,7 +91,7 @@ public class AuthServiceImpl implements AuthService {
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public AccessToken.Get login(UserEntity.LoginDto userLoginDto) {
+    public AccessToken.Get login(UserEntity.UserLoginDto userLoginDto) {
 
         authenticateByIdAndPassword(userLoginDto);
 
@@ -136,7 +136,7 @@ public class AuthServiceImpl implements AuthService {
      *
      * Author : taking(taking@duck.com)
      */
-    private void authenticateByIdAndPassword(UserEntity.LoginDto userLoginDto) {
+    private void authenticateByIdAndPassword(UserEntity.UserLoginDto userLoginDto) {
 
         if(userLoginDto == null) {  // Body 값이 비어 있을 경우, 예외처리
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 입력 값이 유효하지 않음

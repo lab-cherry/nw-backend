@@ -11,10 +11,10 @@ import lab.cherry.nw.error.ErrorResponse;
 import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.UserEntity;
-import lab.cherry.nw.model.WeddinghallEntity;
+import lab.cherry.nw.model.BanquetEntity;
 import lab.cherry.nw.service.MinioService;
 import lab.cherry.nw.service.UserService;
-import lab.cherry.nw.service.WeddinghallService;
+import lab.cherry.nw.service.BanquetService;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -34,10 +34,10 @@ import java.util.List;
 
 /**
  * <pre>
- * ClassName : WeddinghallController
+ * ClassName : BanquetController
  * Type : class
- * Description : 사용자 목록 조회, 사용자 상세 조회, 사용자 업데이트, 사용자 삭제, 사용자 찾기 등 사용자와 관련된 함수를 포함하고 있는 클래스입니다.
- * Related : UserRepository, UserService, UserServiceImpl
+ * Description : 연회장 목록 조회, 연회장 상세 조회, 연회장업데이트, 연회장 삭제, 연회장 찾기 등 연회장과 관련된 함수를 포함하고 있는 클래스입니다.
+ * Related : BanquetRepository, BanquetService, BanquetServiceImpl
  * </pre>
  */
 
@@ -46,38 +46,38 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/weddinghall")
-@Tag(name = "Weddinghall", description = "Weddinghall API Document")
-public class WeddinghallController {
+@RequestMapping("/api/v1/banquet")
+@Tag(name = "Banquet", description = "Banquet API Document")
+public class BanquetController {
     
-    private final WeddinghallService weddinghallService;
+	private final BanquetService banquetService;
 	private final MinioService minioService;
 	private final UserService userService;
     
     /**
-     * [WeddinghallController] 웨딩홀(예식장) 목록 함수
+     * [BanquetController] 연회장 목록 함수
      *
-     * @return 전체 웨딩홀(예식장) 목록을 반환합니다.
+     * @return 전체 연회장 목록을 반환합니다.
      *
      * Author : taking(taking@duck.com)
      */
     @GetMapping("")
-    @Operation(summary = "웨딩홀 목록", description = "웨딩홀 목록을 조회합니다.")
-    public ResponseEntity<?> findAllWeddinghalls(
+    @Operation(summary = "연회장 목록", description = "연회장 목록을 조회합니다.")
+    public ResponseEntity<?> findAllBanquets(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "5") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
 
-        log.info("retrieve all weddinghall controller...!");
+        log.info("retrieve all banquet controller...!");
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Common.getOrder(sort)));
 
-        Page<WeddinghallEntity> userEntity;
+        Page<BanquetEntity> userEntity;
         if(name == null) {
-            userEntity = weddinghallService.getWeddinghalls(pageable);
+			userEntity = banquetService.getBanquets(pageable);
         } else {
-            userEntity = weddinghallService.findPageByName(name, pageable);
+			userEntity = banquetService.findPageByName(name, pageable);
         }
 
         //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
@@ -85,9 +85,9 @@ public class WeddinghallController {
     }
     
     /**
-     * [WeddinghallController] 웨딩홀(예식장) 생성 함수
+     * [BanquetController] 연회장 생성 함수
      *
-     * @param weddinghallCreateDto 생성에 필요한 웨딩홀(예식장) 정보를 담고 있는 객체입니다.
+     * @param banquetCreateDto 생성에 필요한 연회장 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
      * true  : 성공(200)을 반환합니다.
@@ -97,64 +97,46 @@ public class WeddinghallController {
      * Author : taking(taking@duck.com)
      */
     @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    @Operation(summary = "웨딩홀(예식장) 생성", description = "웨딩홀(예식장)을 생성합니다.")
+    @Operation(summary = "연회장 생성", description = "연회장을 생성합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "웨딩홀(예식장) 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+			@ApiResponse(responseCode = "200", description = "연회장 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<?> createWeddinghall(@Valid @RequestPart WeddinghallEntity.WeddinghallCreateDto weddinghallCreateDto,
+    public ResponseEntity<?> createBanquet(@Valid @RequestPart BanquetEntity.BanquetCreateDto banquetCreateDto,
 											   		  @RequestPart List<MultipartFile> files) {
 
-		log.info("[WeddinghallController] createWeddinghall...!");
+		log.info("[BanquetController] createBanquet...!");
 		
-		log.error("이름 : {}", weddinghallCreateDto.getName());
-		log.error("조직 : {}", weddinghallCreateDto.getOrg());
+		log.error("이름 : {}", banquetCreateDto.getName());
+		log.error("조직 : {}", banquetCreateDto.getOrg());
 		log.error("이미지 : {}", files);
 
-		WeddinghallEntity weddinghallEntity =  weddinghallService.createWeddinghall(weddinghallCreateDto, files);
+		BanquetEntity banquetEntity =  banquetService.createBanquet(banquetCreateDto, files);
 
-        return new ResponseEntity<>(weddinghallEntity, new HttpHeaders(), HttpStatus.OK);
+		return new ResponseEntity<>(banquetEntity, new HttpHeaders(), HttpStatus.OK);
     }
 	
 	/**
-     * [WeddinghallController] 특정 웨딩홀(예식장) 삭제 함수
+     * [BanquetController] 특정 연회장 삭제 함수
      *
-     * @param id 웨딩홀(예식장) 고유번호를 입력합니다.
+     * @param id 연회장 고유번호를 입력합니다.
      * @return
      * <pre>
-     * true  : 특정 웨딩홀(예식장)를 삭제처리합니다.
+     * true  : 특정 연회장을 삭제처리합니다.
      * false : 에러(400, 404)를 반환합니다.
      * </pre>
      *
      * Author : taking(taking@duck.com)
      */
     @DeleteMapping("{id}")
-    @Operation(summary = "웨딩홀(예식장) 삭제", description = "웨딩홀(예식장)를 삭제합니다.")
-    public ResponseEntity<?> deleteWeddinghall(@PathVariable("id") String id) {
+    @Operation(summary = "연회장 삭제", description = "연회장를 삭제합니다.")
+    public ResponseEntity<?> deleteBanquet(@PathVariable("id") String id) {
 
-		log.info("[UserController] deleteWeddinghall...!");
+		log.info("[BanquetController] deleteBanquet...!");
 
-		weddinghallService.deleteById(id);
+		banquetService.deleteById(id);
 
 		final ResultResponse response = ResultResponse.of(SuccessCode.OK);
 		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
 	}
-
-	@SneakyThrows
-	@GetMapping("test")
-    public ResponseEntity<?> test() {
-
-		minioService.createBucketIfNotExists("test");
-		minioService.createGlobalPolicy("test");
-		minioService.setBucketPolicy("test");
-
-		UserEntity user = userService.findById("64f82e492948d933edfaa9c0");
-
-		minioService.newUser(user);
-		minioService.setUserPolicy("test", "64f82e492948d933edfaa9c0");
-
-		return new ResponseEntity<>(minioService.listUsers(), new HttpHeaders(), HttpStatus.OK);
-	}
-
-
 }

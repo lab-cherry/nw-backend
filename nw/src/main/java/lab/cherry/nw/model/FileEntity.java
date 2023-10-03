@@ -46,12 +46,6 @@ public class FileEntity implements Serializable {
     @Schema(title = "파일 타입", example = "image/jpeg")
     private String type;
 
-	@JsonIgnore
-	@NotNull
-//    @JsonProperty("fileExt")
-    @Schema(title = "파일 확장자", example = "png")
-    private String ext;
-
 	@NotNull
     @JsonProperty("filePath")
     @Schema(title = "파일 경로", example = "관리/더 글로리/IMG_61E29A079818-1.jpeg")
