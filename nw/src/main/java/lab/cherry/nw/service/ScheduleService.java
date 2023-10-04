@@ -6,6 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 /**
  * <pre>
  * ClassName : ScheduleService
@@ -16,12 +20,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public interface ScheduleService {
-    Page<FinalTemplEntity> getFinalTemplate(Pageable pageable);
+    Page<ScheduleEntity> getSchedule(Pageable pageable);
+	ScheduleEntity  scheduleByDate(Instant fromDate, Instant toDate);
 	ScheduleEntity transColumn(ScheduleEntity.transDto scheduleTransDto);
-    void updateById(String id, FinalTemplEntity.FinalTemplUpdateDto org);
-    FinalTemplEntity findById(String id);
-    FinalTemplEntity findByName(String name);
+//    void updateById(String id, ScheduleEntity.FinalTemplUpdateDto org);
+	ScheduleEntity findById(String id);
+	ScheduleEntity findByName(String name);
     void deleteById(String id);
-    Page<FinalTemplEntity> findPageByName(String name, Pageable pageable);
-    Page<FinalTemplEntity> findPageById(String id, Pageable pageable);
+    Page<ScheduleEntity> findPageByName(String name, Pageable pageable);
+    Page<ScheduleEntity> findPageById(String id, Pageable pageable);
 }

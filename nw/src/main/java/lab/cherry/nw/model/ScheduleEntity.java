@@ -12,6 +12,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,7 +37,6 @@ public class ScheduleEntity implements Serializable {
     @Schema(title = "스케줄표 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
-
     @DBRef
     @JsonProperty("userid")
     @Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
@@ -50,11 +51,15 @@ public class ScheduleEntity implements Serializable {
 	@Schema(title = "스케줄표 고유번호", example = "64ed89aa9e813b5ab16da6de")
 	private FinalTemplEntity finaltemplid;
 
-
     @JsonProperty("scheduleName")
     @Schema(title = "스케줄표 이름", example = "문서1")
     @Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
     private String name;
+
+	@JsonProperty("scheduleContent")
+	@Schema(title = "스케줄표 내용", example = "[]")
+//	@Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
+	private List<FinaldocsEntity> content;
 
     @JsonProperty("content")
     @Schema(title = "스케줄표  컬럼", example = "")
@@ -91,25 +96,19 @@ public class ScheduleEntity implements Serializable {
 
 		private String content;
 
-
 	}
 
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class CreateDto {
+    public static class scheduleDateDto {
 
     private String name;
 
-    private String userid;
+    private String content;
 
-    private String orgid;
-
-    private Map content;
+    private LocalDateTime date;
 
     }
-
-
-
 
 }

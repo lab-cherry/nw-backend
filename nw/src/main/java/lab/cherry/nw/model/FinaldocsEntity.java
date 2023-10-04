@@ -39,12 +39,10 @@ public class FinaldocsEntity implements Serializable {
     @Schema(title = "최종확인서 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
-
 	@NotNull
     @JsonProperty("finaltemplid")
     @Schema(title = "최종확인서 템플릿 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private FinalTemplEntity finaltemplid;
-
 
 	@NotNull
     @DBRef
@@ -77,7 +75,7 @@ public class FinaldocsEntity implements Serializable {
     @JsonProperty("created_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
     @Schema(title = "최종확인서 생성 시간", example = "2023-07-04 12:00:00")
-    private Instant created_at;
+    private Instant createdAt;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -107,7 +105,7 @@ public class FinaldocsEntity implements Serializable {
 		@Schema(title = "최종확인서 템플릿 고유번호", example = "64ed89aa9e813b5ab16da6de")
         private  String finaltemplid;
 
-		@NotBlank
+//		@NotBlank
 		@JsonProperty("content")
 		@Schema(title = "최종확인서 내용", example = "")
         private Map content;

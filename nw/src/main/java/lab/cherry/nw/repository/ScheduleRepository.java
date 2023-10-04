@@ -1,11 +1,11 @@
 package lab.cherry.nw.repository;
 
-import lab.cherry.nw.model.FinalTemplEntity;
 import lab.cherry.nw.model.ScheduleEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,6 +31,8 @@ public interface ScheduleRepository extends MongoRepository<ScheduleEntity, UUID
     Optional<ScheduleEntity> findById(String id);
 
     Optional<ScheduleEntity> findByName(String scheduleName);
+
+//	Optional<ScheduleEntity> findByDate(String weddingDate);
 
     List<ScheduleEntity> findAllById(List<String> scheduleIds);
 }

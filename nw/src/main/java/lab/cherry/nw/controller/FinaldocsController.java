@@ -71,7 +71,6 @@ public class FinaldocsController {
                 finaldocsEntity = finaldocsService.findPageById(id,pageable);
         }
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
             return new ResponseEntity<>(finaldocsEntity, new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -98,13 +97,7 @@ public class FinaldocsController {
 
         log.info("[FinaldocsController] createFinaldocs...!");
 
-
-
         FinaldocsEntity finaldocsEntity =  finaldocsService.createFinaldocs(finaldocsCreateDto);
-
-        //         Header 에 등록
-        //        HttpHeaders httpHeaders = new HttpHeaders();
-        //        httpHeaders.add("Authorization", "Bearer " + accessToken.getToken());
 
             return new ResponseEntity<>(finaldocsEntity, new HttpHeaders(), HttpStatus.OK);
     }
@@ -125,13 +118,12 @@ public class FinaldocsController {
      */
     @PatchMapping("{id}")
     @Operation(summary = "최종 확인서 업데이트", description = "특정 최종 확인서를 업데이트합니다.")
-    public ResponseEntity<?> updateOrgById(@PathVariable("id") String id, @RequestBody FinaldocsEntity.FinaldocsUpdateDto finaldocsEntity) {
+    public ResponseEntity<?> updateFinaldocsById(@PathVariable("id") String id, @RequestBody FinaldocsEntity.FinaldocsUpdateDto finaldocsEntity) {
 
         log.info("[FinaldocsController] updateFinaldocsById...!");
 
         finaldocsService.updateById(id, finaldocsEntity);
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(finaldocsService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 

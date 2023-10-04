@@ -87,7 +87,7 @@ public class FinaldocsServiceImpl implements FinaldocsService {
             .userid(userEntity)
             .orgid(orgEntity)
             .finaltemplid(finamTemplEntity)
-            .created_at(instant)
+            .createdAt(instant)
             .build();
 
         return finaldocsRepository.save(finaldocsEntity);
