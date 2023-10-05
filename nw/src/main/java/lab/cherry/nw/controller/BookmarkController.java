@@ -89,7 +89,7 @@ public class BookmarkController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @Operation(summary = "Bookmark 생성", description = "Bookmark를 추가합니다.")
-    public ResponseEntity<?> createBookmark(@Valid @RequestBody BookmarkEntity.CreateDto bookmarkCreateDto) {
+    public ResponseEntity<?> createBookmark(@Valid @RequestBody BookmarkEntity.BookmarkCreateDto bookmarkCreateDto) {
         log.info("[BookmarkController] createBookmark...!");
         bookmarkService.createBookmark(bookmarkCreateDto);
 

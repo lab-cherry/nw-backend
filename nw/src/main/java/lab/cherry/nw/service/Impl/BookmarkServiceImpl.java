@@ -67,7 +67,7 @@ public class BookmarkServiceImpl implements BookmarkService {
      *
      * Author : yby654(yby654@github.com)
      */
-    public void createBookmark(BookmarkEntity.CreateDto bookmarkCreateDto) {
+    public void createBookmark(BookmarkEntity.BookmarkCreateDto bookmarkCreateDto) {
         Instant instant = Instant.now();
 		checkExistsWithBookmarkName(bookmarkCreateDto.getUserSeq());
         UserEntity userEntity = userService.findById(bookmarkCreateDto.getUserSeq());

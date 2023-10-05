@@ -34,7 +34,7 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
 
-    private final TagRepository TagRepository;
+	private final TagRepository tagRepository;
 
 	/**
      * [TagServiceImpl] 전체 게시판 태그 조회 함수
@@ -49,7 +49,7 @@ public class TagServiceImpl implements TagService {
      */
     @Transactional(readOnly = true)
     public Page<TagEntity> getTags(Pageable pageable) {
-    return TagRepository.findAll(pageable);
+		return tagRepository.findAll(pageable);
     //        return EntityNotFoundException.requireNotEmpty(orgRepository.findAll(), "Roles Not Found");
 }
 
@@ -68,10 +68,11 @@ public class TagServiceImpl implements TagService {
      * Author : yby654(yby654@github.com)
      */
     public void createTag(TagEntity.TagCreateDto tagCreateDto) {
+		checkExistsWithTagName(tagCreateDto.getName());
         TagEntity tagEntity = TagEntity.builder()
 			.name(tagCreateDto.getName())
             .build();
-		TagRepository.save(tagEntity);
+		tagRepository.save(tagEntity);
     }
 
     /**
@@ -136,7 +137,7 @@ public class TagServiceImpl implements TagService {
      */
     @Transactional(readOnly = true)
     public TagEntity findByName(String name) {
-		return TagRepository.findById(name).orElseThrow(() -> new EntityNotFoundException("Tag with Name " + name + " Not Found."));
+		return tagRepository.findById(name).orElseThrow(() -> new EntityNotFoundException("Tag with Name " + name + " Not Found."));
     }
 //
 //    @Transactional(readOnly = true)
@@ -144,5 +145,10 @@ public class TagServiceImpl implements TagService {
 //        return TagRepository.findPageByUserid(userid, pageable);
 //    }
 
-    
+	public void checkExistsWithTagName(String name) {
+
+		if (tagRepository.findByName(name).isPresent()) {
+			throw new CustomException(ErrorCode.DUPLICATE); // 북마크생성 유저가 중복됨
+		}
+	}
 }
