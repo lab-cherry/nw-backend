@@ -58,6 +58,7 @@ public class QsheetEntity implements Serializable {
 
     @JsonProperty("data")
 	@Schema(title = "큐시트 내용",type="List", example = "[{'orderIndex':1, }]")
+
     private List<ItemData> data;
 
     @JsonProperty("created_at")
@@ -74,11 +75,17 @@ public class QsheetEntity implements Serializable {
     @Getter
     @Builder
     public static class ItemData {
+		@Schema(title = "큐시트 순서", example = "1")
         private int orderIndex;
+		@Schema(title = "큐시트 순서명", example = "축가")
 		private String process;
+		@Schema(title = "큐시트 내용", example = "니가사는그집-박진영")
         private String content;
+		@Schema(title = "큐시트 행위자", example = "신부")
         private String actor;
+		@Schema(title = "메모", example = "신부가 노래를 못함")
         private String note;
+		@Schema(title = "파일위치", example = "./")
         private String filePath;
     }
 
@@ -106,7 +113,9 @@ public class QsheetEntity implements Serializable {
         private String userSeq;
 		@Schema(title = "조직 고유번호", example = "38352658567418867")
         private String orgSeq;
-		@Schema(title = "데이터", example = "[]")
+//		@Schema(title = "데이터", implementation=List<ItemData>.class)
+		@Schema(title = "데이터 리스트")
+		//example="[{\"orderIndex1\": \"1\", \"process\": \"축가\", \"content\": \"니가사는그집-박진영\", \"actor\": \"신부\", \"note\": \"신부가 노래를 잘함\", \"filePathr\": \"./\"}]
 		private List<ItemData> data;
     }
 
@@ -132,6 +141,7 @@ public class QsheetEntity implements Serializable {
     @Builder
     @NoArgsConstructor @AllArgsConstructor
     public static class UpdateDto {
+		@Schema(title = "데이터 리스트")
 		private List<ItemData> data;
     }
 

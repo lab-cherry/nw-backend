@@ -24,7 +24,7 @@ public interface BookmarkService {
 // BookmarkEntity findByUserId(String userid);
  BookmarkEntity findByUserId(ObjectId userId);
  void createBookmark(BookmarkEntity.BookmarkCreateDto bookmarkCreateDto);
- void updateById(String id, BookmarkEntity.UpdateDto updateDto);
+ void updateById(String id, BookmarkEntity.BookmarkUpdateDto bookmarkUpdateDto);
 // void updateByUserId(String userid, BookmarkEntity.UpdateDto updateDto);
  void deleteById(String id);
 

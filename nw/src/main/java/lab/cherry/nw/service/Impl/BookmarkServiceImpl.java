@@ -92,7 +92,7 @@ public class BookmarkServiceImpl implements BookmarkService {
      *
      * Author : yby654(yby654@github.com)
      */
-    public void updateById(String id, BookmarkEntity.UpdateDto bookmarkUpdateDto) {
+    public void updateById(String id, BookmarkEntity.BookmarkUpdateDto bookmarkUpdateDto) {
         BookmarkEntity bookmarkEntity = findById(id);
 
         if (bookmarkEntity.getData() != null ) {

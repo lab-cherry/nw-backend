@@ -112,7 +112,7 @@ public class BookmarkController {
      @Operation(summary = "북마크 업데이트", description = "특정 북마크를 업데이트합니다.")
     public ResponseEntity<?> updateById(
             @PathVariable("id") String id,
-            @RequestBody BookmarkEntity.UpdateDto bookmarkUpdateDto) {
+			@RequestBody BookmarkEntity.BookmarkUpdateDto bookmarkUpdateDto) {
 
         log.info("[BookmarkController] updateBookmark...!");
 
