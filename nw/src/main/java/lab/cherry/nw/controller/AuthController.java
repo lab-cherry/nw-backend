@@ -12,6 +12,7 @@ import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.service.AuthService;
+import lab.cherry.nw.service.EmailService;
 import lab.cherry.nw.util.Security.AccessToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+
 
     /**
      * [AuthController] 회원가입 함수
@@ -120,6 +122,8 @@ public class AuthController {
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
 
+
+
 	@GetMapping("myinfo")
     @Operation(summary = "사용자 정보 확인", description = "사용자 정보를 확인합니다.")
     public ResponseEntity<?> myInfo() {
@@ -128,4 +132,5 @@ public class AuthController {
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
 		return new ResponseEntity<>(authService.myInfo(), new HttpHeaders(), HttpStatus.OK);
 	}
+
 }
