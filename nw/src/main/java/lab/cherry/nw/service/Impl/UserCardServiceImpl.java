@@ -51,7 +51,7 @@ public class UserCardServiceImpl implements UserCardService {
     @Override
     public Page<UserCardEntity> getUsercards(Pageable pageable) {
         return userCardRepository.findAll(pageable);
-//        return EntityNotFoundException.requireNotEmpty(orgRepository.findAll(), "Orgs Not Found");
+
     }
 
     /**
@@ -116,7 +116,7 @@ public class UserCardServiceImpl implements UserCardService {
             userCardRepository.save(userCardEntity);
 
         } else {
-            log.error("[userCardServiceImpl - groom bride, note, status,weddingDate,resDate만 수정 가능합니다.");
+            log.error("[userCardServiceImpl - groom, bride, note, status,weddingDate,resDate만 수정 가능합니다.");
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
         }
     }
@@ -133,7 +133,7 @@ public class UserCardServiceImpl implements UserCardService {
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
     public void deleteById(String id) {
-        userCardRepository.delete(userCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Org with Id " + id + " Not Found.")));
+        userCardRepository.delete(userCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usercard with Id " + id + " Not Found.")));
     }
 
 
@@ -151,7 +151,7 @@ public class UserCardServiceImpl implements UserCardService {
      */
     @Transactional(readOnly = true)
     public UserCardEntity findById(String id) {
-        return userCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Org with Id " + id + " Not Found."));
+        return userCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usercard with Id " + id + " Not Found."));
     }
 
     @Transactional(readOnly = true)

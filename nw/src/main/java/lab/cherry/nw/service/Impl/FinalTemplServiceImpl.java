@@ -53,9 +53,6 @@ public class FinalTemplServiceImpl implements FinalTemplService {
     public Page<FinalTemplEntity> getFinalTemplate(Pageable pageable) {
 
         return finalTemplRepository.findAll(pageable);
-
-
-        //        return EntityNotFoundException.requireNotEmpty(finaldocsRepository.findAll(), "Fianldocs Not Found");
     }
 
     /**
@@ -75,7 +72,6 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 
         UserEntity userEntity = userService.findById(finalTemplCreateDto.getUserid());
         OrgEntity orgEntity = orgService.findById(finalTemplCreateDto.getOrgid());
-
 
         FinalTemplEntity finaldocsEntity = FinalTemplEntity.builder()
             .name(finalTemplCreateDto.getName())

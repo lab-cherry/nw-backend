@@ -73,8 +73,6 @@ public class FinalTemplEntity implements Serializable {
     private Instant created_at;
 
 
-
-
 //////////////////////////////////////////////////////////////////////////
 
     @Getter
@@ -110,11 +108,9 @@ public class FinalTemplEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class FinalTemplUpdateDto {
 
-		@JsonProperty("userid")
 		@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
         private String userid;
 
-		@JsonProperty("orgid")
 		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
         private String orgid;
 
@@ -122,7 +118,6 @@ public class FinalTemplEntity implements Serializable {
 		@Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
 		private String name;
 
-		@JsonProperty("content")
 		@Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
 		private Map content;
 

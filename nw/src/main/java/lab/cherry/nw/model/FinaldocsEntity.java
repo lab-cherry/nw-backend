@@ -21,10 +21,10 @@ import java.util.Map;
 
 /**
  * <pre>
- * ClassName : UserEntity
+ * ClassName : FinaldocsEntity
  * Type : class
- * Description : User와 관련된 Entity를 구성하고 있는 클래스입니다.
- * Related : UserRepository, UserServiceImpl
+ * Description : Finaldocs와 관련된 Entity를 구성하고 있는 클래스입니다.
+ * Related : FinaldocsRepository, FinaldocsServiceImpl
  * </pre>
  */
 @Getter
@@ -65,7 +65,6 @@ public class FinaldocsEntity implements Serializable {
     @JsonProperty("content")
     @Schema(title = "최종확인서 내용", example = "")
     private Map content;
-//    private Map<String, Object> groom;
 
     @JsonProperty("updated_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
@@ -118,24 +117,20 @@ public class FinaldocsEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class FinaldocsUpdateDto {
 
+		@Schema(title = "최종확인서 고유번호", example = "64ed89aa9e813b5ab16da6de")
         private String id;
 
-		@JsonProperty("finaltemplid")
 		@Schema(title = "최종확인서 템플릿 고유번호", example = "64ed89aa9e813b5ab16da6de")
         private String finaltemplid;
 
-		@JsonProperty("userid")
 		@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
         private String userid;
 
-		@JsonProperty("orgid")
 		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
         private String orgid;
 
-		@JsonProperty("content")
 		@Schema(title = "최종확인서 내용", example = "")
         private Map content;
-
 
     }
 }

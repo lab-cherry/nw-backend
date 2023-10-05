@@ -71,7 +71,6 @@ public class FinalTemplController {
             finalTemplateEntity = finalTemplService.findPageById(id,pageable);
         }
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
             return new ResponseEntity<>(finalTemplateEntity, new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -79,7 +78,7 @@ public class FinalTemplController {
     /**
      * [FinalTemplController] 최종확인서 템플릿 생성 함수
      *
-     * @param finalTemplCreateDto 생성에 필요한 조직 정보를 담고 있는 객체입니다.
+     * @param finalTemplateCreateDto 생성에 필요한 조직 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
      * true  : 성공(200)을 반환합니다.
@@ -98,13 +97,7 @@ public class FinalTemplController {
 
         log.info("[FinalTemplController] createFinalTempl...!");
 
-
-
         FinalTemplEntity finalTemplEntity =  finalTemplService.createFinalTemplate(finalTemplateCreateDto);
-
-        //         Header 에 등록
-        //        HttpHeaders httpHeaders = new HttpHeaders();
-        //        httpHeaders.add("Authorization", "Bearer " + accessToken.getToken());
 
             return new ResponseEntity<>(finalTemplEntity, new HttpHeaders(), HttpStatus.OK);
     }
@@ -114,7 +107,7 @@ public class FinalTemplController {
      * [FinalTemplController] 최종확인서 템플릿 업데이트 함수
      *
      * @param id 최종확인서 템플릿 고유번호를 입력합니다.
-     * @param FinalTemplEntity 최종확인서 템플릿 업데이트에 필요한 정보를 담고 있는 객체입니다.
+     * @param finaltemplEntity 최종확인서 템플릿 업데이트에 필요한 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
      * true  : 업데이트된 최종확인서 템플릿 정보를 반환합니다.
@@ -131,7 +124,6 @@ public class FinalTemplController {
 
         finalTemplService.updateById(id, finaltemplEntity);
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(finalTemplService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -145,7 +137,7 @@ public class FinalTemplController {
      * false : 에러(400, 404)를 반환합니다.
      * </pre>
      *
-     * Author : taking(taking@duck.com)
+	 * Author : hhhaeri(yhoo0020@gmail.com)
      */
     @GetMapping("{id}")
     @Operation(summary = "ID로 최종확인서 템플릿 찾기", description = "최종확인서 템플릿을 조회합니다.")
@@ -153,7 +145,6 @@ public class FinalTemplController {
 
         log.info("[FinaldocsController] findByFinalTemplId...!");
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
             return new ResponseEntity<>(finalTemplService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -167,7 +158,7 @@ public class FinalTemplController {
      * false : 에러(400, 404)를 반환합니다.
      * </pre>
      *
-     * Author : taking(taking@duck.com)
+	 * Author : hhhaeri(yhoo0020@gmail.com)
      */
     @DeleteMapping("{id}")
     @Operation(summary = "최종 확인서 템플릿 삭제", description = "최종 확인서 템플릿을 삭제합니다.")

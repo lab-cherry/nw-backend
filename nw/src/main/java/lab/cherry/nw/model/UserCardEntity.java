@@ -24,8 +24,8 @@ import java.util.Set;
  * <pre>
  * ClassName : UserCardEntity
  * Type : class
- * Description : User와 관련된 Entity를 구성하고 있는 클래스입니다.
- * Related : UserRepository, UserServiceImpl
+ * Description : UserCard와 관련된 Entity를 구성하고 있는 클래스입니다.
+ * Related : UserCardRepository, UserCardServiceImpl
  * </pre>
  */
 @Getter
@@ -83,9 +83,6 @@ public class UserCardEntity implements Serializable {
     @Schema(title = "고객카드 수정 시간", example = "2023-07-04 12:00:00")
     private Instant update_at;
 
-
-
-
 //////////////////////////////////////////////////////////////////////////
 
     @Getter
@@ -93,37 +90,30 @@ public class UserCardEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class UserCardCreateDto {
 
-
+		@Schema(title = "사용자 정보", example = "[]")
         private String userinfo;
 
-        @JsonProperty("groom")
         @Schema(title = "신랑측 정보", example = "[]")
         private Map groom;
 
-        @JsonProperty("bride")
         @Schema(title = "신부측 정보", example = "[]")
         private Map bride;
 
-        @JsonProperty("note")
 		@Size(max = 500, message = "Maximum contact length: 500 characters")
         @Schema(title = "비고", example = "가을")
         private String note;
 
-        @JsonProperty("resDate")
         @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
         @Schema(title = "예약 날짜", example = "2023-07-04 12:00:00")
         private String resDate;
 
-        @JsonProperty("weddingDate")
         @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
         @Schema(title = "예식 날짜", example = "2023-07-04 12:00:00")
         private String weddingDate;
 
-        @JsonProperty("status")
 		@Size(min = 2, max = 20, message = "Minimum contact length: 2 characters")
         @Schema(title = "진행 상태", example = "진행중")
         private String status;
-
 
     }
 
@@ -133,36 +123,28 @@ public class UserCardEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class UserCardUpdateDto {
 
+		@Schema(title = "사용자 정보", example = "[]")
         private String userinfo;
 
-        @JsonProperty("groom")
         @Schema(title = "신랑측 정보", example = "[]")
         private Map groom;
 
-        @JsonProperty("bride")
         @Schema(title = "신부측 정보", example = "[]")
         private Map bride;
 
-        @JsonProperty("note")
 		@Size(max = 500, message = "Maximum contact length: 500 characters")
         @Schema(title = "비고", example = "가을")
         private String note;
 
-        @JsonProperty("resDate")
-        @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
         @Schema(title = "예약 날짜", example = "2023-07-04 12:00:00")
         private String resDate;
 
-        @JsonProperty("weddingDate")
-        @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
         @Schema(title = "예식 날짜", example = "2023-07-04 12:00:00")
         private String weddingDate;
 
-        @JsonProperty("status")
 		@Size(min = 2, max = 20, message = "Minimum contact length: 2 characters")
 		@Schema(title = "진행 상태", example = "진행중")
         private String status;
-
 
     }
 }

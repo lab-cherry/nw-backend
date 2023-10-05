@@ -15,7 +15,7 @@ import java.util.UUID;
  * <pre>
  * ClassName : ScheduleRepository
  * Type : interface
- * Descrption : 최종 확인서 JPA 구현을 위한 인터페이스입니다.
+ * Descrption : 스케줄표 JPA 구현을 위한 인터페이스입니다.
  * Related : spring-boot-starter-data-jpa
  * </pre>
  */
@@ -31,8 +31,6 @@ public interface ScheduleRepository extends MongoRepository<ScheduleEntity, UUID
     Optional<ScheduleEntity> findById(String id);
 
     Optional<ScheduleEntity> findByName(String scheduleName);
-
-//	Optional<ScheduleEntity> findByDate(String weddingDate);
 
     List<ScheduleEntity> findAllById(List<String> scheduleIds);
 }

@@ -29,7 +29,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "schedule")
-@JsonPropertyOrder({ "id", "scheduleSeq","userid","orgid","finaltemplid","scheduleName", "content"})
+@JsonPropertyOrder({ "id", "scheduleSeq","userid","orgid","finaltemplid","scheduleName", "scheduleContent", "column"})
 public class ScheduleEntity implements Serializable {
 
     @Id
@@ -58,25 +58,11 @@ public class ScheduleEntity implements Serializable {
 
 	@JsonProperty("scheduleContent")
 	@Schema(title = "스케줄표 내용", example = "[]")
-//	@Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
 	private List<FinaldocsEntity> content;
 
-    @JsonProperty("content")
+    @JsonProperty("column")
     @Schema(title = "스케줄표  컬럼", example = "")
-//    private FinalTemplEntity column;
 	private Map column;
-
-//
-//    @JsonProperty("updated_at")
-//    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
-//    @Schema(title = "스케줄표 수정 시간", example = "2023-07-04 12:00:00")
-//    private Instant updated_at;
-//
-//    @JsonProperty("created_at")
-//    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
-//    @Schema(title = "스케줄표 템플릿 생성 시간", example = "2023-07-04 12:00:00")
-//    private Instant created_at;
-
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -86,29 +72,23 @@ public class ScheduleEntity implements Serializable {
 	@NoArgsConstructor @AllArgsConstructor
 	public static class transDto {
 
+		@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
 		private String userid;
 
+		@Schema(title = "스케줄표 고유번호", example = "64ed89aa9e813b5ab16da6de")
 		private  String finalTemplid;
 
+		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
 		private String orgid;
 
+		@Schema(title = "스케줄표 이름", example = "문서1")
+		@Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
 		private String name;
 
+		@JsonProperty("scheduleContent")
+		@Schema(title = "스케줄표 내용", example = "[]")
 		private String content;
 
 	}
-
-    @Getter
-    @Builder
-    @NoArgsConstructor @AllArgsConstructor
-    public static class scheduleDateDto {
-
-    private String name;
-
-    private String content;
-
-    private LocalDateTime date;
-
-    }
 
 }

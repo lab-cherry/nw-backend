@@ -23,7 +23,6 @@ public interface ScheduleService {
     Page<ScheduleEntity> getSchedule(Pageable pageable);
 	ScheduleEntity  scheduleByDate(Instant fromDate, Instant toDate);
 	ScheduleEntity transColumn(ScheduleEntity.transDto scheduleTransDto);
-//    void updateById(String id, ScheduleEntity.FinalTemplUpdateDto org);
 	ScheduleEntity findById(String id);
 	ScheduleEntity findByName(String name);
     void deleteById(String id);

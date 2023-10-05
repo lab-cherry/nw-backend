@@ -56,9 +56,6 @@ public class FinaldocsServiceImpl implements FinaldocsService {
     public Page<FinaldocsEntity> getFinaldocs(Pageable pageable) {
 
         return finaldocsRepository.findAll(pageable);
-
-
-        //        return EntityNotFoundException.requireNotEmpty(finaldocsRepository.findAll(), "Fianldocs Not Found");
     }
 
     /**
@@ -79,7 +76,6 @@ public class FinaldocsServiceImpl implements FinaldocsService {
         UserEntity userEntity = userService.findById(finaldocsCreateDto.getUserid());
         OrgEntity orgEntity = orgService.findById(finaldocsCreateDto.getOrgid());
         FinalTemplEntity finamTemplEntity = finalTemplService.findById(finaldocsCreateDto.getFinaltemplid());
-
 
         FinaldocsEntity finaldocsEntity = FinaldocsEntity.builder()
             .name(finaldocsCreateDto.getName())
@@ -127,7 +123,7 @@ public class FinaldocsServiceImpl implements FinaldocsService {
             finaldocsRepository.save(finaldocsEntity);
 
         } else {
-            log.error("[OrgServiceImpl - udpateOrganization] Content만 수정 가능합니다.");
+            log.error("[FinaldocsServiceImpl - udpateFinaldocs] Content만 수정 가능합니다.");
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
         }
     }

@@ -14,7 +14,7 @@ import java.util.UUID;
  * <pre>
  * ClassName : FinaldocsRepository
  * Type : interface
- * Descrption : 최종 확인서 JPA 구현을 위한 인터페이스입니다.
+ * Descrption : 최종 확인서 템플릿 JPA 구현을 위한 인터페이스입니다.
  * Related : spring-boot-starter-data-jpa
  * </pre>
  */
@@ -28,6 +28,7 @@ public interface FinalTemplRepository extends MongoRepository<FinalTemplEntity, 
     Page<FinalTemplEntity> findPageById(String id, Pageable pageable);
 
     Optional<FinalTemplEntity> findById(String id);
+
 	Optional<FinalTemplEntity> findByIdIsNotNull(String id);
 
     Optional<FinalTemplEntity> findByName(String fdocsTemplateName);
