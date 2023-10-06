@@ -46,7 +46,7 @@ public class ScheduleController {
 
 	private final ScheduleService scheduleService;
     /**
-     * [SchedulelController] 전체 스케줄표 템플릿 목록 함수
+	 +  [ScheduleController] 전체 스케줄표 목록 함수
      *
      * @return 전체 스케줄표  목록을 반환합니다.
      *
@@ -61,7 +61,7 @@ public class ScheduleController {
             @RequestParam(defaultValue = "id,desc") String[] sort
     ) {
 
-        log.info("retrieve all Schedlue controller...!");
+        log.info("retrieve all Schedule controller...!");
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Common.getOrder(sort)));
 
@@ -77,9 +77,9 @@ public class ScheduleController {
 
 
 	/**
-	 * [SchedulelController] 특정 날짜 스케줄표 템플릿 목록 함수
+	 +  [ScheduleController] 특정 스케줄표 조회 함수
 	 *
-	 * @return 전체 스케줄표  목록을 반환합니다.
+	 * @return 특정 날짜 스케줄표  목록을 반환합니다.
 	 *
 	 * Author : hhhaeri(yhoo0020@gmail.com)
 	 */
@@ -87,13 +87,13 @@ public class ScheduleController {
 	@Operation(summary = "ID로 스케줄표 찾기", description = "스케줄표를 조회합니다.")
 	public ResponseEntity<?> findByScheduleId(@PathVariable("id") String id) {
 
-		log.info("[SchedulelController] findByScheduleDate...!");
+		log.info("[ScheduleController] findByScheduleDate...!");
 
 		return new ResponseEntity<>(scheduleService.findById(id), new HttpHeaders(), HttpStatus.OK);
 	}
 
     /**
-     * [SchedulelController] 스케줄표 컬럼 변경 함수
+     * [ScheduleController] 스케줄표 컬럼 변경 함수
      *
      * @param tranClounm 최종확인서에서 스케줄표에 필요한 컬럼만 담고 있는 객체입니다.
      * @return
@@ -112,7 +112,7 @@ public class ScheduleController {
     })
     public ResponseEntity<?> fianlToSchedule(@Valid @RequestBody(required = false) ScheduleEntity.transDto scheduleTransDto) {
 
-        log.info("[SchedulelController] fianlToSchedule...!");
+        log.info("[ScheduleController] fianlToSchedule...!");
 
 		ScheduleEntity scheduleEntity = scheduleService.transColumn(scheduleTransDto);
 
@@ -121,7 +121,7 @@ public class ScheduleController {
 
 
 	/**
-	 * [SchedulelController] 스케줄표 날짜 기준 조회
+	 * [ScheduleController] 스케줄표 날짜 기준 조회
 	 *
 	 * @param 날짜 기준으로 스케줄표를 조회합니다.
 	 * @return
@@ -140,7 +140,7 @@ public class ScheduleController {
 	})
 	public ResponseEntity<?> fianlToDateSchedule(@Valid @PathVariable("start") String start, @PathVariable("end") String end) {
 
-		log.info("[SchedulelController] fianlToDateSchedule...!");
+		log.info("[ScheduleController] fianlToDateSchedule...!");
 
 		LocalDate localStartDate = LocalDate.parse(start);
 		LocalDate localEndDate = LocalDate.parse(end);

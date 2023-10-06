@@ -78,7 +78,7 @@ public class FinalTemplController {
     /**
      * [FinalTemplController] 최종확인서 템플릿 생성 함수
      *
-     * @param finalTemplateCreateDto 생성에 필요한 조직 정보를 담고 있는 객체입니다.
+     * @param finalTemplateCreateDto 생성에 필요한 최종확인서 템플릿 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
      * true  : 성공(200)을 반환합니다.
@@ -90,7 +90,7 @@ public class FinalTemplController {
     @PostMapping("")
     @Operation(summary = "최종확인서 템플릿 생성", description = "최종확인서 템플릿을 생성합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조직 최종확인서 템플릿 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+            @ApiResponse(responseCode = "200", description = "최종확인서 템플릿 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<?> createFinalTemplate(@Valid @RequestBody(required = false) FinalTemplEntity.FinalTemplCreateDto finalTemplateCreateDto) {
@@ -130,10 +130,10 @@ public class FinalTemplController {
     /**
      * [FinalTemplController] 특정 최종확인서 템플릿 조회 함수
      *
-     * @param id 조직 고유번호를 입력합니다.
+     * @param id 최종확인서 템플릿 고유번호를 입력합니다.
      * @return
      * <pre>
-     * true  : 특정 조직 정보를 반환합니다.
+     * true  : 특정 최종확인서 템플릿 정보를 반환합니다.
      * false : 에러(400, 404)를 반환합니다.
      * </pre>
      *
@@ -151,10 +151,10 @@ public class FinalTemplController {
     /**
      * [FinalTemplController] 특정 최종확인서 템플릿 삭제 함수
      *
-     * @param id 조직 고유번호를 입력합니다.
+     * @param id 최종확인서 템플릿 고유번호를 입력합니다.
      * @return
      * <pre>
-     * true  : 특정 조직 삭제처리합니다.
+     * true  : 특정 최종확인서 템플릿 삭제처리합니다.
      * false : 에러(400, 404)를 반환합니다.
      * </pre>
      *

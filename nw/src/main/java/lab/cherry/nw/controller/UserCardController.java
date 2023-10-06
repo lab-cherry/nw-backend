@@ -91,7 +91,7 @@ public class UserCardController {
     @PostMapping("")
     @Operation(summary = "고객카드 생성", description = "고객카드를 생성합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조직 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+            @ApiResponse(responseCode = "200", description = "고객카드 생성이 완료되었습니다..", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<?> createUserCard(@Valid @RequestBody(required = false) UserCardEntity.UserCardCreateDto userCardCreateDto) {

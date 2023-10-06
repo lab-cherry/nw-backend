@@ -59,9 +59,9 @@ public class FinaldocsServiceImpl implements FinaldocsService {
     }
 
     /**
-     * [FinaldocsServiceImpl] 조직 생성 함수
+     * [FinaldocsServiceImpl] 최종확인서 생성 함수
      *
-     * @param finaldocsCreateDto 최종확인서 생성에 필요한 조직 등록 정보를 담은 개체입니다.
+	 * @param finaldocsCreateDto 최종확인서 생성에 필요한 최종확인서 등록 정보를 담은 개체입니다.
      * @return 생성된 최종확인서 정보를 리턴합니다.
      * <pre>
      * 최종확인서를 등록합니다.
