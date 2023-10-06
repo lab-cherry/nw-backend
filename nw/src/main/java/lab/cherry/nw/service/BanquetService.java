@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-
 /**
  * <pre>
  * ClassName : BanquetService
@@ -22,8 +21,8 @@ public interface BanquetService {
 	Page<BanquetEntity> getBanquets(Pageable pageable);
 	BanquetEntity createBanquet(BanquetEntity.BanquetCreateDto banquetCreateDto, List<MultipartFile> files);
 	//    void updateById(String id, BanquetEntity.BanquetUpdateDto banquet);
-    BanquetEntity findById(String id);
-    //  BanquetEntity findByName(String name);
-    void deleteById(String id);
+	BanquetEntity findById(String id);
+	//  BanquetEntity findByName(String name);
+	void deleteById(String id);
 	Page<BanquetEntity> findPageByName(String name, Pageable pageable);
 }

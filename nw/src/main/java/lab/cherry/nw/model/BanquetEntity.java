@@ -32,16 +32,16 @@ import java.util.List;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "banquets")
-@JsonPropertyOrder({ "seq", "name", "maxPerson", "org", "interval", "image", "created_at", "updated_at" })
+@JsonPropertyOrder({ "banquetSeq", "banquetName", "maxPerson", "org", "interval", "image", "created_at", "updated_at" })
 public class BanquetEntity implements Serializable {
 
     @Id
-    @JsonProperty("seq")
+    @JsonProperty("banquetSeq")
     @Schema(title = "연회장 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
     @NotNull
-    @JsonProperty("name")
+    @JsonProperty("banquetName")
     @Schema(title = "연회장 이름", example = "더글로리")
     private String name;
 
@@ -86,7 +86,7 @@ public class BanquetEntity implements Serializable {
 		@NotBlank(message = "[필수] 연회장")
         @Schema(title = "연회장 이름", example = "더글로리")
         @Size(min = 4, max = 10, message = "연회장 이름은 2글자 이상 10글자 이하만 입력 가능합니다.")
-        private String name;
+        private String banquetName;
 
 		@NotNull(message = "[필수] 연회장 최대인원")
 		@Schema(title = "연회장 최대인원", example = "100")

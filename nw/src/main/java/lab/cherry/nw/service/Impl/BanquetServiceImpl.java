@@ -73,7 +73,7 @@ public class BanquetServiceImpl implements BanquetService {
 		
 		log.error("[#0] in createBanquet");
 		
-		checkExistsWithBanquetName(banquetCreateDto.getName());	// 중복 체크
+		checkExistsWithBanquetName(banquetCreateDto.getBanquetName());	// 중복 체크
 
 		String orgId = banquetCreateDto.getOrg();
 		OrgEntity orgEntity = orgService.findById(orgId);
@@ -82,7 +82,7 @@ public class BanquetServiceImpl implements BanquetService {
 		// {org_objectId}/웨딩홀/{weddinghallName}/profile.jpg
 		// {org_objectId}/고객/{userName}/문서.xlsx
 		Map<String, String> info = new HashMap<>();
-		info.put("type", banquetCreateDto.getName());
+		info.put("type", "연회장");
 		info.put("org", banquetCreateDto.getOrg());
 
 		// 업로드한 파일의 ObjectId 를 List로 반환
@@ -91,11 +91,11 @@ public class BanquetServiceImpl implements BanquetService {
         log.error("[#1] imageFileIds = {}", fileObjectIds);
 		
 		BanquetEntity banquetEntity = BanquetEntity.builder()
-            .name(banquetCreateDto.getName())
-			.max_person(banquetCreateDto.getMaxPerson())
-			.org(orgEntity)
-			.interval(banquetCreateDto.getInterval())
-			.images(fileObjectIds)
+            .name(banquetCreateDto.getBanquetName())
+            .max_person(banquetCreateDto.getMaxPerson())
+            .org(orgEntity)
+            .interval(banquetCreateDto.getInterval())
+            .images(fileObjectIds)
             .created_at(Instant.now())
             .build();
 

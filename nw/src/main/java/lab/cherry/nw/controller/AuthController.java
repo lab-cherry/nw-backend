@@ -12,7 +12,6 @@ import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.service.AuthService;
-import lab.cherry.nw.service.EmailService;
 import lab.cherry.nw.util.Security.AccessToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -88,14 +87,11 @@ public class AuthController {
     })
     public ResponseEntity<?> login(@Valid @RequestBody(required = false) UserEntity.UserLoginDto userLoginDto) {
 
-            log.error("{} {}", userLoginDto.getUserId(), userLoginDto.getUserPassword());
-
         AccessToken.Get accessToken =  authService.login(userLoginDto);
 
 //         Header 에 등록
 //        HttpHeaders httpHeaders = new HttpHeaders();
 //        httpHeaders.add("Authorization", "Bearer " + accessToken.getToken());
-
         return new ResponseEntity<>(accessToken, new HttpHeaders(), HttpStatus.OK);
     }
 

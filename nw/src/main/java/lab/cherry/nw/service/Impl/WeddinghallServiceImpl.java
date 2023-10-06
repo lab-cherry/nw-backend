@@ -77,7 +77,7 @@ public class WeddinghallServiceImpl implements WeddinghallService {
 		
 		log.error("[#0] in createWeddinghall");
 		
-		checkExistsWithWeddingHallName(weddinghallCreateDto.getName());	// 중복 체크
+		checkExistsWithWeddingHallName(weddinghallCreateDto.getWeddinghallName());	// 중복 체크
 
 		String orgId = weddinghallCreateDto.getOrg();
 		OrgEntity orgEntity = orgService.findById(orgId);
@@ -86,7 +86,8 @@ public class WeddinghallServiceImpl implements WeddinghallService {
 		// {org_objectId}/웨딩홀/{weddinghallName}/profile.jpg
 		// {org_objectId}/고객/{userName}/문서.xlsx
 		Map<String, String> info = new HashMap<>();
-		info.put("type", weddinghallCreateDto.getName());
+		info.put("type", "웨딩홀");
+		// info.put("type", weddinghallCreateDto.getWeddinghallName());
 		info.put("org", weddinghallCreateDto.getOrg());
 
 		// 업로드한 파일의 ObjectId 를 List로 반환
@@ -95,11 +96,11 @@ public class WeddinghallServiceImpl implements WeddinghallService {
         log.error("[#1] imageFileIds = {}", fileObjectIds);
 		
 		WeddinghallEntity weddinghallEntity = WeddinghallEntity.builder()
-            .name(weddinghallCreateDto.getName())
-			.max_person(weddinghallCreateDto.getMaxPerson())
-			.org(orgEntity)
-			.interval(weddinghallCreateDto.getInterval())
-			.images(fileObjectIds)
+            .name(weddinghallCreateDto.getWeddinghallName())
+            .max_person(weddinghallCreateDto.getMaxPerson())
+            .org(orgEntity)
+            .interval(weddinghallCreateDto.getInterval())
+            .images(fileObjectIds)
             .created_at(Instant.now())
             .build();
 

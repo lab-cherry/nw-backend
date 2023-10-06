@@ -47,4 +47,3 @@ lab.cherry.nw.jwtExpirationMs= 86400000
 minio.url=http://nw-storage:9000
 minio.access-key={your-access-key}
 minio.secret-key={your-secret-key}
-

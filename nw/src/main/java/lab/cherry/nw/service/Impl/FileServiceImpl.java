@@ -1,16 +1,10 @@
 package lab.cherry.nw.service.Impl;
 
-import io.minio.*;
-import io.minio.errors.MinioException;
-import io.minio.messages.DeleteObject;
-import io.minio.messages.Item;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.FileEntity;
 import lab.cherry.nw.repository.FileRepository;
 import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.service.MinioService;
-import lab.cherry.nw.service.OrgService;
-import lab.cherry.nw.util.Common;
 import lab.cherry.nw.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +22,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Service

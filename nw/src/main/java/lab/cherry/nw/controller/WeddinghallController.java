@@ -51,8 +51,6 @@ import java.util.List;
 public class WeddinghallController {
     
     private final WeddinghallService weddinghallService;
-	private final MinioService minioService;
-	private final UserService userService;
     
     /**
      * [WeddinghallController] 웨딩홀(예식장) 목록 함수
@@ -107,7 +105,7 @@ public class WeddinghallController {
 
 		log.info("[WeddinghallController] createWeddinghall...!");
 		
-		log.error("이름 : {}", weddinghallCreateDto.getName());
+		log.error("이름 : {}", weddinghallCreateDto.getWeddinghallName());
 		log.error("조직 : {}", weddinghallCreateDto.getOrg());
 		log.error("이미지 : {}", files);
 
@@ -140,21 +138,31 @@ public class WeddinghallController {
 		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
 	}
 
-	@SneakyThrows
-	@GetMapping("test")
-    public ResponseEntity<?> test() {
 
-		minioService.createBucketIfNotExists("test");
-		minioService.createGlobalPolicy("test");
-		minioService.setBucketPolicy("test");
+    /**
+     * [WeddinghallController] 특정 웨딩홀(예식장) 조회 함수
+     *
+     * @param id 웨딩홀(예식장) 고유번호를 입력합니다.
+     * @return
+     * <pre>
+     * true  : 특정 웨딩홀(예식장) 정보를 반환합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * How-to:
+     *  /api/v1/weddinghall/{id}
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @GetMapping("{id}")
+    @Operation(summary = "웨딩홀(예식장) 찾기", description = "웨딩홀(예식장)를 조회합니다.")
+    public ResponseEntity<?> findWeddinghall(
+            @PathVariable("id") String id) {
 
-		UserEntity user = userService.findById("64f82e492948d933edfaa9c0");
+        log.info("[WeddinghallController] findWeddinghall...!");
 
-		minioService.newUser(user);
-		minioService.setUserPolicy("test", "64f82e492948d933edfaa9c0");
-
-		return new ResponseEntity<>(minioService.listUsers(), new HttpHeaders(), HttpStatus.OK);
-	}
-
+//        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
+        return new ResponseEntity<>(weddinghallService.findById(id), new HttpHeaders(), HttpStatus.OK);
+    }
 
 }

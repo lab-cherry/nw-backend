@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -32,16 +31,16 @@ import java.util.List;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "pyebaeksils")
-@JsonPropertyOrder({ "seq", "name", "org", "image", "created_at", "updated_at" })
+@JsonPropertyOrder({ "pyebaeksilSeq", "pyebaeksilName", "org", "image", "created_at", "updated_at" })
 public class PyebaeksilEntity implements Serializable {
 
     @Id
-    @JsonProperty("seq")
+    @JsonProperty("pyebaeksilSeq")
     @Schema(title = "폐백실 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
     @NotNull
-    @JsonProperty("name")
+    @JsonProperty("pyebaeksilName")
     @Schema(title = "폐백실 이름", example = "더글로리")
     private String name;
 
@@ -74,7 +73,7 @@ public class PyebaeksilEntity implements Serializable {
 		@NotBlank(message = "[필수] 폐백실")
         @Schema(title = "폐백실 이름", example = "더글로리")
         @Size(min = 4, max = 10, message = "폐백실 이름은 2글자 이상 10글자 이하만 입력 가능합니다.")
-        private String name;
+        private String pyebaeksilName;
 		
 		@NotNull(message = "[필수] Org 정보")
 		@Schema(title = "Org 정보", example = "더모멘트")

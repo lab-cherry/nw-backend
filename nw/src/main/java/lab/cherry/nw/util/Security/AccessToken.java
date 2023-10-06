@@ -1,12 +1,12 @@
 package lab.cherry.nw.util.Security;
 
+import java.util.Map;
+import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.RoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Getter
 @Builder
@@ -26,9 +26,9 @@ public class AccessToken {
         private String userSeq;
         private String userId;
         private String userName;
-        private RoleEntity userRole;
+        private String userRole;
+        private Map<String, String> info;
         private String accessToken;
-        private String refreshToken;
 
     }
 
