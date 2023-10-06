@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.aggregation.VariableOperators;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -63,19 +64,22 @@ public class BookmarkEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class CreateDto {
+    public static class BookmarkCreateDto {
+		@Schema(title = "유저 고유번호", example = "38352658567418867")
         private String userSeq;
+		@Schema(title = "북마크 정보",implementation=Map.class, example="{\"로그인\": \"/login\"}")
         private Map<String, String> data;
-    }
-    
-    @Getter
+	}
+
+	@Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class UpdateDto {
+    public static class BookmarkUpdateDto {
+		@Schema(title = "북마크 정보",implementation=Map.class, example="{\"로그인\": \"/login\"}")
         private Map<String, String> data;
     }
 
-     public void updateFromDto(UpdateDto updateDto) {
+	public void updateFromDto(BookmarkUpdateDto updateDto) {
         if (updateDto.getData() != null) {
             this.data = updateDto.getData();
             this.updated_at = Instant.now();

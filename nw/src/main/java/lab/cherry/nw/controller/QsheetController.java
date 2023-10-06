@@ -94,7 +94,7 @@ public class QsheetController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @Operation(summary = "Qsheet 생성", description = "Qsheet를 추가합니다.")
-    public ResponseEntity<?> createQsheet(@Valid @RequestBody QsheetEntity.CreateDto qsheetCreateDto) {
+    public ResponseEntity<?> createQsheet(@Valid @RequestBody QsheetEntity.QsheetCreateDto qsheetCreateDto) {
         log.info("[QsheetController] createQsheet...!");
         qsheetService.createQsheet(qsheetCreateDto);
 
@@ -117,7 +117,7 @@ public class QsheetController {
      @Operation(summary = "큐시트 업데이트", description = "특정 큐시트를 업데이트합니다.")
     public ResponseEntity<?> updateById(
             @PathVariable("id") String id,
-            @RequestBody QsheetEntity.UpdateDto qsheetUpdateDto) {
+            @RequestBody QsheetEntity.QsheetUpdateDto qsheetUpdateDto) {
 
         log.info("[QsheetController] updateQsheet...!");
 
