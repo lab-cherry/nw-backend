@@ -49,12 +49,12 @@ public class TokenServiceImpl implements TokenService {
         Claims claims = Jwts.claims().setSubject(userid);
         claims.put("id", user.getUserid());
         claims.put("name", user.getUsername());
-        claims.put("roleName", user.getRole().getName() == null ? "ROLE_USER" : user.getRole().getName());
+        claims.put("roleName", (user.getRole() == null) ? "ROLE_USER" : user.getRole().getName());
 
         Map<String, String> info = new HashMap<>();
         info.put("userSeq", user.getId());
-        info.put("orgSeq", user.getOrg().getId() == null ? null : user.getOrg().getId());
-        info.put("roleSeq", user.getRole().getId() == null ? null : user.getRole().getId());
+        info.put("orgSeq", (user.getOrg() == null) ? null : user.getOrg().getId());
+        info.put("roleSeq", (user.getRole() == null) ? null : user.getRole().getId());
         claims.put("info", info);
 
         Instant issuedAt = Instant.now();
