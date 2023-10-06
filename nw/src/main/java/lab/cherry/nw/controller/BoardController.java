@@ -91,7 +91,7 @@ public class BoardController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @Operation(summary = "Board 생성", description = "Board를 추가합니다.")
-    public ResponseEntity<?> createBoard(@Valid @RequestBody BoardEntity.CreateDto boardCreateDto) {
+    public ResponseEntity<?> createBoard(@Valid @RequestBody BoardEntity.BoardCreateDto boardCreateDto) {
         log.info("[BoardController] createBoard...!");
         boardService.createBoard(boardCreateDto);
 
@@ -114,7 +114,7 @@ public class BoardController {
      @Operation(summary = "게시판 업데이트", description = "특정 게시판를 업데이트합니다.")
     public ResponseEntity<?> updateById(
             @PathVariable("id") String id,
-            @RequestBody BoardEntity.UpdateDto boardUpdateDto) {
+            @RequestBody BoardEntity.BoardUpdateDto boardUpdateDto) {
 
         log.info("[BoardController] updateBoard...!");
 

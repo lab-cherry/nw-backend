@@ -15,11 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
@@ -62,10 +58,6 @@ public class BoardEntity implements Serializable {
     @Schema(title = "큐시트", example = "큐시트") 
     private QsheetEntity qsheet;
 	
-	@DBRef
-    @JsonProperty("category")
-    @Schema(title = "카테고리", example = "연출") 
-    private CategoryEntity category;
 	
     @JsonProperty("created_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
@@ -82,24 +74,27 @@ public class BoardEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class CreateDto {
+    public static class BoardCreateDto {
 
 		@Schema(title = "유저 고유번호", example = "64f82e492948d933edfaa9c0")
         private String userSeq;
+		@Schema(title = "게시물 내용", example = "안녕하세요~ 반갑습니다")
 		private String content;
+		@Schema(title = "큐시트 고유번호", example = "64f82e492948d933edfaa9c0")
 		private String qsheetSeq;
-		private CategoryEntity category;
+		@Schema(title = "태그 목록")
 		private List<TagEntity> tag;
     }
 //
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class UpdateDto {
-
+    public static class BoardUpdateDto {
+		@Schema(title = "게시물 내용", example = "안녕하세요~ 반갑습니다")
 		private String content;
+		@Schema(title = "큐시트 고유번호", example = "64f82e492948d933edfaa9c0")
 		private String qsheetSeq;
-		private CategoryEntity category;
+		@Schema(title = "태그 목록")
 		private List<TagEntity> tag;
     }
 

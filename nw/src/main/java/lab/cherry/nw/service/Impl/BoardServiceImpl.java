@@ -70,7 +70,7 @@ public class BoardServiceImpl implements BoardService {
      *
      * Author : yby654(yby654@github.com)
      */
-    public void createBoard(BoardEntity.CreateDto boardCreateDto) {
+    public void createBoard(BoardEntity.BoardCreateDto boardCreateDto) {
         Instant instant = Instant.now();
         UserEntity userEntity = userService.findById(boardCreateDto.getUserSeq());
 		QsheetEntity qsheetEntity= qsheetService.findById(boardCreateDto.getQsheetSeq());
@@ -97,7 +97,7 @@ public class BoardServiceImpl implements BoardService {
      *
      * Author : yby654(yby654@github.com)
      */
-    public void updateById(String id, BoardEntity.UpdateDto boardUpdateDto) {
+    public void updateById(String id, BoardEntity.BoardUpdateDto boardUpdateDto) {
         Instant instant = Instant.now();
         BoardEntity boardEntity = findById(id);
 		QsheetEntity qsheetEntity= qsheetService.findById(boardUpdateDto.getQsheetSeq());

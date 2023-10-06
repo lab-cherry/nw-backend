@@ -103,7 +103,7 @@ public class QsheetEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class CreateQsheetDto {
+    public static class QsheetCreateDto {
 
         @Schema(title = "큐시트 데이터", example = "최해리_230824")
         @Size(min = 4, max = 20)
@@ -113,9 +113,7 @@ public class QsheetEntity implements Serializable {
         private String userSeq;
 		@Schema(title = "조직 고유번호", example = "38352658567418867")
         private String orgSeq;
-//		@Schema(title = "데이터", implementation=List<ItemData>.class)
 		@Schema(title = "데이터 리스트")
-		//example="[{\"orderIndex1\": \"1\", \"process\": \"축가\", \"content\": \"니가사는그집-박진영\", \"actor\": \"신부\", \"note\": \"신부가 노래를 잘함\", \"filePathr\": \"./\"}]
 		private List<ItemData> data;
     }
 
@@ -140,12 +138,12 @@ public class QsheetEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class UpdateDto {
+    public static class QsheetUpdateDto {
 		@Schema(title = "데이터 리스트")
 		private List<ItemData> data;
     }
 
-     public void updateFromDto(UpdateDto updateDto) {
+	public void updateFromDto(QsheetUpdateDto updateDto) {
         if (updateDto.getData() != null) {
             this.data = updateDto.getData();
             this.updated_at = Instant.now();

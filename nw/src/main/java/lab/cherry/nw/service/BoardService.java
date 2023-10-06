@@ -19,8 +19,8 @@ public interface BoardService {
  BoardEntity findById(String id);
 // BoardEntity findByUserId(String userid);
 // BoardEntity findByOrgId(String orgid);
- void createBoard(BoardEntity.CreateDto boardCreateDto);
- void updateById(String id, BoardEntity.UpdateDto updateDto);
+ void createBoard(BoardEntity.BoardCreateDto boardCreateDto);
+ void updateById(String id, BoardEntity.BoardUpdateDto updateDto);
  void deleteById(String id);
  Page<BoardEntity> findPageByUserId(String userid, Pageable pageable);
 // void updateOrgById(String id, List<String> orgIds);
