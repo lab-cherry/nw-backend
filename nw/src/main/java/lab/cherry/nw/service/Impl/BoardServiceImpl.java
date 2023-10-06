@@ -92,7 +92,7 @@ public class BoardServiceImpl implements BoardService {
      * @param boardUpdateDto 게시판 태그 수정에 필요한 사용자 정보를 담은 개체입니다.
      * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
      * <pre>
-     * 특정 사용자에 대해 사용자 정보를 수정합니다.
+     * 특정 게시물에 대해 정보를 수정합니다.
      * </pre>
      *
      * Author : yby654(yby654@github.com)

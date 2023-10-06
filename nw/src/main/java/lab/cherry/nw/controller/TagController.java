@@ -96,7 +96,7 @@ public class TagController {
   
 
     /**
-     * [TagController] 특정 태 조회 함수
+     * [TagController] 특정 태그 조회 함수
      *
      * @param name 태그 이름 입력합니다.
      * @return
