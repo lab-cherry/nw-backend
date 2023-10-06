@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 @Component
 public interface FinaldocsService {
     Page<FinaldocsEntity> getFinaldocs(Pageable pageable);
-    FinaldocsEntity createFinaldocs(FinaldocsEntity.CreateDto finaldocsCreateDto);
-    void updateById(String id, FinaldocsEntity.UpdateDto finaldocs);
+    FinaldocsEntity createFinaldocs(FinaldocsEntity.FinaldocsCreateDto finaldocsCreateDto);
+    void updateById(String id, FinaldocsEntity.FinaldocsUpdateDto finaldocs);
     FinaldocsEntity findById(String id);
     FinaldocsEntity findByName(String name);
     void deleteById(String id);

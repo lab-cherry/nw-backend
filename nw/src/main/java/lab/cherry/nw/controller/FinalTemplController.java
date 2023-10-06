@@ -71,7 +71,6 @@ public class FinalTemplController {
             finalTemplateEntity = finalTemplService.findPageById(id,pageable);
         }
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
             return new ResponseEntity<>(finalTemplateEntity, new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -79,7 +78,7 @@ public class FinalTemplController {
     /**
      * [FinalTemplController] 최종확인서 템플릿 생성 함수
      *
-     * @param finalTemplCreateDto 생성에 필요한 조직 정보를 담고 있는 객체입니다.
+     * @param finalTemplateCreateDto 생성에 필요한 최종확인서 템플릿 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
      * true  : 성공(200)을 반환합니다.
@@ -91,20 +90,14 @@ public class FinalTemplController {
     @PostMapping("")
     @Operation(summary = "최종확인서 템플릿 생성", description = "최종확인서 템플릿을 생성합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조직 최종확인서 템플릿 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+            @ApiResponse(responseCode = "200", description = "최종확인서 템플릿 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<?> createFinalTemplate(@Valid @RequestBody(required = false) FinalTemplEntity.CreateDto finalTemplateCreateDto) {
+    public ResponseEntity<?> createFinalTemplate(@Valid @RequestBody(required = false) FinalTemplEntity.FinalTemplCreateDto finalTemplateCreateDto) {
 
         log.info("[FinalTemplController] createFinalTempl...!");
 
-
-
         FinalTemplEntity finalTemplEntity =  finalTemplService.createFinalTemplate(finalTemplateCreateDto);
-
-        //         Header 에 등록
-        //        HttpHeaders httpHeaders = new HttpHeaders();
-        //        httpHeaders.add("Authorization", "Bearer " + accessToken.getToken());
 
             return new ResponseEntity<>(finalTemplEntity, new HttpHeaders(), HttpStatus.OK);
     }
@@ -114,7 +107,7 @@ public class FinalTemplController {
      * [FinalTemplController] 최종확인서 템플릿 업데이트 함수
      *
      * @param id 최종확인서 템플릿 고유번호를 입력합니다.
-     * @param FinalTemplEntity 최종확인서 템플릿 업데이트에 필요한 정보를 담고 있는 객체입니다.
+     * @param finaltemplEntity 최종확인서 템플릿 업데이트에 필요한 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
      * true  : 업데이트된 최종확인서 템플릿 정보를 반환합니다.
@@ -125,27 +118,26 @@ public class FinalTemplController {
      */
     @PatchMapping("{id}")
     @Operation(summary = "최종 확인서 템플릿 업데이트", description = "특정 최종 확인서 템플릿을 업데이트합니다.")
-    public ResponseEntity<?> updateFinalTemplById(@PathVariable("id") String id, @RequestBody FinalTemplEntity.UpdateDto finaltemplEntity) {
+    public ResponseEntity<?> updateFinalTemplById(@PathVariable("id") String id, @RequestBody FinalTemplEntity.FinalTemplUpdateDto finaltemplEntity) {
 
         log.info("[FinalTemplController] updateFinaltemplById...!");
 
         finalTemplService.updateById(id, finaltemplEntity);
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(finalTemplService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
      * [FinalTemplController] 특정 최종확인서 템플릿 조회 함수
      *
-     * @param id 조직 고유번호를 입력합니다.
+     * @param id 최종확인서 템플릿 고유번호를 입력합니다.
      * @return
      * <pre>
-     * true  : 특정 조직 정보를 반환합니다.
+     * true  : 특정 최종확인서 템플릿 정보를 반환합니다.
      * false : 에러(400, 404)를 반환합니다.
      * </pre>
      *
-     * Author : taking(taking@duck.com)
+	 * Author : hhhaeri(yhoo0020@gmail.com)
      */
     @GetMapping("{id}")
     @Operation(summary = "ID로 최종확인서 템플릿 찾기", description = "최종확인서 템플릿을 조회합니다.")
@@ -153,21 +145,20 @@ public class FinalTemplController {
 
         log.info("[FinaldocsController] findByFinalTemplId...!");
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
             return new ResponseEntity<>(finalTemplService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
      * [FinalTemplController] 특정 최종확인서 템플릿 삭제 함수
      *
-     * @param id 조직 고유번호를 입력합니다.
+     * @param id 최종확인서 템플릿 고유번호를 입력합니다.
      * @return
      * <pre>
-     * true  : 특정 조직 삭제처리합니다.
+     * true  : 특정 최종확인서 템플릿 삭제처리합니다.
      * false : 에러(400, 404)를 반환합니다.
      * </pre>
      *
-     * Author : taking(taking@duck.com)
+	 * Author : hhhaeri(yhoo0020@gmail.com)
      */
     @DeleteMapping("{id}")
     @Operation(summary = "최종 확인서 템플릿 삭제", description = "최종 확인서 템플릿을 삭제합니다.")

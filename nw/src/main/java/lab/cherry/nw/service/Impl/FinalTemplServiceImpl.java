@@ -53,9 +53,6 @@ public class FinalTemplServiceImpl implements FinalTemplService {
     public Page<FinalTemplEntity> getFinalTemplate(Pageable pageable) {
 
         return finalTemplRepository.findAll(pageable);
-
-
-        //        return EntityNotFoundException.requireNotEmpty(finaldocsRepository.findAll(), "Fianldocs Not Found");
     }
 
     /**
@@ -69,13 +66,12 @@ public class FinalTemplServiceImpl implements FinalTemplService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public FinalTemplEntity createFinalTemplate(FinalTemplEntity.CreateDto finalTemplCreateDto) {
+    public FinalTemplEntity createFinalTemplate(FinalTemplEntity.FinalTemplCreateDto finalTemplCreateDto) {
 
         Instant instant = Instant.now();
 
         UserEntity userEntity = userService.findById(finalTemplCreateDto.getUserid());
         OrgEntity orgEntity = orgService.findById(finalTemplCreateDto.getOrgid());
-
 
         FinalTemplEntity finaldocsEntity = FinalTemplEntity.builder()
             .name(finalTemplCreateDto.getName())
@@ -87,7 +83,7 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 
         return finalTemplRepository.save(finaldocsEntity);
     }
-    
+
     /**
      * [FinalTemplServiceImpl] 최종확인서 템플릿 수정 함수
      *
@@ -99,7 +95,7 @@ public class FinalTemplServiceImpl implements FinalTemplService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public void updateById(String id, FinalTemplEntity.UpdateDto finalTempl) {
+    public void updateById(String id, FinalTemplEntity.FinalTemplUpdateDto finalTempl) {
 
         FinalTemplEntity finalTemplEntity = findById(id);
         UserEntity userEntity = userService.findById(finalTempl.getUserid());
@@ -161,10 +157,17 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 
     @Transactional(readOnly = true)
     public FinalTemplEntity findById(String id) {
-        return finalTemplRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("finaldocs with Id " + id + " Not Found."));
+        return finalTemplRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("finalTempl with Id " + id + " Not Found."));
     }
 
-    /**
+
+	@Transactional(readOnly = true)
+	public FinalTemplEntity findByIdNotNull(String id) {
+		return finalTemplRepository.findByIdIsNotNull(id).orElseThrow(() -> new EntityNotFoundException("finalTempl with Id " + id + " Not Found."));
+	}
+
+
+	/**
      * [FinalTemplServiceImpl] NAME으로 최종확인서 템플릿 조회 함수
      *
      * @param name 조회할 최종확인서 템플릿의 이름입니다.
@@ -178,7 +181,7 @@ public class FinalTemplServiceImpl implements FinalTemplService {
      */
     @Transactional(readOnly = true)
     public FinalTemplEntity findByName(String name) {
-        return finalTemplRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Org with Name " + name + " Not Found."));
+        return finalTemplRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("finalTempl with Name " + name + " Not Found."));
     }
 
     @Transactional(readOnly = true)

@@ -23,8 +23,8 @@ public interface UserCardService {
     Page<UserCardEntity> getUsercards(Pageable pageable);
     UserCardEntity findById(String id);
 //    UserCardEntity findByUserCardId(String id);
-    UserCardEntity createUserCard(UserCardEntity.CreateDto userCardCreateDto);
-    void updateById(String id, UserCardEntity.UpdateDto usercard);
+    UserCardEntity createUserCard(UserCardEntity.UserCardCreateDto userCardCreateDto);
+    void updateById(String id, UserCardEntity.UserCardUpdateDto usercard);
     void deleteById(String id);
     Page<UserCardEntity> findPageById(String id, Pageable pageable);
 
