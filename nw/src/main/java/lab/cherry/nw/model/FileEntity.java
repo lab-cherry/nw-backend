@@ -1,7 +1,6 @@
 package lab.cherry.nw.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -45,12 +44,6 @@ public class FileEntity implements Serializable {
     @JsonProperty("fileType")
     @Schema(title = "파일 타입", example = "image/jpeg")
     private String type;
-
-	@JsonIgnore
-	@NotNull
-//    @JsonProperty("fileExt")
-    @Schema(title = "파일 확장자", example = "png")
-    private String ext;
 
 	@NotNull
     @JsonProperty("filePath")

@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
      *
      * Author : taking(taking@duck.com)
      */
-    public AccessToken register(UserEntity.RegisterDto userRegisterDto) {
+    public AccessToken register(UserEntity.UserRegisterDto userRegisterDto) {
 
         Instant instant = Instant.now();
         checkExistsWithUserId(userRegisterDto.getUserId()); // 동일한 이름 중복체크
@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
             .username(userRegisterDto.getUserName())
             .email(userRegisterDto.getUserEmail())
             .password(passwordEncoder.encode(userRegisterDto.getUserPassword()))
-			.type((userRegisterDto.getType()) == null ? "user" : userRegisterDto.getType())
+			.type((userRegisterDto.getUserType()) == null ? "user" : userRegisterDto.getUserType())
             .role(roleEntity)
             .enabled(true)
             .created_at(instant)
@@ -91,18 +91,25 @@ public class AuthServiceImpl implements AuthService {
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public AccessToken.Get login(UserEntity.LoginDto userLoginDto) {
+    public AccessToken.Get login(UserEntity.UserLoginDto userLoginDto) {
 
         authenticateByIdAndPassword(userLoginDto);
 
         Optional<UserEntity> userEntity = userRepository.findByuserid(userLoginDto.getUserId());
         AccessToken accessToken = tokenService.generateJwtToken(userLoginDto.getUserId(), userEntity.get().getRole());
 
+        Map<String, String> info = new HashMap<>();
+        info.put("userSeq", userEntity.get().getId());
+        info.put("orgSeq", userEntity.get().getOrg().getId() == null ? null : userEntity.get().getOrg().getId());
+        info.put("roleSeq", userEntity.get().getRole().getId() == null ? null : userEntity.get().getRole().getId());
+
         return AccessToken.Get.builder()
-            .accessToken(accessToken.getAccessToken())
+            .userSeq(userEntity.get().getId())
             .userId(userEntity.get().getUserid())
             .userName(userEntity.get().getUsername())
-            .userRole(userEntity.get().getRole())
+            .userRole(userEntity.get().getRole().getName())
+            .info(info)
+            .accessToken(accessToken.getAccessToken())
             .build();
 
     }
@@ -136,7 +143,7 @@ public class AuthServiceImpl implements AuthService {
      *
      * Author : taking(taking@duck.com)
      */
-    private void authenticateByIdAndPassword(UserEntity.LoginDto userLoginDto) {
+    private void authenticateByIdAndPassword(UserEntity.UserLoginDto userLoginDto) {
 
         if(userLoginDto == null) {  // Body 값이 비어 있을 경우, 예외처리
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 입력 값이 유효하지 않음
@@ -177,8 +184,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
 	public UserEntity myInfo() {
-
-		Map<String, Object> info = new HashMap<>();
 
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();

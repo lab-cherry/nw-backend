@@ -60,7 +60,7 @@ public class RoleServiceImpl implements RoleService {
      *
      * Author : taking(taking@duck.com)
      */
-    public RoleEntity createRole(RoleEntity.CreateDto roleCreateDto) {
+    public RoleEntity createRole(RoleEntity.RoleCreateDto roleCreateDto) {
 
         Instant instant = Instant.now();
         checkExistsWithRoleName(roleCreateDto.getName()); // 동일한 이름 중복체크
@@ -101,7 +101,7 @@ public class RoleServiceImpl implements RoleService {
      */
     @Transactional(readOnly = true)
     public void checkExistsWithRoleName(String name) {
-        if (roleRepository.findByName(name).isPresent()) {
+        if (roleRepository.findByName("ROLE_" + name).isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE); // 조직 이름이 중복됨
         }
     }

@@ -23,9 +23,11 @@ public interface FileService {
 
 	List<String> uploadFiles(Map<String, String> info, List<MultipartFile> files);
 	Page<FileEntity> getFiles(Pageable pageable);
-//	Page<FileEntity> findPageByUserId(String userid, Pageable pageable);
-//	Page<FileEntity> findPageByOrgId(String orgid, Pageable pageable);
 	Page<FileEntity> findPageByName(String name, Pageable pageable);
+	FileEntity findById(String id);
+	FileEntity findByPath(String path);
 	void deleteById(String id);
+
 	InputStream downloadFile(String orgId, String path);
+	void deleteFiles(String orgId, List<String> images);
 }
