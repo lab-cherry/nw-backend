@@ -89,7 +89,7 @@ public class BookmarkController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @Operation(summary = "Bookmark 생성", description = "Bookmark를 추가합니다.")
-    public ResponseEntity<?> createBookmark(@Valid @RequestBody BookmarkEntity.BookmarkCreateDto bookmarkCreateDto) {
+    public ResponseEntity<?> createBookmark(@Valid @RequestBody BookmarkEntity.CreateDto bookmarkCreateDto) {
         log.info("[BookmarkController] createBookmark...!");
         bookmarkService.createBookmark(bookmarkCreateDto);
 
@@ -112,7 +112,7 @@ public class BookmarkController {
      @Operation(summary = "북마크 업데이트", description = "특정 북마크를 업데이트합니다.")
     public ResponseEntity<?> updateById(
             @PathVariable("id") String id,
-			@RequestBody BookmarkEntity.BookmarkUpdateDto bookmarkUpdateDto) {
+            @RequestBody BookmarkEntity.UpdateDto bookmarkUpdateDto) {
 
         log.info("[BookmarkController] updateBookmark...!");
 
