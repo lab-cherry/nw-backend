@@ -56,15 +56,12 @@ public class FinaldocsServiceImpl implements FinaldocsService {
     public Page<FinaldocsEntity> getFinaldocs(Pageable pageable) {
 
         return finaldocsRepository.findAll(pageable);
-
-
-        //        return EntityNotFoundException.requireNotEmpty(finaldocsRepository.findAll(), "Fianldocs Not Found");
     }
 
     /**
-     * [FinaldocsServiceImpl] 조직 생성 함수
+     * [FinaldocsServiceImpl] 최종확인서 생성 함수
      *
-     * @param finaldocsCreateDto 최종확인서 생성에 필요한 조직 등록 정보를 담은 개체입니다.
+	 * @param finaldocsCreateDto 최종확인서 생성에 필요한 최종확인서 등록 정보를 담은 개체입니다.
      * @return 생성된 최종확인서 정보를 리턴합니다.
      * <pre>
      * 최종확인서를 등록합니다.
@@ -72,7 +69,7 @@ public class FinaldocsServiceImpl implements FinaldocsService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public FinaldocsEntity createFinaldocs(FinaldocsEntity.CreateDto finaldocsCreateDto) {
+    public FinaldocsEntity createFinaldocs(FinaldocsEntity.FinaldocsCreateDto finaldocsCreateDto) {
 
         Instant instant = Instant.now();
 
@@ -80,19 +77,18 @@ public class FinaldocsServiceImpl implements FinaldocsService {
         OrgEntity orgEntity = orgService.findById(finaldocsCreateDto.getOrgid());
         FinalTemplEntity finamTemplEntity = finalTemplService.findById(finaldocsCreateDto.getFinaltemplid());
 
-
         FinaldocsEntity finaldocsEntity = FinaldocsEntity.builder()
             .name(finaldocsCreateDto.getName())
             .content(finaldocsCreateDto.getContent())
             .userid(userEntity)
             .orgid(orgEntity)
             .finaltemplid(finamTemplEntity)
-            .created_at(instant)
+            .createdAt(instant)
             .build();
 
         return finaldocsRepository.save(finaldocsEntity);
     }
-    
+
     /**
      * [FinaldocsServiceImpl] 최종확인서 수정 함수
      *
@@ -104,7 +100,7 @@ public class FinaldocsServiceImpl implements FinaldocsService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public void updateById(String id, FinaldocsEntity.UpdateDto finaldocs) {
+    public void updateById(String id, FinaldocsEntity.FinaldocsUpdateDto finaldocs) {
 
         FinaldocsEntity finaldocsEntity = findById(id);
         UserEntity userEntity = userService.findById(finaldocs.getUserid());
@@ -127,7 +123,7 @@ public class FinaldocsServiceImpl implements FinaldocsService {
             finaldocsRepository.save(finaldocsEntity);
 
         } else {
-            log.error("[OrgServiceImpl - udpateOrganization] Content만 수정 가능합니다.");
+            log.error("[FinaldocsServiceImpl - udpateFinaldocs] Content만 수정 가능합니다.");
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
         }
     }

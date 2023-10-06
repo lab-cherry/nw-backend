@@ -72,7 +72,6 @@ public class UserCardController {
             userCardEntity = userCardService.findPageById(id, pageable);
         }
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
         return new ResponseEntity<>(userCardEntity, new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -92,18 +91,14 @@ public class UserCardController {
     @PostMapping("")
     @Operation(summary = "고객카드 생성", description = "고객카드를 생성합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조직 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+            @ApiResponse(responseCode = "200", description = "고객카드 생성이 완료되었습니다..", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<?> createUserCard(@Valid @RequestBody(required = false) UserCardEntity.CreateDto userCardCreateDto) {
+    public ResponseEntity<?> createUserCard(@Valid @RequestBody(required = false) UserCardEntity.UserCardCreateDto userCardCreateDto) {
 
-        log.info("[OrgController] createOrganization...!");
+        log.info("[UserCardController] createUsercard...!");
 
         UserCardEntity userCardEntity =  userCardService.createUserCard(userCardCreateDto);
-
-        //         Header 에 등록
-        //        HttpHeaders httpHeaders = new HttpHeaders();
-        //        httpHeaders.add("Authorization", "Bearer " + accessToken.getToken());
 
         return new ResponseEntity<>(userCardEntity, new HttpHeaders(), HttpStatus.OK);
     }
@@ -113,7 +108,7 @@ public class UserCardController {
      * [UserCardController] 고객카드 업데이트 함수
      *
      * @param id 고객카드 고유번호를 입력합니다.
-     * @param UserCardEntity 고객카드 업데이트에 필요한 정보를 담고 있는 객체입니다.
+     * @param userCardEntity 고객카드 업데이트에 필요한 정보를 담고 있는 객체입니다.
      * @return
      * <pre>
      * true  : 업데이트된 고객카드 정보를 반환합니다.
@@ -124,13 +119,12 @@ public class UserCardController {
      */
     @PatchMapping("{id}")
     @Operation(summary = "고객카드 업데이트", description = "특정 고객카드를 업데이트합니다.")
-    public ResponseEntity<?> updateUserCardById(@PathVariable("id") String id, @RequestBody UserCardEntity.UpdateDto userCardEntity) {
+    public ResponseEntity<?> updateUserCardById(@PathVariable("id") String id, @RequestBody UserCardEntity.UserCardUpdateDto userCardEntity) {
 
-        log.info("[OrgController] updateOrgById...!");
+        log.info("[UserCardController] updateUsercardById...!");
 
         userCardService.updateById(id, userCardEntity);
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(userCardService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -172,7 +166,7 @@ public class UserCardController {
     @Operation(summary = "고객카드 삭제", description = "고객카드를 삭제합니다.")
     public ResponseEntity<?> deleteUserCard(@PathVariable("id") String id) {
 
-        log.info("[UserController] deleteUserCard...!");
+        log.info("[UserCardController] deleteUserCard...!");
 
         userCardService.deleteById(id);
 

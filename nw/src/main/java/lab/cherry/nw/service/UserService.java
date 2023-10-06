@@ -18,7 +18,7 @@ public interface UserService {
     Page<UserEntity> getUsers(Pageable pageable);
     UserEntity findById(String id);
 	UserEntity findByUserId(String userid);
-    void updateById(String id, UserEntity.UpdateDto user);
+    void updateById(String id, UserEntity.UserUpdateDto user);
     void deleteById(String id);
     Page<UserEntity> findPageByUserId(String userid, Pageable pageable);
 	void updateOrgById(String id, String orgId);

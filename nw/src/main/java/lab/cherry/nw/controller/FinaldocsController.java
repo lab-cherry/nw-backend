@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/nw/api/v1/fianldocs")
+@RequestMapping("/nw/api/v1/finaldocs")
 @Tag(name = "Finaldocs", description = "Finaldocs API Document")
 public class FinaldocsController {
 
@@ -71,7 +71,6 @@ public class FinaldocsController {
                 finaldocsEntity = finaldocsService.findPageById(id,pageable);
         }
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
             return new ResponseEntity<>(finaldocsEntity, new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -94,17 +93,11 @@ public class FinaldocsController {
             @ApiResponse(responseCode = "200", description = "조직 최종확인서 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<?> createFinaldocs(@Valid @RequestBody(required = false) FinaldocsEntity.CreateDto finaldocsCreateDto) {
+    public ResponseEntity<?> createFinaldocs(@Valid @RequestBody(required = false) FinaldocsEntity.FinaldocsCreateDto finaldocsCreateDto) {
 
         log.info("[FinaldocsController] createFinaldocs...!");
 
-
-
         FinaldocsEntity finaldocsEntity =  finaldocsService.createFinaldocs(finaldocsCreateDto);
-
-        //         Header 에 등록
-        //        HttpHeaders httpHeaders = new HttpHeaders();
-        //        httpHeaders.add("Authorization", "Bearer " + accessToken.getToken());
 
             return new ResponseEntity<>(finaldocsEntity, new HttpHeaders(), HttpStatus.OK);
     }
@@ -125,13 +118,12 @@ public class FinaldocsController {
      */
     @PatchMapping("{id}")
     @Operation(summary = "최종 확인서 업데이트", description = "특정 최종 확인서를 업데이트합니다.")
-    public ResponseEntity<?> updateOrgById(@PathVariable("id") String id, @RequestBody FinaldocsEntity.UpdateDto finaldocsEntity) {
+    public ResponseEntity<?> updateFinaldocsById(@PathVariable("id") String id, @RequestBody FinaldocsEntity.FinaldocsUpdateDto finaldocsEntity) {
 
         log.info("[FinaldocsController] updateFinaldocsById...!");
 
         finaldocsService.updateById(id, finaldocsEntity);
 
-//        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(finaldocsService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
 

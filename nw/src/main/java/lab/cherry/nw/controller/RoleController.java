@@ -93,7 +93,7 @@ public class RoleController {
             @ApiResponse(responseCode = "200", description = "역할 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<?> createRole(@Valid @RequestBody(required = false) RoleEntity.CreateDto roleCreateDto) {
+    public ResponseEntity<?> createRole(@Valid @RequestBody(required = false) RoleEntity.RoleCreateDto roleCreateDto) {
 
         log.info("[RoleController] createRole...!");
 

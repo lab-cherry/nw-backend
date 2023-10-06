@@ -8,9 +8,9 @@ import java.util.Optional;
 
 /**
  * <pre>
- * ClassName : GridFsFileRepository
+ * ClassName : WeddinghallRepository
  * Type : interface
- * Descrption : 파일 관리 JPA 구현을 위한 인터페이스입니다.
+ * Descrption : 웨딩홀(예식장) 관리 JPA 구현을 위한 인터페이스입니다.
  * Related : spring-boot-starter-data-mongo
  * </pre>
  */

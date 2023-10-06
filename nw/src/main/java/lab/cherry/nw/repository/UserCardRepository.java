@@ -28,8 +28,6 @@ public interface UserCardRepository extends MongoRepository<UserCardEntity, UUID
     Page<UserCardEntity> findPageById(String id, Pageable pageable);
 
     Optional<UserCardEntity> findById(String id);
-//
-//    Optional<OrgEntity> findByName(String id);
 
     List<UserCardEntity> findAllById(List<String> orgIds);
 }

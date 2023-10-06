@@ -70,6 +70,7 @@ public class Initalizer implements ApplicationRunner {
                 .username("관리자")
                 .password(passwordEncoder.encode("admin"))
                 .email("admin@test.com")
+				.type("org")
                 .role(roleEntity)
                 .enabled(true)
                 .build());
@@ -85,6 +86,7 @@ public class Initalizer implements ApplicationRunner {
                 .username("체리랩")
                 .password(passwordEncoder.encode("cherrylab"))
                 .email("cherrylab@test.com")
+				.type("user")
                 .role(roleEntity)
                 .enabled(true)
                 .build());

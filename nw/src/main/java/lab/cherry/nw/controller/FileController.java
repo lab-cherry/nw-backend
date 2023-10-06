@@ -54,8 +54,7 @@ public class FileController {
     @Operation(summary = "파일 목록", description = "파일 목록을 조회합니다.")
     public ResponseEntity<?> findAllFiles(
 			@RequestParam(required = false) String name,
-//			@RequestParam(required = false) String orgid,
-//			@RequestParam(required = false) String userid,
+			@RequestParam(required = false) String path,
 			@RequestParam(defaultValue = "0") Integer page,
 			@RequestParam(defaultValue = "5") Integer size,
 			@RequestParam(defaultValue = "id,desc") String[] sort) {
@@ -72,11 +71,54 @@ public class FileController {
 //			fileEntity = fileService.findPageByUserId(userid, pageable);
 //		}
 //		} else {
-//			fileEntity = fileService.findPageByOrgId(orgid, pageable);
+//			fileEntity = fileService.getFiles(pageable);
 //		}
 
 		//        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
 		return new ResponseEntity<>(fileEntity, new HttpHeaders(), HttpStatus.OK);
+	}
+
+	/**
+     * [FileController] 특정 파일 조회 함수
+     *
+     * @param id 파일 고유번호를 입력합니다.
+     * @return
+     * <pre>
+     * true  : 특정 파일의 정보를 반홥합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @GetMapping("{id}")
+    @Operation(summary = "파일 조회", description = "파일을 조회합니다.")
+    public ResponseEntity<?> findByFileId(@PathVariable("id") String id) {
+		log.info("[FileController] findByFileId...!");
+
+//		final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+		return new ResponseEntity<>(fileService.findById(id), new HttpHeaders(), HttpStatus.OK);
+	}
+
+	/**
+     * [FileController] 특정 파일 조회 함수
+     *
+     * @param path 파일 path를 입력합니다.
+     * @return
+     * <pre>
+     * true  : 특정 파일 정보를 반환합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @GetMapping("info")
+    @Operation(summary = "Path로 조직 찾기", description = "조직을 조회합니다.")
+    public ResponseEntity<?> findByFilePath(@RequestParam(required = true) String path) {
+
+		log.info("[OrgController] findByFilePath...!");
+
+		final ResultResponse response = ResultResponse.of(SuccessCode.OK, fileService.findByPath(path));
+		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
 	}
 
 

@@ -55,6 +55,12 @@ public class OrgEntity implements Serializable {
     @Size(min = 4, max = 255, message = "Minimum contact length: 4 characters")
     private String contact;
 
+	@NotNull
+    @JsonProperty("orgAddress")
+    @Schema(title = "조직 주소", example = "서울시 종로구 파인애플주스 A동")
+    @Size(min = 4, max = 255, message = "Minimum address length: 4 characters")
+    private String address;
+
     @JsonProperty("orgEnabled")
     @Schema(title = "조직 활성화 여부", example = "true")
     private boolean enabled;
@@ -76,7 +82,7 @@ public class OrgEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class CreateDto {
+    public static class OrgCreateDto {
 
         @NotBlank
         @Schema(title = "조직 이름", example = "더모멘트")
@@ -92,13 +98,18 @@ public class OrgEntity implements Serializable {
         @Schema(title = "조직 연락처", example = "02-0000-0000")
         @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
         private String contact;
+
+		@NotBlank
+	    @Schema(title = "조직 주소", example = "서울시 종로구 파인애플주스 A동")
+	    @Size(min = 4, max = 255, message = "Minimum address length: 4 characters")
+	    private String address;
 
     }
 
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class UpdateDto {
+    public static class OrgUpdateDto {
 
         @Schema(title = "조직 이름", example = "더모멘트")
         @Size(min = 4, max = 20, message = "Minimum name length: 4 characters")
@@ -111,6 +122,10 @@ public class OrgEntity implements Serializable {
         @Schema(title = "조직 연락처", example = "02-0000-0000")
         @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
         private String contact;
+
+	    @Schema(title = "조직 주소", example = "서울시 종로구 파인애플주스 A동")
+	    @Size(min = 4, max = 255, message = "Minimum address length: 4 characters")
+	    private String address;
 
     }
 }
