@@ -59,7 +59,7 @@ public class QsheetServiceImpl implements QsheetService {
     /**
      * [QsheetServiceImpl] 큐시트 생성 함수
      *
-     * @param qsheetQsheetCreateDto 큐시트 생성에 필요한 큐시트 등록 정보를 담은 개체입니다.
+     * @param qsheetCreateDto 큐시트 생성에 필요한 큐시트 등록 정보를 담은 개체입니다.
      * @return 생성된 큐시트 정보를 리턴합니다.
      * @throws CustomException 중복된 이름에 대한 예외 처리 발생
      * <pre>
@@ -98,18 +98,32 @@ public class QsheetServiceImpl implements QsheetService {
      * Author : yby654(yby654@github.com)
      */
     public void updateById(String id, QsheetEntity.QsheetUpdateDto qsheetUpdateDto) {
-//        Instant instant = Instant.now();
+        Instant instant = Instant.now();
         QsheetEntity qsheetEntity = findById(id);
 
         if (qsheetEntity.getData() != null ) {
             log.error("qsheetEntity : {} ", qsheetEntity);
             log.error("qsheetUpdateDto.getData() : {} ", qsheetUpdateDto.getData());
-            qsheetEntity.updateFromDto(qsheetUpdateDto);
-            qsheetRepository.save(qsheetEntity);
-
+//            qsheetEntity.updateFromDto(qsheetUpdateDto);
+//            qsheetRepository.save(qsheetEntity);
+			OrgEntity orgEntity = qsheetEntity.getOrgid();
+			if (qsheetUpdateDto.getOrgSeq() != null){
+				orgEntity = orgService.findById(qsheetUpdateDto.getOrgSeq());
+			}
+			
+			qsheetEntity = QsheetEntity.builder()
+			.id(qsheetEntity.getId())
+			.name(qsheetEntity.getName())
+			.orgid(orgEntity)
+			.userid(qsheetEntity.getUserid())
+			.created_at(qsheetEntity.getCreated_at())
+			.data(qsheetUpdateDto.getData())
+			.updated_at(instant)
+			.build();
+			qsheetRepository.save(qsheetEntity);
 
         } else {
-            log.error("[QsheetServiceImpl - udpateQsheet] data 만 수정 가능합니다.");
+            log.error("[QsheetServiceImpl - udpateQsheet] OrgSeq,data 만 수정 가능합니다.");
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
         }
     }
