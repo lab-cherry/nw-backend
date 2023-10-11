@@ -16,7 +16,7 @@ import java.util.UUID;
  * Related : BoardServiceImpl, BoardService
  * </pre>
  */
-public interface BoardRepository extends MongoRepository<BoardEntity, UUID> {
+public interface BoardRepository extends MongoRepository<BoardEntity, String> {
 
     Page<BoardEntity> findAll(Pageable pageable);
     Page<BoardEntity> findPageByUserid(String userid, Pageable pageable);

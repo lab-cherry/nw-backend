@@ -72,14 +72,24 @@ public class QsheetServiceImpl implements QsheetService {
         Instant instant = Instant.now();
         UserEntity userEntity = userService.findById(qsheetCreateDto.getUserSeq());
         OrgEntity orgEntity = null;
+        UserEntity orgUserEntity = null; 
+        userService.findById(qsheetCreateDto.getUserSeq());
 		if (qsheetCreateDto.getOrgSeq() != null){
             orgEntity = orgService.findById(qsheetCreateDto.getOrgSeq());
+        }
+        if ( qsheetCreateDto.getOrg_approverSeq() != null){
+            orgUserEntity = userService.findById(qsheetCreateDto.getOrg_approverSeq());
         }
         QsheetEntity qsheetEntity = QsheetEntity.builder()
             .userid(userEntity)
             .orgid(orgEntity)
             .name(qsheetCreateDto.getName())
             .data(qsheetCreateDto.getData())
+            .memo(qsheetCreateDto.getMemo())
+            .org_approver(orgUserEntity)
+            .org_confirm(false)
+            .client_confirm(false)
+            // .finalConfirm(FinalConfirm.builder().build())
             .created_at(instant)
             .build();
         qsheetRepository.save(qsheetEntity);
@@ -107,17 +117,36 @@ public class QsheetServiceImpl implements QsheetService {
 //            qsheetEntity.updateFromDto(qsheetUpdateDto);
 //            qsheetRepository.save(qsheetEntity);
 			OrgEntity orgEntity = qsheetEntity.getOrgid();
+            UserEntity orgUserEntity = qsheetEntity.getOrg_approver();
 			if (qsheetUpdateDto.getOrgSeq() != null){
 				orgEntity = orgService.findById(qsheetUpdateDto.getOrgSeq());
 			}
-			
+			if (qsheetUpdateDto.isOrg_confirm()){
+                if(qsheetUpdateDto.getOrg_approverSeq()!=null){
+                    orgUserEntity = userService.findById(qsheetUpdateDto.getOrg_approverSeq());
+                }else{
+                log.error("[QsheetServiceImpl - udpateQsheet] org_approver와 isOrg_confirm 입력이 잘못되었습니다.");
+                throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+            }
+                
+            } 
 			qsheetEntity = QsheetEntity.builder()
 			.id(qsheetEntity.getId())
 			.name(qsheetEntity.getName())
 			.orgid(orgEntity)
 			.userid(qsheetEntity.getUserid())
 			.created_at(qsheetEntity.getCreated_at())
-			.data(qsheetUpdateDto.getData())
+			.data(qsheetUpdateDto.getData()!=null?qsheetUpdateDto.getData():qsheetEntity.getData())
+            .org_approver(orgUserEntity)
+            .org_confirm(qsheetUpdateDto.isOrg_confirm()==!(qsheetEntity.isOrg_confirm())?qsheetUpdateDto.isOrg_confirm():qsheetEntity.isOrg_confirm())
+            .client_confirm(qsheetUpdateDto.isClient_confirm()==!(qsheetEntity.isClient_confirm())?qsheetUpdateDto.isClient_confirm():qsheetEntity.isClient_confirm())
+            // .finalConfirm(qsheetUpdateDto.getFinalConfirm()!=null?  
+            //     FinalConfirm.builder()
+            //     .org_approver(qsheetUpdateDto.getFinalConfirm().getOrg_approver()!=null?qsheetUpdateDto.getFinalConfirm().getOrg_approver():null)
+            //     .org_confirm(qsheetUpdateDto.getFinalConfirm().isOrg_confirm()==!(qsheetEntity.getFinalConfirm().isOrg_confirm())?qsheetUpdateDto.getFinalConfirm().isOrg_confirm():qsheetEntity.getFinalConfirm().isOrg_confirm())
+            //     .client_confirm(qsheetUpdateDto.getFinalConfirm().isClient_confirm()==!(qsheetEntity.getFinalConfirm().isClient_confirm())?qsheetUpdateDto.getFinalConfirm().isClient_confirm():qsheetEntity.getFinalConfirm().isClient_confirm())    
+            //     .build():qsheetEntity.getFinalConfirm() )
+            .memo(qsheetUpdateDto.getMemo())
 			.updated_at(instant)
 			.build();
 			qsheetRepository.save(qsheetEntity);
