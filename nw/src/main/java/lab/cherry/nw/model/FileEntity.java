@@ -27,7 +27,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "files")
-@JsonPropertyOrder({ "fileSeq", "fileName", "fileType", "fileExt", "filePath", "fileSize", "userId", "orgId", "created_at" })
+@JsonPropertyOrder({ "fileSeq", "fileName", "fileType", "fileExt", "filePath", "fileUrl", "fileSize", "userId", "orgId", "created_at" })
 public class FileEntity implements Serializable {
 
 	@Id
@@ -49,6 +49,11 @@ public class FileEntity implements Serializable {
     @JsonProperty("filePath")
     @Schema(title = "파일 경로", example = "관리/더 글로리/IMG_61E29A079818-1.jpeg")
     private String path;
+
+	@NotNull
+    @JsonProperty("fileUrl")
+    @Schema(title = "파일 URL", example = "https://{IP_ADDR}:{PORT}/api/v1/file/download/6506ebb61b6deb1602d85c35?path=/관리/더 글로리/IMG_61E29A079818-1.jpeg")
+    private String url;
 
 	@NotNull
     @JsonProperty("fileSize")

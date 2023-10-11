@@ -8,6 +8,7 @@ import lab.cherry.nw.service.MinioService;
 import lab.cherry.nw.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,9 @@ public class FileServiceImpl implements FileService {
 
 	private final MinioService minioService;
     private final FileRepository fileRepository;
+
+	@Value("${server.port}")
+    private String server_port;
 
 	public Page<FileEntity> getFiles(Pageable pageable) {
 		return fileRepository.findAll(pageable);
@@ -67,14 +71,16 @@ public class FileServiceImpl implements FileService {
 				throw new RuntimeException(e);
 			}
 
+			String fileUrl = "/api/v1/file/download/" + orgId + "?path=" + filePath;
             // 파일 객체 ID 저장
-			fileObjectIds.add(filePath);
+			fileObjectIds.add(fileUrl);
 
 			FileEntity fileEntity = FileEntity.builder()
 						.name(file.getOriginalFilename())
 						.size(FormatConverter.convertInputBytes(file.getSize()))
 						.type(file.getContentType())
 						.path(filePath)
+						.url(fileUrl)
 						.userid(userName)
 						.orgid(orgId)
 						.created_at(Instant.now())

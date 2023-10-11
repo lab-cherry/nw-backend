@@ -74,6 +74,7 @@ public class QsheetEntity implements Serializable {
 
     @Getter
     @Builder
+    @NoArgsConstructor @AllArgsConstructor
     public static class ItemData {
 		@Schema(title = "큐시트 순서", example = "1")
         private int orderIndex;
