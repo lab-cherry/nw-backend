@@ -38,9 +38,8 @@ import lombok.extern.slf4j.Slf4j;
 public class FileServiceImpl implements FileService {
 
 	private final MinioService minioService;
-    private final FileRepository fileRepository;
+  private final FileRepository fileRepository;
 
-		
 	@Value("${minio.url}")
 	private String minioUrl;
 
