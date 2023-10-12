@@ -1,28 +1,36 @@
 package lab.cherry.nw.service.Impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
+import lab.cherry.nw.error.enums.ErrorCode;
+import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.FileEntity;
 import lab.cherry.nw.repository.FileRepository;
 import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.service.MinioService;
 import lab.cherry.nw.util.FormatConverter;
+import lab.cherry.nw.util.HttpUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -32,8 +40,15 @@ public class FileServiceImpl implements FileService {
 	private final MinioService minioService;
     private final FileRepository fileRepository;
 
-	@Value("${server.port}")
-    private String server_port;
+		
+	@Value("${minio.url}")
+	private String minioUrl;
+
+	@Value("${minio.access-key}")
+	private String accessKey;
+
+	@Value("${minio.secret-key}")
+	private String secretKey;
 
 	public Page<FileEntity> getFiles(Pageable pageable) {
 		return fileRepository.findAll(pageable);
@@ -118,7 +133,35 @@ public class FileServiceImpl implements FileService {
 		return null;
 	}
 
-     public void deleteById(String id) {
+	@Override
+	public byte[] downloadZip(String bucketName, String objectName) {
+
+		objectName = Base64.encodeBase64String(objectName.getBytes());
+		String addr = minioUrl.substring(0, minioUrl.length()-5) + ":9001";
+
+		try {
+        	URI uri = UriComponentsBuilder
+	                .fromUriString(addr)
+	                .path("/api/v1/buckets/{bucketName}/objects/download")
+	                // .encode()
+									.queryParam("prefix", objectName)
+	                .build()
+	                .expand(bucketName, objectName)
+	                .toUri();
+			
+			log.error("uri {}", uri);
+			return HttpUtils.getForObject(uri);
+
+		} catch (Exception ex) {
+			log.error("error {}", ex);
+			log.error("error.msg {}", ex.getMessage());
+			// throw new CustomException(ErrorCode.URL_NOTFOUND);
+		}
+
+		return null;
+	}	
+
+	public void deleteById(String id) {
 		FileEntity fileEntity = findById(id);
 
 		try {

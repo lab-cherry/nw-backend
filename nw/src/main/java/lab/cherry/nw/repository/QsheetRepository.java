@@ -16,7 +16,7 @@ import java.util.UUID;
  * Related : QsheetServiceImpl, QsheetService
  * </pre>
  */
-public interface QsheetRepository extends MongoRepository<QsheetEntity, UUID> {
+public interface QsheetRepository extends MongoRepository<QsheetEntity, String> {
 
     Page<QsheetEntity> findAll(Pageable pageable);
     Page<QsheetEntity> findPageByUserid(String userid, Pageable pageable);

@@ -1,12 +1,16 @@
 package lab.cherry.nw.service;
 
 import lab.cherry.nw.model.FileEntity;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
@@ -29,5 +33,6 @@ public interface FileService {
 	void deleteById(String id);
 
 	InputStream downloadFile(String orgId, String path);
+	byte[] downloadZip(String bucketName, String objectName);
 	void deleteFiles(String orgId, List<String> images);
 }
