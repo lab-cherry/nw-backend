@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Comparator;
@@ -57,8 +56,7 @@ public class QsheetEntity implements Serializable {
     private String name;
 
     @JsonProperty("data")
-	@Schema(title = "큐시트 내용",type="List", example = "[{'orderIndex':1, }]")
-
+	@Schema(title = "큐시트 내용")
     private List<ItemData> data;
 
     @JsonProperty("created_at")
@@ -71,25 +69,54 @@ public class QsheetEntity implements Serializable {
     @Schema(title = "큐시트 업데이트 시간", example = "2023-07-04 12:00:00")
     private Instant updated_at;
 
+    @JsonProperty("memo")
+    @Schema(title = "메모", type="String", example = "신랑 깜짝 이벤트 준비")
+    private String memo;
+
+    @DBRef
+    @JsonProperty("org_approver")
+    @Schema(title = "업체 확인자 정보",type="String",example = "38352658567418867")
+    private UserEntity org_approver;
+    @JsonProperty("org_confirm")
+    @Schema(title = "업체 확인", type="Boolean", example = "false")
+    private boolean org_confirm;
+    @JsonProperty("client_confirm")
+	@Schema(title = "신랑신부 확인", type="Boolean", example = "false")
+	private boolean client_confirm;
+    // @JsonProperty("final_confirm")
+    // @Schema(title = "최종 확인")
+    // private FinalConfirm finalConfirm;
+    
 
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
     public static class ItemData {
-		@Schema(title = "큐시트 순서", example = "1")
-        private int orderIndex;
+		@Schema(title = "큐시트 순서",type="integer" ,example = "1")
+        private Integer orderIndex;
 		@Schema(title = "큐시트 순서명", example = "축가")
 		private String process;
 		@Schema(title = "큐시트 내용", example = "니가사는그집-박진영")
         private String content;
 		@Schema(title = "큐시트 행위자", example = "신부")
         private String actor;
-		@Schema(title = "메모", example = "신부가 노래를 못함")
+		@Schema(title = "비고", example = "신부가 노래를 못함")
         private String note;
 		@Schema(title = "파일위치", example = "./")
         private String filePath;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor @AllArgsConstructor
+    public static class FinalConfirm {
+		@Schema(title = "업체 확인자 정보",type="String",example = "38352658567418867")
+        private String org_approver;
+        @Schema(title = "업체 확인", type="Boolean", example = "false")
+        private boolean org_confirm;
+		@Schema(title = "신랑신부 확인", type="Boolean", example = "false")
+		private boolean client_confirm;
+    }
 
     // TODO: Permission Entity
     //    @Builder.Default
@@ -117,6 +144,17 @@ public class QsheetEntity implements Serializable {
         private String orgSeq;
 		@Schema(title = "데이터 리스트")
 		private List<ItemData> data;
+        @Schema(title = "메모", type="String", example = "신랑 깜짝 이벤트 준비")
+        private String memo;
+        @Schema(title = "업체 확인자 정보",type="String",example = "38352658567418867")
+        private String org_approverSeq;
+        @Schema(title = "업체 확인", type="Boolean", example = "false")
+        private boolean org_confirm;
+		@Schema(title = "신랑신부 확인", type="Boolean", example = "false")
+		private boolean client_confirm;
+        // @Schema(title = "최종 확인")
+        // private FinalConfirm finalConfirm;
+
     }
 
 	public void sortDataByOrderIndex() {
@@ -145,6 +183,14 @@ public class QsheetEntity implements Serializable {
         private String orgSeq;
 		@Schema(title = "데이터 리스트")
 		private List<ItemData> data;
+        @Schema(title = "메모", type="String", example = "신랑 깜짝 이벤트 준비")
+        private String memo;
+        @Schema(title = "업체 확인자 정보",type="String",example = "38352658567418867")
+        private String org_approverSeq;
+        @Schema(title = "업체 확인", type="Boolean", example = "false")
+        private boolean org_confirm;
+		@Schema(title = "신랑신부 확인", type="Boolean", example = "false")
+		private boolean client_confirm;
     }
 
 	public void updateFromDto(QsheetUpdateDto updateDto) {
