@@ -112,8 +112,6 @@ public class QsheetServiceImpl implements QsheetService {
         QsheetEntity qsheetEntity = findById(id);
 
         if (qsheetEntity.getData() != null ) {
-            log.error("qsheetEntity : {} ", qsheetEntity);
-            log.error("qsheetUpdateDto.getData() : {} ", qsheetUpdateDto.getData());
 //            qsheetEntity.updateFromDto(qsheetUpdateDto);
 //            qsheetRepository.save(qsheetEntity);
 			OrgEntity orgEntity = qsheetEntity.getOrgid();

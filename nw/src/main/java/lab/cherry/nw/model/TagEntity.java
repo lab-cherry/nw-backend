@@ -1,6 +1,5 @@
 package lab.cherry.nw.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,24 +9,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.io.Serializable;
-import java.time.Instant;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
  * <pre>
- * ClassName : BoardEntity
+ * ClassName : TagEntity
  * Type : class
- * Description : 게시판과 관련된 Entity를 구성하고 있는 클래스입니다.
- * Related : BoardRepository, BoardServiceImpl
+ * Description : 태그와 관련된 Entity를 구성하고 있는 클래스입니다.
+ * Related : TagRepository, TagServiceImpl
  * </pre>
  */
 @Getter
@@ -37,8 +27,8 @@ import java.util.stream.Collectors;
 @JsonPropertyOrder({ "created_at"})
 public class TagEntity {
 	@Id
-    @JsonProperty("boardSeq")
-    @Schema(title = "게시판 고유번호", example = "38352658567418867") // (Long) Tsid
+    @JsonProperty("tagSeq")
+    @Schema(title = "태그 고유번호", example = "38352658567418867") // (Long) Tsid
     private String id;
 	
 	@JsonProperty("content")
