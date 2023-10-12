@@ -1,6 +1,5 @@
 package lab.cherry.nw.error;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lab.cherry.nw.error.enums.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;

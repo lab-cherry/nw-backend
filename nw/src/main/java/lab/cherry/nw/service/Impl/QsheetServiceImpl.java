@@ -7,17 +7,25 @@ import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.QsheetEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.QsheetRepository;
+import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.QsheetService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 /**
  * <pre>
@@ -36,6 +44,7 @@ public class QsheetServiceImpl implements QsheetService {
     private final QsheetRepository qsheetRepository;
     private final UserService userService;
     private final OrgService orgService;
+    private final FileService fileService;
     /**
      * [QsheetServiceImpl] 전체 큐시트 조회 함수
      *
@@ -234,4 +243,53 @@ public class QsheetServiceImpl implements QsheetService {
         return qsheetRepository.findPageByOrgid(orgid, pageable);
     }
     
+    public byte[] download(List<String> users) {
+        
+        List<UserEntity> userList = new ArrayList<>();
+        List<byte[]> userData = new ArrayList<>();
+
+        for(String user : users) {
+            if (userService.checkId(user)) {
+                UserEntity _user = userService.findById(user);
+                userList.add(_user);
+
+                String objectName = _user.getId() +"/";
+                userData.add(fileService.downloadZip("user", objectName)); 
+            }
+        }
+
+        if(userList.size() > 1) {
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            try (ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream)) {
+                for (UserEntity user : userList) {
+
+                        String objectName = user.getId() +"/";
+
+                        byte[] objectData = fileService.downloadZip("user", objectName);
+
+                        // Zip 아카이브에 객체 추가
+                        ZipArchiveEntry zipEntry = new ZipArchiveEntry(user.getUsername() + ".zip");
+                        zipOut.putNextEntry(zipEntry);
+                        zipOut.write(objectData);
+                        zipOut.closeEntry();
+
+                }
+            } catch (IOException e) {
+                log.error("{}", e);
+            }
+        
+            byte[] zipBytes = byteArrayOutputStream.toByteArray();
+            
+            return zipBytes;
+
+        } else {
+
+            UserEntity user = userService.findById(users.get(0));
+
+            String objectName = "사용자/" + user.getId();
+
+            return fileService.downloadZip(user.getOrg().getId(), objectName);
+        }
+    }
 }

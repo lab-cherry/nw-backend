@@ -29,7 +29,8 @@ public enum ErrorCode {
     FORBIDDEN(403, "접근 권한이 없어 거부되었습니다."),
     ACCESS_DENIED_EXCEPTION(401, "인증 정보가 유효하지 않습니다."),
     DUPLICATE(409, "중복된 데이터가 있습니다."),
-    NO_BODY(400, "파라미터 값이 입력되지 않았습니다.");
+    NO_BODY(400, "파라미터 값이 입력되지 않았습니다."),
+    URL_NOTFOUND(400, "Minio URL을 다시 확인해주세요.");
 
     private final int status;
     private final String message;

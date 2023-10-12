@@ -200,5 +200,12 @@ public class QsheetEntity implements Serializable {
         }
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor @AllArgsConstructor
+    public static class QsheetDownloadDto {
+		@Schema(title = "사용자 리스트")
+		private List<String> user;
+    }
 
 }

@@ -1,13 +1,11 @@
 package lab.cherry.nw.repository;
 
-import lab.cherry.nw.model.FinalTemplEntity;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import lab.cherry.nw.model.FinalTemplEntity;
 
 
 /**
@@ -19,7 +17,7 @@ import java.util.UUID;
  * </pre>
  */
 //@Repository
-public interface FinalTemplRepository extends MongoRepository<FinalTemplEntity, UUID> {
+public interface FinalTemplRepository extends MongoRepository<FinalTemplEntity, String> {
 
     Page<FinalTemplEntity> findAll(Pageable pageable);
 

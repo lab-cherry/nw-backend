@@ -179,4 +179,14 @@ public class UserServiceImpl implements UserService {
     public Page<UserEntity> findPageByUserId(String userid, Pageable pageable) {
         return userRepository.findPageByUserid(userid, pageable);
     }
+
+    public Boolean checkId(String id) {
+
+        // userSeq가 DB에 존재할 시, true
+        if(userRepository.findById(id).isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
