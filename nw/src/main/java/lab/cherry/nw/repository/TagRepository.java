@@ -16,7 +16,7 @@ import java.util.UUID;
  * Related : TagServiceImpl, TagService
  * </pre>
  */
-public interface TagRepository extends MongoRepository<TagEntity, UUID> {
+public interface TagRepository extends MongoRepository<TagEntity, String> {
 
     Page<TagEntity> findAll(Pageable pageable);
 	Optional<TagEntity> findByName(String name);

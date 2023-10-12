@@ -1,15 +1,11 @@
 package lab.cherry.nw.repository;
 
-import lab.cherry.nw.model.OrgEntity;
-import lab.cherry.nw.model.UserCardEntity;
-import org.apache.catalina.User;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import lab.cherry.nw.model.UserCardEntity;
 
 
 /**
@@ -21,7 +17,7 @@ import java.util.UUID;
  * </pre>
  */
 //@Repository
-public interface UserCardRepository extends MongoRepository<UserCardEntity, UUID> {
+public interface UserCardRepository extends MongoRepository<UserCardEntity, String> {
 
     Page<UserCardEntity> findAll(Pageable pageable);
 
