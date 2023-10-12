@@ -14,6 +14,7 @@ import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -24,8 +25,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipOutputStream;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -77,11 +81,12 @@ public class QsheetServiceImpl implements QsheetService {
      *
      * Author : yby654(yby654@github.com)
      */
-    public void createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto) {
+    public void createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files) {
         Instant instant = Instant.now();
         UserEntity userEntity = userService.findById(qsheetCreateDto.getUserSeq());
         OrgEntity orgEntity = null;
         UserEntity orgUserEntity = null; 
+        ObjectId objectid = new ObjectId();
         userService.findById(qsheetCreateDto.getUserSeq());
 		if (qsheetCreateDto.getOrgSeq() != null){
             orgEntity = orgService.findById(qsheetCreateDto.getOrgSeq());
@@ -89,7 +94,24 @@ public class QsheetServiceImpl implements QsheetService {
         if ( qsheetCreateDto.getOrg_approverSeq() != null){
             orgUserEntity = userService.findById(qsheetCreateDto.getOrg_approverSeq());
         }
+        
+        ////////////
+
+        log.error("name {}", qsheetCreateDto.getName());
+        log.error("memo {}", qsheetCreateDto.getMemo());
+
+		Map<String, String> info = new HashMap<>();
+		info.put("type", "사용자");
+		info.put("user", userEntity.getId());
+        info.put("qsheetSeq", objectid.toString());
+
+        List<String> fileUrls = fileService.uploadFiles(info, files);
+        log.error("fileUrls {}", fileUrls);
+        ////////////
+
+
         QsheetEntity qsheetEntity = QsheetEntity.builder()
+            .id(objectid.toString())
             .userid(userEntity)
             .orgid(orgEntity)
             .name(qsheetCreateDto.getName())

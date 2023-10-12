@@ -3,6 +3,8 @@ package lab.cherry.nw.controller;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -176,7 +178,13 @@ public class FileController {
                     String[] parts = objectName.split("/");
 
                     // 마지막 요소 확인
-                    String fileName = parts[parts.length - 1];
+                     String fileName = parts[parts.length - 1];
+
+                    try {
+                         fileName = URLEncoder.encode(fileName, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                         log.error("{}", e);
+                    }
 
                     // 파일 다운로드를 위한 헤더 설정
                     HttpHeaders headers = new HttpHeaders();
