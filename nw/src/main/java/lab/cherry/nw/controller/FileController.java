@@ -1,14 +1,13 @@
 package lab.cherry.nw.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lab.cherry.nw.error.ResultResponse;
-import lab.cherry.nw.error.enums.SuccessCode;
-import lab.cherry.nw.model.FileEntity;
-import lab.cherry.nw.service.FileService;
-import lab.cherry.nw.util.Common;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.zip.ZipOutputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,9 +17,22 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.io.InputStream;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lab.cherry.nw.error.ResultResponse;
+import lab.cherry.nw.error.enums.SuccessCode;
+import lab.cherry.nw.model.FileEntity;
+import lab.cherry.nw.service.FileService;
+import lab.cherry.nw.util.Common;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -64,17 +76,6 @@ public class FileController {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Common.getOrder(sort)));
 
 		Page<FileEntity> fileEntity = fileService.getFiles(pageable);
-//		if(userid == null && orgid == null) {
-//			fileEntity = fileService.getFiles(pageable);
-//		}
-//		else {
-//			fileEntity = fileService.findPageByUserId(userid, pageable);
-//		}
-//		} else {
-//			fileEntity = fileService.getFiles(pageable);
-//		}
-
-		//        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
 		return new ResponseEntity<>(fileEntity, new HttpHeaders(), HttpStatus.OK);
 	}
 
@@ -121,7 +122,6 @@ public class FileController {
 		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
 	}
 
-
 	/**
      * [FileController] 특정 파일 다운로드 함수
      *
@@ -129,31 +129,86 @@ public class FileController {
      *
      * Author : taking(taking@duck.com)
      */
-	@GetMapping("/download/{orgId}")
-    @Operation(summary = "특정 파일 다운로드", description = "특정 파일을 다운로드합니다.")
-    public ResponseEntity<?> downloadFile(
-			@RequestParam(required = false) String path,
+     @GetMapping("/download/{orgId}")
+     @Operation(summary = "특정 파일 다운로드", description = "특정 파일을 다운로드합니다.")
+     public ResponseEntity<?> downloadFile(
+               @RequestParam(required = false) Boolean qsheet,
+			@RequestParam(required = false) List<String> path,
 			@PathVariable String orgId) {
 
-		// MinioService를 사용하여 MinIO 서버로부터 파일을 가져옵니다.
-		InputStream fileInputStream = fileService.downloadFile(orgId, path);
+          if(path.size() > 1) {
 
-		// 문자열을 '/'로 분할
-		String[] parts = path.split("/");
+               ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+               try (ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream)) {
+                    for (String data : path) {
 
-		// 마지막 요소 확인
-		String fileName = parts[parts.length - 1];
+                         String[] parts = data.split("/");
+                         String fileName = parts[parts.length - 1];
 
-		// 파일 다운로드를 위한 헤더 설정
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentDispositionFormData("attachment", fileName); // 다운로드할 때 파일 이름 지정
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+                         byte[] objectData = fileService.downloadZip(orgId, data);
 
-		// 파일 스트림을 InputStreamResource로 래핑하여 응답합니다.
-		InputStreamResource resource = new InputStreamResource(fileInputStream);
+                         // Zip 아카이브에 객체 추가
+                         ZipArchiveEntry zipEntry = new ZipArchiveEntry(fileName + ".zip");
+                         zipOut.putNextEntry(zipEntry);
+                         zipOut.write(objectData);
+                         zipOut.closeEntry();
 
-		//        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
-		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+                    }
+               } catch (IOException e) {
+                    log.error("{}", e);
+               }
+          
+               byte[] zipBytes = byteArrayOutputStream.toByteArray();
+               
+               HttpHeaders headers = new HttpHeaders();
+               headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "download.zip");
+
+               return new ResponseEntity<>(zipBytes, headers, HttpStatus.OK);
+
+          } else {
+
+               String objectName = path.get(0);
+
+               if(chkExtension(path.get(0))) {
+
+                    // MinioService를 사용하여 MinIO 서버로부터 파일을 가져옵니다.
+                    InputStream fileInputStream = fileService.downloadFile(orgId, objectName);
+
+                    // 문자열을 '/'로 분할
+                    String[] parts = objectName.split("/");
+
+                    // 마지막 요소 확인
+                     String fileName = parts[parts.length - 1];
+
+                    try {
+                         fileName = URLEncoder.encode(fileName, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                         log.error("{}", e);
+                    }
+
+                    // 파일 다운로드를 위한 헤더 설정
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentDispositionFormData("attachment", fileName); // 다운로드할 때 파일 이름 지정
+                    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+                    // 파일 스트림을 InputStreamResource로 래핑하여 응답합니다.
+                    InputStreamResource resource = new InputStreamResource(fileInputStream);
+
+                    return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+
+               } else {
+
+                    // 파일 다운로드를 위한 헤더 설정
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentDispositionFormData("attachment", "download.zip"); // 다운로드할 때 파일 이름 지정
+                    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+                    return new ResponseEntity<>(fileService.downloadZip(orgId, objectName), headers, HttpStatus.OK);
+
+               }
+
+          }
+
 	}
 
 
@@ -180,4 +235,14 @@ public class FileController {
 		final ResultResponse response = ResultResponse.of(SuccessCode.OK);
 		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
 	}
+
+     public Boolean chkExtension(String path) {
+          String extension = StringUtils.getFilenameExtension(path);
+
+          if (extension == null) {
+               return false;
+          } else {
+               return true;
+          }
+     }
 }

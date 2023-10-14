@@ -1,5 +1,24 @@
 package lab.cherry.nw.controller;
 
+import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,14 +34,6 @@ import lab.cherry.nw.service.QsheetService;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * <pre>
@@ -94,9 +105,9 @@ public class QsheetController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @Operation(summary = "Qsheet 생성", description = "Qsheet를 추가합니다.")
-    public ResponseEntity<?> createQsheet(@Valid @RequestBody QsheetEntity.CreateDto qsheetCreateDto) {
+    public ResponseEntity<?> createQsheet(@Valid @RequestPart QsheetEntity.QsheetCreateDto qsheetCreateDto, @RequestPart List<MultipartFile> files) {
         log.info("[QsheetController] createQsheet...!");
-        qsheetService.createQsheet(qsheetCreateDto);
+        qsheetService.createQsheet(qsheetCreateDto, files);
 
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
@@ -117,7 +128,7 @@ public class QsheetController {
      @Operation(summary = "큐시트 업데이트", description = "특정 큐시트를 업데이트합니다.")
     public ResponseEntity<?> updateById(
             @PathVariable("id") String id,
-            @RequestBody QsheetEntity.UpdateDto qsheetUpdateDto) {
+            @RequestBody QsheetEntity.QsheetUpdateDto qsheetUpdateDto) {
 
         log.info("[QsheetController] updateQsheet...!");
 
@@ -171,5 +182,26 @@ public class QsheetController {
         //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
         return new ResponseEntity<>(qsheetService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
+    
+	/**
+     * [QsheetController] 큐시트 사용자 파일 다운로드 함수
+     *
+     * @return 큐시트 사용자 파일을 반환합니다.
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @PostMapping("/download")
+    @Operation(summary = "큐시트 사용자 파일 다운로드", description = "큐시트 사용자 파일을 다운로드합니다.")
+    public ResponseEntity<?> downloadQsheetBySeq(@RequestBody QsheetEntity.QsheetDownloadDto qsheetDownloadDto) {
+
+        log.info("[QsheetController] downloadQsheetBySeq...!");
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "download.zip");
+
+        return new ResponseEntity<>(qsheetService.download(qsheetDownloadDto.getUser()), new HttpHeaders(), HttpStatus.OK);
+
+   }
 
 }
