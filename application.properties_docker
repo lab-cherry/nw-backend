@@ -12,6 +12,9 @@ server.port=8888
 #server.error.include-message=always
 server.servlet.encoding.charset=UTF-8
 server.servlet.encoding.force=true
+spring.servlet.multipart.max-file-size=3096MB
+spring.servlet.multipart.max-request-size=3096MB
+spring.servlet.multipart.enabled=true
 
 # Swagger springdoc-ui Configuration
 spring.messages.encoding=UTF-8
