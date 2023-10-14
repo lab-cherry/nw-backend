@@ -194,7 +194,7 @@ public class QsheetServiceImpl implements QsheetService {
                 
                 for (ItemData data : qsheetUpdateDto.getData()) {
                     for (String filePath : fileUrls) {
-                        if (filePath.contains(data.getFilePath())) {
+                            if (filePath.contains(data.getFilePath())) {
                             ItemData tempData = ItemData.builder()
                                 .orderIndex(data.getOrderIndex())
                                 .process(data.getProcess())
@@ -205,21 +205,22 @@ public class QsheetServiceImpl implements QsheetService {
                                 .build();
                             data = tempData;
                             break;
+                            }
                         }
-                    }
-                    newItemData.add(data);
+                         newItemData.add(data);
                 }
+           
+                   
             }else if(qsheetUpdateDto.getData()!=null && files==null){
                 newItemData= new ArrayList<>();
-                List<ItemData> updateData = qsheetUpdateDto.getData();
-                for(int i = 0; i < updateData.size(); i++){
+                for(ItemData data : qsheetUpdateDto.getData()){
                     ItemData tempData = ItemData.builder()
-                                .orderIndex(updateData.get(i).getOrderIndex())
-                                .process(updateData.get(i).getProcess())
-                                .content(updateData.get(i).getContent())
-                                .actor(updateData.get(i).getActor())
-                                .note(updateData.get(i).getNote())
-                                .filePath(qsheetEntity.getData().get(i).getFilePath())
+                                .orderIndex(data.getOrderIndex())
+                                .process(data.getProcess())
+                                .content(data.getContent())
+                                .actor(data.getActor())
+                                .note(data.getNote())
+                                .filePath(data.getFilePath())
                                 .build();
                      newItemData.add(tempData);           
                 }
