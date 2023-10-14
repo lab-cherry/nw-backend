@@ -81,7 +81,7 @@ public class BoardEntity implements Serializable {
 		@Schema(title = "큐시트 고유번호", example = "64f82e492948d933edfaa9c0")
 		private String qsheetSeq;
 		@Schema(title = "태그 목록")
-		private List<TagEntity> tag;
+		private List<String> tagList;
     }
 //
     @Getter
@@ -93,7 +93,7 @@ public class BoardEntity implements Serializable {
 		@Schema(title = "큐시트 고유번호", example = "64f82e492948d933edfaa9c0")
 		private String qsheetSeq;
 		@Schema(title = "태그 목록")
-		private List<TagEntity> tag;
+		private List<String> tagList;
     }
 
 }

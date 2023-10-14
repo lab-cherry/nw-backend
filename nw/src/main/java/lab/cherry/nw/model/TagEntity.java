@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 
 /**
  * <pre>
- * ClassName : BoardEntity
+ * ClassName : TagEntity
  * Type : class
- * Description : 게시판과 관련된 Entity를 구성하고 있는 클래스입니다.
- * Related : BoardRepository, BoardServiceImpl
+ * Description : 태그와 관련된 Entity를 구성하고 있는 클래스입니다.
+ * Related : TagRepository, TagServiceImpl
  * </pre>
  */
 @Getter
@@ -27,8 +27,8 @@ import lombok.NoArgsConstructor;
 @JsonPropertyOrder({ "created_at"})
 public class TagEntity {
 	@Id
-    @JsonProperty("boardSeq")
-    @Schema(title = "게시판 고유번호", example = "38352658567418867") // (Long) Tsid
+    @JsonProperty("tagSeq")
+    @Schema(title = "태그 고유번호", example = "38352658567418867") // (Long) Tsid
     private String id;
 	
 	@JsonProperty("content")

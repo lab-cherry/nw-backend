@@ -137,7 +137,8 @@ public class TagServiceImpl implements TagService {
      */
     @Transactional(readOnly = true)
     public TagEntity findByName(String name) {
-		return tagRepository.findById(name).orElseThrow(() -> new EntityNotFoundException("Tag with Name " + name + " Not Found."));
+      return tagRepository.findByName(name).orElse(null);
+		  // return tagRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Tag with Name " + name + " Not Found."));
     }
 //
 //    @Transactional(readOnly = true)

@@ -57,35 +57,39 @@ public class FileServiceImpl implements FileService {
     public List<String> uploadFiles(Map<String, String> info, List<MultipartFile> files) {
 
 		String orgId = info.get("org");	// 조직명
-		String userName = info.get("user"); 	// 사용자명
-		String type = info.get("type");		 	// 파일 구분명
+		String userId = info.get("user"); 	// 사용자명
+		String type = info.get("type");
+		String qsheetSeq= info.get("qsheetSeq");		 	// 파일 구분명
+		String bucketName = null;
 
 		String destPath;
-		if (userName != null) {
-			// user가 입력되면, {org_objectId}/고객/{userName}으로 Path 지정
-			destPath = "/고객/" + userName + "/";
+		if (userId != null) {
+			// user가 입력되면, /user/{userId}으로 Path 지정
+			bucketName = "user";
+			destPath = userId + "/" + qsheetSeq +"/";
 		} else {
 			// user값이 없을 시, {org_objectId}/관리/로 Path 지정
+			bucketName = orgId;
 			destPath = "/관리/";
 		}
 
 		List<String> fileObjectIds = new ArrayList<>();
 
 		for (MultipartFile file : files) {
-			String originalFilename = (userName != null) ? file.getOriginalFilename() : type + "/" + file.getOriginalFilename();
-			String filePath = destPath + originalFilename;
+			String originalFilename = (userId != null) ? file.getOriginalFilename() : type + "/" + file.getOriginalFilename();
+			String filepath = destPath + originalFilename;
 
-			log.error("filePath is {}", filePath);
+			log.error("objectName is {}", filepath);
 
 			try {
-				minioService.uploadObject(orgId, filePath, file);
+				minioService.uploadObject(bucketName, filepath, file);
             } catch (IOException e) {
 				log.error(e.getMessage());
 			} catch (NoSuchAlgorithmException | InvalidKeyException e) {
 				throw new RuntimeException(e);
 			}
 
-			String fileUrl = "/api/v1/file/download/" + orgId + "?path=" + filePath;
+			String fileUrl = "/api/v1/file/download/" + bucketName + "?path=" + filepath;
             // 파일 객체 ID 저장
 			fileObjectIds.add(fileUrl);
 
@@ -93,10 +97,10 @@ public class FileServiceImpl implements FileService {
 						.name(file.getOriginalFilename())
 						.size(FormatConverter.convertInputBytes(file.getSize()))
 						.type(file.getContentType())
-						.path(filePath)
+						.path(filepath)
 						.url(fileUrl)
-						.userid(userName)
-						.orgid(orgId)
+						.userid(userId)
+						.orgid(bucketName)
 						.created_at(Instant.now())
 						.build();
 

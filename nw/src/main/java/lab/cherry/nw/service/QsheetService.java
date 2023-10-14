@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -20,7 +21,7 @@ public interface QsheetService {
  QsheetEntity findById(String id);
 // QsheetEntity findByUserId(String userid);
 // QsheetEntity findByOrgId(String orgid);
- void createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto);
+ void createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files);
  void updateById(String id, QsheetEntity.QsheetUpdateDto updateDto);
  void deleteById(String id);
  Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable);
