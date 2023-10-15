@@ -109,13 +109,6 @@ public class QsheetController {
     @Operation(summary = "Qsheet 생성", description = "Qsheet를 추가합니다.")
     public ResponseEntity<?> createQsheet(@RequestPart QsheetEntity.QsheetCreateDto qsheetCreateDto, @RequestPart(required = false) List<MultipartFile> files) {
         log.info("[QsheetController] createQsheet...!");
-        log.error ("files : {}", files);
-        for(MultipartFile file:files){
-            if(file.isEmpty()){
-                files = null;
-                break;
-            }
-        }
         
         qsheetService.createQsheet(qsheetCreateDto, files);
 
@@ -139,14 +132,7 @@ public class QsheetController {
     public ResponseEntity<?> updateById(
             @PathVariable("id") String id,
             @RequestPart QsheetEntity.QsheetUpdateDto qsheetUpdateDto, @RequestPart(required = false) List<MultipartFile> files) {
-            
-        log.info("[QsheetController] updateQsheet...!");
-        for(MultipartFile file:files){
-            if(file.isEmpty()){
-                files = null;
-                break;
-            }
-        }
+                
         qsheetService.updateById(id, qsheetUpdateDto, files);
 
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
