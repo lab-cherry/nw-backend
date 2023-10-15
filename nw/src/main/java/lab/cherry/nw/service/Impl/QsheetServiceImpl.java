@@ -6,6 +6,7 @@ import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.QsheetEntity;
 import lab.cherry.nw.model.UserEntity;
+import lab.cherry.nw.model.QsheetEntity.ItemData;
 import lab.cherry.nw.repository.QsheetRepository;
 import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.service.OrgService;
@@ -17,8 +18,6 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.io.ByteArrayOutputStream;
@@ -96,18 +95,39 @@ public class QsheetServiceImpl implements QsheetService {
         }
         
         ////////////
+        List<ItemData> newItemData = new ArrayList<>();
+        if (files != null){
+            Map<String, String> info = new HashMap<>();
+            info.put("type", "사용자");
+            info.put("user", userEntity.getId());
+            info.put("qsheetSeq", objectid.toString());
 
-        log.error("name {}", qsheetCreateDto.getName());
-        log.error("memo {}", qsheetCreateDto.getMemo());
+            List<String> fileUrls = fileService.uploadFiles(info, files);
+            log.error("fileUrls {}", fileUrls);
+            ////////////
+            
 
-		Map<String, String> info = new HashMap<>();
-		info.put("type", "사용자");
-		info.put("user", userEntity.getId());
-        info.put("qsheetSeq", objectid.toString());
-
-        List<String> fileUrls = fileService.uploadFiles(info, files);
-        log.error("fileUrls {}", fileUrls);
-        ////////////
+            for (ItemData data : qsheetCreateDto.getData()) {
+                for (String filePath : fileUrls) {
+                    if (filePath.contains(data.getFilePath())) {
+                        ItemData tempData = ItemData.builder()
+                            .orderIndex(data.getOrderIndex())
+                            .process(data.getProcess())
+                            .content(data.getContent())
+                            .actor(data.getActor())
+                            .note(data.getNote())
+                            .filePath(filePath)
+                            .build();
+                        data = tempData;
+                        break;
+                    }
+                }
+                newItemData.add(data);
+            }
+        }else{
+            newItemData = qsheetCreateDto.getData();
+        }
+		
 
 
         QsheetEntity qsheetEntity = QsheetEntity.builder()
@@ -115,7 +135,8 @@ public class QsheetServiceImpl implements QsheetService {
             .userid(userEntity)
             .orgid(orgEntity)
             .name(qsheetCreateDto.getName())
-            .data(qsheetCreateDto.getData())
+            .data(newItemData)
+            // .data(qsheetCreateDto.getData())
             .memo(qsheetCreateDto.getMemo())
             .org_approver(orgUserEntity)
             .org_confirm(false)
@@ -138,11 +159,12 @@ public class QsheetServiceImpl implements QsheetService {
      *
      * Author : yby654(yby654@github.com)
      */
-    public void updateById(String id, QsheetEntity.QsheetUpdateDto qsheetUpdateDto) {
+    public void updateById(String id, QsheetEntity.QsheetUpdateDto qsheetUpdateDto, List<MultipartFile> files) {
         Instant instant = Instant.now();
         QsheetEntity qsheetEntity = findById(id);
+        List<ItemData> newItemData =qsheetEntity.getData();
 
-        if (qsheetEntity.getData() != null ) {
+        if (qsheetEntity != null ) {
 //            qsheetEntity.updateFromDto(qsheetUpdateDto);
 //            qsheetRepository.save(qsheetEntity);
 			OrgEntity orgEntity = qsheetEntity.getOrgid();
@@ -156,16 +178,63 @@ public class QsheetServiceImpl implements QsheetService {
                 }else{
                 log.error("[QsheetServiceImpl - udpateQsheet] org_approver와 isOrg_confirm 입력이 잘못되었습니다.");
                 throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
-            }
+                }
                 
             } 
+            if(files!=null){
+                newItemData= new ArrayList<>();
+                Map<String, String> info = new HashMap<>();
+                info.put("type", "사용자");
+                info.put("user", qsheetEntity.getUserid().getId());
+                info.put("qsheetSeq", qsheetEntity.getId().toString());
+
+                List<String> fileUrls = fileService.uploadFiles(info, files);
+                log.error("fileUrls {}", fileUrls);
+            ////////////
+                
+                for (ItemData data : qsheetUpdateDto.getData()) {
+                    for (String filePath : fileUrls) {
+                            if (filePath.contains(data.getFilePath())) {
+                            ItemData tempData = ItemData.builder()
+                                .orderIndex(data.getOrderIndex())
+                                .process(data.getProcess())
+                                .content(data.getContent())
+                                .actor(data.getActor())
+                                .note(data.getNote())
+                                .filePath(filePath)
+                                .build();
+                            data = tempData;
+                            break;
+                            }
+                        }
+                         newItemData.add(data);
+                }
+           
+                   
+            }else if(qsheetUpdateDto.getData()!=null && files==null){
+                newItemData= new ArrayList<>();
+                for(ItemData data : qsheetUpdateDto.getData()){
+                    ItemData tempData = ItemData.builder()
+                                .orderIndex(data.getOrderIndex())
+                                .process(data.getProcess())
+                                .content(data.getContent())
+                                .actor(data.getActor())
+                                .note(data.getNote())
+                                .filePath(data.getFilePath())
+                                .build();
+                     newItemData.add(tempData);           
+                }
+            }
+            
+
+
 			qsheetEntity = QsheetEntity.builder()
 			.id(qsheetEntity.getId())
 			.name(qsheetEntity.getName())
 			.orgid(orgEntity)
 			.userid(qsheetEntity.getUserid())
 			.created_at(qsheetEntity.getCreated_at())
-			.data(qsheetUpdateDto.getData()!=null?qsheetUpdateDto.getData():qsheetEntity.getData())
+			.data(newItemData)
             .org_approver(orgUserEntity)
             .org_confirm(qsheetUpdateDto.isOrg_confirm()==!(qsheetEntity.isOrg_confirm())?qsheetUpdateDto.isOrg_confirm():qsheetEntity.isOrg_confirm())
             .client_confirm(qsheetUpdateDto.isClient_confirm()==!(qsheetEntity.isClient_confirm())?qsheetUpdateDto.isClient_confirm():qsheetEntity.isClient_confirm())

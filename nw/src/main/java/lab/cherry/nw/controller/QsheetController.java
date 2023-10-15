@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -106,8 +107,16 @@ public class QsheetController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @Operation(summary = "Qsheet 생성", description = "Qsheet를 추가합니다.")
-    public ResponseEntity<?> createQsheet(@Valid @RequestPart QsheetEntity.QsheetCreateDto qsheetCreateDto, @RequestPart List<MultipartFile> files) {
+    public ResponseEntity<?> createQsheet(@RequestPart QsheetEntity.QsheetCreateDto qsheetCreateDto, @RequestPart(required = false) List<MultipartFile> files) {
         log.info("[QsheetController] createQsheet...!");
+        log.error ("files : {}", files);
+        for(MultipartFile file:files){
+            if(file.isEmpty()){
+                files = null;
+                break;
+            }
+        }
+        
         qsheetService.createQsheet(qsheetCreateDto, files);
 
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
@@ -129,11 +138,16 @@ public class QsheetController {
      @Operation(summary = "큐시트 업데이트", description = "특정 큐시트를 업데이트합니다.")
     public ResponseEntity<?> updateById(
             @PathVariable("id") String id,
-            @RequestBody QsheetEntity.QsheetUpdateDto qsheetUpdateDto) {
-
+            @RequestPart QsheetEntity.QsheetUpdateDto qsheetUpdateDto, @RequestPart(required = false) List<MultipartFile> files) {
+            
         log.info("[QsheetController] updateQsheet...!");
-
-        qsheetService.updateById(id, qsheetUpdateDto);
+        for(MultipartFile file:files){
+            if(file.isEmpty()){
+                files = null;
+                break;
+            }
+        }
+        qsheetService.updateById(id, qsheetUpdateDto, files);
 
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(qsheetService.findById(id), new HttpHeaders(), HttpStatus.OK);
