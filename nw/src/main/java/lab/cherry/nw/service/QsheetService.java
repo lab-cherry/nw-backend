@@ -22,7 +22,7 @@ public interface QsheetService {
 // QsheetEntity findByUserId(String userid);
 // QsheetEntity findByOrgId(String orgid);
  void createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files);
- void updateById(String id, QsheetEntity.QsheetUpdateDto updateDto);
+ void updateById(String id, QsheetEntity.QsheetUpdateDto updateDto, List<MultipartFile> files);
  void deleteById(String id);
  Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable);
  Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable);

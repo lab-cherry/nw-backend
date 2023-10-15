@@ -90,4 +90,10 @@ public class Common {
 			return ""; // 확장자가 없을 경우 빈 문자열 반환
 		}
 	}
+
+    public String getFileNameFromPath(String path) {
+        String[] parts = path.split("/");
+        return parts[parts.length - 1];
+    }
+    
 }
