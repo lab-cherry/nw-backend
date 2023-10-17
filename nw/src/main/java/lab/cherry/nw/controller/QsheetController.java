@@ -200,7 +200,6 @@ public class QsheetController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "download.zip");
-
         return new ResponseEntity<>(qsheetService.download(qsheetDownloadDto.getUser()), new HttpHeaders(), HttpStatus.OK);
 
    }

@@ -1,7 +1,6 @@
 package lab.cherry.nw.configuration.bean;
 
-import lab.cherry.nw.service.security.CustomUserDetailsService;
-import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
@@ -16,8 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.yaml.snakeyaml.Yaml;
-
-import java.util.Arrays;
+import lab.cherry.nw.service.security.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
 
 /**
  * <pre>
