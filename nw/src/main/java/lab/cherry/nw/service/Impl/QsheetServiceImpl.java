@@ -244,7 +244,7 @@ public class QsheetServiceImpl implements QsheetService {
             //     .org_confirm(qsheetUpdateDto.getFinalConfirm().isOrg_confirm()==!(qsheetEntity.getFinalConfirm().isOrg_confirm())?qsheetUpdateDto.getFinalConfirm().isOrg_confirm():qsheetEntity.getFinalConfirm().isOrg_confirm())
             //     .client_confirm(qsheetUpdateDto.getFinalConfirm().isClient_confirm()==!(qsheetEntity.getFinalConfirm().isClient_confirm())?qsheetUpdateDto.getFinalConfirm().isClient_confirm():qsheetEntity.getFinalConfirm().isClient_confirm())    
             //     .build():qsheetEntity.getFinalConfirm() )
-            .memo(qsheetUpdateDto.getMemo())
+            .memo(qsheetUpdateDto.getMemo() != null ? qsheetUpdateDto.getMemo() : qsheetEntity.getMemo())
 			.updated_at(instant)
 			.build();
 			qsheetRepository.save(qsheetEntity);
@@ -340,16 +340,19 @@ public class QsheetServiceImpl implements QsheetService {
         List<byte[]> userData = new ArrayList<>();
 
         for(String user : users) {
+
             if (userService.checkId(user)) {
                 UserEntity _user = userService.findById(user);
                 userList.add(_user);
 
-                String objectName = _user.getId() +"/";
-                userData.add(fileService.downloadZip("user", objectName)); 
+                // String objectName = _user.getId() + "/";
+                // userData.add(fileService.downloadZip("user", objectName));
             }
         }
 
         if(userList.size() > 1) {
+
+            log.error("userList 가 1명 초과인 경우 # ", userList.size());
 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             try (ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream)) {
@@ -380,7 +383,7 @@ public class QsheetServiceImpl implements QsheetService {
 
             String objectName = "사용자/" + user.getId();
 
-            return fileService.downloadZip(user.getOrg().getId(), objectName);
+            return fileService.downloadZip("user", objectName);
         }
     }
 }
