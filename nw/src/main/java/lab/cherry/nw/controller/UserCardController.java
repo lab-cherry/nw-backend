@@ -46,7 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/nw/api/v1/usercard")
+@RequestMapping("/api/v1/usercard")
 @Tag(name = "Usercard", description = "Usercard API Document")
 public class UserCardController {
 

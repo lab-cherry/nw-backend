@@ -144,7 +144,27 @@ public class FinaldocsServiceImpl implements FinaldocsService {
     }
 
 
-
+  /**
+     * [FinaldocsServiceImpl] 최종확인서 승인 함수
+     *
+     * @param name 조회할 최종확인서의 이름입니다.
+     * @return 주어진 이름에 해당하는 최종확인서 정보를 리턴합니다.
+     * @throws EntityNotFoundException 해당 이름의 최종확인서 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 입력한 name에 해당하는 최종확인서 정보를 조회합니다.
+     * </pre>
+     *
+     * Author : hhhaeri(yhoo0020@gmail.com)
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public Boolean Approval(Boolean Yn) {
+        if(Yn ==true){
+            return true
+        }else{
+            return false
+        }
+    }
     /**
      * [FinaldocsServiceImpl] ID로 최종확인서 조회 함수
      *

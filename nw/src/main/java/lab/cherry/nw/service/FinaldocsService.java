@@ -21,6 +21,7 @@ public interface FinaldocsService {
     FinaldocsEntity findById(String id);
     FinaldocsEntity findByName(String name);
     void deleteById(String id);
+    Boolean Approval(Boolean Yn);
     Page<FinaldocsEntity> findPageByName(String name, Pageable pageable);
     Page<FinaldocsEntity> findPageById(String id, Pageable pageable);
 }
