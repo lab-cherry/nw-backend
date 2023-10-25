@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/nw/api/v1/finaltempl")
+@RequestMapping("/api/v1/finaltempl")
 @Tag(name = "Finaltempl", description = "Finaltempl API Document")
 public class FinalTemplController {
 
