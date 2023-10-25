@@ -19,7 +19,7 @@ import java.util.UUID;
  * Related : BookmarkServiceImpl, BookmarkService
  * </pre>
  */
-public interface BookmarkRepository extends MongoRepository<BookmarkEntity, UUID> {
+public interface BookmarkRepository extends MongoRepository<BookmarkEntity, String> {
 
     Page<BookmarkEntity> findAll(Pageable pageable);
 

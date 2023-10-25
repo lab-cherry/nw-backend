@@ -49,7 +49,7 @@ public class RoleEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class CreateDto {
+    public static class RoleCreateDto {
 
         @Schema(title = "권한 이름", example = "ADMIN")
         @Size(min = 4, max = 20, message = "Minimum name length: 4 characters")

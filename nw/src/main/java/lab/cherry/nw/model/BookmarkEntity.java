@@ -1,24 +1,19 @@
 package lab.cherry.nw.model;
 
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.Map;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.io.Serializable;
-import java.time.Instant;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
@@ -63,19 +58,22 @@ public class BookmarkEntity implements Serializable {
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class CreateDto {
+    public static class BookmarkCreateDto {
+		@Schema(title = "유저 고유번호", example = "38352658567418867")
         private String userSeq;
+		@Schema(title = "북마크 정보",implementation=Map.class, example="{\"로그인\": \"/login\"}")
         private Map<String, String> data;
-    }
-    
-    @Getter
+	}
+
+	@Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class UpdateDto {
+    public static class BookmarkUpdateDto {
+		@Schema(title = "북마크 정보",implementation=Map.class, example="{\"로그인\": \"/login\"}")
         private Map<String, String> data;
     }
 
-     public void updateFromDto(UpdateDto updateDto) {
+	public void updateFromDto(BookmarkUpdateDto updateDto) {
         if (updateDto.getData() != null) {
             this.data = updateDto.getData();
             this.updated_at = Instant.now();

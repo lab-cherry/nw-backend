@@ -16,13 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -48,8 +49,13 @@ public class TokenServiceImpl implements TokenService {
         Claims claims = Jwts.claims().setSubject(userid);
         claims.put("id", user.getUserid());
         claims.put("name", user.getUsername());
-        claims.put("role", user.getRole());
-		claims.put("org", user.getOrg());
+        claims.put("roleName", (user.getRole() == null) ? "ROLE_USER" : user.getRole().getName());
+
+        Map<String, String> info = new HashMap<>();
+        info.put("userSeq", user.getId());
+        info.put("orgSeq", (user.getOrg() == null) ? null : user.getOrg().getId());
+        info.put("roleSeq", (user.getRole() == null) ? null : user.getRole().getId());
+        claims.put("info", info);
 
         Instant issuedAt = Instant.now();
         Instant validUntil = issuedAt.plusMillis(secretKey.getExpirationInMiliseconds());

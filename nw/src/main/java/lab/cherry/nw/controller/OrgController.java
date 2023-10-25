@@ -93,7 +93,7 @@ public class OrgController {
             @ApiResponse(responseCode = "200", description = "조직 생성이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<?> createOrganization(@Valid @RequestBody(required = false) OrgEntity.CreateDto orgCreateDto) {
+    public ResponseEntity<?> createOrganization(@Valid @RequestBody(required = false) OrgEntity.OrgCreateDto orgCreateDto) {
 
         log.info("[OrgController] createOrganization...!");
 
@@ -122,7 +122,7 @@ public class OrgController {
      */
     @PatchMapping("{id}")
     @Operation(summary = "조직 업데이트", description = "특정 조직을 업데이트합니다.")
-    public ResponseEntity<?> updateOrgById(@PathVariable("id") String id, @RequestBody OrgEntity.UpdateDto orgEntity) {
+    public ResponseEntity<?> updateOrgById(@PathVariable("id") String id, @RequestBody OrgEntity.OrgUpdateDto orgEntity) {
 
         log.info("[OrgController] updateOrgById...!");
 

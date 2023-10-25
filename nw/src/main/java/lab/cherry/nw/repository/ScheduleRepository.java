@@ -1,14 +1,11 @@
 package lab.cherry.nw.repository;
 
-import lab.cherry.nw.model.ScheduleEntity;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import lab.cherry.nw.model.ScheduleEntity;
 
 
 /**
@@ -20,7 +17,7 @@ import java.util.UUID;
  * </pre>
  */
 //@Repository
-public interface ScheduleRepository extends MongoRepository<ScheduleEntity, UUID> {
+public interface ScheduleRepository extends MongoRepository<ScheduleEntity, String> {
 
     Page<ScheduleEntity> findAll(Pageable pageable);
 

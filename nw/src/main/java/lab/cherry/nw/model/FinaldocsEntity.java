@@ -64,7 +64,7 @@ public class FinaldocsEntity implements Serializable {
 
     @JsonProperty("content")
     @Schema(title = "최종확인서 내용", example = "")
-    private Map content;
+    private Map<String, String> content;
 
     @JsonProperty("updated_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
@@ -107,7 +107,7 @@ public class FinaldocsEntity implements Serializable {
 //		@NotBlank
 		@JsonProperty("content")
 		@Schema(title = "최종확인서 내용", example = "")
-        private Map content;
+        private Map<String, String> content;
 
     }
 
@@ -130,7 +130,7 @@ public class FinaldocsEntity implements Serializable {
         private String orgid;
 
 		@Schema(title = "최종확인서 내용", example = "")
-        private Map content;
+        private Map<String, String> content;
 
     }
 }

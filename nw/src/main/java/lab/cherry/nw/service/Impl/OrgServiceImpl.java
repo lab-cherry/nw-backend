@@ -1,7 +1,5 @@
 package lab.cherry.nw.service.Impl;
 
-import io.minio.*;
-import io.minio.errors.MinioException;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
@@ -65,7 +63,7 @@ public class OrgServiceImpl implements OrgService {
      *
      * Author : taking(taking@duck.com)
      */
-    public OrgEntity createOrganization(OrgEntity.CreateDto orgCreateDto) {
+    public OrgEntity createOrganization(OrgEntity.OrgCreateDto orgCreateDto) {
 		ObjectId orgId = new ObjectId();
 
 		try {
@@ -90,6 +88,7 @@ public class OrgServiceImpl implements OrgService {
             .name(orgCreateDto.getName())
             .biznum(orgCreateDto.getBiznum())
             .contact(orgCreateDto.getContact())
+			.address(orgCreateDto.getAddress())
             .enabled(true)
             .created_at(instant)
             .build();
@@ -108,17 +107,18 @@ public class OrgServiceImpl implements OrgService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void updateById(String id, OrgEntity.UpdateDto org) {
+    public void updateById(String id, OrgEntity.OrgUpdateDto org) {
 
         OrgEntity orgEntity = findById(id);
 
-        if (org.getName() != null || org.getBiznum() != null || org.getContact() != null) {
+        if (org.getName() != null || org.getBiznum() != null || org.getContact() != null || org.getAddress() != null) {
 
             orgEntity = OrgEntity.builder()
                 .id(orgEntity.getId())
                 .name((org.getName() != null) ? org.getName() : orgEntity.getName())
                 .biznum((org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum())
-                .contact((org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum())
+                .contact((org.getContact() != null) ? org.getContact() : orgEntity.getContact())
+                .address((org.getAddress() != null) ? org.getAddress() : orgEntity.getAddress())
                 .build();
 
             orgRepository.save(orgEntity);

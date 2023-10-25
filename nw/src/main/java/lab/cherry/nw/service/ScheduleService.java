@@ -1,14 +1,10 @@
 package lab.cherry.nw.service;
 
-import lab.cherry.nw.model.FinalTemplEntity;
-import lab.cherry.nw.model.ScheduleEntity;
+import java.time.Instant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Optional;
+import lab.cherry.nw.model.ScheduleEntity;
 
 /**
  * <pre>

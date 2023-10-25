@@ -32,16 +32,16 @@ import java.util.List;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "weddinghalls")
-@JsonPropertyOrder({ "seq", "name", "maxPerson", "org", "interval", "image", "created_at", "updated_at" })
+@JsonPropertyOrder({ "weddinghallSeq", "weddinghallName", "maxPerson", "org", "interval", "image", "created_at", "updated_at" })
 public class WeddinghallEntity implements Serializable {
 
     @Id
-    @JsonProperty("seq")
+    @JsonProperty("weddinghallSeq")
     @Schema(title = "웨딩홀(예식장) 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
     @NotNull
-    @JsonProperty("name")
+    @JsonProperty("weddinghallName")
     @Schema(title = "웨딩홀(예식장) 이름", example = "더글로리")
     private String name;
 
@@ -54,7 +54,6 @@ public class WeddinghallEntity implements Serializable {
     @DBRef
     @JsonProperty("org")
     @Schema(title = "Org 정보", example = "더모멘트")
-//    private Set<OrgEntity> orgs = new HashSet<>();
     private OrgEntity org;
 	
 	@NotNull(message = "[필수] 웨딩홀(예식장) 행사 시간 간격")
@@ -82,12 +81,12 @@ public class WeddinghallEntity implements Serializable {
 	@Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
-    public static class CreateDto {
+    public static class WeddinghallCreateDto {
 
 		@NotBlank(message = "[필수] 웨딩홀(예식장 이름)")
         @Schema(title = "웨딩홀(예식장) 이름", example = "더글로리")
         @Size(min = 4, max = 10, message = "웨딩홀(예식장) 이름은 2글자 이상 10글자 이하만 입력 가능합니다.")
-        private String name;
+        private String weddinghallName;
 
 		@NotNull(message = "[필수] 웨딩홀(예식장 이름) 최대인원")
 		@Schema(title = "웨딩홀(예식장) 최대인원", example = "100")

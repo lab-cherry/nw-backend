@@ -1,13 +1,11 @@
 package lab.cherry.nw.repository;
 
-import lab.cherry.nw.model.FinaldocsEntity;
-import lab.cherry.nw.model.OrgEntity;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.util.List;
-import java.util.Optional;
+import lab.cherry.nw.model.OrgEntity;
 
 
 /**

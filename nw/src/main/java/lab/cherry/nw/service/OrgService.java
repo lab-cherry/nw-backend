@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 @Component
 public interface OrgService {
     Page<OrgEntity> getOrganizations(Pageable pageable);
-    OrgEntity createOrganization(OrgEntity.CreateDto orgCreateDto);
-    void updateById(String id, OrgEntity.UpdateDto org);
+    OrgEntity createOrganization(OrgEntity.OrgCreateDto orgCreateDto);
+    void updateById(String id, OrgEntity.OrgUpdateDto org);
     OrgEntity findById(String id);
     OrgEntity findByName(String name);
     void deleteById(String id);

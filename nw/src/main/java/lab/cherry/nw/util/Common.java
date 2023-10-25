@@ -1,13 +1,12 @@
 package lab.cherry.nw.util;
 
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Common {
@@ -57,7 +56,7 @@ public class Common {
         } else {
             // sort=[field, direction]
             orders.add(new Sort.Order(getSortDirection(sort[1]), sort[0]));
-   }
+        }
 
         return orders;
     }
@@ -91,4 +90,10 @@ public class Common {
 			return ""; // 확장자가 없을 경우 빈 문자열 반환
 		}
 	}
+
+    public String getFileNameFromPath(String path) {
+        String[] parts = path.split("/");
+        return parts[parts.length - 1];
+    }
+    
 }

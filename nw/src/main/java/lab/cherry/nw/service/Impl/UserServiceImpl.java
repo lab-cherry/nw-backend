@@ -5,7 +5,6 @@ import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.UserEntity;
-import lab.cherry.nw.repository.OrgRepository;
 import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.UserService;
@@ -81,15 +80,18 @@ public class UserServiceImpl implements UserService {
      *
      * Author : taking(taking@duck.com)
      */
-    public void updateById(String id, UserEntity.UpdateDto user) {
+    public void updateById(String id, UserEntity.UserUpdateDto user) {
 
         UserEntity userEntity = findById(id);
 
-        if (user.getUsername() != null || user.getEmail() != null || user.getPassword() != null) {
+        if (user.getUserName() != null || user.getEmail() != null || user.getPassword() != null) {
+
+			log.error("{}", userEntity.getId());
 
             userEntity = UserEntity.builder()
                 .id(userEntity.getId())
-                .username((user.getUsername() != null) ? user.getUsername() : userEntity.getUsername())
+				.userid(userEntity.getUserid())
+                .username((user.getUserName() != null) ? user.getUserName() : userEntity.getUsername())
                 .email((user.getEmail() != null) ? user.getEmail() : userEntity.getEmail())
                 .password((user.getPassword() != null) ? passwordEncoder.encode(user.getPassword()) : userEntity.getPassword())
                 .build();
@@ -176,5 +178,15 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public Page<UserEntity> findPageByUserId(String userid, Pageable pageable) {
         return userRepository.findPageByUserid(userid, pageable);
+    }
+
+    public Boolean checkId(String id) {
+
+        // userSeq가 DB에 존재할 시, true
+        if(userRepository.findById(id).isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

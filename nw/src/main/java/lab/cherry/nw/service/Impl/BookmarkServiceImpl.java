@@ -1,5 +1,11 @@
 package lab.cherry.nw.service.Impl;
 
+import java.time.Instant;
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
@@ -7,17 +13,9 @@ import lab.cherry.nw.model.BookmarkEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.BookmarkRepository;
 import lab.cherry.nw.service.BookmarkService;
-import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
 
 /**
  * <pre>
@@ -67,7 +65,7 @@ public class BookmarkServiceImpl implements BookmarkService {
      *
      * Author : yby654(yby654@github.com)
      */
-    public void createBookmark(BookmarkEntity.CreateDto bookmarkCreateDto) {
+    public void createBookmark(BookmarkEntity.BookmarkCreateDto bookmarkCreateDto) {
         Instant instant = Instant.now();
 		checkExistsWithBookmarkName(bookmarkCreateDto.getUserSeq());
         UserEntity userEntity = userService.findById(bookmarkCreateDto.getUserSeq());
@@ -92,7 +90,7 @@ public class BookmarkServiceImpl implements BookmarkService {
      *
      * Author : yby654(yby654@github.com)
      */
-    public void updateById(String id, BookmarkEntity.UpdateDto bookmarkUpdateDto) {
+    public void updateById(String id, BookmarkEntity.BookmarkUpdateDto bookmarkUpdateDto) {
         BookmarkEntity bookmarkEntity = findById(id);
 
         if (bookmarkEntity.getData() != null ) {
