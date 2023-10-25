@@ -31,7 +31,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "finaltempl")
-@JsonPropertyOrder({ "id", "finaltemplName","content","userid","orgid","updated_at", "created_at"})
+@JsonPropertyOrder({ "id", "finaltemplName","content","user","org","updated_at", "created_at"})
 public class FinalTemplEntity implements Serializable {
 
     @Id
@@ -41,15 +41,15 @@ public class FinalTemplEntity implements Serializable {
 
 	@NotNull
     @DBRef
-    @JsonProperty("userid")
-    @Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private UserEntity userid;
+    @JsonProperty("user")
+    @Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
+    private UserEntity user;
 
 	@NotNull
     @DBRef
-    @JsonProperty("orgid")
-    @Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private OrgEntity orgid;
+    @JsonProperty("org")
+    @Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
+    private OrgEntity org;
 
 	@NotNull
     @JsonProperty("finaltemplName")
@@ -60,7 +60,7 @@ public class FinalTemplEntity implements Serializable {
 	@NotNull
     @JsonProperty("content")
     @Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
-    private Map content;
+    private Map<String,String> content;
 
     @JsonProperty("updated_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
@@ -87,18 +87,18 @@ public class FinalTemplEntity implements Serializable {
 
 	@NotBlank
 	@JsonProperty("userid")
-	@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private String userid;
+	@Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
+    private String user;
 
 	@NotBlank
 	@JsonProperty("orgid")
-	@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private String orgid;
+	@Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
+    private String org;
 
 	@NotBlank
 	@JsonProperty("content")
 	@Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
-    private Map content;
+    private Map<String,String> content;
 
     }
 
@@ -108,18 +108,18 @@ public class FinalTemplEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class FinalTemplUpdateDto {
 
-		@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-        private String userid;
+		@Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
+        private String user;
 
-		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-        private String orgid;
+		@Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
+        private String org;
 
 		@Schema(title = "최종확인서 템플릿 이름", example = "예식장 최종 확인서 양식")
 		@Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
 		private String name;
 
 		@Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
-		private Map content;
+		private Map<String,String> content;
 
     }
 

@@ -70,14 +70,14 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 
         Instant instant = Instant.now();
 
-        UserEntity userEntity = userService.findById(finalTemplCreateDto.getUserid());
-        OrgEntity orgEntity = orgService.findById(finalTemplCreateDto.getOrgid());
+        UserEntity userEntity = userService.findById(finalTemplCreateDto.getUser());
+        OrgEntity orgEntity = orgService.findById(finalTemplCreateDto.getOrg());
 
         FinalTemplEntity finaldocsEntity = FinalTemplEntity.builder()
             .name(finalTemplCreateDto.getName())
             .content(finalTemplCreateDto.getContent())
-            .userid(userEntity)
-            .orgid(orgEntity)
+            .user(userEntity)
+            .org(orgEntity)
             .created_at(instant)
             .build();
 
@@ -98,8 +98,8 @@ public class FinalTemplServiceImpl implements FinalTemplService {
     public void updateById(String id, FinalTemplEntity.FinalTemplUpdateDto finalTempl) {
 
         FinalTemplEntity finalTemplEntity = findById(id);
-        UserEntity userEntity = userService.findById(finalTempl.getUserid());
-        OrgEntity orgEntity = orgService.findById(finalTempl.getOrgid());
+        UserEntity userEntity = userService.findById(finalTempl.getUser());
+        OrgEntity orgEntity = orgService.findById(finalTempl.getOrg());
         Instant instant = Instant.now();
 
         if (finalTempl.getContent() != null) {
@@ -107,8 +107,8 @@ public class FinalTemplServiceImpl implements FinalTemplService {
             finalTemplEntity = FinalTemplEntity.builder()
                 .id(finalTemplEntity.getId())
                 .content((finalTempl.getContent() != null) ? finalTempl.getContent() : finalTemplEntity.getContent())
-                .userid(userEntity)
-                .orgid(orgEntity)
+                .user(userEntity)
+                .org(orgEntity)
                 .updated_at(instant)
                 .build();
 

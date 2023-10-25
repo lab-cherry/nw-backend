@@ -31,7 +31,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "finaldocs")
-@JsonPropertyOrder({ "id", "finaldocsName","finaltemplid","userid", "orgid","content","updated_at","created_at" })
+@JsonPropertyOrder({ "id", "finaldocsName","finaltempl","user", "org","content","updated_at","created_at" })
 public class FinaldocsEntity implements Serializable {
 
     @Id
@@ -40,21 +40,21 @@ public class FinaldocsEntity implements Serializable {
     private String id;
 
 	@NotNull
-    @JsonProperty("finaltemplid")
-    @Schema(title = "최종확인서 템플릿 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private FinalTemplEntity finaltemplid;
+    @JsonProperty("finaltempl")
+    @Schema(title = "최종확인서 템플릿 정보", example = "64ed89aa9e813b5ab16da6de")
+    private FinalTemplEntity finaltempl;
 
 	@NotNull
     @DBRef
-    @JsonProperty("userid")
-    @Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private UserEntity userid;
+    @JsonProperty("user")
+    @Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
+    private UserEntity user;
 
 	@NotNull
     @DBRef
-    @JsonProperty("orgid")
-    @Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private OrgEntity orgid;
+    @JsonProperty("org")
+    @Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
+    private OrgEntity org;
 
 	@NotNull
     @JsonProperty("finaldocsName")
@@ -64,7 +64,7 @@ public class FinaldocsEntity implements Serializable {
 
     @JsonProperty("content")
     @Schema(title = "최종확인서 내용", example = "")
-    private Map content;
+    private Map<String,String> content;
 
     @JsonProperty("updated_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
@@ -90,24 +90,24 @@ public class FinaldocsEntity implements Serializable {
         private String name;
 
 		@NotBlank
-		@JsonProperty("userid")
-		@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-        private String userid;
+		@JsonProperty("user")
+		@Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
+        private String user;
 
 		@NotBlank
-		@JsonProperty("orgid")
-		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-        private String orgid;
+		@JsonProperty("org")
+		@Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
+        private String org;
 
 		@NotBlank
-		@JsonProperty("finaltemplid")
-		@Schema(title = "최종확인서 템플릿 고유번호", example = "64ed89aa9e813b5ab16da6de")
-        private  String finaltemplid;
+		@JsonProperty("finaltempl")
+		@Schema(title = "최종확인서 템플릿 정보", example = "64ed89aa9e813b5ab16da6de")
+        private  String finaltempl;
 
 //		@NotBlank
 		@JsonProperty("content")
 		@Schema(title = "최종확인서 내용", example = "")
-        private Map content;
+        private Map<String,String> content;
 
     }
 
@@ -120,17 +120,17 @@ public class FinaldocsEntity implements Serializable {
 		@Schema(title = "최종확인서 고유번호", example = "64ed89aa9e813b5ab16da6de")
         private String id;
 
-		@Schema(title = "최종확인서 템플릿 고유번호", example = "64ed89aa9e813b5ab16da6de")
-        private String finaltemplid;
+		@Schema(title = "최종확인서 템플릿 정보", example = "64ed89aa9e813b5ab16da6de")
+        private String finaltempl;
 
-		@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-        private String userid;
+		@Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
+        private String user;
 
-		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-        private String orgid;
+		@Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
+        private String org;
 
 		@Schema(title = "최종확인서 내용", example = "")
-        private Map content;
+        private Map<String,String> content;
 
     }
 }

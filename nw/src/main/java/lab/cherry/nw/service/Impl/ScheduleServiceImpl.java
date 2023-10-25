@@ -95,16 +95,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
     public ScheduleEntity transColumn(ScheduleEntity.transDto scheduleTransDto) {
 
-        UserEntity userEntity = userService.findById(scheduleTransDto.getUserid());
-        OrgEntity orgEntity = orgService.findById(scheduleTransDto.getOrgid());
-		FinalTemplEntity finalTemplEntity = finalTemplService.findById(scheduleTransDto.getFinalTemplid());
+        UserEntity userEntity = userService.findById(scheduleTransDto.getUser());
+        OrgEntity orgEntity = orgService.findById(scheduleTransDto.getOrg());
+		FinalTemplEntity finalTemplEntity = finalTemplService.findById(scheduleTransDto.getFinalTempl());
 
-		Map<Object,Object> content = finalTemplEntity.getContent();
+		Map<String,String> content = finalTemplEntity.getContent();
 
 		// Null 값을 가진 값만 가져오기
-		Map<Object, Object> nullEntries = new HashMap<>();
+		Map<String, String> nullEntries = new HashMap<>();
 
-		for (Map.Entry<Object, Object> entry : content.entrySet()) {
+		for (Map.Entry<String, String> entry : content.entrySet()) {
 			if (!entry.getValue().equals("")) {
 				nullEntries.put(entry.getKey(), entry.getValue());
 			}
@@ -113,8 +113,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 		ScheduleEntity scheduleEntity = ScheduleEntity.builder()
             .name(scheduleTransDto.getName())
             .column(nullEntries)
-            .userid(userEntity)
-            .orgid(orgEntity)
+            .user(userEntity)
+            .org(orgEntity)
             .build();
 
         return scheduleRepository.save(scheduleEntity);

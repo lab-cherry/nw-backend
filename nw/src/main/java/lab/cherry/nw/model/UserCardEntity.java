@@ -47,11 +47,11 @@ public class UserCardEntity implements Serializable {
 
     @JsonProperty("groom")
     @Schema(title = "신랑측 정보", example = "[]")
-    private Map groom;
+    private Map<String,String> groom;
 
     @JsonProperty("bride")
     @Schema(title = "신부측 정보", example = "[]")
-    private Map bride;
+    private Map<String,String> bride;
 
     @JsonProperty("note")
 	@Size(max = 500, message = "Maximum contact length: 500 characters")
@@ -94,10 +94,10 @@ public class UserCardEntity implements Serializable {
         private String userinfo;
 
         @Schema(title = "신랑측 정보", example = "[]")
-        private Map groom;
+        private Map<String,String> groom;
 
         @Schema(title = "신부측 정보", example = "[]")
-        private Map bride;
+        private Map<String,String> bride;
 
 		@Size(max = 500, message = "Maximum contact length: 500 characters")
         @Schema(title = "비고", example = "가을")
@@ -127,10 +127,10 @@ public class UserCardEntity implements Serializable {
         private String userinfo;
 
         @Schema(title = "신랑측 정보", example = "[]")
-        private Map groom;
+        private Map<String,String> groom;
 
         @Schema(title = "신부측 정보", example = "[]")
-        private Map bride;
+        private Map<String,String> bride;
 
 		@Size(max = 500, message = "Maximum contact length: 500 characters")
         @Schema(title = "비고", example = "가을")
