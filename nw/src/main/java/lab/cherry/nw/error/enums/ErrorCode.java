@@ -30,7 +30,9 @@ public enum ErrorCode {
     ACCESS_DENIED_EXCEPTION(401, "인증 정보가 유효하지 않습니다."),
     DUPLICATE(409, "중복된 데이터가 있습니다."),
     NO_BODY(400, "파라미터 값이 입력되지 않았습니다."),
-    URL_NOTFOUND(400, "Minio URL을 다시 확인해주세요.");
+    URL_NOTFOUND(400, "Minio URL을 다시 확인해주세요."),
+    FILE_UPLOAD_FAILED(400, "파일 업로드에 실패했습니다."),
+    FOLDER_CREATE_FAILED(400, "uploadPath를 찾을 수 없습니다.");
 
     private final int status;
     private final String message;

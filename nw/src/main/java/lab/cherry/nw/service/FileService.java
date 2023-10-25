@@ -32,7 +32,8 @@ public interface FileService {
 	FileEntity findByPath(String path);
 	void deleteById(String id);
 
-	InputStream downloadFile(String orgId, String path);
-	byte[] downloadZip(String bucketName, String objectName);
-	void deleteFiles(String orgId, List<String> images);
+	FileEntity.LoadFile downloadFile(String id) throws IllegalStateException, IOException;
+	Map<String, Object> downloadFiles(String key, String value);
+	// byte[] downloadZip(String bucketName, String objectName);
+	void deleteFiles(String name, List<String> files);
 }

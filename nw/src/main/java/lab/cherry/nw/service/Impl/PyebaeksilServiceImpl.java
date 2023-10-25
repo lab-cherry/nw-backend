@@ -11,6 +11,7 @@ import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.service.OrgService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -69,33 +70,36 @@ public class PyebaeksilServiceImpl implements PyebaeksilService {
      *
      * Author : taking(taking@duck.com)
      */
-    public PyebaeksilEntity createPyebaeksil(PyebaeksilEntity.PyebaeksilCreateDto pyebaeksilCreateDto, List<MultipartFile> imageFiles) {
+    public PyebaeksilEntity createPyebaeksil(PyebaeksilEntity.PyebaeksilCreateDto pyebaeksilCreateDto, List<MultipartFile> images) {
 		
 		log.error("[#0] in createPyebaeksil");
 		
 		checkExistsWithPyebaeksilName(pyebaeksilCreateDto.getPyebaeksilName());	// 중복 체크
 
-		String orgId = pyebaeksilCreateDto.getOrg();
+		String orgId = pyebaeksilCreateDto.getOrgId();
 		OrgEntity orgEntity = orgService.findById(orgId);
+    ObjectId objectId = new ObjectId();
 		
 		// 파일 업로드 시, 구분하기 위한 정보 입력
 		// {org_objectId}/웨딩홀/{weddinghallName}/profile.jpg
 		// {org_objectId}/고객/{userName}/문서.xlsx
 		Map<String, String> info = new HashMap<>();
-		info.put("type", "폐백실");
-		info.put("org", pyebaeksilCreateDto.getOrg());
+    info.put("org", orgEntity.getName());
+    info.put("type", "폐백실");
+    // info.put("username", "");
+    info.put("kind", pyebaeksilCreateDto.getPyebaeksilName());
+    info.put("seq", objectId.toString());
 
 		// 업로드한 파일의 ObjectId 를 List로 반환
-        List<String> fileObjectIds = fileService.uploadFiles(info, imageFiles);
-
-        log.error("[#1] imageFileIds = {}", fileObjectIds);
+    List<String> imageUrls = fileService.uploadFiles(info, images);
 		
 		PyebaeksilEntity pyebaeksilEntity = PyebaeksilEntity.builder()
-            .name(pyebaeksilCreateDto.getPyebaeksilName())
-            .org(orgEntity)
-            .images(fileObjectIds)
-            .created_at(Instant.now())
-            .build();
+        .id(objectId.toString())
+        .name(pyebaeksilCreateDto.getPyebaeksilName())
+        .org(orgEntity)
+        .images(imageUrls)
+        .created_at(Instant.now())
+        .build();
 
 		return pyebaeksilRepository.save(pyebaeksilEntity);
 	}
@@ -154,14 +158,8 @@ public class PyebaeksilServiceImpl implements PyebaeksilService {
      */
     public void deleteById(String id) {
 
-		// 파일 다운로드
-		PyebaeksilEntity pyebaeksilEntity = findById(id);
-
-		List<String> fileObjectIds = pyebaeksilEntity.getImages();
-
-		if (!fileObjectIds.isEmpty()) {
-			fileService.deleteFiles(pyebaeksilEntity.getOrg().getId(), fileObjectIds);
-		}
+    PyebaeksilEntity pyebaeksilEntity = findById(id);
+    fileService.deleteFiles(pyebaeksilEntity.getName(), pyebaeksilEntity.getImages());
 
 		pyebaeksilRepository.delete(pyebaeksilRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Pyebaeksil with Id " + id + " Not Found.")));
 	}
