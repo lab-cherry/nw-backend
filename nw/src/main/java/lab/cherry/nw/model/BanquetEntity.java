@@ -93,9 +93,9 @@ public class BanquetEntity implements Serializable {
 		@Range(min = 1, max = 300, message = "연회장의 최대인원은 1인 이상 300명 이하만 입력 가능합니다.")
 		private Integer maxPerson;
 
-		@NotNull(message = "[필수] Org 정보")
-		@Schema(title = "Org 정보", example = "더모멘트")
-		private String org;
+		@NotNull(message = "[필수] Org 고유번호")
+		@Schema(title = "Org 정보", example = "64ed89aa9e813b5ab16da6de")
+		private String orgId;
 
 		@NotNull(message = "[필수] 연회장 행사 시간 간격")
 		@Schema(title = "연회장 행사 시간 간격", example = "30")

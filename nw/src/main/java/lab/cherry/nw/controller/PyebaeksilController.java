@@ -103,15 +103,11 @@ public class PyebaeksilController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<?> createPyebaeksil(@Valid @RequestPart PyebaeksilEntity.PyebaeksilCreateDto pyebaeksilCreateDto,
-											   		  @RequestPart List<MultipartFile> files) {
+											   		  @RequestPart List<MultipartFile> images) {
 
 		log.info("[PyebaeksilController] createPyebaeksil...!");
-		
-		log.error("이름 : {}", pyebaeksilCreateDto.getPyebaeksilName());
-		log.error("조직 : {}", pyebaeksilCreateDto.getOrg());
-		log.error("이미지 : {}", files);
 
-		PyebaeksilEntity pyebaeksilEntity =  pyebaeksilService.createPyebaeksil(pyebaeksilCreateDto, files);
+		PyebaeksilEntity pyebaeksilEntity =  pyebaeksilService.createPyebaeksil(pyebaeksilCreateDto, images);
 
 		return new ResponseEntity<>(pyebaeksilEntity, new HttpHeaders(), HttpStatus.OK);
     }

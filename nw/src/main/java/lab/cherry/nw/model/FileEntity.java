@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -60,18 +61,28 @@ public class FileEntity implements Serializable {
     @Schema(title = "파일 사이즈", example = "20MB")
     private String size;
 
-    @JsonProperty("userId")
-    @Schema(title = "사용자 아이디", example = "admin")
-	private String userid;
+    @JsonProperty("userName")
+    @Schema(title = "사용자명", example = "체리랩")
+	private String userName;
 
 	@NotNull
-    @JsonProperty("orgId")
-    @Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6dd")
-	private String orgid;
+    @JsonProperty("orgName")
+    @Schema(title = "조직명", example = "더모멘트")
+	private String orgName;
 
 	@JsonProperty("created_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
     @Schema(title = "조직 생성 시간", example = "2023-07-04 12:00:00")
     private Instant created_at;
+
+    
+    @Data
+    @NoArgsConstructor @AllArgsConstructor
+    public static class LoadFile {
+        private String name;
+        private String type;
+        private String size;
+        private byte[] file;
+    }
 	
 }

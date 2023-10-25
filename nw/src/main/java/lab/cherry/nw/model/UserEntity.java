@@ -69,7 +69,7 @@ public class UserEntity implements Serializable {
 
     @JsonProperty("userEnabled")
     @Schema(title = "사용자 활성화 여부", example = "true")
-    private boolean enabled;
+    private Boolean enabled;
 
     @JsonProperty("emailVerified")
     @Schema(title = "이메일 인증 여부", example = "true")

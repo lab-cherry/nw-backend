@@ -7,7 +7,6 @@ import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.repository.OrgRepository;
-import lab.cherry.nw.service.MinioService;
 import lab.cherry.nw.service.OrgService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,6 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class OrgServiceImpl implements OrgService {
 
-	private final MinioService minioService;
 	private final OrgRepository orgRepository;
 
     /**
@@ -68,29 +66,29 @@ public class OrgServiceImpl implements OrgService {
     public OrgEntity createOrganization(OrgEntity.OrgCreateDto orgCreateDto) {
 		ObjectId orgId = new ObjectId();
 
-		try {
-			// ObjectId orgId로 Bucket 생성
-			minioService.createBucketIfNotExists(orgId.toString());
+		// try {
+		// 	// ObjectId orgId로 Bucket 생성
+		// 	minioService.createBucketIfNotExists(orgId.toString());
 
-			// ObjectId orgId에 해당하는 GlobalPolicy 생성
-			minioService.createGlobalPolicy(orgId.toString());
+		// 	// ObjectId orgId에 해당하는 GlobalPolicy 생성
+		// 	minioService.createGlobalPolicy(orgId.toString());
 
-			// 생성된 Bucket에 Policy 적용
-			minioService.setBucketPolicy(orgId.toString());
+		// 	// 생성된 Bucket에 Policy 적용
+		// 	minioService.setBucketPolicy(orgId.toString());
 
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
+		// } catch (Exception e) {
+		// 	log.error(e.getMessage());
+		// }
 
         Instant instant = Instant.now();
-        checkExistsWithOrgName(orgCreateDto.getName()); // 동일한 이름 중복체크
+        checkExistsWithOrgName(orgCreateDto.getOrgName()); // 동일한 이름 중복체크
 
         OrgEntity orgEntity = OrgEntity.builder()
 			.id(orgId.toString())
-            .name(orgCreateDto.getName())
-            .biznum(orgCreateDto.getBiznum())
-            .contact(orgCreateDto.getContact())
-			.address(orgCreateDto.getAddress())
+            .name(orgCreateDto.getOrgName())
+            .biznum(orgCreateDto.getOrgBiznum())
+            .contact(orgCreateDto.getOrgContact())
+			.address(orgCreateDto.getOrgAddress())
             .enabled(true)
             .created_at(instant)
             .build();
@@ -113,14 +111,14 @@ public class OrgServiceImpl implements OrgService {
 
         OrgEntity orgEntity = findById(id);
 
-        if (org.getName() != null || org.getBiznum() != null || org.getContact() != null || org.getAddress() != null) {
-
+        if (org.getOrgName() != null || org.getOrgBiznum() != null || org.getOrgContact() != null || org.getOrgAddress() != null || org.getOrgEnabled() != null) {
             orgEntity = OrgEntity.builder()
                 .id(orgEntity.getId())
-                .name((org.getName() != null) ? org.getName() : orgEntity.getName())
-                .biznum((org.getBiznum() != null) ? org.getBiznum() : orgEntity.getBiznum())
-                .contact((org.getContact() != null) ? org.getContact() : orgEntity.getContact())
-                .address((org.getAddress() != null) ? org.getAddress() : orgEntity.getAddress())
+                .name((org.getOrgName() != null) ? org.getOrgName() : orgEntity.getName())
+                .biznum((org.getOrgBiznum() != null) ? org.getOrgBiznum() : orgEntity.getBiznum())
+                .contact((org.getOrgContact() != null) ? org.getOrgContact() : orgEntity.getContact())
+                .address((org.getOrgAddress() != null) ? org.getOrgAddress() : orgEntity.getAddress())
+                .enabled((org.getOrgEnabled() != null) ? org.getOrgEnabled() : orgEntity.getEnabled())
                 .build();
 
             orgRepository.save(orgEntity);
