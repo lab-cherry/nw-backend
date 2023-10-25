@@ -10,6 +10,7 @@ import lab.cherry.nw.model.QsheetEntity.ItemData;
 import lab.cherry.nw.repository.QsheetRepository;
 import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.service.OrgService;
+import lab.cherry.nw.service.QsheetHistoryService;
 import lab.cherry.nw.service.QsheetService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
  * </pre>
  */
 @Slf4j
-@Service("QsheetServiceImpl")
+@Service("qsheetServiceImpl")
 @Transactional
 @RequiredArgsConstructor
 public class QsheetServiceImpl implements QsheetService {
@@ -48,6 +49,7 @@ public class QsheetServiceImpl implements QsheetService {
     private final UserService userService;
     private final OrgService orgService;
     private final FileService fileService;
+    private final QsheetHistoryService qsheetHistoryService;
     /**
      * [QsheetServiceImpl] 전체 큐시트 조회 함수
      *
@@ -225,9 +227,7 @@ public class QsheetServiceImpl implements QsheetService {
                      newItemData.add(tempData);           
                 }
             }
-            
-
-
+            QsheetEntity originEntity = qsheetEntity;
 			qsheetEntity = QsheetEntity.builder()
 			.id(qsheetEntity.getId())
 			.name(qsheetEntity.getName())
@@ -238,17 +238,11 @@ public class QsheetServiceImpl implements QsheetService {
             .org_approver(orgUserEntity)
             .org_confirm(qsheetUpdateDto.isOrg_confirm()==!(qsheetEntity.isOrg_confirm())?qsheetUpdateDto.isOrg_confirm():qsheetEntity.isOrg_confirm())
             .client_confirm(qsheetUpdateDto.isClient_confirm()==!(qsheetEntity.isClient_confirm())?qsheetUpdateDto.isClient_confirm():qsheetEntity.isClient_confirm())
-            // .finalConfirm(qsheetUpdateDto.getFinalConfirm()!=null?  
-            //     FinalConfirm.builder()
-            //     .org_approver(qsheetUpdateDto.getFinalConfirm().getOrg_approver()!=null?qsheetUpdateDto.getFinalConfirm().getOrg_approver():null)
-            //     .org_confirm(qsheetUpdateDto.getFinalConfirm().isOrg_confirm()==!(qsheetEntity.getFinalConfirm().isOrg_confirm())?qsheetUpdateDto.getFinalConfirm().isOrg_confirm():qsheetEntity.getFinalConfirm().isOrg_confirm())
-            //     .client_confirm(qsheetUpdateDto.getFinalConfirm().isClient_confirm()==!(qsheetEntity.getFinalConfirm().isClient_confirm())?qsheetUpdateDto.getFinalConfirm().isClient_confirm():qsheetEntity.getFinalConfirm().isClient_confirm())    
-            //     .build():qsheetEntity.getFinalConfirm() )
-            .memo(qsheetUpdateDto.getMemo())
+            .memo(qsheetUpdateDto.getMemo()!=null?qsheetUpdateDto.getMemo():qsheetEntity.getMemo())
 			.updated_at(instant)
 			.build();
 			qsheetRepository.save(qsheetEntity);
-
+            qsheetHistoryService.createQsheetHistory(originEntity, qsheetUpdateDto);
         } else {
             log.error("[QsheetServiceImpl - udpateQsheet] OrgSeq,data 만 수정 가능합니다.");
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
