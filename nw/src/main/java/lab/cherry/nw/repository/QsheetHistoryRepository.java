@@ -11,7 +11,7 @@ import lab.cherry.nw.model.QsheetHistoryEntity;
  * <pre>
  * ClassName : QsheetRepository
  * Type : interface
- * Descrption : 큐시트 JPA 구현을 위한 인터페이스입니다.
+ * Descrption : 큐시트히스토리 JPA 구현을 위한 인터페이스입니다.
  * Related : QsheetServiceImpl, QsheetService
  * </pre>
  */

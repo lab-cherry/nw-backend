@@ -75,9 +75,9 @@ public class PyebaeksilEntity implements Serializable {
         @Size(min = 4, max = 10, message = "폐백실 이름은 2글자 이상 10글자 이하만 입력 가능합니다.")
         private String pyebaeksilName;
 		
-		@NotNull(message = "[필수] Org 정보")
-		@Schema(title = "Org 정보", example = "더모멘트")
-		private String org;
+		@NotNull(message = "[필수] Org 고유번호")
+		@Schema(title = "Org 정보", example = "64ed89aa9e813b5ab16da6de")
+		private String orgId;
 		
 	}
 }

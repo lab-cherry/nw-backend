@@ -103,15 +103,11 @@ public class WeddinghallController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<?> createWeddinghall(@Valid @RequestPart WeddinghallEntity.WeddinghallCreateDto weddinghallCreateDto,
-											   		  @RequestPart List<MultipartFile> files) {
+											   		  @RequestPart List<MultipartFile> images) {
 
 		log.info("[WeddinghallController] createWeddinghall...!");
-		
-		log.error("이름 : {}", weddinghallCreateDto.getWeddinghallName());
-		log.error("조직 : {}", weddinghallCreateDto.getOrg());
-		log.error("이미지 : {}", files);
 
-		WeddinghallEntity weddinghallEntity =  weddinghallService.createWeddinghall(weddinghallCreateDto, files);
+		WeddinghallEntity weddinghallEntity =  weddinghallService.createWeddinghall(weddinghallCreateDto, images);
 
         return new ResponseEntity<>(weddinghallEntity, new HttpHeaders(), HttpStatus.OK);
     }

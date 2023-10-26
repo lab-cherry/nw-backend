@@ -1,18 +1,17 @@
 package lab.cherry.nw.service;
 
-import lab.cherry.nw.model.BookmarkEntity;
-import lab.cherry.nw.model.QsheetEntity;
-import lab.cherry.nw.model.QsheetHistoryEntity;
-import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import lab.cherry.nw.model.QsheetEntity;
+import lab.cherry.nw.model.QsheetHistoryEntity;
+
 /**
  * <pre>
- * ClassName : QsheetService
+ * ClassName : QsheetHistoryService
  * Type : interface
- * Description : 큐시트와 관련된 함수를 정리한 인터페이스입니다.
+ * Description : 큐시트 히스토리와 관련된 함수를 정리한 인터페이스입니다.
  * Related : QsheetController, QsheetServiceiml
  * </pre>
  */

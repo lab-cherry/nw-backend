@@ -1,14 +1,10 @@
 package lab.cherry.nw.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.List;
-import java.util.zip.ZipOutputStream;
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.springframework.core.io.InputStreamResource;
+import java.util.Map;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -128,89 +124,41 @@ public class FileController {
      * @return 특정 파일을 반환합니다.
      *
      * Author : taking(taking@duck.com)
+	 * @throws IOException
+	 * @throws IllegalStateException
      */
-     @GetMapping("/download/{orgId}")
+     @GetMapping("/download/{file_id}")
      @Operation(summary = "특정 파일 다운로드", description = "특정 파일을 다운로드합니다.")
-     public ResponseEntity<?> downloadFile(
-               @RequestParam(required = false) Boolean qsheet,
-			@RequestParam(required = false) List<String> path,
-			@PathVariable String orgId) {
+     public ResponseEntity<?> downloadFile(@PathVariable String file_id) throws IllegalStateException, IOException {
 
-          if(path.size() > 1) {
+          FileEntity.LoadFile file = fileService.downloadFile(file_id);
 
-               ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-               try (ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream)) {
-                    for (String data : path) {
-
-                         String[] parts = data.split("/");
-                         String fileName = parts[parts.length - 1];
-
-                         byte[] objectData = fileService.downloadZip(orgId, data);
-
-                         // Zip 아카이브에 객체 추가
-                         ZipArchiveEntry zipEntry = new ZipArchiveEntry(fileName + ".zip");
-                         zipOut.putNextEntry(zipEntry);
-                         zipOut.write(objectData);
-                         zipOut.closeEntry();
-
-                    }
-               } catch (IOException e) {
-                    log.error("{}", e);
-               }
-          
-               byte[] zipBytes = byteArrayOutputStream.toByteArray();
-               
-               HttpHeaders headers = new HttpHeaders();
-               headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "download.zip");
-
-               return new ResponseEntity<>(zipBytes, headers, HttpStatus.OK);
-
-          } else {
-
-               String objectName = path.get(0);
-
-               if(chkExtension(path.get(0))) {
-
-                    // MinioService를 사용하여 MinIO 서버로부터 파일을 가져옵니다.
-                    InputStream fileInputStream = fileService.downloadFile(orgId, objectName);
-
-                    // 문자열을 '/'로 분할
-                    String[] parts = objectName.split("/");
-
-                    // 마지막 요소 확인
-                     String fileName = parts[parts.length - 1];
-
-                    try {
-                         fileName = URLEncoder.encode(fileName, "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                         log.error("{}", e);
-                    }
-
-                    // 파일 다운로드를 위한 헤더 설정
-                    HttpHeaders headers = new HttpHeaders();
-                    headers.setContentDispositionFormData("attachment", fileName); // 다운로드할 때 파일 이름 지정
-                    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-
-                    // 파일 스트림을 InputStreamResource로 래핑하여 응답합니다.
-                    InputStreamResource resource = new InputStreamResource(fileInputStream);
-
-                    return new ResponseEntity<>(resource, headers, HttpStatus.OK);
-
-               } else {
-
-                    // 파일 다운로드를 위한 헤더 설정
-                    HttpHeaders headers = new HttpHeaders();
-                    headers.setContentDispositionFormData("attachment", "download.zip"); // 다운로드할 때 파일 이름 지정
-                    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-
-                    return new ResponseEntity<>(fileService.downloadZip(orgId, objectName), headers, HttpStatus.OK);
-
-               }
-
+          String fileName = null;
+          try {
+               fileName = URLEncoder.encode(file.getName(), "UTF-8");
+          } catch (UnsupportedEncodingException e) {
+               log.error("{}", e);
           }
+          
+          HttpHeaders headers = new HttpHeaders();
+          headers.setContentType(MediaType.parseMediaType(file.getType()));
+          headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
 
+          return new ResponseEntity<>(new ByteArrayResource(file.getFile()), headers, HttpStatus.OK);
 	}
 
+     @GetMapping("/downloads/{id}")
+     @Operation(summary = "특정 파일 그룹 다운로드", description = "특정 그룹의 파일을 일괄 다운로드합니다. (ex. 웨딩홀 Seq, 연회장 Seq, 큐시트 Seq 등)")
+     public ResponseEntity<?> downloadFiles(@PathVariable String id) {
+
+          Map<String, Object> val = fileService.downloadFiles("seq", id);
+
+          HttpHeaders headers = new HttpHeaders();
+          headers.setContentType(MediaType.parseMediaType("application/zip"));
+          headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + val.get("name") + "\"");
+
+          return new ResponseEntity<>(val.get("data"), headers, HttpStatus.OK);
+	}
 
 	/**
      * [FileController] 특정 파일 삭제 함수
