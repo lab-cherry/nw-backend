@@ -5,7 +5,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -23,8 +22,8 @@ public interface BookmarkService {
  BookmarkEntity findById(String id);
 // BookmarkEntity findByUserId(String userid);
  BookmarkEntity findByUserId(ObjectId userId);
- void createBookmark(BookmarkEntity.CreateDto bookmarkCreateDto);
- void updateById(String id, BookmarkEntity.UpdateDto updateDto);
+ void createBookmark(BookmarkEntity.BookmarkCreateDto bookmarkCreateDto);
+ void updateById(String id, BookmarkEntity.BookmarkUpdateDto bookmarkUpdateDto);
 // void updateByUserId(String userid, BookmarkEntity.UpdateDto updateDto);
  void deleteById(String id);
 

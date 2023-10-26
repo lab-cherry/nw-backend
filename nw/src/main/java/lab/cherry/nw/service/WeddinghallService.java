@@ -11,16 +11,16 @@ import java.util.List;
 
 /**
  * <pre>
- * ClassName : OrgService
+ * ClassName : WeddinghallService
  * Type : interface
- * Description : 조직와 관련된 함수를 정리한 인터페이스입니다.
- * Related : OrgController, OrgServiceImpl
+ * Description : 웨딩홀(예식장)와 관련된 함수를 정리한 인터페이스입니다.
+ * Related : WeddinghallController, WeddinghallServiceImpl
  * </pre>
  */
 @Component
 public interface WeddinghallService {
     Page<WeddinghallEntity> getWeddinghalls(Pageable pageable);
-	WeddinghallEntity createWeddinghall(WeddinghallEntity.CreateDto weddinghallCreateDto, List<MultipartFile> files);
+	WeddinghallEntity createWeddinghall(WeddinghallEntity.WeddinghallCreateDto weddinghallCreateDto, List<MultipartFile> files);
 //    void updateById(String id, WeddinghallEntity.UpdateDto weddinghall);
     WeddinghallEntity findById(String id);
 //    WeddinghallEntity findByName(String name);

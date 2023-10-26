@@ -1,7 +1,6 @@
 package lab.cherry.nw.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,7 +27,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "files")
-@JsonPropertyOrder({ "fileSeq", "fileName", "fileType", "fileExt", "filePath", "fileSize", "userId", "orgId", "created_at" })
+@JsonPropertyOrder({ "fileSeq", "fileName", "fileType", "fileExt", "filePath", "fileUrl", "fileSize", "userId", "orgId", "created_at" })
 public class FileEntity implements Serializable {
 
 	@Id
@@ -46,16 +45,15 @@ public class FileEntity implements Serializable {
     @Schema(title = "파일 타입", example = "image/jpeg")
     private String type;
 
-	@JsonIgnore
-	@NotNull
-//    @JsonProperty("fileExt")
-    @Schema(title = "파일 확장자", example = "png")
-    private String ext;
-
 	@NotNull
     @JsonProperty("filePath")
     @Schema(title = "파일 경로", example = "관리/더 글로리/IMG_61E29A079818-1.jpeg")
     private String path;
+
+	@NotNull
+    @JsonProperty("fileUrl")
+    @Schema(title = "파일 URL", example = "https://{IP_ADDR}:{PORT}/api/v1/file/download/6506ebb61b6deb1602d85c35?path=/관리/더 글로리/IMG_61E29A079818-1.jpeg")
+    private String url;
 
 	@NotNull
     @JsonProperty("fileSize")

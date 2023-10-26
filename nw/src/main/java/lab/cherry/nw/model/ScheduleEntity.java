@@ -1,18 +1,21 @@
 package lab.cherry.nw.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
-import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <pre>
@@ -60,7 +63,8 @@ public class ScheduleEntity implements Serializable {
 
     @JsonProperty("column")
     @Schema(title = "스케줄표  컬럼", example = "")
-	  private Map<String,String> column;
+	  private Map<String, String> column;
+
 
 //////////////////////////////////////////////////////////////////////////
 

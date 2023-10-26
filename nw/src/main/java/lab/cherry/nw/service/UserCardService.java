@@ -1,13 +1,9 @@
 package lab.cherry.nw.service;
 
-import lab.cherry.nw.model.OrgEntity;
-import lab.cherry.nw.model.UserCardEntity;
-import lab.cherry.nw.model.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
+import lab.cherry.nw.model.UserCardEntity;
 
 
 /**

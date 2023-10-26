@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public interface RoleService {
     Page<RoleEntity> getRoles(Pageable pageable);
-    RoleEntity createRole(RoleEntity.CreateDto orgCreateDto);
+    RoleEntity createRole(RoleEntity.RoleCreateDto orgCreateDto);
     RoleEntity findById(String id);
     RoleEntity findByName(String name);
     void deleteById(String id);

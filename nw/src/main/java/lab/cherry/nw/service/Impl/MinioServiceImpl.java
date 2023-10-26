@@ -1,23 +1,5 @@
 package lab.cherry.nw.service.Impl;
 
-import io.minio.*;
-import io.minio.admin.MinioAdminClient;
-import io.minio.admin.UserInfo;
-import io.minio.errors.*;
-import io.minio.http.Method;
-import io.minio.messages.DeleteError;
-import io.minio.messages.DeleteObject;
-import io.minio.messages.Item;
-import lab.cherry.nw.model.UserEntity;
-import lab.cherry.nw.service.MinioService;
-import lab.cherry.nw.service.UserService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.crypto.InvalidCipherTextException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -27,8 +9,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import org.springframework.beans.factory.annotation.Value;
+import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import io.minio.BucketExistsArgs;
+import io.minio.GetBucketPolicyArgs;
+import io.minio.GetObjectArgs;
+import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.ListObjectsArgs;
+import io.minio.MakeBucketArgs;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import io.minio.RemoveBucketArgs;
+import io.minio.RemoveObjectArgs;
+import io.minio.RemoveObjectsArgs;
+import io.minio.Result;
+import io.minio.SetBucketPolicyArgs;
+import io.minio.admin.MinioAdminClient;
+import io.minio.admin.UserInfo;
+import io.minio.errors.MinioException;
+import io.minio.http.Method;
+import io.minio.messages.DeleteError;
+import io.minio.messages.DeleteObject;
+import io.minio.messages.Item;
+import lab.cherry.nw.model.UserEntity;
+import lab.cherry.nw.service.MinioService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -153,7 +160,7 @@ public class MinioServiceImpl implements MinioService {
 			log.error("Minio Connect Check : {}", isMinioConnected());
 			
 
-			log.error("bucketName is {}, objectName is {}", bucketName, objectName);
+			log.error("\nbucketName is {}\nobjectName is {}\n", bucketName, objectName);
 
 			// bucketName에 있는 objectName을 조회합니다.
 			InputStream stream = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
@@ -341,6 +348,9 @@ public class MinioServiceImpl implements MinioService {
 			Map<String, String> reqParams = new HashMap<String, String>();
 			reqParams.put("response-content-type", "application/json");
 
+			log.error("bucketName {}", bucketName);
+			log.error("objectName {}", objectName);
+
 			// Presigned URL 생성
 			return minioClient.getPresignedObjectUrl(
 					GetPresignedObjectUrlArgs.builder()
@@ -350,6 +360,7 @@ public class MinioServiceImpl implements MinioService {
 					.expiry(1, TimeUnit.HOURS)	// 시간
 					.extraQueryParams(reqParams)
 					.build());
+					
 		} catch (MinioException e) {
 			log.error("Error occurred: " + e);
 		}

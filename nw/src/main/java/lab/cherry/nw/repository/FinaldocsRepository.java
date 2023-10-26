@@ -1,17 +1,12 @@
 package lab.cherry.nw.repository;
 
-import lab.cherry.nw.model.FinaldocsEntity;
-import lab.cherry.nw.model.OrgEntity;
-import lab.cherry.nw.model.ScheduleEntity;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import lab.cherry.nw.model.FinaldocsEntity;
 
 
 /**
@@ -23,7 +18,7 @@ import java.util.UUID;
  * </pre>
  */
 //@Repository
-public interface FinaldocsRepository extends MongoRepository<FinaldocsEntity, UUID> {
+public interface FinaldocsRepository extends MongoRepository<FinaldocsEntity, String> {
 
     Page<FinaldocsEntity> findAll(Pageable pageable);
 

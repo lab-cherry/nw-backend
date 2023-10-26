@@ -62,6 +62,7 @@ public class FinalTemplEntity implements Serializable {
     @Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
     private Map<String,String> content;
 
+
     @JsonProperty("updated_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
     @Schema(title = "최종확인서 템플릿 수정 시간", example = "2023-07-04 12:00:00")
@@ -100,6 +101,7 @@ public class FinalTemplEntity implements Serializable {
 	@Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
     private Map<String,String> content;
 
+
     }
 
 
@@ -119,7 +121,8 @@ public class FinalTemplEntity implements Serializable {
 		private String name;
 
 		@Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
-		private Map<String,String> content;
+		private Map<String, String> content;
+
 
     }
 
