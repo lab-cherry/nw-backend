@@ -91,17 +91,6 @@ public class QsheetServiceImpl implements QsheetService {
         if ( qsheetCreateDto.getOrg_approverSeq() != null){
             orgUserEntity = userService.findById(qsheetCreateDto.getOrg_approverSeq());
         }
-        
-
-// Map<String, String> info = new HashMap<>();
-//       info.put("org", orgEntity.getName());
-//       info.put("type", "웨딩홀");
-//       // info.put("username", "");
-//       info.put("kind", weddinghallCreateDto.getWeddinghallName());
-//       info.put("seq", objectId.toString());
-    
-//     List<String> imageUrls = fileService.uploadFiles(info, images);
-
         ////////////
         List<ItemData> newItemData = new ArrayList<>();
         if (files != null){
@@ -236,7 +225,7 @@ public class QsheetServiceImpl implements QsheetService {
             QsheetEntity originEntity = qsheetEntity;
 			qsheetEntity = QsheetEntity.builder()
 			.id(qsheetEntity.getId())
-			.name(qsheetEntity.getName())
+			.name(qsheetUpdateDto.getName()!=null?qsheetUpdateDto.getName():qsheetEntity.getName())
 			.orgid(orgEntity)
 			.userid(qsheetEntity.getUserid())
 			.created_at(qsheetEntity.getCreated_at())

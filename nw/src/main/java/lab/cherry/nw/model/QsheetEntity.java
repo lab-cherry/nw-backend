@@ -132,10 +132,8 @@ public class QsheetEntity implements Serializable {
     @Builder
     @NoArgsConstructor @AllArgsConstructor
     public static class QsheetCreateDto {
-
-        @Schema(title = "큐시트 데이터", example = "최해리_230824")
-        @Size(min = 4, max = 20)
 		@NotNull
+        @Schema(title = "큐시트 제목", example = "최해리_230824")
         private String name;
 		@NotNull
 		@Schema(title = "유저 고유번호", example = "38352658567418867")
@@ -184,6 +182,8 @@ public class QsheetEntity implements Serializable {
         @NotNull
         @Schema(title = "업데이트 유저", example = "38352658567418867")
         private String updateUser;
+        @Schema(title = "큐시트 제목", example = "최해리_230824")
+        private String name;
 		@Schema(title = "조직 고유번호", example = "38352658567418867")
         private String orgSeq;
 		@Schema(title = "데이터 리스트")

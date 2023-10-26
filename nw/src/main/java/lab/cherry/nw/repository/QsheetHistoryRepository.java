@@ -12,10 +12,10 @@ import lab.cherry.nw.model.QsheetHistoryEntity;
 
 /**
  * <pre>
- * ClassName : QsheetRepository
+ * ClassName : QsheetHistoryRepository
  * Type : interface
- * Descrption : 큐시트히스토리 JPA 구현을 위한 인터페이스입니다.
- * Related : QsheetServiceImpl, QsheetService
+ * Descrption : 큐시트 히스토리 JPA 구현을 위한 인터페이스입니다.
+ * Related : QsheetHistoryServiceImpl, QsheetHistoryService
  * </pre>
  */
 public interface QsheetHistoryRepository extends MongoRepository<QsheetHistoryEntity, String> {
@@ -30,10 +30,7 @@ public interface QsheetHistoryRepository extends MongoRepository<QsheetHistoryEn
 
     @Query("{'qsheetid.$id' : ?0}")
     List<QsheetHistoryEntity> findByQsheetId(ObjectId qsheetId);
-    
-    // @Query("{'userid.$id' : ?0}")
-    // Optional<QsheetHistoryEntity> findByUserid(ObjectId userId);
-  
+
 
     void deleteById(UUID id);
 }
