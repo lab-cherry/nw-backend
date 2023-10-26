@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -153,7 +152,6 @@ public class FileServiceImpl implements FileService {
 		return fileEntity;
 	}
 
-	
 	public Map<String, Object> downloadFiles(String key, String value) {
   		List<GridFSFile> allFiles = new ArrayList<>();
 			GridFSFindIterable resources = template.find(new Query().addCriteria(Criteria.where("metadata." + key).is(value)));

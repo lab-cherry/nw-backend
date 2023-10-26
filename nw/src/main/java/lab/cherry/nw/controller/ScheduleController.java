@@ -40,7 +40,7 @@ import java.time.ZoneId;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/nw/api/v1/schedule")
+@RequestMapping("/api/v1/schedule")
 @Tag(name = "Schedule", description = "Schedule API Document")
 public class ScheduleController {
 

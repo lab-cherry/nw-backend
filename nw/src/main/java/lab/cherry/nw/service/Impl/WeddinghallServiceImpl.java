@@ -1,11 +1,9 @@
 package lab.cherry.nw.service.Impl;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -171,6 +169,23 @@ public class WeddinghallServiceImpl implements WeddinghallService {
     public WeddinghallEntity findById(String id) {
 		  return weddinghallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Weddinghall with Id " + id + " Not Found."));
 	}
+
+      /**
+     * [OrgServiceImpl] NAME으로 웨딩홀 조회 함수
+     *
+     * @param name 조회할 웨딩홀의 이름입니다.
+     * @return 주어진 이름에 해당하는 웨딩홀 정보를 리턴합니다.
+     * @throws EntityNotFoundException 해당 이름의 웨딩홀 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 입력한 name에 해당하는 웨딩홀 정보를 조회합니다.
+     * </pre>
+     *
+     * Author : haeri(yhoo0020@gamil.com)
+     */
+    @Transactional(readOnly = true)
+    public WeddinghallEntity findByName(String name) {
+        return weddinghallRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Weddinghall with Name " + name + " Not Found."));
+    }
 	
 
 	/**

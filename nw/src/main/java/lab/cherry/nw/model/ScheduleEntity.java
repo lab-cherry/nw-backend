@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 /**
  * <pre>
  * ClassName : ScheduleEntity
@@ -29,7 +30,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "schedule")
-@JsonPropertyOrder({ "id", "scheduleSeq","userid","orgid","finaltemplid","scheduleName", "scheduleContent", "column"})
+@JsonPropertyOrder({ "id", "scheduleSeq","user","org","finaltempl","scheduleName", "scheduleContent", "column"})
 public class ScheduleEntity implements Serializable {
 
     @Id
@@ -38,31 +39,32 @@ public class ScheduleEntity implements Serializable {
     private String id;
 
     @DBRef
-    @JsonProperty("userid")
-    @Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private UserEntity userid;
+    @JsonProperty("user")
+    @Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
+    private UserEntity user;
 
     @DBRef
-    @JsonProperty("orgid")
-    @Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private OrgEntity orgid;
+    @JsonProperty("org")
+    @Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
+    private OrgEntity org;
 
-	@JsonProperty("finaltemplid")
-	@Schema(title = "스케줄표 고유번호", example = "64ed89aa9e813b5ab16da6de")
-	private FinalTemplEntity finaltemplid;
+	  @JsonProperty("finaltemplid")
+	  @Schema(title = "최종확인서 템플릿 정보", example = "64ed89aa9e813b5ab16da6de")
+	  private FinalTemplEntity finaltempl;
 
     @JsonProperty("scheduleName")
     @Schema(title = "스케줄표 이름", example = "문서1")
     @Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
     private String name;
 
-	@JsonProperty("scheduleContent")
-	@Schema(title = "스케줄표 내용", example = "[]")
-	private List<FinaldocsEntity> content;
+	  @JsonProperty("scheduleContent")
+	  @Schema(title = "스케줄표 내용", example = "[]")
+	  private List<FinaldocsEntity> content;
 
     @JsonProperty("column")
     @Schema(title = "스케줄표  컬럼", example = "")
-	private Map column;
+	  private Map<String, String> column;
+
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -72,14 +74,14 @@ public class ScheduleEntity implements Serializable {
 	@NoArgsConstructor @AllArgsConstructor
 	public static class transDto {
 
-		@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-		private String userid;
+		@Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
+		private String user;
 
-		@Schema(title = "스케줄표 고유번호", example = "64ed89aa9e813b5ab16da6de")
-		private  String finalTemplid;
+		@Schema(title = "스케줄표 정보", example = "64ed89aa9e813b5ab16da6de")
+		private  String finalTempl;
 
-		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-		private String orgid;
+		@Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
+		private String org;
 
 		@Schema(title = "스케줄표 이름", example = "문서1")
 		@Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
@@ -87,7 +89,7 @@ public class ScheduleEntity implements Serializable {
 
 		@JsonProperty("scheduleContent")
 		@Schema(title = "스케줄표 내용", example = "[]")
-		private String content;
+		private Map<String,String> content;
 
 	}
 

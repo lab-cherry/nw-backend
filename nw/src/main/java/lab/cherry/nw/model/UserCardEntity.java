@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "usercards")
-@JsonPropertyOrder({ "id", "userName", "userEmail", "groom","userinfo", "bride", "note", "resDate", "status","weddingDate", "created_at","update_at" })
+@JsonPropertyOrder({ "id", "userName", "userEmail", "weddinghall", "groom","userinfo", "bride", "note", "resDate", "status","weddingDate", "created_at","update_at" })
 public class UserCardEntity implements Serializable {
 
     @Id
@@ -41,13 +41,18 @@ public class UserCardEntity implements Serializable {
     @Schema(title = "사용자 정보", example = "[]")
     private UserEntity userinfo;
 
+    @DBRef
+    @JsonProperty("weddinghall")
+    @Schema(title = "예식장 정보", example = "[]")
+    private WeddinghallEntity weddinghall;
+
     @JsonProperty("groom")
     @Schema(title = "신랑측 정보", example = "[]")
-    private Map groom;
+    private Map<String,String> groom;
 
     @JsonProperty("bride")
     @Schema(title = "신부측 정보", example = "[]")
-    private Map bride;
+    private Map<String,String> bride;
 
     @JsonProperty("note")
 	@Size(max = 500, message = "Maximum contact length: 500 characters")
@@ -89,11 +94,14 @@ public class UserCardEntity implements Serializable {
 		@Schema(title = "사용자 정보", example = "[]")
         private String userinfo;
 
+        @Schema(title = "예식장 정보", example = "[]")
+        private String weddinghall;
+
         @Schema(title = "신랑측 정보", example = "[]")
-        private Map groom;
+        private Map<String,String> groom;
 
         @Schema(title = "신부측 정보", example = "[]")
-        private Map bride;
+        private Map<String,String> bride;
 
 		@Size(max = 500, message = "Maximum contact length: 500 characters")
         @Schema(title = "비고", example = "가을")
@@ -122,11 +130,14 @@ public class UserCardEntity implements Serializable {
 		@Schema(title = "사용자 정보", example = "[]")
         private String userinfo;
 
+        @Schema(title = "예식장 정보", example = "[]")
+        private String weddinghall;
+
         @Schema(title = "신랑측 정보", example = "[]")
-        private Map groom;
+        private Map<String,String> groom;
 
         @Schema(title = "신부측 정보", example = "[]")
-        private Map bride;
+        private Map<String,String> bride;
 
 		@Size(max = 500, message = "Maximum contact length: 500 characters")
         @Schema(title = "비고", example = "가을")
