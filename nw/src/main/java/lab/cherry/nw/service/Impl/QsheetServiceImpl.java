@@ -16,12 +16,14 @@ import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.QsheetEntity;
+import lab.cherry.nw.model.QsheetLogEntity;
 import lab.cherry.nw.model.QsheetEntity.ItemData;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.QsheetRepository;
 import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.QsheetHistoryService;
+import lab.cherry.nw.service.QsheetLogService;
 import lab.cherry.nw.service.QsheetService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +48,7 @@ public class QsheetServiceImpl implements QsheetService {
     private final OrgService orgService;
     private final FileService fileService;
     private final QsheetHistoryService qsheetHistoryService;
+    private final QsheetLogService qsheetLogService;
     /**
      * [QsheetServiceImpl] 전체 큐시트 조회 함수
      *
@@ -125,8 +128,6 @@ public class QsheetServiceImpl implements QsheetService {
             newItemData = qsheetCreateDto.getData();
         }
 		
-
-
         QsheetEntity qsheetEntity = QsheetEntity.builder()
             .id(objectid.toString())
             .userid(userEntity)
@@ -142,6 +143,7 @@ public class QsheetServiceImpl implements QsheetService {
             .created_at(instant)
             .build();
         qsheetRepository.save(qsheetEntity);
+        qsheetLogService.createQsheetLog("create", qsheetEntity);
     }
 
     /**
@@ -159,6 +161,7 @@ public class QsheetServiceImpl implements QsheetService {
     public void updateById(String id, QsheetEntity.QsheetUpdateDto qsheetUpdateDto, List<MultipartFile> files) {
         Instant instant = Instant.now();
         QsheetEntity qsheetEntity = findById(id);
+        QsheetEntity originEntity = findById(id);
         List<ItemData> newItemData =qsheetEntity.getData();
 
         if (qsheetEntity != null ) {
@@ -222,7 +225,7 @@ public class QsheetServiceImpl implements QsheetService {
                      newItemData.add(tempData);           
                 }
             }
-            QsheetEntity originEntity = qsheetEntity;
+            
 			qsheetEntity = QsheetEntity.builder()
 			.id(qsheetEntity.getId())
 			.name(qsheetUpdateDto.getName()!=null?qsheetUpdateDto.getName():qsheetEntity.getName())
@@ -237,6 +240,7 @@ public class QsheetServiceImpl implements QsheetService {
 			.updated_at(instant)
 			.build();
 			qsheetRepository.save(qsheetEntity);
+            qsheetLogService.createQsheetLog("update", qsheetEntity);
             qsheetHistoryService.createQsheetHistory(originEntity, qsheetUpdateDto);
         } else {
             log.error("[QsheetServiceImpl - udpateQsheet] OrgSeq,data 만 수정 가능합니다.");
