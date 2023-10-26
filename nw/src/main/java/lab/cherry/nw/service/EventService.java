@@ -1,7 +1,6 @@
 package lab.cherry.nw.service;
 
 import lab.cherry.nw.model.EventEntity;
-import lab.cherry.nw.model.UserCardEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -18,10 +17,10 @@ import org.springframework.stereotype.Component;
 @Component
 public interface EventService {
     Page<EventEntity> getEvents(Pageable pageable);
-	EventEntity createEvent(UserCardEntity usercard);
+	EventEntity createEvent(String id);
 //    void updateById(String id, WeddinghallEntity.UpdateDto weddinghall);
     EventEntity findById(String id);
 //    WeddinghallEntity findByName(String name);
     void deleteById(String id);
-    Page<EventEntity> findPageByName(String name, Pageable pageable);
+    // Page<EventEntity> findPageByName(String name, Pageable pageable);
 }

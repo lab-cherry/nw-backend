@@ -1,30 +1,28 @@
 package lab.cherry.nw.service.Impl;
 
+import java.time.Instant;
+import java.util.LinkedList;
+import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.BoardEntity;
 import lab.cherry.nw.model.QsheetEntity;
 import lab.cherry.nw.model.TagEntity;
-import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.model.TagEntity.TagCreateDto;
+import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.BoardRepository;
 import lab.cherry.nw.repository.TagRepository;
-import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.BoardService;
 import lab.cherry.nw.service.QsheetService;
 import lab.cherry.nw.service.TagService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * <pre>
@@ -35,7 +33,7 @@ import java.util.List;
  * </pre>
  */
 @Slf4j
-@Service("BoardServiceImpl")
+@Service("boardServiceImpl")
 @Transactional
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {

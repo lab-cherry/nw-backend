@@ -23,7 +23,7 @@ public interface WeddinghallService {
 	WeddinghallEntity createWeddinghall(WeddinghallEntity.WeddinghallCreateDto weddinghallCreateDto, List<MultipartFile> images);
 //    void updateById(String id, WeddinghallEntity.UpdateDto weddinghall);
     WeddinghallEntity findById(String id);
-//    WeddinghallEntity findByName(String name);
+   WeddinghallEntity findByName(String name);
     void deleteById(String id);
     Page<WeddinghallEntity> findPageByName(String name, Pageable pageable);
 }

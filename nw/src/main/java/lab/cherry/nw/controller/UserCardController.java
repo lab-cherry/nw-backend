@@ -46,7 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/nw/api/v1/usercard")
+@RequestMapping("/api/v1/usercard")
 @Tag(name = "Usercard", description = "Usercard API Document")
 public class UserCardController {
 
@@ -133,6 +133,34 @@ public class UserCardController {
 
         return new ResponseEntity<>(userCardService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
+
+    /**
+     * [UserCardController] 사용자 웨딩홀 업데이트 함수
+     *
+     * @param id 고객카드 고유번호를 입력합니다.
+     * @param usercardEntity 웨딩홀 정보를 업데이트하기 위한 고객카드 고유아이디를 갖고 있는 객체입니다.업데이트에 필요한 고객카드 정보를 담고 있는 객체입니다.
+     * @return
+     * <pre>
+     * true  : 업데이트된 고객카드 정보를 반환합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : hhhaeri(yhoo0020@gmail.com)
+     */
+    @PatchMapping("{id}/weddinghall")
+    @Operation(summary = "고객카드 웨딩홀 정보 업데이트", description = "특정 고객카드의 웨딩홀 정보를 업데이트합니다.")
+    public ResponseEntity<?> updateUserWeddinghalls(
+		@PathVariable("id") String id,
+		@RequestBody UserCardEntity.UserCardUpdateDto usercardEntity) {
+
+            log.info("[UserController] updateUserCard Weddinghall...!");
+
+			userCardService.updateWeddinghallByName(id, usercardEntity.getWeddinghallName());
+
+            final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+            return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+    }
+
 
     /**
      * [UserCardController] 특정 고객카드 조회 함수

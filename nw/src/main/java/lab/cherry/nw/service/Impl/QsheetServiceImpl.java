@@ -1,34 +1,31 @@
 package lab.cherry.nw.service.Impl;
 
-import lab.cherry.nw.error.enums.ErrorCode;
-import lab.cherry.nw.error.exception.CustomException;
-import lab.cherry.nw.error.exception.EntityNotFoundException;
-import lab.cherry.nw.model.OrgEntity;
-import lab.cherry.nw.model.QsheetEntity;
-import lab.cherry.nw.model.UserEntity;
-import lab.cherry.nw.model.QsheetEntity.ItemData;
-import lab.cherry.nw.repository.QsheetRepository;
-import lab.cherry.nw.service.FileService;
-import lab.cherry.nw.service.OrgService;
-import lab.cherry.nw.service.QsheetService;
-import lab.cherry.nw.service.UserService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipOutputStream;
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import lab.cherry.nw.error.enums.ErrorCode;
+import lab.cherry.nw.error.exception.CustomException;
+import lab.cherry.nw.error.exception.EntityNotFoundException;
+import lab.cherry.nw.model.OrgEntity;
+import lab.cherry.nw.model.QsheetEntity;
+import lab.cherry.nw.model.QsheetEntity.ItemData;
+import lab.cherry.nw.model.UserEntity;
+import lab.cherry.nw.repository.QsheetRepository;
+import lab.cherry.nw.service.FileService;
+import lab.cherry.nw.service.OrgService;
+import lab.cherry.nw.service.QsheetHistoryService;
+import lab.cherry.nw.service.QsheetService;
+import lab.cherry.nw.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -39,7 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
  * </pre>
  */
 @Slf4j
-@Service("QsheetServiceImpl")
+@Service("qsheetServiceImpl")
 @Transactional
 @RequiredArgsConstructor
 public class QsheetServiceImpl implements QsheetService {
@@ -48,6 +45,7 @@ public class QsheetServiceImpl implements QsheetService {
     private final UserService userService;
     private final OrgService orgService;
     private final FileService fileService;
+    private final QsheetHistoryService qsheetHistoryService;
     /**
      * [QsheetServiceImpl] 전체 큐시트 조회 함수
      *
@@ -93,16 +91,10 @@ public class QsheetServiceImpl implements QsheetService {
         if ( qsheetCreateDto.getOrg_approverSeq() != null){
             orgUserEntity = userService.findById(qsheetCreateDto.getOrg_approverSeq());
         }
-        
         ////////////
         List<ItemData> newItemData = new ArrayList<>();
         if (files != null){
-            Map<String, String> info = new HashMap<>();
-            info.put("type", "사용자");
-            info.put("user", userEntity.getId());
-            info.put("qsheetSeq", objectid.toString());
-
-            List<String> fileUrls = fileService.uploadFiles(info, files);
+            List<String> fileUrls = fileService.uploadFiles(objectid.toString(), files);
             log.error("fileUrls {}", fileUrls);
             ////////////
             
@@ -183,12 +175,7 @@ public class QsheetServiceImpl implements QsheetService {
             } 
             if(files!=null){
                 newItemData= new ArrayList<>();
-                Map<String, String> info = new HashMap<>();
-                info.put("type", "사용자");
-                info.put("user", qsheetEntity.getUserid().getId());
-                info.put("qsheetSeq", qsheetEntity.getId().toString());
-
-                List<String> fileUrls = fileService.uploadFiles(info, files);
+                List<String> fileUrls = fileService.uploadFiles(qsheetEntity.getId(), files);
                 log.error("fileUrls {}", fileUrls);
             ////////////
                 
@@ -225,12 +212,10 @@ public class QsheetServiceImpl implements QsheetService {
                      newItemData.add(tempData);           
                 }
             }
-            
-
-
+            QsheetEntity originEntity = qsheetEntity;
 			qsheetEntity = QsheetEntity.builder()
 			.id(qsheetEntity.getId())
-			.name(qsheetEntity.getName())
+			.name(qsheetUpdateDto.getName()!=null?qsheetUpdateDto.getName():qsheetEntity.getName())
 			.orgid(orgEntity)
 			.userid(qsheetEntity.getUserid())
 			.created_at(qsheetEntity.getCreated_at())
@@ -238,17 +223,11 @@ public class QsheetServiceImpl implements QsheetService {
             .org_approver(orgUserEntity)
             .org_confirm(qsheetUpdateDto.isOrg_confirm()==!(qsheetEntity.isOrg_confirm())?qsheetUpdateDto.isOrg_confirm():qsheetEntity.isOrg_confirm())
             .client_confirm(qsheetUpdateDto.isClient_confirm()==!(qsheetEntity.isClient_confirm())?qsheetUpdateDto.isClient_confirm():qsheetEntity.isClient_confirm())
-            // .finalConfirm(qsheetUpdateDto.getFinalConfirm()!=null?  
-            //     FinalConfirm.builder()
-            //     .org_approver(qsheetUpdateDto.getFinalConfirm().getOrg_approver()!=null?qsheetUpdateDto.getFinalConfirm().getOrg_approver():null)
-            //     .org_confirm(qsheetUpdateDto.getFinalConfirm().isOrg_confirm()==!(qsheetEntity.getFinalConfirm().isOrg_confirm())?qsheetUpdateDto.getFinalConfirm().isOrg_confirm():qsheetEntity.getFinalConfirm().isOrg_confirm())
-            //     .client_confirm(qsheetUpdateDto.getFinalConfirm().isClient_confirm()==!(qsheetEntity.getFinalConfirm().isClient_confirm())?qsheetUpdateDto.getFinalConfirm().isClient_confirm():qsheetEntity.getFinalConfirm().isClient_confirm())    
-            //     .build():qsheetEntity.getFinalConfirm() )
-            .memo(qsheetUpdateDto.getMemo() != null ? qsheetUpdateDto.getMemo() : qsheetEntity.getMemo())
+            .memo(qsheetUpdateDto.getMemo()!=null?qsheetUpdateDto.getMemo():qsheetEntity.getMemo())
 			.updated_at(instant)
 			.build();
 			qsheetRepository.save(qsheetEntity);
-
+            qsheetHistoryService.createQsheetHistory(originEntity, qsheetUpdateDto);
         } else {
             log.error("[QsheetServiceImpl - udpateQsheet] OrgSeq,data 만 수정 가능합니다.");
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
@@ -335,55 +314,56 @@ public class QsheetServiceImpl implements QsheetService {
     }
     
     public byte[] download(List<String> users) {
+        return null;
         
-        List<UserEntity> userList = new ArrayList<>();
-        List<byte[]> userData = new ArrayList<>();
+        // List<UserEntity> userList = new ArrayList<>();
+        // List<byte[]> userData = new ArrayList<>();
 
-        for(String user : users) {
+        // for(String user : users) {
 
-            if (userService.checkId(user)) {
-                UserEntity _user = userService.findById(user);
-                userList.add(_user);
+        //     if (userService.checkId(user)) {
+        //         UserEntity _user = userService.findById(user);
+        //         userList.add(_user);
 
-                // String objectName = _user.getId() + "/";
-                // userData.add(fileService.downloadZip("user", objectName));
-            }
-        }
+        //         // String objectName = _user.getId() + "/";
+        //         // userData.add(fileService.downloadZip("user", objectName));
+        //     }
+        // }
 
-        if(userList.size() > 1) {
+        // if(userList.size() > 1) {
 
-            log.error("userList 가 1명 초과인 경우 # ", userList.size());
+        //     log.error("userList 가 1명 초과인 경우 # ", userList.size());
 
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            try (ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream)) {
-                for (UserEntity user : userList) {
+        //     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        //     try (ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream)) {
+        //         for (UserEntity user : userList) {
 
-                        String objectName = user.getId() +"/";
+        //                 String objectName = user.getId() +"/";
 
-                        byte[] objectData = fileService.downloadZip("user", objectName);
+        //                 byte[] objectData = fileService.downloadZip("user", objectName);
 
-                        // Zip 아카이브에 객체 추가
-                        ZipArchiveEntry zipEntry = new ZipArchiveEntry(user.getUsername() + ".zip");
-                        zipOut.putNextEntry(zipEntry);
-                        zipOut.write(objectData);
-                        zipOut.closeEntry();
+        //                 // Zip 아카이브에 객체 추가
+        //                 ZipArchiveEntry zipEntry = new ZipArchiveEntry(user.getUsername() + ".zip");
+        //                 zipOut.putNextEntry(zipEntry);
+        //                 zipOut.write(objectData);
+        //                 zipOut.closeEntry();
 
-                }
-            } catch (IOException e) {
-                log.error("{}", e);
-            }
+        //         }
+        //     } catch (IOException e) {
+        //         log.error("{}", e);
+        //     }
         
-            byte[] zipBytes = byteArrayOutputStream.toByteArray();
+        //     byte[] zipBytes = byteArrayOutputStream.toByteArray();
             
-            return zipBytes;
+        //     return zipBytes;
 
-        } else {
+        // } else {
 
-            UserEntity user = userService.findById(users.get(0));
+        //     UserEntity user = userService.findById(users.get(0));
 
-            String objectName = "사용자/" + user.getId();
+        //     String objectName = "사용자/" + user.getId();
 
-            return fileService.downloadZip("user", objectName);
-        }
+        //     return fileService.downloadZip("user", objectName);
+        // }
     }
 }

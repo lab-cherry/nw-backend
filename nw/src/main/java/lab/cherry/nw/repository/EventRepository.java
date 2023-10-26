@@ -1,10 +1,11 @@
 package lab.cherry.nw.repository;
 
-import lab.cherry.nw.model.EventEntity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+import lab.cherry.nw.model.BookmarkEntity;
+import lab.cherry.nw.model.EventEntity;
 
 /**
  * <pre>
@@ -17,7 +18,13 @@ import java.util.Optional;
 //@Repository
 public interface EventRepository extends MongoRepository<EventEntity, String> {
 
-	Page<EventEntity> findPageByName(String eventname, Pageable pageable);
-	Optional<EventEntity> findByName(String name);
+	// Page<EventEntity> findPageByName(String eventname, Pageable pageable);
+	// Optional<EventEntity> findByName(String name);
+
+    @Query("{'seq' : ?0}")
+    Optional<EventEntity> findBySeq(String seq);
+
+    @Query("{'title' : ?0}")
+    Optional<EventEntity> findByTitle(String title);
     
 }

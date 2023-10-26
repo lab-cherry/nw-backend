@@ -1,14 +1,7 @@
 package lab.cherry.nw.service.Impl;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +10,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.utils.IOUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -48,8 +39,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
-	@Value("${lab.cherry.nw.uploadPath}")
-	private String uploadPath;
   private final FileRepository fileRepository;	
 	private final GridFsTemplate template;
 	private final GridFsOperations operations;
@@ -119,7 +108,6 @@ public class FileServiceImpl implements FileService {
 		return fileEntity;
 	}
 
-	
 	public Map<String, Object> downloadFiles(String key, String value) {
   		List<GridFSFile> allFiles = new ArrayList<>();
 			GridFSFindIterable resources = template.find(new Query().addCriteria(Criteria.where("metadata." + key).is(value)));

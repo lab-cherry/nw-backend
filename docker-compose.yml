@@ -12,7 +12,6 @@ services:
       DATABASE_NAME: nw
       DATABASE_USERID: nw
       DATABASE_USERPASS: nw
-      UPLOAD_PATH: /data
       MAX_UPLOAD_SIZE: 3096MB
       #SPRING_PROFILES_ACTIVE: prod
       JAVA_OPTS: "-Xms256m -Xmx512m -XX:+UseG1GC"

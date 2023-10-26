@@ -1,31 +1,23 @@
 package lab.cherry.nw.service.Impl;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
-import lab.cherry.nw.model.OrgEntity;
-import lab.cherry.nw.model.UserCardEntity;
-import lab.cherry.nw.model.WeddinghallEntity;
 import lab.cherry.nw.model.EventEntity;
+import lab.cherry.nw.model.UserCardEntity;
 import lab.cherry.nw.repository.EventRepository;
-import lab.cherry.nw.service.FileService;
-import lab.cherry.nw.service.OrgService;
-import lab.cherry.nw.service.UserCardService;
+import lab.cherry.nw.repository.UserCardRepository;
 import lab.cherry.nw.service.EventService;
+import lab.cherry.nw.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lab.cherry.nw.util.FormatConverter;
 
 /**
  * <pre>
@@ -42,8 +34,7 @@ import lab.cherry.nw.util.FormatConverter;
 public class EventServiceImpl implements EventService {
 	
 	private final EventRepository eventRepository;
-	private final FileService fileService;
-  private final UserCardService userCardService;
+  private final UserCardRepository userCardRepository;
 	
 	/**
      * [EventServiceImpl] 전체 이벤트 조회 함수
@@ -74,53 +65,36 @@ public class EventServiceImpl implements EventService {
      *
      * Author : taking(taking@duck.com)
      */
-    public EventEntity createEvent(String id, String eventType) {
+    public EventEntity createEvent(String id) {
 
-		UserCardEntity UserCardEntity = userCardService.findById(id);
+		UserCardEntity UserCardEntity = userCardFindById(id);
+
     Map<String, Integer> dateFormat = new HashMap<>();
-    Instant EventDate = Instant.now();
-    Integer Hour = null;
-    Integer Minute = null;
+    dateFormat = FormatConverter.convertDateFormat(UserCardEntity.getResDate());
 
-    if(eventType == "reserve") {
-      
-			dateFormat = FormatConverter.convertDateFormat(UserCardEntity.getResDate());
-			Hour = dateFormat.get("hour");
-      Minute = dateFormat.get("minute");
-      EventDate = Instant.parse(UserCardEntity.getResDate());
-
-    } else if(eventType == "wedding") {
-      
-			dateFormat = FormatConverter.convertDateFormat(UserCardEntity.getWeddingDate());
-			Hour = dateFormat.get("hour");
-      Minute = dateFormat.get("minute");
-      EventDate = Instant.parse(UserCardEntity.getWeddingDate());
-
-    }
-
-    String eventName = Hour + ":" + Minute + " " + UserCardEntity.getGroom() + "♥" + UserCardEntity.getBride();
-    log.error("eventName {}", eventName);
+    String eventName = dateFormat.get("hour") + ":" + dateFormat.get("minute") + " " + UserCardEntity.getGroom().getName() + "♥" + UserCardEntity.getBride().getName();
 
     // {hour}:{min} {groom}♥{bride}
-		checkExistsWithEventName(eventName);	// 중복 체크
+		EventEntity _eventEntity = findByTitle(eventName);	// 중복 체크
     
     EventEntity eventEntity = EventEntity.builder()
-        .id(id)
+        .id(_eventEntity.getId())
+        .seq(id)
         .title(eventName)
-        // .description()
-        // .location(UserCardEntity)
-        .date(EventDate)
-        .created_at(Instant.now())
+        .location(UserCardEntity.getWeddinghall().getName())
+        .resDate(UserCardEntity.getResDate())
+        .weddingDate(UserCardEntity.getWeddingDate())
+        .updated_at(Instant.now())
         .build();
 
 		return eventRepository.save(eventEntity);
 	}
 
 
-	@Transactional(readOnly = true)
-    public Page<EventEntity> findPageByName(String name, Pageable pageable) {
-		  return eventRepository.findPageByName(name, pageable);
-	}
+	// @Transactional(readOnly = true)
+  //   public Page<EventEntity> findPageByName(String name, Pageable pageable) {
+	// 	  return eventRepository.findPageByName(name, pageable);
+	// }
 
 	/**
      * [EventServiceImpl] 이벤트 이름 중복 체크 함수
@@ -134,10 +108,10 @@ public class EventServiceImpl implements EventService {
      * Author : taking(taking@duck.com)
      */
     @Transactional(readOnly = true)
-    public void checkExistsWithEventName(String name) {
-		if (eventRepository.findByName(name).isPresent()) {
-			throw new CustomException(ErrorCode.DUPLICATE); // 이벤트 이름이 중복됨
-		}
+    public void checkExistsWithEventTitle(String title) {
+      if (eventRepository.findByTitle(title).isPresent()) {
+        throw new CustomException(ErrorCode.DUPLICATE); // 이벤트 이름이 중복됨
+      }
 	}
 
 	/**
@@ -156,7 +130,40 @@ public class EventServiceImpl implements EventService {
     public EventEntity findById(String id) {
 		  return eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event with Id " + id + " Not Found."));
 	}
-	
+
+	/**
+     * [EventServiceImpl] Seq로 이벤트 조회 함수
+     *
+     * @param seq 조회할 이벤트의 식별자입니다.
+     * @return 주어진 식별자에 해당하는 이벤트 정보
+     * @throws EntityNotFoundException 해당 ID의 이벤트 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 입력한 id에 해당하는 이벤트 정보를 조회합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @Transactional(readOnly = true)
+    public EventEntity findBySeq(String seq) {
+		  return eventRepository.findBySeq(seq).orElseThrow(() -> new EntityNotFoundException("Event with Seq " + seq + " Not Found."));
+	}	
+
+	/**
+     * [EventServiceImpl] Title로 이벤트 조회 함수
+     *
+     * @param title 조회할 이벤트의 식별자입니다.
+     * @return 주어진 식별자에 해당하는 이벤트 정보
+     * @throws EntityNotFoundException 해당 ID의 이벤트 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 입력한 id에 해당하는 이벤트 정보를 조회합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @Transactional(readOnly = true)
+    public EventEntity findByTitle(String title) {
+		  return eventRepository.findByTitle(title).orElseThrow(() -> new EntityNotFoundException("Event with Seq " + title + " Not Found."));
+	}	
 
 	/**
      * [EventServiceImpl] 이벤트 삭제 함수
@@ -170,9 +177,14 @@ public class EventServiceImpl implements EventService {
      * Author : taking(taking@duck.com)
      */
     public void deleteById(String id) {
-      EventEntity eventEntity = findById(id);
 
+      EventEntity eventEntity = findById(id);
 		  eventRepository.delete(eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event with Id " + id + " Not Found.")));
 	}
+
+  @Transactional(readOnly = true)
+  public UserCardEntity userCardFindById(String id) {
+      return userCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usercard with Id " + id + " Not Found."));
+  }
 
 }
