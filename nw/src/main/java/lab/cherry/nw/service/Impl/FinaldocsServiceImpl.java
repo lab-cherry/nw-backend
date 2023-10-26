@@ -73,16 +73,16 @@ public class FinaldocsServiceImpl implements FinaldocsService {
 
         Instant instant = Instant.now();
 
-        UserEntity userEntity = userService.findById(finaldocsCreateDto.getUserid());
-        OrgEntity orgEntity = orgService.findById(finaldocsCreateDto.getOrgid());
-        FinalTemplEntity finamTemplEntity = finalTemplService.findById(finaldocsCreateDto.getFinaltemplid());
+        UserEntity userEntity = userService.findById(finaldocsCreateDto.getUser());
+        OrgEntity orgEntity = orgService.findById(finaldocsCreateDto.getOrg());
+        FinalTemplEntity finamTemplEntity = finalTemplService.findById(finaldocsCreateDto.getFinaltempl());
 
         FinaldocsEntity finaldocsEntity = FinaldocsEntity.builder()
             .name(finaldocsCreateDto.getName())
             .content(finaldocsCreateDto.getContent())
-            .userid(userEntity)
-            .orgid(orgEntity)
-            .finaltemplid(finamTemplEntity)
+            .user(userEntity)
+            .org(orgEntity)
+            .finaltempl(finamTemplEntity)
             .createdAt(instant)
             .build();
 
@@ -103,9 +103,9 @@ public class FinaldocsServiceImpl implements FinaldocsService {
     public void updateById(String id, FinaldocsEntity.FinaldocsUpdateDto finaldocs) {
 
         FinaldocsEntity finaldocsEntity = findById(id);
-        UserEntity userEntity = userService.findById(finaldocs.getUserid());
-        OrgEntity orgEntity = orgService.findById(finaldocs.getOrgid());
-        FinalTemplEntity finamTemplEntity = finalTemplService.findById(finaldocs.getFinaltemplid());
+        UserEntity userEntity = userService.findById(finaldocs.getUser());
+        OrgEntity orgEntity = orgService.findById(finaldocs.getOrg());
+        FinalTemplEntity finamTemplEntity = finalTemplService.findById(finaldocs.getFinaltempl());
 
         Instant instant = Instant.now();
 
@@ -113,9 +113,9 @@ public class FinaldocsServiceImpl implements FinaldocsService {
 
             finaldocsEntity = FinaldocsEntity.builder()
                     .id(finaldocsEntity.getId())
-                    .userid(userEntity)
-                    .orgid(orgEntity)
-                    .finaltemplid(finamTemplEntity)
+                    .user(userEntity)
+                    .org(orgEntity)
+                    .finaltempl(finamTemplEntity)
                     .content((finaldocs.getContent() != null) ? finaldocs.getContent() : finaldocsEntity.getContent())
                     .updated_at(instant)
                     .build();
@@ -144,7 +144,27 @@ public class FinaldocsServiceImpl implements FinaldocsService {
     }
 
 
-
+  /**
+     * [FinaldocsServiceImpl] 최종확인서 승인 함수
+     *
+     * @param name 조회할 최종확인서의 이름입니다.
+     * @return 주어진 이름에 해당하는 최종확인서 정보를 리턴합니다.
+     * @throws EntityNotFoundException 해당 이름의 최종확인서 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 입력한 name에 해당하는 최종확인서 정보를 조회합니다.
+     * </pre>
+     *
+     * Author : hhhaeri(yhoo0020@gmail.com)
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public Boolean Approval(Boolean Yn) {
+        if(Yn ==true){
+            return true;
+        }else{
+            return false;
+        }
+    }
     /**
      * [FinaldocsServiceImpl] ID로 최종확인서 조회 함수
      *

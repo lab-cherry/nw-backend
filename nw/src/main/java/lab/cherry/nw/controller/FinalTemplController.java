@@ -46,7 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/nw/api/v1/finaltempl")
+@RequestMapping("/api/v1/finaltempl")
 @Tag(name = "Finaltempl", description = "Finaltempl API Document")
 public class FinalTemplController {
 

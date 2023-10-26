@@ -56,7 +56,7 @@ public class Common {
         } else {
             // sort=[field, direction]
             orders.add(new Sort.Order(getSortDirection(sort[1]), sort[0]));
-   }
+        }
 
         return orders;
     }

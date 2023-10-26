@@ -1,9 +1,12 @@
 package lab.cherry.nw.service;
 
 import lab.cherry.nw.model.UserEntity;
+import lab.cherry.nw.model.WeddinghallEntity;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -23,4 +26,5 @@ public interface UserService {
     void deleteById(String id);
     Page<UserEntity> findPageByUserId(String userid, Pageable pageable);
 	void updateOrgById(String id, String orgId);
+    void updateUserPhoto(String id, List<MultipartFile> image);
 }

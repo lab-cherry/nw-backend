@@ -1,5 +1,13 @@
 package lab.cherry.nw.service.Impl;
 
+import java.time.Instant;
+import java.util.List;
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
@@ -11,17 +19,6 @@ import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.service.OrgService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <pre>
@@ -72,22 +69,13 @@ public class BanquetServiceImpl implements BanquetService {
      */
     public BanquetEntity createBanquet(BanquetEntity.BanquetCreateDto banquetCreateDto, List<MultipartFile> images) {
 		
-		log.error("[#0] in createBanquet");
-		
 		checkExistsWithBanquetName(banquetCreateDto.getBanquetName());	// 중복 체크
 
 		String orgId = banquetCreateDto.getOrgId();
 		OrgEntity orgEntity = orgService.findById(orgId);
     ObjectId objectId = new ObjectId();
-		
-    Map<String, String> info = new HashMap<>();
-      info.put("org", orgEntity.getName());
-      info.put("type", "연회장");
-      // info.put("username", "");
-      info.put("kind", banquetCreateDto.getBanquetName());
-      info.put("seq", objectId.toString());
     
-    List<String> imageUrls = fileService.uploadFiles(info, images);
+    List<String> imageUrls = fileService.uploadFiles(objectId.toString(), images);
 		
 		BanquetEntity banquetEntity = BanquetEntity.builder()
         .id(objectId.toString())
@@ -157,9 +145,8 @@ public class BanquetServiceImpl implements BanquetService {
     public void deleteById(String id) {
 
       BanquetEntity banquetEntity = findById(id);
-      fileService.deleteFiles(banquetEntity.getName(), banquetEntity.getImages());
-
       banquetRepository.delete(banquetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Banquet with Id " + id + " Not Found.")));
+
 	}
 
 }

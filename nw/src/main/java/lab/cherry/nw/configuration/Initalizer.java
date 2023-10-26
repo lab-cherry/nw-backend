@@ -1,6 +1,11 @@
 package lab.cherry.nw.configuration;
 
 
+import java.time.Instant;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.model.UserEntity;
@@ -9,24 +14,11 @@ import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class Initalizer implements ApplicationRunner {
-
-
-	@Value("${lab.cherry.nw.uploadPath}")
-	private String uploadPath;
     
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;

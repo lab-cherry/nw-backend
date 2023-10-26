@@ -1,7 +1,5 @@
 package lab.cherry.nw.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
 import java.net.URI;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,11 +31,6 @@ public class HttpUtils {
 		ResponseEntity<byte[]> result = restTemplate.exchange(uri, _method, new HttpEntity<>(headers), byte[].class);
 
 		return result.getBody();
-
-		// log.error("result {}", result);
-
-		// return result.getBody();
-
 	}
 
 
