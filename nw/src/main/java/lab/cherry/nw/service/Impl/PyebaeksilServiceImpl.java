@@ -72,26 +72,14 @@ public class PyebaeksilServiceImpl implements PyebaeksilService {
      */
     public PyebaeksilEntity createPyebaeksil(PyebaeksilEntity.PyebaeksilCreateDto pyebaeksilCreateDto, List<MultipartFile> images) {
 		
-		log.error("[#0] in createPyebaeksil");
-		
 		checkExistsWithPyebaeksilName(pyebaeksilCreateDto.getPyebaeksilName());	// 중복 체크
 
 		String orgId = pyebaeksilCreateDto.getOrgId();
 		OrgEntity orgEntity = orgService.findById(orgId);
     ObjectId objectId = new ObjectId();
-		
-		// 파일 업로드 시, 구분하기 위한 정보 입력
-		// {org_objectId}/웨딩홀/{weddinghallName}/profile.jpg
-		// {org_objectId}/고객/{userName}/문서.xlsx
-		Map<String, String> info = new HashMap<>();
-    info.put("org", orgEntity.getName());
-    info.put("type", "폐백실");
-    // info.put("username", "");
-    info.put("kind", pyebaeksilCreateDto.getPyebaeksilName());
-    info.put("seq", objectId.toString());
 
 		// 업로드한 파일의 ObjectId 를 List로 반환
-    List<String> imageUrls = fileService.uploadFiles(info, images);
+    List<String> imageUrls = fileService.uploadFiles(objectId.toString(), images);
 		
 		PyebaeksilEntity pyebaeksilEntity = PyebaeksilEntity.builder()
         .id(objectId.toString())
@@ -159,9 +147,8 @@ public class PyebaeksilServiceImpl implements PyebaeksilService {
     public void deleteById(String id) {
 
     PyebaeksilEntity pyebaeksilEntity = findById(id);
-    fileService.deleteFiles(pyebaeksilEntity.getName(), pyebaeksilEntity.getImages());
-
 		pyebaeksilRepository.delete(pyebaeksilRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Pyebaeksil with Id " + id + " Not Found.")));
+
 	}
 
 }
