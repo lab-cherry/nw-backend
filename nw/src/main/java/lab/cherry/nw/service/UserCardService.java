@@ -21,6 +21,7 @@ public interface UserCardService {
 //    UserCardEntity findByUserCardId(String id);
     UserCardEntity createUserCard(UserCardEntity.UserCardCreateDto userCardCreateDto);
     void updateById(String id, UserCardEntity.UserCardUpdateDto usercard);
+    void updateWeddinghallByName(String id, String weddinghall);
     void deleteById(String id);
     Page<UserCardEntity> findPageById(String id, Pageable pageable);
 
