@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
-import lab.cherry.nw.model.BookmarkEntity;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.QsheetEntity;
 import lab.cherry.nw.model.QsheetEntity.ItemData;
@@ -21,7 +20,6 @@ import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.QsheetHistoryRepository;
 import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.QsheetHistoryService;
-import lab.cherry.nw.service.QsheetService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,6 +75,13 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
         // QsheetEntity qsheetEntity = qsheetService.findById(originQsheetEntity.getId());
         UserEntity userEntity = userService.findById(qsheetUpdateDto.getUpdateUser());
         List<Map<String,String>> contentList = new  ArrayList<>();
+        if(qsheetUpdateDto.getName()!=null){
+            Map<String, String> data = new HashMap<>();
+            data.put("action", "수정");
+            data.put("info", "제목");
+            data.put("content",qsheetUpdateDto.getName());
+            contentList.add(data);
+        }
         if(qsheetUpdateDto.getOrgSeq()!=null){
             OrgEntity orgEntity = orgService.findById(qsheetUpdateDto.getOrgSeq());
             Map<String, String> data = new HashMap<>();

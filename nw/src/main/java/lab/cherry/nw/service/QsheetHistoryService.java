@@ -21,13 +21,8 @@ import lab.cherry.nw.model.QsheetHistoryEntity;
 public interface QsheetHistoryService {
   Page<QsheetHistoryEntity> getQsheetHistorys(Pageable pageable);
   QsheetHistoryEntity findById(String id);
-  // QsheetHistoryEntity findByUserId(ObjectId userId);
   Page<QsheetHistoryEntity> findPageByUserId(String userid, Pageable pageable);
   Page<QsheetHistoryEntity> findPageByQsheetId(String qsheetid, Pageable pageable);
   void createQsheetHistory(QsheetEntity qsheetEntity, QsheetEntity.QsheetUpdateDto qsheetUpdateDto);
   List<QsheetHistoryEntity> findByQsheetId(ObjectId qsheetId);
-//  Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable);
-//  Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable);
-// void updateOrgById(String id, List<String> orgIds);
-// byte[] download(List<String> users);
 }
