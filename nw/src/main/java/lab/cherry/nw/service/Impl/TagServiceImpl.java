@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  * </pre>
  */
 @Slf4j
-@Service("TagServiceImpl")
+@Service("tagServiceImpl")
 @Transactional
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {

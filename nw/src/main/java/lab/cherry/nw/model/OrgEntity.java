@@ -63,7 +63,7 @@ public class OrgEntity implements Serializable {
 
     @JsonProperty("orgEnabled")
     @Schema(title = "조직 활성화 여부", example = "true")
-    private boolean enabled;
+    private Boolean enabled;
 
     @JsonProperty("created_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
@@ -87,22 +87,22 @@ public class OrgEntity implements Serializable {
         @NotBlank
         @Schema(title = "조직 이름", example = "더모멘트")
         @Size(min = 4, max = 20, message = "Minimum name length: 4 characters")
-        private String name;
+        private String orgName;
 
         @NotBlank
         @Schema(title = "조직 사업자번호", example = "123-45-67890")
         @Size(min = 4, max = 40, message = "Minimum biznum length: 4 characters")
-        private String biznum;
+        private String orgBiznum;
 
         @NotBlank
         @Schema(title = "조직 연락처", example = "02-0000-0000")
         @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-        private String contact;
+        private String orgContact;
 
 		@NotBlank
 	    @Schema(title = "조직 주소", example = "서울시 종로구 파인애플주스 A동")
 	    @Size(min = 4, max = 255, message = "Minimum address length: 4 characters")
-	    private String address;
+	    private String orgAddress;
 
     }
 
@@ -113,19 +113,22 @@ public class OrgEntity implements Serializable {
 
         @Schema(title = "조직 이름", example = "더모멘트")
         @Size(min = 4, max = 20, message = "Minimum name length: 4 characters")
-        private String name;
+        private String orgName;
 
         @Schema(title = "조직 사업자번호", example = "123-45-67890")
         @Size(min = 4, max = 40, message = "Minimum biznum length: 4 characters")
-        private String biznum;
+        private String orgBiznum;
 
         @Schema(title = "조직 연락처", example = "02-0000-0000")
         @Size(min = 4, max = 40, message = "Minimum contact length: 4 characters")
-        private String contact;
+        private String orgContact;
 
 	    @Schema(title = "조직 주소", example = "서울시 종로구 파인애플주스 A동")
 	    @Size(min = 4, max = 255, message = "Minimum address length: 4 characters")
-	    private String address;
+	    private String orgAddress;
+
+        @Schema(title = "조직 활성화 여부", example = "true")
+        private Boolean orgEnabled;
 
     }
 }

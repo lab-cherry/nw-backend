@@ -12,6 +12,8 @@ services:
       DATABASE_NAME: nw
       DATABASE_USERID: nw
       DATABASE_USERPASS: nw
+      UPLOAD_PATH: /data
+      MAX_UPLOAD_SIZE: 3096MB
       #SPRING_PROFILES_ACTIVE: prod
       JAVA_OPTS: "-Xms256m -Xmx512m -XX:+UseG1GC"
     ports:
@@ -19,10 +21,8 @@ services:
     depends_on:
       - nw-db
       - nw-redis
-      - nw-storage
-    #    volumes:
-#      - ./log:/log/spring
-
+    volumes:
+      - ./nw_data:/data
 
   nw-db:
     image: 'bitnami/mongodb:latest'
@@ -56,21 +56,3 @@ services:
     volumes:
       - './redis_data:/data'
       - '/etc/localtime:/etc/localtime:ro'
-
-
-  nw-storage:
-    image: 'minio/minio:RELEASE.2023-09-04T19-57-37Z'
-    container_name: nw-storage
-    command: server --console-address ":9001" /data
-    restart: unless-stopped
-    logging:
-      driver: json-file
-    environment:
-      MINIO_ACCESS_KEY: admin
-      MINIO_SECRET_KEY: nangmanwedding
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    volumes:
-      - './storage_data:/data'
-

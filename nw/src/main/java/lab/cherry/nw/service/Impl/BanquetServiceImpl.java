@@ -11,6 +11,7 @@ import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.service.OrgService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -69,35 +70,34 @@ public class BanquetServiceImpl implements BanquetService {
      *
      * Author : taking(taking@duck.com)
      */
-    public BanquetEntity createBanquet(BanquetEntity.BanquetCreateDto banquetCreateDto, List<MultipartFile> imageFiles) {
+    public BanquetEntity createBanquet(BanquetEntity.BanquetCreateDto banquetCreateDto, List<MultipartFile> images) {
 		
 		log.error("[#0] in createBanquet");
 		
 		checkExistsWithBanquetName(banquetCreateDto.getBanquetName());	// 중복 체크
 
-		String orgId = banquetCreateDto.getOrg();
+		String orgId = banquetCreateDto.getOrgId();
 		OrgEntity orgEntity = orgService.findById(orgId);
+    ObjectId objectId = new ObjectId();
 		
-		// 파일 업로드 시, 구분하기 위한 정보 입력
-		// {org_objectId}/웨딩홀/{weddinghallName}/profile.jpg
-		// {org_objectId}/고객/{userName}/문서.xlsx
-		Map<String, String> info = new HashMap<>();
-		info.put("type", "연회장");
-		info.put("org", banquetCreateDto.getOrg());
-
-		// 업로드한 파일의 ObjectId 를 List로 반환
-        List<String> fileObjectIds = fileService.uploadFiles(info, imageFiles);
-
-        log.error("[#1] imageFileIds = {}", fileObjectIds);
+    Map<String, String> info = new HashMap<>();
+      info.put("org", orgEntity.getName());
+      info.put("type", "연회장");
+      // info.put("username", "");
+      info.put("kind", banquetCreateDto.getBanquetName());
+      info.put("seq", objectId.toString());
+    
+    List<String> imageUrls = fileService.uploadFiles(info, images);
 		
 		BanquetEntity banquetEntity = BanquetEntity.builder()
-            .name(banquetCreateDto.getBanquetName())
-            .max_person(banquetCreateDto.getMaxPerson())
-            .org(orgEntity)
-            .interval(banquetCreateDto.getInterval())
-            .images(fileObjectIds)
-            .created_at(Instant.now())
-            .build();
+        .id(objectId.toString())
+        .name(banquetCreateDto.getBanquetName())
+        .max_person(banquetCreateDto.getMaxPerson())
+        .org(orgEntity)
+        .interval(banquetCreateDto.getInterval())
+        .images(imageUrls)
+        .created_at(Instant.now())
+        .build();
 
 		return banquetRepository.save(banquetEntity);
 	}
@@ -156,16 +156,10 @@ public class BanquetServiceImpl implements BanquetService {
      */
     public void deleteById(String id) {
 
-		// 파일 다운로드
-		BanquetEntity banquetEntity = findById(id);
+      BanquetEntity banquetEntity = findById(id);
+      fileService.deleteFiles(banquetEntity.getName(), banquetEntity.getImages());
 
-		List<String> fileObjectIds = banquetEntity.getImages();
-
-		if (!fileObjectIds.isEmpty()) {
-			fileService.deleteFiles(banquetEntity.getOrg().getId(), fileObjectIds);
-		}
-
-		banquetRepository.delete(banquetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Banquet with Id " + id + " Not Found.")));
+      banquetRepository.delete(banquetRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Banquet with Id " + id + " Not Found.")));
 	}
 
 }

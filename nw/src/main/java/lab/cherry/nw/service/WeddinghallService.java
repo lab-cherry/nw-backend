@@ -20,7 +20,7 @@ import java.util.List;
 @Component
 public interface WeddinghallService {
     Page<WeddinghallEntity> getWeddinghalls(Pageable pageable);
-	WeddinghallEntity createWeddinghall(WeddinghallEntity.WeddinghallCreateDto weddinghallCreateDto, List<MultipartFile> files);
+	WeddinghallEntity createWeddinghall(WeddinghallEntity.WeddinghallCreateDto weddinghallCreateDto, List<MultipartFile> images);
 //    void updateById(String id, WeddinghallEntity.UpdateDto weddinghall);
     WeddinghallEntity findById(String id);
    WeddinghallEntity findByName(String name);

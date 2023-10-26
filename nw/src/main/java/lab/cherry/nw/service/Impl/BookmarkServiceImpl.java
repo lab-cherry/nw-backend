@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
  * </pre>
  */
 @Slf4j
-@Service("BookmarkServiceImpl")
+@Service("bookmarkServiceImpl")
 @Transactional
 @RequiredArgsConstructor
 public class BookmarkServiceImpl implements BookmarkService {

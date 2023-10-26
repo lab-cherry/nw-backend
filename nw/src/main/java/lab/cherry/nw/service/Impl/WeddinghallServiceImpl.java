@@ -67,37 +67,36 @@ public class WeddinghallServiceImpl implements WeddinghallService {
      * </pre>
      *
      * Author : taking(taking@duck.com)
+	 * @throws IOException
      */
-    public WeddinghallEntity createWeddinghall(WeddinghallEntity.WeddinghallCreateDto weddinghallCreateDto, List<MultipartFile> imageFiles) {
+    public WeddinghallEntity createWeddinghall(WeddinghallEntity.WeddinghallCreateDto weddinghallCreateDto, List<MultipartFile> images) {
 		
 		log.error("[#0] in createWeddinghall");
 		
 		checkExistsWithWeddingHallName(weddinghallCreateDto.getWeddinghallName());	// 중복 체크
 
-		String orgId = weddinghallCreateDto.getOrg();
+		String orgId = weddinghallCreateDto.getOrgId();
 		OrgEntity orgEntity = orgService.findById(orgId);
-		
-		// 파일 업로드 시, 구분하기 위한 정보 입력
-		// {org_objectId}/웨딩홀/{weddinghallName}/profile.jpg
-		// {org_objectId}/고객/{userName}/문서.xlsx
-		Map<String, String> info = new HashMap<>();
-		info.put("type", "웨딩홀");
-		// info.put("type", weddinghallCreateDto.getWeddinghallName());
-		info.put("org", weddinghallCreateDto.getOrg());
-
-		// 업로드한 파일의 ObjectId 를 List로 반환
-        List<String> fileObjectIds = fileService.uploadFiles(info, imageFiles);
-
-        log.error("[#1] imageFileIds = {}", fileObjectIds);
-		
-		WeddinghallEntity weddinghallEntity = WeddinghallEntity.builder()
-            .name(weddinghallCreateDto.getWeddinghallName())
-            .max_person(weddinghallCreateDto.getMaxPerson())
-            .org(orgEntity)
-            .interval(weddinghallCreateDto.getInterval())
-            .images(fileObjectIds)
-            .created_at(Instant.now())
-            .build();
+    ObjectId objectId = new ObjectId();
+    
+    Map<String, String> info = new HashMap<>();
+      info.put("org", orgEntity.getName());
+      info.put("type", "웨딩홀");
+      // info.put("username", "");
+      info.put("kind", weddinghallCreateDto.getWeddinghallName());
+      info.put("seq", objectId.toString());
+    
+    List<String> imageUrls = fileService.uploadFiles(info, images);
+    
+    WeddinghallEntity weddinghallEntity = WeddinghallEntity.builder()
+        .id(objectId.toString())
+        .name(weddinghallCreateDto.getWeddinghallName())
+        .max_person(weddinghallCreateDto.getMaxPerson())
+        .org(orgEntity)
+        .interval(weddinghallCreateDto.getInterval())
+        .images(imageUrls)
+        .created_at(Instant.now())
+        .build();
 
 		return weddinghallRepository.save(weddinghallEntity);
 	}
@@ -133,7 +132,7 @@ public class WeddinghallServiceImpl implements WeddinghallService {
 
 	@Transactional(readOnly = true)
     public Page<WeddinghallEntity> findPageByName(String name, Pageable pageable) {
-		return weddinghallRepository.findPageByName(name, pageable);
+		  return weddinghallRepository.findPageByName(name, pageable);
 	}
 
 	/**
@@ -168,7 +167,7 @@ public class WeddinghallServiceImpl implements WeddinghallService {
      */
     @Transactional(readOnly = true)
     public WeddinghallEntity findById(String id) {
-		return weddinghallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Weddinghall with Id " + id + " Not Found."));
+		  return weddinghallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Weddinghall with Id " + id + " Not Found."));
 	}
 
       /**
@@ -202,16 +201,10 @@ public class WeddinghallServiceImpl implements WeddinghallService {
      */
     public void deleteById(String id) {
 
-		// 파일 다운로드
-		WeddinghallEntity weddinghallEntity = findById(id);
+      WeddinghallEntity weddinghallEntity = findById(id);
+      fileService.deleteFiles(weddinghallEntity.getName(), weddinghallEntity.getImages());
 
-		List<String> fileObjectIds = weddinghallEntity.getImages();
-
-		if (!fileObjectIds.isEmpty()) {
-			fileService.deleteFiles(weddinghallEntity.getOrg().getId(), fileObjectIds);
-		}
-
-		weddinghallRepository.delete(weddinghallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Weddinghall with Id " + id + " Not Found.")));
+		  weddinghallRepository.delete(weddinghallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Weddinghall with Id " + id + " Not Found.")));
 	}
 
 }

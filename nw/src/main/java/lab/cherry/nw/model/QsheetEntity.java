@@ -31,7 +31,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "qsheet")
-@JsonPropertyOrder({ "id", "name", "opening"})
+@JsonPropertyOrder({ "id", "name"})
 public class QsheetEntity implements Serializable {
 
     @Id
@@ -181,6 +181,9 @@ public class QsheetEntity implements Serializable {
     @Builder
     @NoArgsConstructor @AllArgsConstructor
     public static class QsheetUpdateDto {
+        @NotNull
+        @Schema(title = "업데이트 유저", example = "38352658567418867")
+        private String updateUser;
 		@Schema(title = "조직 고유번호", example = "38352658567418867")
         private String orgSeq;
 		@Schema(title = "데이터 리스트")
@@ -193,6 +196,7 @@ public class QsheetEntity implements Serializable {
         private boolean org_confirm;
 		@Schema(title = "신랑신부 확인", type="Boolean", example = "false")
 		private boolean client_confirm;
+        
     }
 
 	public void updateFromDto(QsheetUpdateDto updateDto) {

@@ -7,8 +7,9 @@ import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.OrgRepository;
 import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.repository.UserRepository;
-import lab.cherry.nw.service.MinioService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,19 +19,22 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class Initalizer implements ApplicationRunner {
+
+
+	@Value("${lab.cherry.nw.uploadPath}")
+	private String uploadPath;
     
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final OrgRepository orgRepository;
     private final PasswordEncoder passwordEncoder;
-    private final MinioService minioService;
 
     @Override
     public void run(ApplicationArguments args) {
-
 
         if(roleRepository.findByName("ROLE_ADMIN").isEmpty()) {
 
@@ -58,6 +62,7 @@ public class Initalizer implements ApplicationRunner {
                     .name("DEFAULT")
                     .biznum("123-45-67890")
                     .contact("02-0000-0000")
+                    .address("파인에비뉴")
                     .enabled(true)
                     .created_at(instant)
                     .build();
@@ -94,16 +99,6 @@ public class Initalizer implements ApplicationRunner {
                 .role(roleEntity)
                 .enabled(true)
                 .build());
-        }
-
-        // 'user' Bucket 생성
-        try {
-            minioService.createBucketIfNotExists("user");
-			minioService.createGlobalPolicy("user");
-			minioService.setBucketPolicy("user");
-        } catch (InvalidKeyException | NoSuchAlgorithmException | IOException e) {
-            // log.error("{}, e");
-            // e.printStackTrace();
         }
     }
 }
