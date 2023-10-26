@@ -1,6 +1,7 @@
 package lab.cherry.nw.service.Impl;
 
 import java.time.Instant;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -8,12 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
-import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.UserCardEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.model.WeddinghallEntity;
 import lab.cherry.nw.repository.UserCardRepository;
-import lab.cherry.nw.repository.WeddinghallRepository;
+import lab.cherry.nw.service.EventService;
 import lab.cherry.nw.service.UserCardService;
 import lab.cherry.nw.service.UserService;
 import lab.cherry.nw.service.WeddinghallService;
@@ -37,6 +37,7 @@ public class UserCardServiceImpl implements UserCardService {
     private final UserCardRepository userCardRepository;
     private final UserService userService;
     private final WeddinghallService weddinghallService;
+    private final EventService eventService;
 
     /**
      * [userCardServiceImpl] 전체 고객카드 조회 함수
@@ -67,11 +68,13 @@ public class UserCardServiceImpl implements UserCardService {
      */
     public UserCardEntity createUserCard(UserCardEntity.UserCardCreateDto userCardCreateDto) {
 
-        Instant instant = Instant.now();
-        UserEntity userEntity = userService.findById(userCardCreateDto.getUserinfo());
-        WeddinghallEntity weddinghallEntity = weddinghallService.findByName(userCardCreateDto.getWeddinghall());
+        UserEntity userEntity = userService.findById(userCardCreateDto.getUserSeq());
+
+        WeddinghallEntity weddinghallEntity = weddinghallService.findByName(userCardCreateDto.getWeddinghallName());
+        ObjectId objectId = new ObjectId();
 
         UserCardEntity userCardEntity = UserCardEntity.builder()
+            .id(objectId.toString())
             .groom(userCardCreateDto.getGroom())
             .bride(userCardCreateDto.getBride())
             .note(userCardCreateDto.getNote())
@@ -80,10 +83,14 @@ public class UserCardServiceImpl implements UserCardService {
             .status(userCardCreateDto.getStatus())
             .userinfo(userEntity)
             .weddinghall(weddinghallEntity)
-            .created_at(instant)
+            .created_at(Instant.now())
             .build();
 
-        return userCardRepository.save(userCardEntity);
+        userCardRepository.save(userCardEntity);
+
+        eventService.createEvent(objectId.toString());
+
+        return userCardEntity;
     }
 
     /**
@@ -99,8 +106,8 @@ public class UserCardServiceImpl implements UserCardService {
      */
     public void updateById(String id, UserCardEntity.UserCardUpdateDto usercard) {
 
-        UserEntity userEntity = userService.findById(usercard.getUserinfo());
-        WeddinghallEntity weddinghallEntity = weddinghallService.findByName(usercard.getWeddinghall());;
+        UserEntity userEntity = userService.findById(usercard.getUserSeq());
+        WeddinghallEntity weddinghallEntity = weddinghallService.findByName(usercard.getWeddinghallName());;
 
         UserCardEntity userCardEntity = findById(id);
         Instant instant = Instant.now();
@@ -121,6 +128,8 @@ public class UserCardServiceImpl implements UserCardService {
                 .build();
 
             userCardRepository.save(userCardEntity);
+
+            eventService.createEvent(userCardEntity.getId());
 
         } else {
             log.error("[userCardServiceImpl - groom, bride, note, status,weddingDate,resDate,만 수정 가능합니다.");
@@ -165,6 +174,8 @@ public class UserCardServiceImpl implements UserCardService {
 
             userCardRepository.save(userCardEntity);
 
+            eventService.createEvent(userCardEntity.getId());
+
         } else {
 			log.error("[UserCardServiceImpl - updateWeddinghallById] weddinghallId 만 입력 가능합니다.");
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
@@ -184,6 +195,8 @@ public class UserCardServiceImpl implements UserCardService {
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
     public void deleteById(String id) {
+        
+        eventService.deleteById(id);
         userCardRepository.delete(userCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usercard with Id " + id + " Not Found.")));
     }
 

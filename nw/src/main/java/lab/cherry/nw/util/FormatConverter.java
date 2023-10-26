@@ -9,8 +9,14 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class FormatConverter {
@@ -66,4 +72,31 @@ public class FormatConverter {
 		}
 		return lines;
 	}
+
+
+	public static Map<String, Integer> convertDateFormat(String _date) {
+
+			Map<String, Integer> returnVal = new HashMap<>();
+
+			try {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+				
+					Date date = sdf.parse(_date);
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(date);
+					
+					returnVal.put("year", calendar.get(Calendar.YEAR));
+					returnVal.put("month", calendar.get(Calendar.MONTH) + 1); // 월은 0부터 시작하므로 1을 더해줍니다.
+					returnVal.put("day", calendar.get(Calendar.DAY_OF_MONTH));
+					returnVal.put("hour", calendar.get(Calendar.HOUR_OF_DAY));
+					returnVal.put("minute", calendar.get(Calendar.MINUTE));
+					returnVal.put("second", calendar.get(Calendar.SECOND));
+					
+					return returnVal;
+
+			} catch (ParseException e) {
+					e.printStackTrace();
+			}
+			return returnVal;
+		}
 }

@@ -31,11 +31,6 @@ public class HttpUtils {
 		ResponseEntity<byte[]> result = restTemplate.exchange(uri, _method, new HttpEntity<>(headers), byte[].class);
 
 		return result.getBody();
-
-		// log.error("result {}", result);
-
-		// return result.getBody();
-
 	}
 
 

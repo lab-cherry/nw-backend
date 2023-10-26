@@ -28,7 +28,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "files")
-@JsonPropertyOrder({ "fileSeq", "fileName", "fileType", "fileExt", "filePath", "fileUrl", "fileSize", "userId", "orgId", "created_at" })
+@JsonPropertyOrder({ "fileSeq", "fileName", "fileType", "fileExt", "fileUrl", "fileSize", "created_at" })
 public class FileEntity implements Serializable {
 
 	@Id
@@ -47,11 +47,6 @@ public class FileEntity implements Serializable {
     private String type;
 
 	@NotNull
-    @JsonProperty("filePath")
-    @Schema(title = "파일 경로", example = "관리/더 글로리/IMG_61E29A079818-1.jpeg")
-    private String path;
-
-	@NotNull
     @JsonProperty("fileUrl")
     @Schema(title = "파일 URL", example = "https://{IP_ADDR}:{PORT}/api/v1/file/download/6506ebb61b6deb1602d85c35?path=/관리/더 글로리/IMG_61E29A079818-1.jpeg")
     private String url;
@@ -60,15 +55,6 @@ public class FileEntity implements Serializable {
     @JsonProperty("fileSize")
     @Schema(title = "파일 사이즈", example = "20MB")
     private String size;
-
-    @JsonProperty("userName")
-    @Schema(title = "사용자명", example = "체리랩")
-	private String userName;
-
-	@NotNull
-    @JsonProperty("orgName")
-    @Schema(title = "조직명", example = "더모멘트")
-	private String orgName;
 
 	@JsonProperty("created_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")

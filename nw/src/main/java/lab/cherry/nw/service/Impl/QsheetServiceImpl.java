@@ -94,12 +94,7 @@ public class QsheetServiceImpl implements QsheetService {
         ////////////
         List<ItemData> newItemData = new ArrayList<>();
         if (files != null){
-            Map<String, String> info = new HashMap<>();
-            info.put("org",(orgEntity != null ? orgEntity.getName(): ""));
-            info.put("username", userEntity.getUsername());
-            info.put("kind", qsheetCreateDto.getName());
-            info.put("seq", objectid.toString());
-            List<String> fileUrls = fileService.uploadFiles(info, files);
+            List<String> fileUrls = fileService.uploadFiles(objectid.toString(), files);
             log.error("fileUrls {}", fileUrls);
             ////////////
             
@@ -180,12 +175,7 @@ public class QsheetServiceImpl implements QsheetService {
             } 
             if(files!=null){
                 newItemData= new ArrayList<>();
-                Map<String, String> info = new HashMap<>();
-                info.put("org",(orgEntity != null ? orgEntity.getName(): ""));
-                info.put("username", qsheetEntity.getUserid().getUsername());
-                info.put("kind", qsheetEntity.getName());
-                info.put("seq",qsheetEntity.getId() );
-                List<String> fileUrls = fileService.uploadFiles(info, files);
+                List<String> fileUrls = fileService.uploadFiles(qsheetEntity.getId(), files);
                 log.error("fileUrls {}", fileUrls);
             ////////////
                 

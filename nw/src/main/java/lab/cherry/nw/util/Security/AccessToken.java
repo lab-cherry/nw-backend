@@ -1,8 +1,6 @@
 package lab.cherry.nw.util.Security;
 
 import java.util.Map;
-import lab.cherry.nw.model.OrgEntity;
-import lab.cherry.nw.model.RoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

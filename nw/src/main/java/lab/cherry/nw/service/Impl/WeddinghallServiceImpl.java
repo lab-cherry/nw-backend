@@ -1,9 +1,8 @@
 package lab.cherry.nw.service.Impl;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -67,11 +66,8 @@ public class WeddinghallServiceImpl implements WeddinghallService {
      * </pre>
      *
      * Author : taking(taking@duck.com)
-	 * @throws IOException
      */
     public WeddinghallEntity createWeddinghall(WeddinghallEntity.WeddinghallCreateDto weddinghallCreateDto, List<MultipartFile> images) {
-		
-		log.error("[#0] in createWeddinghall");
 		
 		checkExistsWithWeddingHallName(weddinghallCreateDto.getWeddinghallName());	// 중복 체크
 
@@ -79,14 +75,7 @@ public class WeddinghallServiceImpl implements WeddinghallService {
 		OrgEntity orgEntity = orgService.findById(orgId);
     ObjectId objectId = new ObjectId();
     
-    Map<String, String> info = new HashMap<>();
-      info.put("org", orgEntity.getName());
-      info.put("type", "웨딩홀");
-      // info.put("username", "");
-      info.put("kind", weddinghallCreateDto.getWeddinghallName());
-      info.put("seq", objectId.toString());
-    
-    List<String> imageUrls = fileService.uploadFiles(info, images);
+    List<String> imageUrls = fileService.uploadFiles(objectId.toString(), images);
     
     WeddinghallEntity weddinghallEntity = WeddinghallEntity.builder()
         .id(objectId.toString())
@@ -136,12 +125,12 @@ public class WeddinghallServiceImpl implements WeddinghallService {
 	}
 
 	/**
-     * [WeddinghallServiceImpl] 조직 이름 중복 체크 함수
+     * [WeddinghallServiceImpl] 웨딩홀 이름 중복 체크 함수
      *
-     * @param name 중복 체크에 필요한 조직 이름 객체입니다.
-     * @throws CustomException 조직의 이름이 중복된 경우 예외 처리 발생
+     * @param name 중복 체크에 필요한 웨딩홀 이름 객체입니다.
+     * @throws CustomException 웨딩홀의 이름이 중복된 경우 예외 처리 발생
      * <pre>
-     * 입력된 조직 이름으로 이미 등록된 조직이 있는지 확인합니다.
+     * 입력된 웨딩홀 이름으로 이미 등록된 웨딩홀이 있는지 확인합니다.
      * </pre>
      *
      * Author : taking(taking@duck.com)
@@ -149,7 +138,7 @@ public class WeddinghallServiceImpl implements WeddinghallService {
     @Transactional(readOnly = true)
     public void checkExistsWithWeddingHallName(String name) {
 		if (weddinghallRepository.findByName(name).isPresent()) {
-			throw new CustomException(ErrorCode.DUPLICATE); // 조직 이름이 중복됨
+			throw new CustomException(ErrorCode.DUPLICATE); // 웨딩홀 이름이 중복됨
 		}
 	}
 
@@ -202,9 +191,8 @@ public class WeddinghallServiceImpl implements WeddinghallService {
     public void deleteById(String id) {
 
       WeddinghallEntity weddinghallEntity = findById(id);
-      fileService.deleteFiles(weddinghallEntity.getName(), weddinghallEntity.getImages());
-
 		  weddinghallRepository.delete(weddinghallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Weddinghall with Id " + id + " Not Found.")));
+
 	}
 
 }

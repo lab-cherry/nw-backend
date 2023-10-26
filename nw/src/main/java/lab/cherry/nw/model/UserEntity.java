@@ -63,6 +63,10 @@ public class UserEntity implements Serializable {
     @Size(min = 3, message = "Minimum password length: 8 characters")
     private String password;
 
+	@JsonProperty("userPhoto")
+	@Schema(title = "사용자 사진")
+	private Object photo;
+
 	@JsonProperty("userType")
 	@Schema(title = "타입", example = "user | org")
 	private String type;
@@ -151,11 +155,11 @@ public class UserEntity implements Serializable {
         @Schema(title = "사용자 이메일", example = "admin@innogrid.com")
         @Email
         @Size(min = 3, max = 40)
-        private String email;
+        private String userEmail;
 
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, max = 40)
-        private String password;
+        private String userPassword;
 
 		@Schema(title = "사용자 조직", example = "")
         @Size(min = 3, max = 40)

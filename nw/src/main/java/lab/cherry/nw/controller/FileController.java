@@ -97,28 +97,6 @@ public class FileController {
 	}
 
 	/**
-     * [FileController] 특정 파일 조회 함수
-     *
-     * @param path 파일 path를 입력합니다.
-     * @return
-     * <pre>
-     * true  : 특정 파일 정보를 반환합니다.
-     * false : 에러(400, 404)를 반환합니다.
-     * </pre>
-     *
-     * Author : taking(taking@duck.com)
-     */
-    @GetMapping("info")
-    @Operation(summary = "Path로 조직 찾기", description = "조직을 조회합니다.")
-    public ResponseEntity<?> findByFilePath(@RequestParam(required = true) String path) {
-
-		log.info("[OrgController] findByFilePath...!");
-
-		final ResultResponse response = ResultResponse.of(SuccessCode.OK, fileService.findByPath(path));
-		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
-	}
-
-	/**
      * [FileController] 특정 파일 다운로드 함수
      *
      * @return 특정 파일을 반환합니다.

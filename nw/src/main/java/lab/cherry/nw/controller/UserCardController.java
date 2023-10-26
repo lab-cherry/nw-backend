@@ -27,7 +27,6 @@ import lab.cherry.nw.error.ErrorResponse;
 import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.UserCardEntity;
-import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.service.UserCardService;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
@@ -156,7 +155,7 @@ public class UserCardController {
 
             log.info("[UserController] updateUserCard Weddinghall...!");
 
-			userCardService.updateWeddinghallByName(id, usercardEntity.getWeddinghall());
+			userCardService.updateWeddinghallByName(id, usercardEntity.getWeddinghallName());
 
             final ResultResponse response = ResultResponse.of(SuccessCode.OK);
             return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);

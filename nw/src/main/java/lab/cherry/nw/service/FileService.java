@@ -1,6 +1,6 @@
 package lab.cherry.nw.service;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Page;
@@ -20,15 +20,15 @@ import lab.cherry.nw.model.FileEntity;
 @Component
 public interface FileService {
 
-	List<String> uploadFiles(Map<String, String> info, List<MultipartFile> files);
+	List<String> uploadFiles(String seq, List<MultipartFile> files);
 	Page<FileEntity> getFiles(Pageable pageable);
 	Page<FileEntity> findPageByName(String name, Pageable pageable);
 	FileEntity findById(String id);
-	FileEntity findByPath(String path);
+	FileEntity findByName(String nme);
 	void deleteById(String id);
 
 	FileEntity.LoadFile downloadFile(String id) throws IllegalStateException, IOException;
 	Map<String, Object> downloadFiles(String key, String value);
 	// byte[] downloadZip(String bucketName, String objectName);
-	void deleteFiles(String name, List<String> files);
+	void deleteFiles(List<String> files);
 }
