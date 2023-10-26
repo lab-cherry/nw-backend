@@ -178,7 +178,7 @@ public class BookmarkController {
     }
 
     /**
-     * [BookmarkController] 특정 역할 조회 함수
+     * [BookmarkController] 특정 북마크 조회 함수
      *
      * @param id 북마크 고유번호를 입력합니다.
      * @return

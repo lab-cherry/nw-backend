@@ -61,7 +61,7 @@ public class FileServiceImpl implements FileService {
 	@Override
     public List<String> uploadFiles(Map<String, String> info, List<MultipartFile> files) {
 		
-		String orgName = info.get("org");				// 조직명
+		String orgName = (info.get("org") != null) ? info.get("org") : "";				// 조직명
 		String userName = info.get("username");	// 사용자명
 		String type = info.get("type");					// 타입 (ex. 웨딩홀, 연회장, 폐백실)
 		String kind = info.get("kind");					// 구분 (ex. 웨딩홀명, 연회장명, 폐백실명)
