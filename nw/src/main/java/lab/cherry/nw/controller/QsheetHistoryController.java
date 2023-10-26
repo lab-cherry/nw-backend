@@ -1,5 +1,6 @@
 package lab.cherry.nw.controller;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,32 +42,57 @@ public class QsheetHistoryController {
     private final QsheetHistoryService qsheetHistoryService;
  
     /**
-     * [QsheetController] 전체 큐시트 히스토리 목록 함수
+     * [QsheetHistoryController] 전체 큐시트 히스토리 목록 함수
      *
      * @return 전체 큐시트 히스토리 목록을 반환합니다.
      *
      * Author : yby654(yby654@github.com)
      */
     @GetMapping("")
-    @Operation(summary = "북마크 목록", description = "북마크 목록을 조회합니다.")
-    public ResponseEntity<?> findAllBookmarks(
+    @Operation(summary = "큐시트 히스토리 목록", description = "큐시트 히스토리 목록을 조회합니다.")
+    public ResponseEntity<?> findAllQsheetHistory(
             @RequestParam(required = false) String userid,
+            @RequestParam(required = false) String qsheetid,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "5") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
 
-    log.info("retrieve all bookmarks controller...!");
+    log.info("retrieve all QsheetHistroy controller...!");
 
     Pageable pageable = PageRequest.of(page, size, Sort.by(Common.getOrder(sort)));
 
     Page<QsheetHistoryEntity> qsheetHistoryEntity;
-    if(userid == null) {
+    if(userid == null && qsheetid==null) {
         qsheetHistoryEntity = qsheetHistoryService.getQsheetHistorys(pageable);
-    } else  {
+    } else if(userid != null && qsheetid==null) {
         qsheetHistoryEntity = qsheetHistoryService.findPageByUserId(userid, pageable);
+    }else {
+        qsheetHistoryEntity = qsheetHistoryService.findPageByQsheetId(qsheetid, pageable);
     }
         return new ResponseEntity<>(qsheetHistoryEntity, new HttpHeaders(), HttpStatus.OK);
 	}
+
+    /**
+     * [QsheetHistoryController] 특정 큐시트 히스토리 조회 함수
+     *
+     * @param qsheetId 큐시트 고유번호를 입력합니다.
+     * @return
+     * <pre>
+     * true  : 특정 큐시트 히스토리 목록을 반환합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : yby654(yby654@github.com)
+     */
+    @GetMapping("/qsheet/{id}")
+    @Operation(summary = "Qsheet ID로 히스토리 찾기", description = "큐시트 히스토리를 조회합니다.")
+    public ResponseEntity<?> find(@PathVariable("id") String qsheetId) {
+    ObjectId objectId = new ObjectId(qsheetId);
+        log.info("[QsheetController] findByQsheetId...!");
+
+        //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
+        return new ResponseEntity<>(qsheetHistoryService.findByQsheetId(objectId), new HttpHeaders(), HttpStatus.OK);
+    }
 
 
 }

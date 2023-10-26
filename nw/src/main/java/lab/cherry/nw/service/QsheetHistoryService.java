@@ -1,5 +1,7 @@
 package lab.cherry.nw.service;
 
+import java.util.List;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -21,7 +23,9 @@ public interface QsheetHistoryService {
   QsheetHistoryEntity findById(String id);
   // QsheetHistoryEntity findByUserId(ObjectId userId);
   Page<QsheetHistoryEntity> findPageByUserId(String userid, Pageable pageable);
+  Page<QsheetHistoryEntity> findPageByQsheetId(String qsheetid, Pageable pageable);
   void createQsheetHistory(QsheetEntity qsheetEntity, QsheetEntity.QsheetUpdateDto qsheetUpdateDto);
+  List<QsheetHistoryEntity> findByQsheetId(ObjectId qsheetId);
 //  Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable);
 //  Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable);
 // void updateOrgById(String id, List<String> orgIds);

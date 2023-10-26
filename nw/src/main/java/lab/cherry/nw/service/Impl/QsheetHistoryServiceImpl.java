@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
+import lab.cherry.nw.model.BookmarkEntity;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.QsheetEntity;
 import lab.cherry.nw.model.QsheetEntity.ItemData;
@@ -196,6 +198,17 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
     @Transactional(readOnly = true)
     public Page<QsheetHistoryEntity> findPageByUserId(String userid, Pageable pageable) {
         return qsheetHistoryRepository.findPageByUserid(userid, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<QsheetHistoryEntity> findPageByQsheetId(String qsheetid, Pageable pageable) {
+        return qsheetHistoryRepository.findPageByQsheetid(qsheetid, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<QsheetHistoryEntity> findByQsheetId(ObjectId qsheeObjectId) {
+        return EntityNotFoundException.requireNotEmpty(qsheetHistoryRepository.findByQsheetId(qsheeObjectId), "QsheetId Not Found");
     }
     
 }
