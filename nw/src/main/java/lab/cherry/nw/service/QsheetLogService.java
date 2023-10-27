@@ -10,7 +10,7 @@ import lab.cherry.nw.model.QsheetLogEntity;
  * <pre>
  * ClassName : QsheetLogService
  * Type : interface
- * Description : 큐시트와 관련된 함수를 정리한 인터페이스입니다.
+ * Description : 큐시트 로그와 관련된 함수를 정리한 인터페이스입니다.
  * Related : QsheetLogController, QsheetLogServiceiml
  * </pre>
  */
