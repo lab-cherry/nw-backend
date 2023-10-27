@@ -40,14 +40,14 @@ public class QsheetEntity implements Serializable {
     private String id;
 
     @DBRef
-    @JsonProperty("userSeq")
-    @Schema(title = "유저 고유번호", type="String",example = "38352658567418867") // (Long) Tsid
-    private UserEntity userid;
+    @JsonProperty("user")
+    @Schema(title = "유저 정보") // (Long) Tsid
+    private UserEntity user;
 
     @DBRef
-    @JsonProperty("orgSeq")
-    @Schema(title = "조직 정보", type="String",example = "38352658567418867") // (Long) Tsid
-    private OrgEntity orgid;
+    @JsonProperty("org")
+    @Schema(title = "조직 정보") // (Long) Tsid
+    private OrgEntity org;
 
 
     @JsonProperty("name")

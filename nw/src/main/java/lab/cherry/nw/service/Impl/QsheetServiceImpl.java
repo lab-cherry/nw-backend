@@ -125,8 +125,8 @@ public class QsheetServiceImpl implements QsheetService {
 		
         QsheetEntity qsheetEntity = QsheetEntity.builder()
             .id(objectid.toString())
-            .userid(userEntity)
-            .orgid(orgEntity)
+            .user(userEntity)
+            .org(orgEntity)
             .name(qsheetCreateDto.getName())
             .data(newItemData)
             // .data(qsheetCreateDto.getData())
@@ -162,7 +162,7 @@ public class QsheetServiceImpl implements QsheetService {
         if (qsheetEntity != null ) {
 //            qsheetEntity.updateFromDto(qsheetUpdateDto);
 //            qsheetRepository.save(qsheetEntity);
-			OrgEntity orgEntity = qsheetEntity.getOrgid();
+			OrgEntity orgEntity = qsheetEntity.getOrg();
             UserEntity orgUserEntity = qsheetEntity.getOrg_approver();
 			if (qsheetUpdateDto.getOrgSeq() != null){
 				orgEntity = orgService.findById(qsheetUpdateDto.getOrgSeq());
@@ -219,8 +219,8 @@ public class QsheetServiceImpl implements QsheetService {
 			qsheetEntity = QsheetEntity.builder()
 			.id(qsheetEntity.getId())
 			.name(qsheetUpdateDto.getName()!=null?qsheetUpdateDto.getName():qsheetEntity.getName())
-			.orgid(orgEntity)
-			.userid(qsheetEntity.getUserid())
+			.org(orgEntity)
+			.user(qsheetEntity.getUser())
 			.created_at(qsheetEntity.getCreated_at())
 			.data(newItemData)
             .org_approver(orgUserEntity)
@@ -308,13 +308,13 @@ public class QsheetServiceImpl implements QsheetService {
     }
 
     @Transactional(readOnly = true)
-    public Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable) {
-        return qsheetRepository.findPageByUserid(userid, pageable);
+    public Page<QsheetEntity> findPageByUserId(String userSeq, Pageable pageable) {
+        return qsheetRepository.findPageByUserid(userSeq, pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable) {
-        return qsheetRepository.findPageByOrgid(orgid, pageable);
+    public Page<QsheetEntity> findPageByOrgId(String orgSeq, Pageable pageable) {
+        return qsheetRepository.findPageByOrgid(orgSeq, pageable);
     }
     
     public byte[] download(List<String> users) {
