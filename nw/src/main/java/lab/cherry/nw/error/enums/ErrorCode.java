@@ -28,11 +28,14 @@ public enum ErrorCode {
     NOT_FOUND(404, "찾을 수 없습니다."),
     FORBIDDEN(403, "접근 권한이 없어 거부되었습니다."),
     ACCESS_DENIED_EXCEPTION(401, "인증 정보가 유효하지 않습니다."),
+    EXPIRED_EXCEPTION(401, "기간이 만료된 링크입니다."),
+    USER_DUPLICATE(409, "중복된 사용자가 있습니다."),
+    USER_NOTFOUND(409, "사용자를 찾을 수 없습니다."),
+    EMAIL_AUTH_ERROR(409, "이메일 인증이 진행 중이 아니거나, 이메일 코드가 유효하지 않습니다."),
+    REQUIRE_EMAIL_VERIFIED(409, "이메일 인증을 진행해주세요."),
     DUPLICATE(409, "중복된 데이터가 있습니다."),
     NO_BODY(400, "파라미터 값이 입력되지 않았습니다."),
-    URL_NOTFOUND(400, "Minio URL을 다시 확인해주세요."),
-    FILE_UPLOAD_FAILED(400, "파일 업로드에 실패했습니다."),
-    FOLDER_CREATE_FAILED(400, "uploadPath를 찾을 수 없습니다.");
+    FILE_UPLOAD_FAILED(400, "파일 업로드에 실패했습니다.");
 
     private final int status;
     private final String message;
