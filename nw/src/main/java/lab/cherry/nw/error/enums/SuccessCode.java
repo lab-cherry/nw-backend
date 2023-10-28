@@ -18,7 +18,11 @@ import lombok.ToString;
 public enum SuccessCode {
 
     // Common
-    OK(200, "Success");
+    OK(200, "Success"),
+    REGISTER_SUCCESS(200, "회원가입 완료"),
+    USERID_CHECK_OK(200, "사용 가능합니다."),
+    EMAIL_CHECK_OK(200, "이메일 인증 완료"),
+    EMAIL_RESEND_OK(200, "이메일 인증 메일 재발송 완료");
 
     private final int status;
     private final String message;

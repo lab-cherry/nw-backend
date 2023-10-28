@@ -108,6 +108,24 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * [UserServiceImpl] 사용자 이메일 인증 부분 수정 함수
+     *
+     * @param id 조회할 사용자의 고유번호입니다.
+     * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 특정 사용자에 대해 이메일 인증 정보를 수정합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    public void updateEmailVerifiedByid(String id) {
+
+        UserEntity userEntity = findById(id);
+        userEntity.emailVerifiedSuccess();
+
+        userRepository.save(userEntity);
+    }
 
     /**
      * [UserServiceImpl] 사용자 조직 수정 함수

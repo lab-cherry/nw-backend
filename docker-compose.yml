@@ -15,11 +15,17 @@ services:
       MAX_UPLOAD_SIZE: 3096MB
       #SPRING_PROFILES_ACTIVE: prod
       JAVA_OPTS: "-Xms256m -Xmx512m -XX:+UseG1GC"
+      SMTP_ADDRESS: nw-smtp
+      SMTP_PORT: 1025
+      SMTP_USER: test@test.com
+      SMTP_PASS: test@test.com
+      SMTP_AUTH: false
+      SMTP_STARTTLS: false
     ports:
       - "8081:8888"
     depends_on:
       - nw-db
-      - nw-redis
+      - nw-smtp
     volumes:
       - ./nw_data:/data
 
@@ -44,14 +50,9 @@ services:
       - './mongodb_data:/bitnami'
       - '/etc/localtime:/etc/localtime:ro'
 
-
-  nw-redis:
-    image: 'redis:latest'
-    container_name: nw-redis
-    restart: unless-stopped
-    entrypoint: redis-server --appendonly yes --maxmemory 4g --maxmemory-policy allkeys-lru
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - './redis_data:/data'
-      - '/etc/localtime:/etc/localtime:ro'
+  nw-smtp:
+      image: jcalonso/mailhog
+      container_name: 'nw-smtp'
+      ports:
+        - "1025:1025" # smtp
+        - "8025:8025" # web-ui
