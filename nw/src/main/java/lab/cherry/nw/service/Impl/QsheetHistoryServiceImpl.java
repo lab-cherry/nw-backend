@@ -16,10 +16,12 @@ import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.QsheetEntity;
 import lab.cherry.nw.model.QsheetEntity.ItemData;
 import lab.cherry.nw.model.QsheetHistoryEntity;
+import lab.cherry.nw.model.QsheetLogEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.QsheetHistoryRepository;
 import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.QsheetHistoryService;
+import lab.cherry.nw.service.QsheetLogService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +42,7 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
     private final QsheetHistoryRepository qsheetHistoryRepository;
     private final UserService userService;
     private final OrgService orgService;
+    private final QsheetLogService qsheetLogService;
     /**
      * [QsheetHistoryServiceImpl] 전체 큐시트 히스토리 조회 함수
      *
@@ -58,7 +61,6 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
     }
 
 
-//
     /**
      * [QsheetHistoryServiceImpl] 큐시트 히스토리 생성 함수
      *
@@ -72,10 +74,14 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
      * Author : yby654(yby654@github.com)
      */
     public void createQsheetHistory(QsheetEntity originQsheetEntity, QsheetEntity.QsheetUpdateDto qsheetUpdateDto) {
-        // QsheetEntity qsheetEntity = qsheetService.findById(originQsheetEntity.getId());
+        ObjectId qsheetId = new ObjectId(originQsheetEntity.getId());
+        QsheetEntity oldQsheetEntity = null;
+        List<QsheetLogEntity> logList =qsheetLogService.findByQsheetId(qsheetId);
         UserEntity userEntity = userService.findById(qsheetUpdateDto.getUpdateUser());
         List<Map<String,String>> contentList = new  ArrayList<>();
+    
         if(qsheetUpdateDto.getName()!=null){
+            log.info("큐시트 제목 수정");
             Map<String, String> data = new HashMap<>();
             data.put("action", "수정");
             data.put("info", "제목");
@@ -83,6 +89,7 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
             contentList.add(data);
         }
         if(qsheetUpdateDto.getOrgSeq()!=null){
+            log.info("업체 수정");
             OrgEntity orgEntity = orgService.findById(qsheetUpdateDto.getOrgSeq());
             Map<String, String> data = new HashMap<>();
             data.put("action", "수정");
@@ -91,6 +98,7 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
             contentList.add(data);
         }
         if(qsheetUpdateDto.getMemo()!=null){
+            log.info("시크릿 메모 수정");
             Map<String, String> data = new HashMap<>();
             data.put("action", "수정");
             data.put("info", "시크릿 메모");
@@ -98,6 +106,7 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
             contentList.add(data);
         }
         if(qsheetUpdateDto.getOrg_approverSeq()!=null && qsheetUpdateDto.isClient_confirm()){
+            log.info("최종 확인-업체");
             UserEntity Org_approverEntity = userService.findById(qsheetUpdateDto.getOrg_approverSeq());
             Map<String, String> data = new HashMap<>();
             data.put("action", "최종 확인");
@@ -106,6 +115,7 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
             contentList.add(data);
         }
         if(qsheetUpdateDto.isClient_confirm()){
+            log.info("최종 확인-신랑&신부");
             Map<String, String> data = new HashMap<>();
             data.put("action", "최종 확인");
             data.put("info", "신랑&신부 최종 확인");
@@ -113,12 +123,21 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
             contentList.add(data);
         }
         if(qsheetUpdateDto.getData()!=null){
+            log.info("큐시트 데이터 수정" );
+            if(logList.size() > 0 ) {
+                if(logList.size()==1){
+                    oldQsheetEntity = logList.get(0).getQsheet();
+                    log.error("qsheetName1 : {}", oldQsheetEntity.getName());
+                } else if(logList.size() > 1){
+                    oldQsheetEntity = logList.get(logList.size()-2).getQsheet();
+                    log.error("qsheetName~ : {}", oldQsheetEntity.getName());
+                }
+            }
+            
             List<Map<String, ItemData>> result = compareLists(originQsheetEntity.getData(), qsheetUpdateDto.getData());
             for (Map<String, ItemData> change : result) {
                 for (Map.Entry<String, ItemData> entry : change.entrySet()) {
-                    String action = entry.getKey();
                     ItemData item = entry.getValue();
-                    System.out.println(action + " : " + item.getProcess());
                     Map<String, String> data = new HashMap<>();
                     data.put("action", entry.getKey());
                     data.put("info", item.getProcess());
@@ -139,41 +158,42 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
     }
     public List<Map<String, ItemData>> compareLists(List<ItemData> list1, List<ItemData> list2) {
         List<Map<String, ItemData>> resultList = new ArrayList<>();
-    
-        // 두 리스트를 순회하면서 비교
-        for (ItemData item1 : list1) {
-            ItemData matchingItem = list2.stream()
-                    .filter(item2 -> item2.getOrderIndex().equals(item1.getOrderIndex()))
-                    .findFirst()
-                    .orElse(null);
-    
-            if (matchingItem == null) {
-                // list2에 없는 경우, 삭제로 처리
-                Map<String, ItemData> change = new HashMap<>();
-                change.put("삭제", item1);
-                resultList.add(change);
-            } else if (!item1.equals(matchingItem)) {
-                // 내용이 다른 경우, 수정으로 처리
-                Map<String, ItemData> change = new HashMap<>();
-                change.put("수정", matchingItem);
-                resultList.add(change);
+        Map<String, ItemData> map1 = new HashMap<>();
+        Map<String, ItemData> map2 = new HashMap<>();
+        for (ItemData item : list1) {
+            map1.put(item.getProcess(), item);
+        }
+        for (ItemData item2 : list2){
+            ItemData item1 = map1.get(item2.getProcess());
+            map2.put(item2.getProcess(), item2);
+            if (item1 != null) {
+                 if(!(item1.getOrderIndex().equals(item2.getOrderIndex())) || !(item1.getActor().equals(item2.getActor())) || !(item1.getContent().equals(item2.getContent()))|| !(item1.getNote().equals(item2.getNote())) || !(item1.getFilePath().equals(item2.getFilePath())) ){
+                     Map<String, ItemData> modification = new HashMap<>();
+                    modification.put("수정", item2);
+                    log.error("수정 : {} ", item2.getProcess());
+                    resultList.add(modification);
+                 } 
+                 map1.remove(item2.getProcess());
+               
+            } else {
+                Map<String, ItemData> addition = new HashMap<>();
+                addition.put("추가", item2);
+                resultList.add(addition);
             }
         }
-    
-        // list2에만 있는 항목을 추가로 처리
-        for (ItemData item2 : list2) {
-            ItemData matchingItem = list1.stream()
-                    .filter(item1 -> item1.getOrderIndex().equals(item2.getOrderIndex()))
-                    .findFirst()
-                    .orElse(null);
-    
-            if (matchingItem == null) {
-                Map<String, ItemData> change = new HashMap<>();
-                change.put("추가", item2);
-                resultList.add(change);
+        if(!(map1.isEmpty())){
+            for( Map.Entry<String, ItemData> element : map1.entrySet() ){
+                String key = element.getKey();
+                ItemData value = element.getValue();
+                System.out.println(String.format("키 :{}", key));
+                Map<String, ItemData> deletion = new HashMap<>();
+                deletion.put("삭제", value);
+                resultList.add(deletion);
             }
+        }else{
+            log.error("map empty ");
         }
-    
+        
         return resultList;
     }
 

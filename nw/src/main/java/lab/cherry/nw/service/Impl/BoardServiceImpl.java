@@ -100,7 +100,7 @@ public class BoardServiceImpl implements BoardService {
             }
         }
         BoardEntity boardEntity = BoardEntity.builder()
-            .userid(userEntity)
+            .user(userEntity)
 			.content(boardCreateDto.getContent())
 			.qsheet(qsheetEntity)
             .tag(tagList)
@@ -151,7 +151,7 @@ public class BoardServiceImpl implements BoardService {
 		if (boardEntity.getContent() != null || boardEntity.getQsheet()!=null|| boardEntity.getTag()!= null) {
 			boardEntity = BoardEntity.builder()
 			.id(boardEntity.getId())
-			.userid(boardEntity.getUserid())
+			.user(boardEntity.getUser())
 			.content(boardUpdateDto.getContent() != null ? boardUpdateDto.getContent():boardEntity.getContent() )
 			.qsheet(boardUpdateDto.getQsheetSeq()!=null? qsheetService.findById(boardUpdateDto.getQsheetSeq()) : boardEntity.getQsheet())
 			.tag(tagList)

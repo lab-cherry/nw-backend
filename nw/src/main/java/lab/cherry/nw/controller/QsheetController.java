@@ -65,8 +65,8 @@ public class QsheetController {
     @GetMapping("")
     @Operation(summary = "큐시트 목록", description = "큐시트 목록을 조회합니다.")
     public ResponseEntity<?> findAllQsheets(
-            @RequestParam(required = false) String userid,
-            @RequestParam(required = false) String orgid,
+            @RequestParam(required = false) String userSeq,
+            @RequestParam(required = false) String orgSeq,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "5") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
@@ -76,12 +76,12 @@ public class QsheetController {
     Pageable pageable = PageRequest.of(page, size, Sort.by(Common.getOrder(sort)));
 
     Page<QsheetEntity> qsheetEntity;
-    if(userid == null && orgid==null) {
+    if(userSeq == null && orgSeq==null) {
         qsheetEntity = qsheetService.getQsheets(pageable);
-    } else if(userid != null && orgid==null) {
-        qsheetEntity = qsheetService.findPageByUserId(userid, pageable);
+    } else if(userSeq != null && orgSeq==null) {
+        qsheetEntity = qsheetService.findPageByUserId(userSeq, pageable);
 	} else{
-		qsheetEntity = qsheetService.findPageByOrgId(orgid, pageable);
+		qsheetEntity = qsheetService.findPageByOrgId(orgSeq, pageable);
 	}
         for (QsheetEntity qsheet : qsheetEntity) {
             qsheet.sortDataByOrderIndex();
