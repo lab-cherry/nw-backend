@@ -19,13 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 public interface QsheetService {
  Page<QsheetEntity> getQsheets(Pageable pageable);
  QsheetEntity findById(String id);
-// QsheetEntity findByUserId(String userid);
-// QsheetEntity findByOrgId(String orgid);
  void createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files);
  void updateById(String id, QsheetEntity.QsheetUpdateDto updateDto, List<MultipartFile> files);
  void deleteById(String id);
- Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable);
- Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable);
+ Page<QsheetEntity> findPageByUserId(String userSeq, Pageable pageable);
+ Page<QsheetEntity> findPageByOrgId(String orgSeq, Pageable pageable);
 // void updateOrgById(String id, List<String> orgIds);
 byte[] download(List<String> users);
 }

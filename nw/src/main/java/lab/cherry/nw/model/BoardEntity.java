@@ -39,7 +39,7 @@ public class BoardEntity implements Serializable {
     @DBRef
     @JsonProperty("userSeq")
     @Schema(title = "유저 고유번호", example = "38352658567418867") // (Long) Tsid
-    private UserEntity userid;
+    private UserEntity user;
 
     @JsonProperty("content")
     @Schema(title = "내용", example = "드디어 결혼합니다!")

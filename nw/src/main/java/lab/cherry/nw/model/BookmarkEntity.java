@@ -39,7 +39,7 @@ public class BookmarkEntity implements Serializable {
     @DBRef
     @JsonProperty("user")
 	@Schema(title = "유저 고유번호", example = "38352658567418867") // (Long) Tsid
-    private UserEntity userid;
+    private UserEntity user;
 
     @JsonProperty("data")
     private Map<String, String> data;
