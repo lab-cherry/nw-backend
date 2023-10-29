@@ -109,6 +109,35 @@ public class EmailAuthServiceImpl implements EmailAuthService{
         } catch (MessagingException e) {
             log.error("email Error {}", e);
         }
+    }
+    
+
+    public void ResetPasswordSend(String email, String password) {
+
+        MimeMessage message = javaMmailSender.createMimeMessage();
+
+        try {
+            message.addRecipients(MimeMessage.RecipientType.TO, email);
+            message.setFrom(EmailAuthServiceImpl.FROM_ADDRESS);
+            message.setSubject("[낭만웨딩] 비밀번호 초기화 메일입니다."); //제목
+            String text="";
+            text+= "<div style='margin:100px;'>";
+            text+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
+            text+= "<h3 style='color:blue;'>다음 비밀번호로 초기화되었습니다.</h3>";
+            text+= "<p>로그인 하신 후, 비밀번호를 변경해주세요.</p>";
+            text+= "<div style='font-size:130%'>";
+            text+= "NEW PASSWORD : <strong>";
+            text+= password + "</strong><div><br/> ";
+            text+= "</div>";
+            message.setText(text, "utf-8", "html");
+
+            javaMmailSender.send(message);
+
+
+        } catch (MessagingException e) {
+            log.error("email Error {}", e);
+        }
+        
     }    
 
 }
