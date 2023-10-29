@@ -31,7 +31,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "users")
-@JsonPropertyOrder({ "id", "userId", "userName", "userEmail", "userRole", "userType", "userEnabled", "userRole", "userOrgs", "created_at" })
+@JsonPropertyOrder({ "id", "userId", "userName", "userEmail", "userRole", "userType", "userEnabled", "emailVerified", "userRole", "userOrgs", "created_at" })
 public class UserEntity implements Serializable {
 
     @Id
@@ -66,11 +66,7 @@ public class UserEntity implements Serializable {
 	@JsonProperty("userPhoto")
 	@Schema(title = "사용자 사진")
 	private Object photo;
-
-	@JsonProperty("userType")
-	@Schema(title = "타입", example = "user | org")
-	private String type;
-
+    
     @JsonProperty("userEnabled")
     @Schema(title = "사용자 활성화 여부", example = "true")
     private Boolean enabled;
@@ -94,6 +90,11 @@ public class UserEntity implements Serializable {
     @Schema(title = "Org 정보", example = "더모멘트")
 //    private Set<OrgEntity> orgs = new HashSet<>();
 	private OrgEntity org;
+
+    
+    public void emailVerifiedSuccess() {
+        this.isEmailVerified = true;
+    }
 
 //////////////////////////////////////////////////////////////////////////
 

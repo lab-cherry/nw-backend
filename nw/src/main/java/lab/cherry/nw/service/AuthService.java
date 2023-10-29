@@ -15,8 +15,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public interface AuthService {
-    AccessToken register(UserEntity.UserRegisterDto userRegisterDto);
+    UserEntity register(UserEntity.UserRegisterDto userRegisterDto);
     AccessToken.Get login(UserEntity.UserLoginDto userLoginDto);
     void checkExistsWithUserId(String userid);
 	UserEntity myInfo();
+    void confirmEmail(String email, String token);
+    void reConfirmEmail(String userid);
 }

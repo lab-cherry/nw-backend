@@ -1,6 +1,7 @@
 package lab.cherry.nw.controller;
 
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -9,13 +10,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -190,17 +189,19 @@ public class QsheetController {
      *
      * Author : taking(taking@duck.com)
      */
-    @PostMapping("/download")
+    @PostMapping("/download/{qsheetIds}")
     @Operation(summary = "큐시트 사용자 파일 다운로드", description = "큐시트 사용자 파일을 다운로드합니다.")
-    public ResponseEntity<?> downloadQsheetBySeq(@RequestBody QsheetEntity.QsheetDownloadDto qsheetDownloadDto) {
+    public ResponseEntity<?> downloadQsheetBySeq(@PathVariable("qsheetIds") String[] qsheetIds) {
 
         log.info("[QsheetController] downloadQsheetBySeq...!");
 
+        Map<String, Object> val = qsheetService.download(qsheetIds);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "download.zip");
-        return new ResponseEntity<>(qsheetService.download(qsheetDownloadDto.getUser()), new HttpHeaders(), HttpStatus.OK);
-
+        headers.setContentType(MediaType.parseMediaType("application/zip"));
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + val.get("name") + "\"");
+    
+        return new ResponseEntity<>(val.get("data"), headers, HttpStatus.OK);
    }
 
 }

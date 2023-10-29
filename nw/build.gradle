@@ -16,7 +16,6 @@ dependencies {
     implementation 'org.springframework:spring-context-support:6.0.7'
     implementation 'jakarta.mail:jakarta.mail-api:2.1.2'
     implementation 'org.springframework.boot:spring-boot-starter-mail:3.0.2'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.0.2'
     implementation 'io.lettuce:lettuce-core'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'com.google.code.gson:gson:2.8.6'
@@ -24,4 +23,5 @@ dependencies {
     implementation 'io.minio:minio-admin:8.5.5'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'commons-io:commons-io:2.15.0'
 }

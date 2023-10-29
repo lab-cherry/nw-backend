@@ -11,8 +11,6 @@ services:
       - "8081:8888"
     depends_on:
       - nw-db
-      - nw-redis
-      - nw-smtp
 
   nw-db:
     image: 'mongo:latest'
@@ -29,21 +27,3 @@ services:
       - ./.env
     ports:
       - '8082:27017'
-
-  nw-redis:
-    image: 'redis:latest'
-    container_name: nw-redis
-    restart: unless-stopped
-    entrypoint: redis-server --appendonly yes --maxmemory 4g --maxmemory-policy allkeys-lru
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - './redis_data:/data'
-      - '/etc/localtime:/etc/localtime:ro'
-
-  mailhog:
-      image: jcalonso/mailhog
-      container_name: 'mailhog'
-      ports:
-        - "1025:1025" # smtp
-        - "8025:8025" # web-ui
