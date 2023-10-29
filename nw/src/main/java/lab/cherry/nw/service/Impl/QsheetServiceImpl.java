@@ -9,21 +9,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.io.FilenameUtils;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import com.mongodb.client.gridfs.model.GridFSFile;
+
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
+import lab.cherry.nw.model.FileEntity;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.QsheetEntity;
-import lab.cherry.nw.model.QsheetLogEntity;
 import lab.cherry.nw.model.QsheetEntity.ItemData;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.QsheetRepository;
@@ -112,22 +111,32 @@ public class QsheetServiceImpl implements QsheetService {
 
             for (ItemData data : qsheetCreateDto.getData()) {
                 for (String filePath : fileUrls) {
-                    if (filePath.contains(data.getFilePath())) {
-                        ItemData tempData = ItemData.builder()
-                            .orderIndex(data.getOrderIndex())
-                            .process(data.getProcess())
-                            .content(data.getContent())
-                            .actor(data.getActor())
-                            .note(data.getNote())
-                            .filePath(filePath)
-                            .build();
-                        data = tempData;
-                        break;
+                    String[] parts = filePath.split("/");
+                    String fileId = parts[parts.length - 1];
+                    FileEntity fileEntity = fileService.findById(fileId);
+                    if( fileEntity != null ) {
+                        if (fileEntity.getName().contains(data.getFilePath())){
+                            ItemData tempData = ItemData.builder()
+                                .orderIndex(data.getOrderIndex())
+                                .process(data.getProcess())
+                                .content(data.getContent())
+                                .actor(data.getActor())
+                                .note(data.getNote())
+                                .filePath(filePath)
+                                .build();
+                            data = tempData;
+                            break;
+                            
+                        }
+                        
+                      
                     }
+                
                 }
                 newItemData.add(data);
-            }
-        }else{
+             }
+            
+        } else {
             newItemData = qsheetCreateDto.getData();
         }
 		
@@ -192,34 +201,38 @@ public class QsheetServiceImpl implements QsheetService {
                 
                 for (ItemData data : qsheetUpdateDto.getData()) {
                     for (String filePath : fileUrls) {
-                            if (filePath.contains(data.getFilePath())) {
-                            ItemData tempData = ItemData.builder()
-                                .orderIndex(data.getOrderIndex())
-                                .process(data.getProcess())
-                                .content(data.getContent())
-                                .actor(data.getActor())
-                                .note(data.getNote())
-                                .filePath(filePath)
-                                .build();
-                            data = tempData;
-                            break;
+                        String[] parts = filePath.split("/");
+                        String fileId = parts[parts.length - 1];
+                        FileEntity fileEntity = fileService.findById(fileId);
+                        if(fileEntity != null){
+                            if (fileEntity.getName().contains(data.getFilePath())){
+                                ItemData tempData = ItemData.builder()
+                                    .orderIndex(data.getOrderIndex())
+                                    .process(data.getProcess())
+                                    .content(data.getContent())
+                                    .actor(data.getActor())
+                                    .note(data.getNote())
+                                    .filePath(filePath)
+                                    .build();
+                                data = tempData;
+                                break;
                             }
-                        }
-                         newItemData.add(data);
+
+                        }    
+                    }
+                    newItemData.add(data);
                 }
-           
-                   
             }else if(qsheetUpdateDto.getData()!=null && files==null){
                 newItemData= new ArrayList<>();
                 for(ItemData data : qsheetUpdateDto.getData()){
                     ItemData tempData = ItemData.builder()
-                                .orderIndex(data.getOrderIndex())
-                                .process(data.getProcess())
-                                .content(data.getContent())
-                                .actor(data.getActor())
-                                .note(data.getNote())
-                                .filePath(data.getFilePath())
-                                .build();
+                        .orderIndex(data.getOrderIndex())
+                        .process(data.getProcess())
+                        .content(data.getContent())
+                        .actor(data.getActor())
+                        .note(data.getNote())
+                        .filePath(data.getFilePath())
+                        .build();
                      newItemData.add(tempData);           
                 }
             }
