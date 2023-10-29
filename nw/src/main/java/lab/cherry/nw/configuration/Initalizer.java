@@ -36,12 +36,20 @@ public class Initalizer implements ApplicationRunner {
             
             roleRepository.save(roleEntity);
         }
-        
 
         if(roleRepository.findByName("ROLE_USER").isEmpty()) {
 
             RoleEntity roleEntity = RoleEntity.builder()
                 .name("ROLE_USER")
+                .build();
+
+            roleRepository.save(roleEntity);
+        }
+
+        if(roleRepository.findByName("ROLE_ORG").isEmpty()) {
+
+            RoleEntity roleEntity = RoleEntity.builder()
+                .name("ROLE_ORG")
                 .build();
 
             roleRepository.save(roleEntity);
@@ -71,7 +79,6 @@ public class Initalizer implements ApplicationRunner {
                 .username("관리자")
                 .password(passwordEncoder.encode("admin"))
                 .email("admin@localhost.com")
-				.type("org")
                 .role(roleEntity)
                 .enabled(true)
                 .build());
@@ -87,7 +94,21 @@ public class Initalizer implements ApplicationRunner {
                 .username("체리랩")
                 .password(passwordEncoder.encode("cherrylab"))
                 .email("cherrylab@test.com")
-				.type("user")
+                .role(roleEntity)
+                .enabled(true)
+                .build());
+        }
+        
+        // TODO: 최종 개발 완료 후 삭제 처리 예정
+        if(userRepository.findByuserid("themoment").isEmpty()) {
+
+            RoleEntity roleEntity = roleRepository.findByName("ROLE_ORG").get();
+        
+            userRepository.save(UserEntity.builder()
+                .userid("themoment")
+                .username("더모멘트")
+                .password(passwordEncoder.encode("themoment"))
+                .email("themoment@test.com")
                 .role(roleEntity)
                 .enabled(true)
                 .build());

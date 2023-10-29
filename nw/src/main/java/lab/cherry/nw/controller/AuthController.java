@@ -146,4 +146,14 @@ public class AuthController {
         final ResultResponse response = ResultResponse.of(SuccessCode.EMAIL_RESEND_OK);
 		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
 	}
+
+	// @GetMapping("/forgot-password")
+    // @Operation(summary = "비밀번호 찾기", description = "이메일로 비밀번호 초기화 메일을 발송합니다.")
+    // public ResponseEntity<?> forgotPassword(@Valid @RequestBody UserEntity.UserForgotPassword userForgotPasswordDto) {
+	// 	log.info("[AuthController] forgotPassword...!");
+
+    //     authService.forgotPassword(userForgotPasswordDto);
+    //     final ResultResponse response = ResultResponse.of(SuccessCode.PASSWORD_RESET_OK);
+	// 	return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+	// }
 }

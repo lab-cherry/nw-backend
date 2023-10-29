@@ -183,24 +183,24 @@ public class QsheetController {
         return new ResponseEntity<>(qsheetService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
     
-	/**
-     * [QsheetController] 큐시트 사용자 파일 다운로드 함수
-     *
-     * @return 큐시트 사용자 파일을 반환합니다.
-     *
-     * Author : taking(taking@duck.com)
-     */
-    @PostMapping("/download")
-    @Operation(summary = "큐시트 사용자 파일 다운로드", description = "큐시트 사용자 파일을 다운로드합니다.")
-    public ResponseEntity<?> downloadQsheetBySeq(@RequestBody QsheetEntity.QsheetDownloadDto qsheetDownloadDto) {
+// 	/**
+//      * [QsheetController] 큐시트 사용자 파일 다운로드 함수
+//      *
+//      * @return 큐시트 사용자 파일을 반환합니다.
+//      *
+//      * Author : taking(taking@duck.com)
+//      */
+//     @PostMapping("/download")
+//     @Operation(summary = "큐시트 사용자 파일 다운로드", description = "큐시트 사용자 파일을 다운로드합니다.")
+//     public ResponseEntity<?> downloadQsheetBySeq(@RequestBody QsheetEntity.QsheetDownloadDto qsheetDownloadDto) {
 
-        log.info("[QsheetController] downloadQsheetBySeq...!");
+//         log.info("[QsheetController] downloadQsheetBySeq...!");
 
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "download.zip");
-        return new ResponseEntity<>(qsheetService.download(qsheetDownloadDto.getUser()), new HttpHeaders(), HttpStatus.OK);
+//         HttpHeaders headers = new HttpHeaders();
+//         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "download.zip");
+//         return new ResponseEntity<>(qsheetService.download(qsheetDownloadDto.getUser()), new HttpHeaders(), HttpStatus.OK);
 
-   }
+//    }
 
 }
