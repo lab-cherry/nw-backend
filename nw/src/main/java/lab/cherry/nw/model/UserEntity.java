@@ -66,11 +66,7 @@ public class UserEntity implements Serializable {
 	@JsonProperty("userPhoto")
 	@Schema(title = "사용자 사진")
 	private Object photo;
-
-	@JsonProperty("userType")
-	@Schema(title = "타입", example = "user | org")
-	private String type;
-
+    
     @JsonProperty("userEnabled")
     @Schema(title = "사용자 활성화 여부", example = "true")
     private Boolean enabled;

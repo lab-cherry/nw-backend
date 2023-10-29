@@ -21,6 +21,7 @@ public enum SuccessCode {
     OK(200, "Success"),
     REGISTER_SUCCESS(200, "회원가입 완료"),
     USERID_CHECK_OK(200, "사용 가능합니다."),
+    PASSWORD_RESET_OK(200, "비밀번호 초기화 이메일 발송 완료"),
     EMAIL_CHECK_OK(200, "이메일 인증 완료"),
     EMAIL_RESEND_OK(200, "이메일 인증 메일 재발송 완료");
 
