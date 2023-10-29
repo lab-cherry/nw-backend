@@ -1,16 +1,23 @@
 package lab.cherry.nw.service.Impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.io.FilenameUtils;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import com.mongodb.client.gridfs.model.GridFSFile;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
@@ -26,6 +33,7 @@ import lab.cherry.nw.service.QsheetHistoryService;
 import lab.cherry.nw.service.QsheetLogService;
 import lab.cherry.nw.service.QsheetService;
 import lab.cherry.nw.service.UserService;
+import lab.cherry.nw.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -317,57 +325,34 @@ public class QsheetServiceImpl implements QsheetService {
         return qsheetRepository.findPageByOrgid(orgSeq, pageable);
     }
     
-    public byte[] download(List<String> users) {
-        return null;
+    public Map<String, Object> download(String[] qsheetIds) {
         
-        // List<UserEntity> userList = new ArrayList<>();
-        // List<byte[]> userData = new ArrayList<>();
-
-        // for(String user : users) {
-
-        //     if (userService.checkId(user)) {
-        //         UserEntity _user = userService.findById(user);
-        //         userList.add(_user);
-
-        //         // String objectName = _user.getId() + "/";
-        //         // userData.add(fileService.downloadZip("user", objectName));
-        //     }
-        // }
-
-        // if(userList.size() > 1) {
-
-        //     log.error("userList 가 1명 초과인 경우 # ", userList.size());
-
-        //     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        //     try (ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream)) {
-        //         for (UserEntity user : userList) {
-
-        //                 String objectName = user.getId() +"/";
-
-        //                 byte[] objectData = fileService.downloadZip("user", objectName);
-
-        //                 // Zip 아카이브에 객체 추가
-        //                 ZipArchiveEntry zipEntry = new ZipArchiveEntry(user.getUsername() + ".zip");
-        //                 zipOut.putNextEntry(zipEntry);
-        //                 zipOut.write(objectData);
-        //                 zipOut.closeEntry();
-
-        //         }
-        //     } catch (IOException e) {
-        //         log.error("{}", e);
-        //     }
         
-        //     byte[] zipBytes = byteArrayOutputStream.toByteArray();
-            
-        //     return zipBytes;
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream)) {
+                for (String qsheetId : qsheetIds) {
 
-        // } else {
+                    QsheetEntity qsheetEntity = findById(qsheetId);
 
-        //     UserEntity user = userService.findById(users.get(0));
+                    String qsheetName = qsheetEntity.getName() + "-" + new ObjectId() + ".zip";
 
-        //     String objectName = "사용자/" + user.getId();
+                    ZipEntry zipEntry = new ZipEntry(qsheetName);
+                    zipOut.putNextEntry(zipEntry);
 
-        //     return fileService.downloadZip("user", objectName);
-        // }
+                    Object objectData = fileService.downloadFiles("seq", qsheetId).get("data");
+                    zipOut.write(FormatConverter.convertObjectToBytes(objectData));
+                    zipOut.closeEntry();
+                }
+                zipOut.finish();
+
+        Map<String, Object> returnVal = new HashMap<>();
+        returnVal.put("name", "download" + ".zip");
+        returnVal.put("data", byteArrayOutputStream.toByteArray());
+        
+        return returnVal;
+        } catch (IOException e) {
+            log.error("Error creating and sending the zip file: {}", e);
+            return null;
+        }
     }
 }

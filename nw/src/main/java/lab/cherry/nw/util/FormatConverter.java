@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,5 +100,14 @@ public class FormatConverter {
 					e.printStackTrace();
 			}
 			return returnVal;
-		}
+	}
+	
+	public static byte[] convertObjectToBytes(Object obj) throws IOException {
+    ByteArrayOutputStream boas = new ByteArrayOutputStream();
+    try (ObjectOutputStream ois = new ObjectOutputStream(boas)) {
+        ois.writeObject(obj);
+        return boas.toByteArray();
+    }
+}
+
 }

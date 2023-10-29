@@ -2,6 +2,7 @@ package lab.cherry.nw.service;
 
 import lab.cherry.nw.model.QsheetEntity;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -25,5 +26,5 @@ public interface QsheetService {
  Page<QsheetEntity> findPageByUserId(String userSeq, Pageable pageable);
  Page<QsheetEntity> findPageByOrgId(String orgSeq, Pageable pageable);
 // void updateOrgById(String id, List<String> orgIds);
-byte[] download(List<String> users);
+Map<String, Object> download(String[] qsheetSeq);
 }

@@ -34,6 +34,7 @@ import lab.cherry.nw.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.bson.types.ObjectId;
 
 @Slf4j
 @Service
@@ -123,7 +124,7 @@ public class FileServiceImpl implements FileService {
 					ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream)) {
 					for (GridFSFile file : allFiles) {
 
-							String fileName = FilenameUtils.getBaseName(file.getFilename()) + (Math.random() * 10) + FilenameUtils.getExtension(file.getFilename());
+							String fileName = FilenameUtils.getBaseName(file.getFilename()) + "-" + new ObjectId() + "." + FilenameUtils.getExtension(file.getFilename());
 
 							ZipEntry zipEntry = new ZipEntry(fileName);
 							zipOut.putNextEntry(zipEntry);
