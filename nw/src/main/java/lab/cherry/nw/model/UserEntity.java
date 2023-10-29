@@ -66,7 +66,7 @@ public class UserEntity implements Serializable {
 	@JsonProperty("userPhoto")
 	@Schema(title = "사용자 사진")
 	private Object photo;
-    
+
     @JsonProperty("userEnabled")
     @Schema(title = "사용자 활성화 여부", example = "true")
     private Boolean enabled;
@@ -90,7 +90,6 @@ public class UserEntity implements Serializable {
     @Schema(title = "Org 정보", example = "더모멘트")
 //    private Set<OrgEntity> orgs = new HashSet<>();
 	private OrgEntity org;
-
     
     public void emailVerifiedSuccess() {
         this.isEmailVerified = true;
