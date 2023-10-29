@@ -280,4 +280,18 @@ public class AuthServiceImpl implements AuthService {
         emailAuthService.ConfirmEmailSend(emailAuthEntity.getEmail(), emailAuthEntity.getToken());
 
     }
+
+    public void forgotPassword(String userid, String email) {
+
+        UserEntity userEntity = userRepository.findByuseridAndEmail(userid, email).orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+
+        log.error("userEntity getUsername {}", userEntity.getUsername());
+        log.error("userEntity getEmail {}", userEntity.getEmail());
+
+        ObjectId objectId = new ObjectId();
+        userEntity.resetPassword(passwordEncoder.encode(objectId.toString()));
+        userRepository.save(userEntity);
+
+        emailAuthService.ResetPasswordSend(email, objectId.toString());
+    }
 }

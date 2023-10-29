@@ -21,4 +21,5 @@ public interface AuthService {
 	UserEntity myInfo();
     void confirmEmail(String email, String token);
     void reConfirmEmail(String userid);
+    void forgotPassword(String userid, String email);
 }

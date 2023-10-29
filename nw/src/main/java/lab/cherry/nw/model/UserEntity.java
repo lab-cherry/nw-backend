@@ -94,6 +94,10 @@ public class UserEntity implements Serializable {
     public void emailVerifiedSuccess() {
         this.isEmailVerified = true;
     }
+    
+    public void resetPassword(String password) {
+        this.password = password;
+    }
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -164,6 +168,22 @@ public class UserEntity implements Serializable {
 		@Schema(title = "사용자 조직", example = "")
         @Size(min = 3, max = 40)
         private String orgId;
+
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor @AllArgsConstructor
+    public static class UserForgotPassword {
+
+        @Schema(title = "사용자 아이디", example = "admin")
+        @Size(min = 4, max = 10)
+        private String userId;
+
+        @Schema(title = "사용자 이메일", example = "admin@innogrid.com")
+        @Email
+        @Size(min = 3, max = 40)
+        private String userEmail;
 
     }
 }
