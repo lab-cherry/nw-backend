@@ -202,11 +202,11 @@ public class AuthServiceImpl implements AuthService {
         }
 
         UserEntity user = userRepository.findByuserid(userLoginDto.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));   // 로그인 정보가 유효하지 않음
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));   // 로그인 정보가 유효하지 않음
 
         if(!passwordEncoder.matches(userLoginDto.getUserPassword(), user.getPassword())) {
             log.error("{} Account Password is Corrent!", userLoginDto.getUserId());
-            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 로그인 정보가 정확하지 않음
+            throw new CustomException(ErrorCode.USER_INVALID_INPUT_VALUE);   // 로그인 정보가 정확하지 않음
         }
     }
 
@@ -308,5 +308,19 @@ public class AuthServiceImpl implements AuthService {
         emailAuthEntity = emailAuthService.updateExpired(userSeq);
         emailAuthService.ConfirmEmailSend(emailAuthEntity.getEmail(), emailAuthEntity.getToken());
 
+    }
+
+    public void forgotPassword(String userid, String email) {
+
+        UserEntity userEntity = userRepository.findByuseridAndEmail(userid, email).orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+
+        log.error("userEntity getUsername {}", userEntity.getUsername());
+        log.error("userEntity getEmail {}", userEntity.getEmail());
+
+        ObjectId objectId = new ObjectId();
+        userEntity.resetPassword(passwordEncoder.encode(objectId.toString()));
+        userRepository.save(userEntity);
+
+        emailAuthService.ResetPasswordSend(email, objectId.toString());
     }
 }

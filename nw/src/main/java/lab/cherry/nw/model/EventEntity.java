@@ -33,12 +33,9 @@ import lombok.NoArgsConstructor;
 public class EventEntity implements Serializable {
 
     @Id
-    @JsonIgnore
-    private String id;
-
     @JsonProperty("eventSeq")
     @Schema(title = "이벤트 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private String seq;
+    private String id;
 
 	@NotNull
     @JsonProperty("eventTitle")
@@ -76,5 +73,9 @@ public class EventEntity implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
     @Schema(title = "이벤트 마지막 업데이트 시간", example = "2023-07-04 12:00:00")
     private Instant updated_at;
+    
+    public void editTitle(String title) {
+        this.title = title;
+    }
 
 }

@@ -15,7 +15,7 @@ import lab.cherry.nw.model.EventEntity;
 //@Repository
 public interface EventRepository extends MongoRepository<EventEntity, String> {
 
-    Optional<EventEntity> findBySeq(String seq);
+    Optional<EventEntity> findById(String id);
     Optional<EventEntity> findByTitle(String title);
     
 }

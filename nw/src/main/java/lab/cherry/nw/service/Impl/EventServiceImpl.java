@@ -67,34 +67,25 @@ public class EventServiceImpl implements EventService {
      */
     public EventEntity createEvent(String id) {
 
-		UserCardEntity UserCardEntity = userCardFindById(id);
+    UserCardEntity userCardEntity = userCardFindById(id);
 
     Map<String, Integer> dateFormat = new HashMap<>();
-    dateFormat = FormatConverter.convertDateFormat(UserCardEntity.getResDate());
-
-    String eventName = dateFormat.get("hour") + ":" + dateFormat.get("minute") + " " + UserCardEntity.getGroom().getName() + "♥" + UserCardEntity.getBride().getName();
+    dateFormat = FormatConverter.convertDateFormat(userCardEntity.getResDate());
 
     // {hour}:{min} {groom}♥{bride}
-		EventEntity _eventEntity = findByTitle(eventName);	// 중복 체크
-    
+    String eventName = dateFormat.get("hour") + ":" + dateFormat.get("minute") + " " + userCardEntity.getGroom().getName() + "♥" + userCardEntity.getBride().getName();
+
     EventEntity eventEntity = EventEntity.builder()
-        .id(_eventEntity.getId())
-        .seq(id)
-        .title(eventName)
-        .location(UserCardEntity.getWeddinghall().getName())
-        .resDate(UserCardEntity.getResDate())
-        .weddingDate(UserCardEntity.getWeddingDate())
-        .updated_at(Instant.now())
-        .build();
+          .id(userCardEntity.getUserinfo().getId())
+          .title(eventName)
+          .location(userCardEntity.getWeddinghall().getName())
+          .resDate(userCardEntity.getResDate())
+          .weddingDate(userCardEntity.getWeddingDate())
+          .updated_at(Instant.now())
+          .build();
 
-		return eventRepository.save(eventEntity);
+      return eventRepository.save(eventEntity);
 	}
-
-
-	// @Transactional(readOnly = true)
-  //   public Page<EventEntity> findPageByName(String name, Pageable pageable) {
-	// 	  return eventRepository.findPageByName(name, pageable);
-	// }
 
 	/**
      * [EventServiceImpl] 이벤트 이름 중복 체크 함수
@@ -130,23 +121,6 @@ public class EventServiceImpl implements EventService {
     public EventEntity findById(String id) {
 		  return eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event with Id " + id + " Not Found."));
 	}
-
-	/**
-     * [EventServiceImpl] Seq로 이벤트 조회 함수
-     *
-     * @param seq 조회할 이벤트의 식별자입니다.
-     * @return 주어진 식별자에 해당하는 이벤트 정보
-     * @throws EntityNotFoundException 해당 ID의 이벤트 정보가 없을 경우 예외 처리 발생
-     * <pre>
-     * 입력한 id에 해당하는 이벤트 정보를 조회합니다.
-     * </pre>
-     *
-     * Author : taking(taking@duck.com)
-     */
-    @Transactional(readOnly = true)
-    public EventEntity findBySeq(String seq) {
-		  return eventRepository.findBySeq(seq).orElseThrow(() -> new EntityNotFoundException("Event with Seq " + seq + " Not Found."));
-	}	
 
 	/**
      * [EventServiceImpl] Title로 이벤트 조회 함수

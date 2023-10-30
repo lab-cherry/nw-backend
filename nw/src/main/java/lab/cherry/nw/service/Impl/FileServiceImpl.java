@@ -33,7 +33,6 @@ import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.bson.types.ObjectId;
 
 @Slf4j
@@ -116,17 +115,18 @@ public class FileServiceImpl implements FileService {
 			resources.forEach((Consumer<GridFSFile>) file -> allFiles.add(file));
 
 			log.error("allFiles {}", allFiles);
-			for(GridFSFile file : allFiles) {
-				log.error("FileName : {}", file.getFilename());
-			}
+			log.error("allFiles.size {}", allFiles.size());
 
 			try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 					ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream)) {
 					for (GridFSFile file : allFiles) {
 
-							String fileName = FilenameUtils.getBaseName(file.getFilename()) + "-" + new ObjectId() + "." + FilenameUtils.getExtension(file.getFilename());
+							int lastIndex = file.getFilename().lastIndexOf(".");
+							String fileNameWithoutExtension = file.getFilename().substring(0, lastIndex);
+							String Extension = file.getFilename().substring(file.getFilename().lastIndexOf(".") + 1);
+							String fullName = fileNameWithoutExtension + "-" + new ObjectId() + "." + Extension;
 
-							ZipEntry zipEntry = new ZipEntry(fileName);
+							ZipEntry zipEntry = new ZipEntry(fullName);
 							zipOut.putNextEntry(zipEntry);
 
 							byte[] objectData = IOUtils.toByteArray(operations.getResource(file).getInputStream());

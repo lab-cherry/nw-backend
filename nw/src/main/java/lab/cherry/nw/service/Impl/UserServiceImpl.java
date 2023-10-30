@@ -188,16 +188,7 @@ public class UserServiceImpl implements UserService {
             imageData = fileService.uploadFiles(userEntity.getId(), image).get(0);
         }
 
-        userEntity = UserEntity.builder()
-            .id(userEntity.getId())
-            .userid(userEntity.getUserid())
-            .username(userEntity.getUsername())
-            .email(userEntity.getEmail())
-            .password(userEntity.getPassword())
-            .org(userEntity.getOrg())
-            .photo(imageData)
-            .build();
-
+        userEntity.editImage(imageData);
         userRepository.save(userEntity);
 
     }
