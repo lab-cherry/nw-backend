@@ -99,6 +99,35 @@ public class AuthServiceImpl implements AuthService {
 
         return userEntity;
     }
+    public List<UserEntity> addOrgUser(List<UserEntity.UserRegisterDto> orgUserUpdateDtoList) {
+        List<UserEntity> createOrgUserList = new ArrayList<>();
+        if(orgUserUpdateDtoList.size()> 0){
+            //  중복 체크 
+            RoleEntity roleEntity = roleRepository.findByName("ROLE_ORG").get();
+            Instant instant = Instant.now();
+            for (UserEntity.UserRegisterDto userRegisterDto : orgUserUpdateDtoList){
+                checkExistsWithUserId(userRegisterDto.getUserId());
+            }
+            for (UserEntity.UserRegisterDto userRegisterDto : orgUserUpdateDtoList){
+                UserEntity userEntity = UserEntity.builder()
+                .userid(userRegisterDto.getUserId())
+                .username(userRegisterDto.getUserName())
+                .email(userRegisterDto.getUserEmail())
+                .password(passwordEncoder.encode("0000"))
+                .role(roleEntity)
+                .enabled(true)
+                .isEmailVerified(true)
+                .created_at(instant)
+                .build();
+                createOrgUserList.add(userEntity);
+            }
+           userRepository.saveAll(createOrgUserList);
+           return createOrgUserList;
+        }else {
+            log.error("[QsheetServiceImpl - CreateRegisterOrgUser] OrgSeq,data 만 수정 가능합니다.");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+        }
+    }
 
     /**
      * [AuthServiceImpl] 로그인 함수
