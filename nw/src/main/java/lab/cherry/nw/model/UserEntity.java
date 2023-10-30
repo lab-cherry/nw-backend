@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import org.springframework.web.multipart.MultipartFile;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -94,6 +94,14 @@ public class UserEntity implements Serializable {
     public void emailVerifiedSuccess() {
         this.isEmailVerified = true;
     }
+    
+    public void resetPassword(String password) {
+        this.password = password;
+    }
+    
+    public void editImage(Object image) {
+        this.photo = image;
+    }
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -109,7 +117,7 @@ public class UserEntity implements Serializable {
 
         @NotBlank
         @Schema(title = "사용자 이름", example = "홍길동")
-        @Size(min = 2, max = 10, message = "Minimum username length: 4 characters")
+        @Size(min = 2, max = 10, message = "Minimum username length: 2 characters")
         private String userName;
 
         @NotBlank
@@ -123,7 +131,7 @@ public class UserEntity implements Serializable {
 
         @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
-        @Size(min = 3, message = "Minimum password length: 8 characters")
+        @Size(min = 3, message = "Minimum password length: 3 characters")
         private String userPassword;
     }
 
@@ -164,6 +172,22 @@ public class UserEntity implements Serializable {
 		@Schema(title = "사용자 조직", example = "")
         @Size(min = 3, max = 40)
         private String orgId;
+
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor @AllArgsConstructor
+    public static class UserForgotPassword {
+
+        @Schema(title = "사용자 아이디", example = "admin")
+        @Size(min = 4, max = 10)
+        private String userId;
+
+        @Schema(title = "사용자 이메일", example = "admin@innogrid.com")
+        @Email
+        @Size(min = 3, max = 40)
+        private String userEmail;
 
     }
 }

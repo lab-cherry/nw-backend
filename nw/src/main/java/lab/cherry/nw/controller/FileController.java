@@ -3,7 +3,9 @@ package lab.cherry.nw.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
+import org.bson.types.ObjectId;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,14 +19,24 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lab.cherry.nw.error.ErrorResponse;
 import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.FileEntity;
+import lab.cherry.nw.model.WeddinghallEntity;
 import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
@@ -95,6 +107,34 @@ public class FileController {
 //		final ResultResponse response = ResultResponse.of(SuccessCode.OK);
 		return new ResponseEntity<>(fileService.findById(id), new HttpHeaders(), HttpStatus.OK);
 	}
+
+    
+    /**
+     * [FileController] 파일 업로드 함수
+     *
+     * @param files 파일 업로드 객체 리스트입니다.
+     * @return
+     * <pre>
+     * true  : 성공(200)을 반환합니다.
+     * false : 에러(400)를 반환합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @PostMapping(value = "/upload", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    @Operation(summary = "파일 업로드", description = "파일을 업로드합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "파일 업로드가 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+            @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    public ResponseEntity<?> uploadFile(@RequestPart List<MultipartFile> files) {
+
+		log.info("[FileController] uploadFile...!");
+          
+        ResultResponse result = ResultResponse.of(SuccessCode.FILE_UPLOAD_SUCCESS, fileService.uploadFiles(new ObjectId().toString(), files));
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
+    }
+	     
 
 	/**
      * [FileController] 특정 파일 다운로드 함수

@@ -22,4 +22,5 @@ public interface OrgService {
     OrgEntity findByName(String name);
     void deleteById(String id);
     Page<OrgEntity> findPageByName(String name, Pageable pageable);
+    void inviteUser(String orgid, String email);
 }

@@ -109,6 +109,64 @@ public class EmailAuthServiceImpl implements EmailAuthService{
         } catch (MessagingException e) {
             log.error("email Error {}", e);
         }
-    }    
+    }
+    
 
+    public void ResetPasswordSend(String email, String password) {
+
+        MimeMessage message = javaMmailSender.createMimeMessage();
+
+        try {
+            message.addRecipients(MimeMessage.RecipientType.TO, email);
+            message.setFrom(EmailAuthServiceImpl.FROM_ADDRESS);
+            message.setSubject("[낭만웨딩] 비밀번호 초기화 메일입니다."); //제목
+            String text="";
+            text+= "<div style='margin:100px;'>";
+            text+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
+            text+= "<h3 style='color:blue;'>다음 비밀번호로 초기화되었습니다.</h3>";
+            text+= "<p>로그인 하신 후, 비밀번호를 변경해주세요.</p>";
+            text+= "<div style='font-size:130%'>";
+            text+= "NEW PASSWORD : <strong>";
+            text+= password + "</strong><div><br/> ";
+            text+= "</div>";
+            message.setText(text, "utf-8", "html");
+
+            javaMmailSender.send(message);
+
+
+        } catch (MessagingException e) {
+            log.error("email Error {}", e);
+        }
+        
+    }
+    
+
+    public void InviteUserSend(String orgid, String orgname, String email) {
+
+        MimeMessage message = javaMmailSender.createMimeMessage();
+        String _link = "/register/org/" + orgid;
+
+        try {
+            message.addRecipients(MimeMessage.RecipientType.TO, email);
+            message.setFrom(EmailAuthServiceImpl.FROM_ADDRESS);
+            message.setSubject("[낭만웨딩] " + orgname + " 초대 메일"); //제목
+            String text="";
+            text+= "<div style='margin:100px;'>";
+            text+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
+            text+= "<h3 style='color:blue;'>다음 링크를 통해 회원가입을 진행해주세요.</h3>";
+            text+= "<p>회원이시라면, 링크 클릭 후 '계정 있음' 선택 후 진행하시면 됩니다.</p>";
+            text+= "<div style='font-size:130%'>";
+            text+= "LINK : <strong>";
+            text+= "<a href=" + "'" + _link + "'>진행하기</a>" + "</strong><div><br/> ";
+            text+= "</div>";
+            message.setText(text, "utf-8", "html");
+
+            javaMmailSender.send(message);
+
+
+        } catch (MessagingException e) {
+            log.error("email Error {}", e);
+        }
+        
+    }
 }
