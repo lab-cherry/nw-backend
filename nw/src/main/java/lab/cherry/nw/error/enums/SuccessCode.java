@@ -19,6 +19,7 @@ public enum SuccessCode {
 
     // Common
     OK(200, "Success"),
+    FILE_UPLOAD_SUCCESS(200, "파일 업로드 완료"),
     REGISTER_SUCCESS(200, "회원가입 완료"),
     USERID_CHECK_OK(200, "사용 가능합니다."),
     PASSWORD_RESET_OK(200, "비밀번호 초기화 이메일 발송 완료"),
