@@ -36,7 +36,8 @@ public enum ErrorCode {
     REQUIRE_EMAIL_VERIFIED(409, "이메일 인증을 진행해주세요."),
     DUPLICATE(409, "중복된 데이터가 있습니다."),
     NO_BODY(400, "파라미터 값이 입력되지 않았습니다."),
-    FILE_UPLOAD_FAILED(400, "파일 업로드에 실패했습니다.");
+    FILE_UPLOAD_FAILED(400, "파일 업로드에 실패했습니다."),
+    USERCARD_DUPLICATE(409, "고객 카드에 이미 등록 된 사용자가 있습니다.");
 
     private final int status;
     private final String message;
