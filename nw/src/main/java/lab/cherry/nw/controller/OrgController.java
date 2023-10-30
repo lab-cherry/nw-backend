@@ -177,4 +177,16 @@ public class OrgController {
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
+
+    
+
+	@GetMapping("/invite")
+    @Operation(summary = "사용자(랑부) 초대", description = "이메일로 조직 초대 메일을 발송합니다.")
+    public ResponseEntity<?> inviteUser(@RequestParam(required = false) String orgid, @RequestParam(required = false) String email) {
+		log.info("[OrgController] inviteUser...!");
+
+        orgService.inviteUser(orgid, email);
+        final ResultResponse response = ResultResponse.of(SuccessCode.EMAIL_INVITE_USER_OK);
+		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+	}
 }

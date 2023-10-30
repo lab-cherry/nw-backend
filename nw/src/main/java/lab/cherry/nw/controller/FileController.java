@@ -129,7 +129,7 @@ public class FileController {
     })
     public ResponseEntity<?> uploadFile(@RequestPart List<MultipartFile> files) {
 
-		log.info("[WeddinghallController] uploadFile...!");
+		log.info("[FileController] uploadFile...!");
           
         ResultResponse result = ResultResponse.of(SuccessCode.FILE_UPLOAD_SUCCESS, fileService.uploadFiles(new ObjectId().toString(), files));
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
