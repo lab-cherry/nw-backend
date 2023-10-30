@@ -4,6 +4,7 @@ import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.EmailAuthEntity;
+import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.EmailAuthRepository;
@@ -11,6 +12,7 @@ import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.AuthService;
 import lab.cherry.nw.service.EmailAuthService;
+import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.TokenService;
 import lab.cherry.nw.service.UserService;
 import lab.cherry.nw.util.Security.AccessToken;
@@ -48,6 +50,7 @@ public class AuthServiceImpl implements AuthService {
     private final EmailAuthRepository emailAuthRepository;
     private final EmailAuthService emailAuthService;
     private final UserService userService;
+    private final OrgService orgService;
 
     /**
      * [AuthServiceImpl] 회원가입 함수
@@ -99,12 +102,13 @@ public class AuthServiceImpl implements AuthService {
 
         return userEntity;
     }
-    public List<UserEntity> addOrgUser(List<UserEntity.UserRegisterDto> orgUserUpdateDtoList) {
+    public List<UserEntity> addOrgUser(String orgSeq, List<UserEntity.UserRegisterDto> orgUserUpdateDtoList) {
         List<UserEntity> createOrgUserList = new ArrayList<>();
         if(orgUserUpdateDtoList.size()> 0){
-            //  중복 체크 
+            OrgEntity orgEntity = orgService.findById(orgSeq);
             RoleEntity roleEntity = roleRepository.findByName("ROLE_ORG").get();
             Instant instant = Instant.now();
+             //  중복 체크 
             for (UserEntity.UserRegisterDto userRegisterDto : orgUserUpdateDtoList){
                 checkExistsWithUserId(userRegisterDto.getUserId());
             }
@@ -115,6 +119,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(userRegisterDto.getUserEmail())
                 .password(passwordEncoder.encode("0000"))
                 .role(roleEntity)
+                .org(orgEntity)
                 .enabled(true)
                 .isEmailVerified(true)
                 .created_at(instant)
