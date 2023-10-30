@@ -73,9 +73,7 @@ public class UserCardServiceImpl implements UserCardService {
         UserEntity userEntity = userService.findById(userCardCreateDto.getUserSeq());
 
         checkExistsWithUserId(userEntity.getId());
-
-        System.err.println("user id "+userEntity.getId());
-
+        
         WeddinghallEntity weddinghallEntity = weddinghallService.findByName(userCardCreateDto.getWeddinghallName());
         ObjectId objectId = new ObjectId();
 
@@ -232,7 +230,6 @@ public class UserCardServiceImpl implements UserCardService {
 
     @Transactional(readOnly = true)
     public void checkExistsWithUserId(String userid) {
-         System.err.println("중복체크 :"+userCardRepository.findByUserSeq(userid));
         if (userCardRepository.findByUserSeq(userid).isPresent()) {
             throw new CustomException(ErrorCode.USERCARD_DUPLICATE); // usercard에 사용자 ID 중복 체크
         }
