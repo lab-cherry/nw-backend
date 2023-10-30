@@ -5,6 +5,7 @@ import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.repository.OrgRepository;
+import lab.cherry.nw.service.EmailAuthService;
 import lab.cherry.nw.service.OrgService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ import java.time.Instant;
 public class OrgServiceImpl implements OrgService {
 
 	private final OrgRepository orgRepository;
+    private final EmailAuthService emailAuthService;
 
     /**
      * [OrgServiceImpl] 전체 조직 조회 함수
@@ -197,5 +199,12 @@ public class OrgServiceImpl implements OrgService {
     @Transactional(readOnly = true)
     public Page<OrgEntity> findPageByName(String name, Pageable pageable) {
         return orgRepository.findPageByName(name, pageable);
+    }
+
+    public void inviteUser(String orgid, String email) {
+
+        OrgEntity orgEntity = findById(orgid);
+        emailAuthService.InviteUserSend(orgid, orgEntity.getName(), email);
+
     }
 }
