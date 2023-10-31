@@ -20,6 +20,6 @@ public interface AuthService {
     void checkExistsWithUserId(String userid);
 	UserEntity myInfo();
     void confirmEmail(String email, String token);
-    void reConfirmEmail(String userid);
+    void reConfirmEmail(String userid, String email);
     void forgotPassword(String userid, String email);
 }

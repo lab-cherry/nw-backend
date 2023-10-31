@@ -31,12 +31,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lab.cherry.nw.error.ErrorResponse;
 import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.FileEntity;
-import lab.cherry.nw.model.WeddinghallEntity;
 import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +74,7 @@ public class FileController {
 			@RequestParam(required = false) String name,
 			@RequestParam(required = false) String path,
 			@RequestParam(defaultValue = "0") Integer page,
-			@RequestParam(defaultValue = "5") Integer size,
+			@RequestParam(defaultValue = "100") Integer size,
 			@RequestParam(defaultValue = "id,desc") String[] sort) {
 
 		log.info("retrieve all orgs controller...!");

@@ -63,7 +63,7 @@ public class FinalTemplController {
     public ResponseEntity<?> findAllFinalTemplate(
             @RequestParam(required = false) String id,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size,
+            @RequestParam(defaultValue = "100") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort
     ) {
 

@@ -271,14 +271,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional(readOnly = true)
-    public void reConfirmEmail(String userSeq) {
+    public void reConfirmEmail(String userid, String email) {
 
-        EmailAuthEntity emailAuthEntity = emailAuthRepository.findById(userSeq)
+        UserEntity userEntity = userRepository.findByuseridAndEmail(userid, email).orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+
+        EmailAuthEntity emailAuthEntity = emailAuthRepository.findById(userEntity.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_AUTH_ERROR));
         
-        emailAuthEntity = emailAuthService.updateExpired(userSeq);
+        emailAuthEntity = emailAuthService.updateExpired(userEntity.getId());
         emailAuthService.ConfirmEmailSend(emailAuthEntity.getEmail(), emailAuthEntity.getToken());
-
     }
 
     public void forgotPassword(String userid, String email) {
