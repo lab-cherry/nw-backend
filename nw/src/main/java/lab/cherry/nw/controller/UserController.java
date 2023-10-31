@@ -51,6 +51,7 @@ public class UserController {
     @Operation(summary = "사용자 목록", description = "사용자 목록을 조회합니다.")
     public ResponseEntity<?> findAllUsers(
             @RequestParam(required = false) String userid,
+            @RequestParam(required = false) String orgSeq,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "5") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
@@ -60,10 +61,12 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Common.getOrder(sort)));
 
         Page<UserEntity> userEntity;
-        if(userid == null) {
+        if(userid == null && orgSeq ==null) {
             userEntity = userService.getUsers(pageable);
-        } else {
+        } else if (userid != null && orgSeq ==null)  {
             userEntity = userService.findPageByUserId(userid, pageable);
+        } else  {
+            userEntity = userService.findPageByOrgSeq(orgSeq, pageable);
         }
 
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
