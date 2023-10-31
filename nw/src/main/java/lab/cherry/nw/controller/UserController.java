@@ -53,7 +53,7 @@ public class UserController {
             @RequestParam(required = false) String userid,
             @RequestParam(required = false) String orgSeq,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size,
+            @RequestParam(defaultValue = "100") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
 
         log.info("retrieve all users controller...!");

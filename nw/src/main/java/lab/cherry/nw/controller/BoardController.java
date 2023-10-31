@@ -55,7 +55,7 @@ public class BoardController {
     public ResponseEntity<?> findAllBoards(
             @RequestParam(required = false) String userid,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size,
+            @RequestParam(defaultValue = "100") Integer size,
 			@RequestParam(defaultValue = "created_at,desc") String[] sort) {
 
     log.info("retrieve all boards controller...!");

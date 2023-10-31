@@ -2,6 +2,7 @@ package lab.cherry.nw.service.Impl;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
@@ -11,13 +12,18 @@ import lab.cherry.nw.model.EmailAuthEntity;
 import lab.cherry.nw.repository.EmailAuthRepository;
 import lab.cherry.nw.service.EmailAuthService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-@AllArgsConstructor
+// @AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class EmailAuthServiceImpl implements EmailAuthService{
+    
+    @Value("${frontend.host}")
+    private String FRONTEND_ADDR;
 
     private final JavaMailSender  javaMmailSender;
     private final EmailAuthRepository emailAuthRepository;
@@ -34,7 +40,6 @@ public class EmailAuthServiceImpl implements EmailAuthService{
             return null;
         }
     }
-
 
     /**
      * [UserServiceImpl] 이메일 인증 부분 수정 함수
@@ -59,7 +64,8 @@ public class EmailAuthServiceImpl implements EmailAuthService{
     public void ConfirmEmailSend(String email, String token) {
 
         MimeMessage message = javaMmailSender.createMimeMessage();
-        String _link = "/api/auth/confirm?email=" + email + "&token=" + token;
+        String _link = FRONTEND_ADDR + "/auth/confirm?email=" + email + "&token=" + token;
+        // "/api/auth/confirm?email=" + email + "&token=" + token;
 
         try {
             message.addRecipients(MimeMessage.RecipientType.TO, email);
@@ -71,8 +77,8 @@ public class EmailAuthServiceImpl implements EmailAuthService{
             text+= "<h3 style='color:blue;'>다음 링크를 눌러 인증을 완료하세요.</h3>";
             text+= "<div style='font-size:130%'>";
             text+= "LINK : <strong>";
-            text+= "<a href=" + "'" + _link + "'>인증하기</a>" + "</strong><div><br/> ";
-            text+= "</div>";
+            text+= "<a href=" + "'" + _link + "'>인증하기</a>" + "</strong><di`v><br/> ";
+            text+= "</di>";
             message.setText(text, "utf-8", "html");
 
             javaMmailSender.send(message);
@@ -83,33 +89,34 @@ public class EmailAuthServiceImpl implements EmailAuthService{
 
     }
 
-    public void InviteOrgSend(String orgname, String email, String token) {
+    // public void InviteOrgSend(String orgname, String email, String token) {
 
-        MimeMessage message = javaMmailSender.createMimeMessage();
-        String _link = "/api/auth/register/confirm?email" + email + "&token=" + token;
+    //     MimeMessage message = javaMmailSender.createMimeMessage();
+    //     String _link = FRONTEND_ADDR + "/auth/register/confirm?email" + email + "&token=" + token;
+    //     // "/api/auth/register/confirm?email" + email + "&token=" + token;
 
-        try {
-            message.addRecipients(MimeMessage.RecipientType.TO, email);
-            message.setFrom(EmailAuthServiceImpl.FROM_ADDRESS);
-            message.setSubject("[낭만웨딩] " + orgname + " 회원가입 요청 메일입니다."); //제목
-            String text="";
-            text+= "<div style='margin:100px;'>";
-            text+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
-            text+= "<h3 style='color:blue;'>다음 링크를 눌러 회원가입을 진행하세요.</h3>";
-            text+= "<p>회원이시라면 링크를 누르면 [" + orgname + "]에 소속됩니다.</p>";
-            text+= "<div style='font-size:130%'>";
-            text+= "LINK : <strong>";
-            text+= "<a href=" + "'" + _link + "'>진행하기</a>" + "</strong><div><br/> ";
-            text+= "</div>";
-            message.setText(text, "utf-8", "html");
+    //     try {
+    //         message.addRecipients(MimeMessage.RecipientType.TO, email);
+    //         message.setFrom(EmailAuthServiceImpl.FROM_ADDRESS);
+    //         message.setSubject("[낭만웨딩] " + orgname + " 회원가입 요청 메일입니다."); //제목
+    //         String text="";
+    //         text+= "<div style='margin:100px;'>";
+    //         text+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
+    //         text+= "<h3 style='color:blue;'>다음 링크를 눌러 회원가입을 진행하세요.</h3>";
+    //         text+= "<p>회원이시라면 링크를 누르면 [" + orgname + "]에 소속됩니다.</p>";
+    //         text+= "<div style='font-size:130%'>";
+    //         text+= "LINK : <strong>";
+    //         text+= "<a href=" + "'" + _link + "'>진행하기</a>" + "</strong><div><br/> ";
+    //         text+= "</div>";
+    //         message.setText(text, "utf-8", "html");
 
-            javaMmailSender.send(message);
+    //         javaMmailSender.send(message);
 
 
-        } catch (MessagingException e) {
-            log.error("email Error {}", e);
-        }
-    }
+    //     } catch (MessagingException e) {
+    //         log.error("email Error {}", e);
+    //     }
+    // }
     
 
     public void ResetPasswordSend(String email, String password) {
@@ -133,28 +140,26 @@ public class EmailAuthServiceImpl implements EmailAuthService{
 
             javaMmailSender.send(message);
 
-
         } catch (MessagingException e) {
             log.error("email Error {}", e);
         }
-        
     }
     
 
     public void InviteUserSend(String orgid, String orgname, String email) {
 
         MimeMessage message = javaMmailSender.createMimeMessage();
-        String _link = "/register/org/" + orgid;
+        String _link = FRONTEND_ADDR + "/auth/register/org/" + orgid;
 
         try {
             message.addRecipients(MimeMessage.RecipientType.TO, email);
             message.setFrom(EmailAuthServiceImpl.FROM_ADDRESS);
-            message.setSubject("[낭만웨딩] " + orgname + " 초대 메일"); //제목
+            message.setSubject("[낭만웨딩] " + orgname + " 초대 메일입니다."); //제목
             String text="";
             text+= "<div style='margin:100px;'>";
             text+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
-            text+= "<h3 style='color:blue;'>다음 링크를 통해 회원가입을 진행해주세요.</h3>";
-            text+= "<p>회원이시라면, 링크 클릭 후 '계정 있음' 선택 후 진행하시면 됩니다.</p>";
+            text+= "<h3 style='color:blue;'>다음 링크를 눌러 회원가입을 진행하세요.</h3>";
+            text+= "<p>회원이시라면 링크를 누르면 [" + orgname + "]에 소속됩니다.</p>";
             text+= "<div style='font-size:130%'>";
             text+= "LINK : <strong>";
             text+= "<a href=" + "'" + _link + "'>진행하기</a>" + "</strong><div><br/> ";

@@ -21,6 +21,7 @@ services:
       SMTP_PASS: test@test.com
       SMTP_AUTH: false
       SMTP_STARTTLS: false
+      FRONTEND_ADDR: http://localhost:8080
     ports:
       - "8081:8888"
     depends_on:

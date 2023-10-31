@@ -62,6 +62,7 @@ public class WebSecurityConfiguration {
                     "/swagger-ui.html",
                     "/api/auth/confirm/**",
                     "/api/v1/file/download/**",
+                    "/api/v1/file/downloads/**",
                     "/api/auth/forgot-password/**"
             )
               .permitAll()
