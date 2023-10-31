@@ -20,6 +20,8 @@ import lab.cherry.nw.model.OrgEntity;
 public interface OrgRepository extends MongoRepository<OrgEntity, String> {
 
     Page<OrgEntity> findAll(Pageable pageable);
+    
+    List<OrgEntity> findAll();
 
     Page<OrgEntity> findPageByName(String orgname, Pageable pageable);
 

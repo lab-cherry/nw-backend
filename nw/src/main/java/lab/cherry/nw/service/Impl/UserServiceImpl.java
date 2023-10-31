@@ -231,6 +231,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findPageByUserid(userid, pageable);
     }
 
+     @Transactional(readOnly = true)
+    public Page<UserEntity> findPageByOrgSeq(String orgSeq, Pageable pageable) {
+        return userRepository.findPageByOrgseq(orgSeq, pageable);
+    }
+
     public Boolean checkId(String id) {
 
         // userSeq가 DB에 존재할 시, true

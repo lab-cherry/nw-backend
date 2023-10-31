@@ -176,7 +176,7 @@ public class QsheetServiceImpl implements QsheetService {
         QsheetEntity originEntity = findById(id);
         List<ItemData> newItemData =qsheetEntity.getData();
 
-        if (qsheetEntity != null ) {
+        if (qsheetEntity != null && qsheetUpdateDto !=null ) {
 //            qsheetEntity.updateFromDto(qsheetUpdateDto);
 //            qsheetRepository.save(qsheetEntity);
 			OrgEntity orgEntity = qsheetEntity.getOrg();
@@ -193,7 +193,7 @@ public class QsheetServiceImpl implements QsheetService {
                 }
                 
             } 
-            if(files!=null){
+            if(qsheetUpdateDto.getData()!=null && files!=null){
                 newItemData= new ArrayList<>();
                 List<String> fileUrls = fileService.uploadFiles(qsheetEntity.getId(), files);
                 log.error("fileUrls {}", fileUrls);
@@ -243,7 +243,7 @@ public class QsheetServiceImpl implements QsheetService {
 			.org(orgEntity)
 			.user(qsheetEntity.getUser())
 			.created_at(qsheetEntity.getCreated_at())
-			.data(newItemData)
+			.data(qsheetUpdateDto.getData()!=null?newItemData:qsheetEntity.getData())
             .org_approver(orgUserEntity)
             .org_confirm(qsheetUpdateDto.isOrg_confirm()==!(qsheetEntity.isOrg_confirm())?qsheetUpdateDto.isOrg_confirm():qsheetEntity.isOrg_confirm())
             .client_confirm(qsheetUpdateDto.isClient_confirm()==!(qsheetEntity.isClient_confirm())?qsheetUpdateDto.isClient_confirm():qsheetEntity.isClient_confirm())
@@ -254,7 +254,7 @@ public class QsheetServiceImpl implements QsheetService {
             qsheetLogService.createQsheetLog("update", qsheetEntity);
             qsheetHistoryService.createQsheetHistory(originEntity, qsheetUpdateDto);
         } else {
-            log.error("[QsheetServiceImpl - udpateQsheet] OrgSeq,data 만 수정 가능합니다.");
+            log.error("[QsheetServiceImpl - udpateQsheet] 수정 Data가 없습니다.");
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
         }
     }
