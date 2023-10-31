@@ -137,12 +137,12 @@ public class AuthController {
 		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
 	}
 
-	@GetMapping("/confirm/{userSeq}")
+	@GetMapping("/re-confirm")
     @Operation(summary = "이메일 재인증", description = "이메일 재인증 메일을 발송합니다.")
-    public ResponseEntity<?> reConfirmEmail(@PathVariable("userSeq") String userSeq) {
+    public ResponseEntity<?> reConfirmEmail(@RequestParam(required = true) String userid, @RequestParam(required = true) String email) {
 		log.info("[AuthController] reConfirmEmail...!");
 
-        authService.reConfirmEmail(userSeq);
+        authService.reConfirmEmail(userid, email);
         final ResultResponse response = ResultResponse.of(SuccessCode.EMAIL_RESEND_OK);
 		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
 	}
