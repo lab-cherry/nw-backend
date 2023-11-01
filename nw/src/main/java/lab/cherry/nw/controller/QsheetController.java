@@ -107,9 +107,6 @@ public class QsheetController {
     @Operation(summary = "Qsheet 생성", description = "Qsheet를 추가합니다.")
     public ResponseEntity<?> createQsheet(@RequestPart QsheetEntity.QsheetCreateDto qsheetCreateDto, @RequestPart(name = "files", required = false) List<MultipartFile> files) {
         log.info("[QsheetController] createQsheet...!");
-
-        log.error("qsheetCreateDto {} ", qsheetCreateDto.getName());
-        log.error("file {} ", files.size());
         
         qsheetService.createQsheet(qsheetCreateDto, files);
 
