@@ -2,6 +2,7 @@ package lab.cherry.nw.service;
 
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.util.Security.AccessToken;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public interface AuthService {
     UserEntity register(UserEntity.UserRegisterDto userRegisterDto);
+    List<UserEntity> addOrgUser(String orgSeq, List<UserEntity.UserRegisterDto> userRegisterDtoList);
     AccessToken.Get login(UserEntity.UserLoginDto userLoginDto);
     void checkExistsWithUserId(String userid);
 	UserEntity myInfo();

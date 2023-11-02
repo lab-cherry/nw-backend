@@ -13,6 +13,7 @@ import lab.cherry.nw.model.UserCardEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.model.WeddinghallEntity;
 import lab.cherry.nw.repository.UserCardRepository;
+import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.EventService;
 import lab.cherry.nw.service.UserCardService;
 import lab.cherry.nw.service.UserService;
@@ -35,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserCardServiceImpl implements UserCardService {
 
     private final UserCardRepository userCardRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
     private final WeddinghallService weddinghallService;
     private final EventService eventService;
@@ -70,6 +72,8 @@ public class UserCardServiceImpl implements UserCardService {
 
         UserEntity userEntity = userService.findById(userCardCreateDto.getUserSeq());
 
+        checkExistsWithUserId(userEntity.getId());
+        
         WeddinghallEntity weddinghallEntity = weddinghallService.findByName(userCardCreateDto.getWeddinghallName());
         ObjectId objectId = new ObjectId();
 
@@ -218,9 +222,17 @@ public class UserCardServiceImpl implements UserCardService {
         return userCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usercard with Id " + id + " Not Found."));
     }
 
+
     @Transactional(readOnly = true)
     public Page<UserCardEntity> findPageById(String name, Pageable pageable) {
         return userCardRepository.findPageById(name, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public void checkExistsWithUserId(String userid) {
+        if (userCardRepository.findByUserSeq(userid).isPresent()) {
+            throw new CustomException(ErrorCode.USERCARD_DUPLICATE); // usercard에 사용자 ID 중복 체크
+        }
     }
 
 }

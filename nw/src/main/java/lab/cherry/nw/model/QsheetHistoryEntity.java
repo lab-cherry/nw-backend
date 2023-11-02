@@ -40,12 +40,12 @@ public class QsheetHistoryEntity implements Serializable {
     @DBRef
     @JsonProperty("qsheet")
     @Schema(title = "큐시트 고유번호",type="String", example = "38352658567418867") // (Long) Tsid
-    private QsheetEntity qsheetid;
+    private QsheetEntity qsheet;
 
     @DBRef
-    @JsonProperty("user")
+    @JsonProperty("update_user")
     @Schema(title = "유저 고유번호", type="String",example = "38352658567418867") // (Long) Tsid
-    private UserEntity userid;
+    private UserEntity updateUser;
 
     @JsonProperty("content")
     @Schema(title = "수정 내용", type="String",example = "큐시트 제목 변경")

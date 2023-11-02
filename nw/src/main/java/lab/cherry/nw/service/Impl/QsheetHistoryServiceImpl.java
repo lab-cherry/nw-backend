@@ -149,8 +149,8 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
         Instant instant = Instant.now();
         // UserEntity userEntity = userService.findById(qsheetHistoryCreateDto.getUserSeq());
         QsheetHistoryEntity qsheetHistoryEntity = QsheetHistoryEntity.builder()
-			.qsheetid(originQsheetEntity)
-            .userid(userEntity)
+			.qsheet(originQsheetEntity)
+            .updateUser(userEntity)
             .content(contentList)
             .updated_at(instant)
             .build();

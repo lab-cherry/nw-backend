@@ -4,6 +4,7 @@ import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.EmailAuthEntity;
+import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.EmailAuthRepository;
@@ -11,6 +12,7 @@ import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.AuthService;
 import lab.cherry.nw.service.EmailAuthService;
+import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.TokenService;
 import lab.cherry.nw.service.UserService;
 import lab.cherry.nw.util.Security.AccessToken;
@@ -48,6 +50,7 @@ public class AuthServiceImpl implements AuthService {
     private final EmailAuthRepository emailAuthRepository;
     private final EmailAuthService emailAuthService;
     private final UserService userService;
+    private final OrgService orgService;
 
     /**
      * [AuthServiceImpl] 회원가입 함수
@@ -98,6 +101,37 @@ public class AuthServiceImpl implements AuthService {
         emailAuthService.ConfirmEmailSend(emailAuthEntity.getEmail(), emailAuthEntity.getToken());
 
         return userEntity;
+    }
+    public List<UserEntity> addOrgUser(String orgSeq, List<UserEntity.UserRegisterDto> orgUserUpdateDtoList) {
+        List<UserEntity> createOrgUserList = new ArrayList<>();
+        if(orgUserUpdateDtoList.size()> 0){
+            OrgEntity orgEntity = orgService.findById(orgSeq);
+            RoleEntity roleEntity = roleRepository.findByName("ROLE_ORG").get();
+            Instant instant = Instant.now();
+             //  중복 체크 
+            for (UserEntity.UserRegisterDto userRegisterDto : orgUserUpdateDtoList){
+                checkExistsWithUserId(userRegisterDto.getUserId());
+            }
+            for (UserEntity.UserRegisterDto userRegisterDto : orgUserUpdateDtoList){
+                UserEntity userEntity = UserEntity.builder()
+                .userid(userRegisterDto.getUserId())
+                .username(userRegisterDto.getUserName())
+                .email(userRegisterDto.getUserEmail())
+                .password(passwordEncoder.encode("0000"))
+                .role(roleEntity)
+                .org(orgEntity)
+                .enabled(true)
+                .isEmailVerified(true)
+                .created_at(instant)
+                .build();
+                createOrgUserList.add(userEntity);
+            }
+           userRepository.saveAll(createOrgUserList);
+           return createOrgUserList;
+        }else {
+            log.error("[QsheetServiceImpl - CreateRegisterOrgUser] OrgSeq,data 만 수정 가능합니다.");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+        }
     }
 
     /**

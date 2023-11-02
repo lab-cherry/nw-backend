@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 
 /**
  * <pre>
@@ -48,6 +49,23 @@ public class OrgServiceImpl implements OrgService {
     @Override
     public Page<OrgEntity> getOrganizations(Pageable pageable) {
         return orgRepository.findAll(pageable);
+//        return EntityNotFoundException.requireNotEmpty(orgRepository.findAll(), "Orgs Not Found");
+    }
+
+    /**
+     * [OrgServiceImpl] 전체 조직 조회 함수
+     *
+     * @return DB에서 전체 조직 정보 목록을 리턴합니다.
+     * <pre>
+     * 전체 조직를 조회하여, 사용자 정보 목록을 반환합니다.
+     * </pre>
+     *
+     * Author : yby654(yby654@github.com)
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<OrgEntity> getOrganizationList() {
+        return orgRepository.findAll();
 //        return EntityNotFoundException.requireNotEmpty(orgRepository.findAll(), "Orgs Not Found");
     }
 

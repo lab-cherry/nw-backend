@@ -15,6 +15,7 @@ import lab.cherry.nw.service.AuthService;
 import lab.cherry.nw.util.Security.AccessToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,19 @@ public class AuthController {
     public ResponseEntity<?> register(@Valid @RequestBody UserEntity.UserRegisterDto userRegisterDto) {
         
         ResultResponse result = ResultResponse.of(SuccessCode.REGISTER_SUCCESS, authService.register(userRegisterDto));
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping("/register/orgUser/{orgSeq}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조직 유저 추가 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+            @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "중복된 사용자입니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @Operation(summary = "조직 유저 일괄 가입", description = "조직 유저를 추가합니다.")
+    public ResponseEntity<?> register(@PathVariable("orgSeq") String orgSeq, @Valid @RequestBody List<UserEntity.UserRegisterDto> userRegisterDtoList) {
+        
+        ResultResponse result = ResultResponse.of(SuccessCode.REGISTER_SUCCESS, authService.addOrgUser(orgSeq, userRegisterDtoList));
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 

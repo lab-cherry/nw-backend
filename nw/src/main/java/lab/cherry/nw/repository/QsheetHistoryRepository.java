@@ -22,13 +22,15 @@ public interface QsheetHistoryRepository extends MongoRepository<QsheetHistoryEn
 
     Page<QsheetHistoryEntity> findAll(Pageable pageable);
 
+    @Query("{'user.$_id' : ?0}")
     Page<QsheetHistoryEntity> findPageByUserid(String userid, Pageable pageable);
 
+    @Query("{'qsheet.$_id' : ?0}")
     Page<QsheetHistoryEntity> findPageByQsheetid(String qsheetid, Pageable pageable);
 
     Optional<QsheetHistoryEntity> findById(String id);
 
-    @Query("{'qsheetid.$id' : ?0}")
+    @Query("{'qsheet.$_id' : ?0}")
     List<QsheetHistoryEntity> findByQsheetId(ObjectId qsheetId);
 
 
