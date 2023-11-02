@@ -23,6 +23,6 @@ public interface OrgService {
     OrgEntity findByName(String name);
     void deleteById(String id);
     Page<OrgEntity> findPageByName(String name, Pageable pageable);
-    void inviteUser(String orgid, String email);
+    void inviteOrgSend(String orgid, String email);
     List<OrgEntity> getOrganizationList();
 }
