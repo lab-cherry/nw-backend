@@ -201,10 +201,10 @@ public class OrgServiceImpl implements OrgService {
         return orgRepository.findPageByName(name, pageable);
     }
 
-    public void inviteUser(String orgid, String email) {
+    public void inviteOrgSend(String orgid, String email) {
 
         OrgEntity orgEntity = findById(orgid);
-        emailAuthService.InviteUserSend(orgid, orgEntity.getName(), email);
+        emailAuthService.InviteOrgSend(orgEntity.getId(), orgEntity.getName(), email);
 
     }
 }
