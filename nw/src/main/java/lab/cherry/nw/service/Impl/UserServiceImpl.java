@@ -4,11 +4,13 @@ import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.OrgEntity;
+import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.UserService;
+import lab.cherry.nw.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.util.List;
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
 	private final OrgService orgService;
     private final PasswordEncoder passwordEncoder;
     private final FileService fileService;
+    private final RoleService roleService;
 
     /**
      * [UserServiceImpl] 전체 사용자 조회 함수
@@ -146,15 +149,7 @@ public class UserServiceImpl implements UserService {
         if (orgId != null) {
 
 		    OrgEntity orgEntity = orgService.findById(orgId);
-
-            userEntity = UserEntity.builder()
-                .id(userEntity.getId())
-                .userid(userEntity.getUserid())
-                .username(userEntity.getUsername())
-                .email(userEntity.getEmail())
-                .password(userEntity.getPassword())
-                .org(orgEntity)
-                .build();
+            userEntity.changeOrg(orgEntity);
 
             userRepository.save(userEntity);
 
@@ -164,6 +159,25 @@ public class UserServiceImpl implements UserService {
 		}
     }
 
+    public void updateRoleById(String id, String roleId) {
+
+        log.error("#0");
+        UserEntity userEntity = findById(id);
+        log.error("#1");
+
+        if (roleId != null) {
+
+		    RoleEntity roleEntity = roleService.findById(roleId);
+            log.error("#2");
+            userEntity.changeRole(roleEntity);
+
+            userRepository.save(userEntity);
+
+        } else {
+			log.error("[UserServiceImpl - updateOrgById] orgId 만 입력 가능합니다.");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+		}
+    }
 
     /**
      * [UserServiceImpl] 사용자 사진 수정 함수

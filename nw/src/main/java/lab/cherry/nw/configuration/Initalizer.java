@@ -81,6 +81,7 @@ public class Initalizer implements ApplicationRunner {
                 .email("admin@localhost.com")
                 .role(roleEntity)
                 .enabled(true)
+                .isEmailVerified(true)
                 .build());
         }
         
@@ -96,6 +97,7 @@ public class Initalizer implements ApplicationRunner {
                 .email("cherrylab@test.com")
                 .role(roleEntity)
                 .enabled(true)
+                .isEmailVerified(true)
                 .build());
         }
         
@@ -111,6 +113,7 @@ public class Initalizer implements ApplicationRunner {
                 .email("themoment@test.com")
                 .role(roleEntity)
                 .enabled(true)
+                .isEmailVerified(true)
                 .build());
         }
     }
