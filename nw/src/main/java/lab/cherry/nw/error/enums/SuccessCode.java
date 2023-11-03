@@ -22,7 +22,7 @@ public enum SuccessCode {
     FILE_UPLOAD_SUCCESS(200, "파일 업로드 완료"),
     REGISTER_SUCCESS(200, "회원가입 완료"),
     USERID_CHECK_OK(200, "사용 가능합니다."),
-    PASSWORD_RESET_OK(200, "비밀번호 초기화 이메일 발송 완료"),
+    PASSWORD_RESET_OK(200, "초기화 비밀번호 이메일 발송 완료"),
     EMAIL_INVITE_USER_OK(200, "사용자(랑부) 초대 이메일 발송 완료"),
     EMAIL_CHECK_OK(200, "이메일 인증 완료"),
     EMAIL_RESEND_OK(200, "이메일 인증 메일 재발송 완료");

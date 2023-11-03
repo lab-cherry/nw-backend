@@ -89,36 +89,6 @@ public class EmailAuthServiceImpl implements EmailAuthService{
 
     }
 
-    // public void InviteOrgSend(String orgname, String email, String token) {
-
-    //     MimeMessage message = javaMmailSender.createMimeMessage();
-    //     String _link = FRONTEND_ADDR + "/auth/register/confirm?email" + email + "&token=" + token;
-    //     // "/api/auth/register/confirm?email" + email + "&token=" + token;
-
-    //     try {
-    //         message.addRecipients(MimeMessage.RecipientType.TO, email);
-    //         message.setFrom(EmailAuthServiceImpl.FROM_ADDRESS);
-    //         message.setSubject("[낭만웨딩] " + orgname + " 회원가입 요청 메일입니다."); //제목
-    //         String text="";
-    //         text+= "<div style='margin:100px;'>";
-    //         text+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
-    //         text+= "<h3 style='color:blue;'>다음 링크를 눌러 회원가입을 진행하세요.</h3>";
-    //         text+= "<p>회원이시라면 링크를 누르면 [" + orgname + "]에 소속됩니다.</p>";
-    //         text+= "<div style='font-size:130%'>";
-    //         text+= "LINK : <strong>";
-    //         text+= "<a href=" + "'" + _link + "'>진행하기</a>" + "</strong><div><br/> ";
-    //         text+= "</div>";
-    //         message.setText(text, "utf-8", "html");
-
-    //         javaMmailSender.send(message);
-
-
-    //     } catch (MessagingException e) {
-    //         log.error("email Error {}", e);
-    //     }
-    // }
-    
-
     public void ResetPasswordSend(String email, String password) {
 
         MimeMessage message = javaMmailSender.createMimeMessage();
@@ -146,7 +116,7 @@ public class EmailAuthServiceImpl implements EmailAuthService{
     }
     
 
-    public void InviteUserSend(String orgid, String orgname, String email) {
+    public void InviteOrgSend(String orgid, String orgname, String email) {
 
         MimeMessage message = javaMmailSender.createMimeMessage();
         String _link = FRONTEND_ADDR + "/auth/register/org/" + orgid;
