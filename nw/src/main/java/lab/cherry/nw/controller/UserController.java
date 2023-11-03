@@ -116,7 +116,7 @@ public class UserController {
      */
     @PatchMapping("{id}/org")
     @Operation(summary = "사용자 조직 업데이트", description = "특정 사용자의 조직 정보를 업데이트합니다.")
-    public ResponseEntity<?> updateUserOrgs(
+    public ResponseEntity<?> updateUserOrg(
 		@PathVariable("id") String id,
 		@RequestBody UserEntity.UserUpdateDto userEntity) {
 
@@ -127,6 +127,20 @@ public class UserController {
             final ResultResponse response = ResultResponse.of(SuccessCode.OK);
             return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
+
+    @PatchMapping("{id}/role")
+    @Operation(summary = "사용자 조직 업데이트", description = "특정 사용자의 조직 정보를 업데이트합니다.")
+    public ResponseEntity<?> updateUserRole(
+		@PathVariable("id") String id,
+		@RequestBody UserEntity.UserUpdateDto userEntity) {
+
+            log.info("[UserController] updateUserOrg...!");
+
+			userService.updateRoleById(id, userEntity.getRoleId());
+
+            final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+            return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+    }    
 
     /**
      * [UserController] 사용자 사진 업데이트 함수

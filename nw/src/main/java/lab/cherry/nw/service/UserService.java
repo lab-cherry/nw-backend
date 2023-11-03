@@ -26,6 +26,7 @@ public interface UserService {
     Page<UserEntity> findPageByUserId(String userid, Pageable pageable);
     Page<UserEntity> findPageByOrgSeq(String orgSeq, Pageable pageable);
 	void updateOrgById(String id, String orgId);
+    void updateRoleById(String id, String roleId);
     void updateUserPhoto(String id, List<MultipartFile> image);
     void updateEmailVerifiedByid(String id);
 }
