@@ -20,7 +20,7 @@ public enum ErrorCode {
     // Common
     RUNTIME_EXCEPTION(400, "잘못된 요청입니다."),
     INVALID_INPUT_VALUE(400, "유효하지 않는 입력 값입니다."),
-    ENTITY_NOT_FOUND(400, "데이터를 찾을 수 없습니다."),
+    ENTITY_NOT_FOUND(404, "데이터를 찾을 수 없습니다."),
     METHOD_NOT_ALLOWED(405, "허용되지 않는 메소드입니다."),
     INVALID_TYPE_VALUE(400, "유효하지 않은 유형 값입니다."),
     INVALID_USERNAME(400, "잘못된 사용자 이름/비밀번호를 입력했습니다."),
