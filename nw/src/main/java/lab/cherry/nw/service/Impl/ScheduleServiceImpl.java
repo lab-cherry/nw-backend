@@ -37,7 +37,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	private final FinalTemplService finalTemplService;
     private final UserService userService;
     private final OrgService orgService;
-	private final FinaldocsRepository finaldocsRepository;
+
 
     /**
      * [scheduleServiceImpl] 스케줄표 조회 함수
@@ -56,29 +56,62 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.findAll(pageable);
     }
 
-	/**
-	 * [scheduleServiceImpl] 스케줄표 날짜 기준 조회 함수
-	 *
-	 * @return DB에서 스케줄표 정보 목록을 날짜 기준으로 리턴합니다.
-	 * @throws EntityNotFoundException 스케줄표 정보가 없을 경우 예외 처리 발생
-	 * <pre>
-	 * 전체 스케줄표 조회하여, 날짜에 맞는 스케줄표목록을 반환합니다.
-	 * </pre>
-	 *
-	 * Author : hhhaeri(yhoo0020@gmail.com)
-	 */
-	@Transactional(readOnly = true)
-	@Override
-	public ScheduleEntity scheduleByDate(Instant start, Instant end) {
+	// /**
+	//  * [scheduleServiceImpl] 스케줄표 날짜 기준 조회 함수
+	//  *
+	//  * @return DB에서 스케줄표 정보 목록을 날짜 기준으로 리턴합니다.
+	//  * @throws EntityNotFoundException 스케줄표 정보가 없을 경우 예외 처리 발생
+	//  * <pre>
+	//  * 전체 스케줄표 조회하여, 날짜에 맞는 스케줄표목록을 반환합니다.
+	//  * </pre>
+	//  *
+	//  * Author : hhhaeri(yhoo0020@gmail.com)
+	//  */
+	// @Transactional(readOnly = true)
+	// @Override
+	// public ScheduleEntity scheduleByDate(Instant start, Instant end) {
 
-		List<FinaldocsEntity> finaldocsEntity = finaldocsRepository.findAllBycreatedAtBetween(start,end);
+	// 	List<FinaldocsEntity> finaldocsEntity = finaldocsRepository.findAllBycreatedAtBetween(start,end);
 
-		ScheduleEntity scheduleEntity = ScheduleEntity.builder()
-			.content(finaldocsEntity)
-			.build();
+	// 	ScheduleEntity scheduleEntity = ScheduleEntity.builder()
+	// 		.content(finaldocsEntity)
+	// 		.build();
 
-		return scheduleEntity;
-	}
+	// 	return scheduleEntity;
+	// }
+
+
+      /**
+     * [scheduleServiceImpl] 스케줄표 생성 함수
+     *
+     * @param scheduleCreateDto 스케줄표 생성에 필요한 조직 등록 정보를 담은 개체입니다.
+     * @return 스케줄표정보를 리턴합니다.
+     * <pre>
+     * 스케줄표를 등록합니다.
+     * </pre>
+     *
+     * Author : hhhaeri(yhoo0020@gmail.com)
+     */
+    public ScheduleEntity createSchedule(ScheduleEntity.ScheduleCreateDto scheduleCreateDto) {
+
+        Instant instant = Instant.now();
+
+        UserEntity userEntity = userService.findById(scheduleCreateDto.getUserSeq());
+        OrgEntity orgEntity = orgService.findById(scheduleCreateDto.getOrgId());
+        FinalTemplEntity finaltempl = finalTemplService.findById(scheduleCreateDto.getFinaltemplId());
+
+        ScheduleEntity scheduleEntity = ScheduleEntity.builder()
+            .content(scheduleCreateDto.getContent())
+            .user(userEntity)
+            .finaltempl(finaltempl)
+            .org(orgEntity)
+            .created_at(instant)
+            .build();
+
+        return scheduleRepository.save(scheduleEntity);
+    }
+
+
 
     /**
      * [scheduleServiceImpl] 스케줄표 생성 함수
@@ -99,19 +132,18 @@ public class ScheduleServiceImpl implements ScheduleService {
         OrgEntity orgEntity = orgService.findById(scheduleTransDto.getOrg());
 		FinalTemplEntity finalTemplEntity = finalTemplService.findById(scheduleTransDto.getFinalTempl());
 
-		Map<String,String> content = finalTemplEntity.getContent();
+		Map<String,Object> content = finalTemplEntity.getContent();
 
 		// Null 값을 가진 값만 가져오기
-		Map<String, String> nullEntries = new HashMap<>();
+		Map<String, Object> nullEntries = new HashMap<>();
 
-		for (Map.Entry<String, String> entry : content.entrySet()) {
+		for (Map.Entry<String, Object> entry : content.entrySet()) {
 			if (!entry.getValue().equals("")) {
 				nullEntries.put(entry.getKey(), entry.getValue());
 			}
 		}
 
 		ScheduleEntity scheduleEntity = ScheduleEntity.builder()
-            .name(scheduleTransDto.getName())
             .column(nullEntries)
             .user(userEntity)
             .org(orgEntity)
@@ -167,15 +199,15 @@ public class ScheduleServiceImpl implements ScheduleService {
      *
 	 * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    @Transactional(readOnly = true)
-    public ScheduleEntity findByName(String name) {
-        return scheduleRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Schedule with Name " + name + " Not Found."));
-    }
+    // @Transactional(readOnly = true)
+    // public ScheduleEntity findByName(String name) {
+    //     return scheduleRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Schedule with Name " + name + " Not Found."));
+    // }
 
-    @Transactional(readOnly = true)
-    public Page<ScheduleEntity> findPageByName(String name, Pageable pageable) {
-        return scheduleRepository.findPageByName(name, pageable);
-    }
+    // @Transactional(readOnly = true)
+    // public Page<ScheduleEntity> findPageByName(String name, Pageable pageable) {
+    //     return scheduleRepository.findPageByName(name, pageable);
+    // }
 
     @Transactional(readOnly = true)
     public Page<ScheduleEntity> findPageById(String id, Pageable pageable) {

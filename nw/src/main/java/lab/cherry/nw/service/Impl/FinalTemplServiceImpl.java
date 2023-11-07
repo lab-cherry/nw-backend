@@ -5,10 +5,12 @@ import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.FinalTemplEntity;
 import lab.cherry.nw.model.OrgEntity;
+import lab.cherry.nw.model.UserCardEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.FinalTemplRepository;
 import lab.cherry.nw.service.FinalTemplService;
 import lab.cherry.nw.service.OrgService;
+import lab.cherry.nw.service.UserCardService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,7 @@ public class FinalTemplServiceImpl implements FinalTemplService {
     private final FinalTemplRepository finalTemplRepository;
     private final UserService userService;
     private final OrgService orgService;
+    private final UserCardService userCardService;
 
     /**
      * [FinalTemplServiceImpl] 최종확인서 템플릿 조회 함수
@@ -70,18 +73,20 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 
         Instant instant = Instant.now();
 
-        UserEntity userEntity = userService.findById(finalTemplCreateDto.getUser());
-        OrgEntity orgEntity = orgService.findById(finalTemplCreateDto.getOrg());
+        UserEntity userEntity = userService.findById(finalTemplCreateDto.getUserSeq());
+        OrgEntity orgEntity = orgService.findById(finalTemplCreateDto.getOrgId());
+        UserCardEntity usercard = userCardService.findById(finalTemplCreateDto.getUsercardId());
 
-        FinalTemplEntity finaldocsEntity = FinalTemplEntity.builder()
+        FinalTemplEntity finaltemplEntity = FinalTemplEntity.builder()
             .name(finalTemplCreateDto.getName())
             .content(finalTemplCreateDto.getContent())
             .user(userEntity)
+            .usercard(usercard)
             .org(orgEntity)
             .created_at(instant)
             .build();
 
-        return finalTemplRepository.save(finaldocsEntity);
+        return finalTemplRepository.save(finaltemplEntity);
     }
 
     /**
@@ -98,8 +103,8 @@ public class FinalTemplServiceImpl implements FinalTemplService {
     public void updateById(String id, FinalTemplEntity.FinalTemplUpdateDto finalTempl) {
 
         FinalTemplEntity finalTemplEntity = findById(id);
-        UserEntity userEntity = userService.findById(finalTempl.getUser());
-        OrgEntity orgEntity = orgService.findById(finalTempl.getOrg());
+        UserEntity userEntity = userService.findById(finalTempl.getUserSeq());
+        OrgEntity orgEntity = orgService.findById(finalTempl.getOrgId());
         Instant instant = Instant.now();
 
         if (finalTempl.getContent() != null) {
