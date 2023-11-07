@@ -4,6 +4,7 @@ import java.time.Instant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import lab.cherry.nw.model.FinalTemplEntity;
 import lab.cherry.nw.model.ScheduleEntity;
 
 /**
@@ -17,11 +18,12 @@ import lab.cherry.nw.model.ScheduleEntity;
 @Component
 public interface ScheduleService {
     Page<ScheduleEntity> getSchedule(Pageable pageable);
-	ScheduleEntity  scheduleByDate(Instant fromDate, Instant toDate);
+	// ScheduleEntity  scheduleByDate(Instant fromDate, Instant toDate);
+    ScheduleEntity createSchedule(ScheduleEntity.ScheduleCreateDto scheduleCreateDto);
 	ScheduleEntity transColumn(ScheduleEntity.transDto scheduleTransDto);
 	ScheduleEntity findById(String id);
-	ScheduleEntity findByName(String name);
+	// ScheduleEntity findByName(String name);
     void deleteById(String id);
-    Page<ScheduleEntity> findPageByName(String name, Pageable pageable);
+    // Page<ScheduleEntity> findPageByName(String name, Pageable pageable);
     Page<ScheduleEntity> findPageById(String id, Pageable pageable);
 }

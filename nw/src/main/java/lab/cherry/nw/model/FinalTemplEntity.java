@@ -31,7 +31,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "finaltempl")
-@JsonPropertyOrder({ "id", "finaltemplName","content","user","org","updated_at", "created_at"})
+@JsonPropertyOrder({ "id", "finaltemplName", "content","user", "org", "usercard", "updated_at", "created_at"})
 public class FinalTemplEntity implements Serializable {
 
     @Id
@@ -51,16 +51,21 @@ public class FinalTemplEntity implements Serializable {
     @Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
     private OrgEntity org;
 
+
+    @NotNull
+    @JsonProperty("usercard")
+    @Schema(title = "고객카드 정보", example = "문서 내용")
+    private UserCardEntity usercard;
+
 	@NotNull
     @JsonProperty("finaltemplName")
     @Schema(title = "최종확인서 템플릿 이름", example = "예식장 최종 확인서 양식")
     @Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
     private String name;
 
-	@NotNull
     @JsonProperty("content")
     @Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
-    private Map<String,String> content;
+    private Map<String,Object> content;
 
 
     @JsonProperty("updated_at")
@@ -87,19 +92,20 @@ public class FinalTemplEntity implements Serializable {
     private String name;
 
 	@NotBlank
-	@JsonProperty("userid")
-	@Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
-    private String user;
+	@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
+    private String userSeq;
 
 	@NotBlank
-	@JsonProperty("orgid")
-	@Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
-    private String org;
+	@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
+    private String orgId;
 
-	@NotBlank
-	@JsonProperty("content")
+    @NotBlank
+    @Schema(title = "고객카드 고유 번호", example = "문서 내용")
+    private String usercardId;
+
+
 	@Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
-    private Map<String,String> content;
+    private Map<String,Object> content;
 
 
     }
@@ -110,18 +116,18 @@ public class FinalTemplEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class FinalTemplUpdateDto {
 
-		@Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
-        private String user;
+		@Schema(title = "사용자 고유 번호", example = "64ed89aa9e813b5ab16da6de")
+        private String userSeq;
 
-		@Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
-        private String org;
+		@Schema(title = "조직 고유 번호", example = "64ed89aa9e813b5ab16da6de")
+        private String orgId;
 
 		@Schema(title = "최종확인서 템플릿 이름", example = "예식장 최종 확인서 양식")
 		@Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
 		private String name;
 
 		@Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
-		private Map<String, String> content;
+		private Map<String, Object> content;
 
 
     }
