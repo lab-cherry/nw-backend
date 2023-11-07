@@ -99,6 +99,15 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
     
+    public void changeOrg(OrgEntity org) {
+        this.org = org;
+    }
+    
+    public void changeRole(RoleEntity role) {
+        this.role = role;
+    }
+    
+    
     public void editImage(Object image) {
         this.photo = image;
     }
@@ -170,8 +179,12 @@ public class UserEntity implements Serializable {
         private String userPassword;
 
 		@Schema(title = "사용자 조직", example = "")
-        @Size(min = 3, max = 40)
+        @Size(min = 1, max = 40)
         private String orgId;
+
+		@Schema(title = "사용자 권한", example = "")
+        @Size(min = 1, max = 40)
+        private String roleId;
 
     }
 

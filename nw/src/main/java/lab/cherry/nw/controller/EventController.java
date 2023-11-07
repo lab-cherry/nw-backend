@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/event")
+@RequestMapping("/api/v1/events")
 @Tag(name = "Event", description = "Event API Document")
 public class EventController {
     
