@@ -21,13 +21,13 @@ public interface ScheduleRepository extends MongoRepository<ScheduleEntity, Stri
 
     Page<ScheduleEntity> findAll(Pageable pageable);
 
-    Page<ScheduleEntity> findPageByName(String scheduleName, Pageable pageable);
+    // Page<ScheduleEntity> findPageByName(String scheduleName, Pageable pageable);
 
     Page<ScheduleEntity> findPageById(String id, Pageable pageable);
 
     Optional<ScheduleEntity> findById(String id);
 
-    Optional<ScheduleEntity> findByName(String scheduleName);
+    // Optional<ScheduleEntity> findByName(String scheduleName);
 
     List<ScheduleEntity> findAllById(List<String> scheduleIds);
 }
