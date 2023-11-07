@@ -128,9 +128,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
     public ScheduleEntity transColumn(ScheduleEntity.transDto scheduleTransDto) {
 
-        UserEntity userEntity = userService.findById(scheduleTransDto.getUser());
-        OrgEntity orgEntity = orgService.findById(scheduleTransDto.getOrg());
-		FinalTemplEntity finalTemplEntity = finalTemplService.findById(scheduleTransDto.getFinalTempl());
+        UserEntity userEntity = userService.findById(scheduleTransDto.getUserId());
+        OrgEntity orgEntity = orgService.findById(scheduleTransDto.getOrgId());
+		FinalTemplEntity finalTemplEntity = finalTemplService.findById(scheduleTransDto.getFinalTemplId());
 
 		Map<String,Object> content = finalTemplEntity.getContent();
 

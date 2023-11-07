@@ -18,7 +18,7 @@ import lab.cherry.nw.model.ScheduleEntity;
 @Component
 public interface ScheduleService {
     Page<ScheduleEntity> getSchedule(Pageable pageable);
-	ScheduleEntity  scheduleByDate(Instant fromDate, Instant toDate);
+	// ScheduleEntity  scheduleByDate(Instant fromDate, Instant toDate);
     ScheduleEntity createSchedule(ScheduleEntity.ScheduleCreateDto scheduleCreateDto);
 	ScheduleEntity transColumn(ScheduleEntity.transDto scheduleTransDto);
 	ScheduleEntity findById(String id);
