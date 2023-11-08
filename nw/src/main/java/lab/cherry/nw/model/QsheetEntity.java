@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.aggregation.VariableOperators.Map;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
@@ -52,7 +53,6 @@ public class QsheetEntity implements Serializable {
 
     @JsonProperty("name")
     @Schema(title = "큐시트 이름", type="String",example = "최해리_230824")
-    @Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
     private String name;
 
     @JsonProperty("data")
@@ -102,8 +102,20 @@ public class QsheetEntity implements Serializable {
         private String actor;
 		@Schema(title = "비고", example = "신부가 노래를 못함")
         private String note;
-		@Schema(title = "파일위치", example = "./")
-        private String filePath;
+		@Schema(title = "파일 이름", example = "[축가.mp3, 축하영상.mp4]")
+        private List<String> fileName;
+        @Schema(title = "파일 정보")
+        private List<FileInfo> fileInfo;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor @AllArgsConstructor
+    public static class FileInfo {
+		@Schema(title = "파일 네임",type="String",example = "38352658567418867")
+        private String name;
+        @Schema(title = "다운로드 링크", type="String", example = "false")
+        private String link;
     }
     @Getter
     @Builder
