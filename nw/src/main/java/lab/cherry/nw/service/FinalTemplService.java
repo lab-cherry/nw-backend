@@ -19,8 +19,8 @@ public interface FinalTemplService {
     FinalTemplEntity createFinalTemplate(FinalTemplEntity.FinalTemplCreateDto fdocsTemplateCreateDto);
     void updateById(String id, FinalTemplEntity.FinalTemplUpdateDto org);
     FinalTemplEntity findById(String id);
-    FinalTemplEntity findByName(String name);
+    // FinalTemplEntity findByName(String name);
     void deleteById(String id);
-    Page<FinalTemplEntity> findPageByName(String name, Pageable pageable);
+    // Page<FinalTemplEntity> findPageByName(String name, Pageable pageable);
     Page<FinalTemplEntity> findPageById(String id, Pageable pageable);
 }
