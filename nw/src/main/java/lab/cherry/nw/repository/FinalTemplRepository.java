@@ -21,7 +21,7 @@ public interface FinalTemplRepository extends MongoRepository<FinalTemplEntity, 
 
     Page<FinalTemplEntity> findAll(Pageable pageable);
 
-    Page<FinalTemplEntity> findPageByName(String fdocsTemplateName, Pageable pageable);
+    // Page<FinalTemplEntity> findPageByName(String fdocsTemplateName, Pageable pageable);
 
     Page<FinalTemplEntity> findPageById(String id, Pageable pageable);
 
@@ -29,7 +29,7 @@ public interface FinalTemplRepository extends MongoRepository<FinalTemplEntity, 
 
 	Optional<FinalTemplEntity> findByIdIsNotNull(String id);
 
-    Optional<FinalTemplEntity> findByName(String fdocsTemplateName);
+    // Optional<FinalTemplEntity> findByName(String fdocsTemplateName);
 
     List<FinalTemplEntity> findAllById(List<String> orgIds);
 }

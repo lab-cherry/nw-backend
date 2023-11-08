@@ -35,7 +35,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	private final ScheduleRepository scheduleRepository;
 	private final FinalTemplService finalTemplService;
-    private final UserService userService;
     private final OrgService orgService;
 
 
@@ -56,30 +55,6 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.findAll(pageable);
     }
 
-	// /**
-	//  * [scheduleServiceImpl] 스케줄표 날짜 기준 조회 함수
-	//  *
-	//  * @return DB에서 스케줄표 정보 목록을 날짜 기준으로 리턴합니다.
-	//  * @throws EntityNotFoundException 스케줄표 정보가 없을 경우 예외 처리 발생
-	//  * <pre>
-	//  * 전체 스케줄표 조회하여, 날짜에 맞는 스케줄표목록을 반환합니다.
-	//  * </pre>
-	//  *
-	//  * Author : hhhaeri(yhoo0020@gmail.com)
-	//  */
-	// @Transactional(readOnly = true)
-	// @Override
-	// public ScheduleEntity scheduleByDate(Instant start, Instant end) {
-
-	// 	List<FinaldocsEntity> finaldocsEntity = finaldocsRepository.findAllBycreatedAtBetween(start,end);
-
-	// 	ScheduleEntity scheduleEntity = ScheduleEntity.builder()
-	// 		.content(finaldocsEntity)
-	// 		.build();
-
-	// 	return scheduleEntity;
-	// }
-
 
       /**
      * [scheduleServiceImpl] 스케줄표 생성 함수
@@ -96,14 +71,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         Instant instant = Instant.now();
 
-        UserEntity userEntity = userService.findById(scheduleCreateDto.getUserSeq());
         OrgEntity orgEntity = orgService.findById(scheduleCreateDto.getOrgId());
-        FinalTemplEntity finaltempl = finalTemplService.findById(scheduleCreateDto.getFinaltemplId());
 
         ScheduleEntity scheduleEntity = ScheduleEntity.builder()
             .content(scheduleCreateDto.getContent())
-            .user(userEntity)
-            .finaltempl(finaltempl)
             .org(orgEntity)
             .created_at(instant)
             .build();
@@ -128,11 +99,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
     public ScheduleEntity transColumn(ScheduleEntity.transDto scheduleTransDto) {
 
-        UserEntity userEntity = userService.findById(scheduleTransDto.getUserId());
         OrgEntity orgEntity = orgService.findById(scheduleTransDto.getOrgId());
 		FinalTemplEntity finalTemplEntity = finalTemplService.findById(scheduleTransDto.getFinalTemplId());
 
-		Map<String,Object> content = finalTemplEntity.getContent();
+		Map<String, Object> content = finalTemplEntity.getContent();
 
 		// Null 값을 가진 값만 가져오기
 		Map<String, Object> nullEntries = new HashMap<>();
@@ -145,7 +115,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		ScheduleEntity scheduleEntity = ScheduleEntity.builder()
             .column(nullEntries)
-            .user(userEntity)
             .org(orgEntity)
             .build();
 
