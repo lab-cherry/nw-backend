@@ -9,20 +9,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.FileEntity;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.QsheetEntity;
+import lab.cherry.nw.model.QsheetEntity.FileInfo;
 import lab.cherry.nw.model.QsheetEntity.ItemData;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.QsheetRepository;
@@ -98,7 +97,7 @@ public class QsheetServiceImpl implements QsheetService {
 		if (qsheetCreateDto.getOrgSeq() != null){
             orgEntity = orgService.findById(qsheetCreateDto.getOrgSeq());
         }
-        if ( qsheetCreateDto.getOrg_approverSeq() != null){
+        if (qsheetCreateDto.getOrg_approverSeq() != null){
             orgUserEntity = userService.findById(qsheetCreateDto.getOrg_approverSeq());
         }
         ////////////
@@ -107,32 +106,36 @@ public class QsheetServiceImpl implements QsheetService {
             List<String> fileUrls = fileService.uploadFiles(objectid.toString(), files);
             log.error("fileUrls {}", fileUrls);
             ////////////
-            
-
             for (ItemData data : qsheetCreateDto.getData()) {
+                 List<FileInfo>  fileInfos = new ArrayList<>();
                 for (String filePath : fileUrls) {
                     String[] parts = filePath.split("/");
                     String fileId = parts[parts.length - 1];
                     FileEntity fileEntity = fileService.findById(fileId);
-                    if( fileEntity != null ) {
-                        if (fileEntity.getName().contains(data.getFilePath())){
-                            ItemData tempData = ItemData.builder()
+                    if(fileEntity != null &&  data.getFileName() !=null) {
+                        for(String fileName : data.getFileName() ){
+                            if (fileEntity.getName().contains(fileName)){
+                             FileInfo fileInfo = FileInfo.builder()
+                             .name(fileName)
+                             .link(fileEntity.getUrl())
+                             .build();
+                             log.error("fileInfo : {} ",fileInfo);
+                            fileInfos.add(fileInfo);
+                            }
+                           
+                        }
+                       
+                    }     
+                }
+                 ItemData tempData = ItemData.builder()
                                 .orderIndex(data.getOrderIndex())
                                 .process(data.getProcess())
                                 .content(data.getContent())
                                 .actor(data.getActor())
                                 .note(data.getNote())
-                                .filePath(filePath)
+                                .fileInfo(fileInfos)
                                 .build();
-                            data = tempData;
-                            break;
-                            
-                        }
-                        
-                      
-                    }
-                
-                }
+                data = tempData;
                 newItemData.add(data);
              }
             
@@ -197,31 +200,38 @@ public class QsheetServiceImpl implements QsheetService {
                 newItemData= new ArrayList<>();
                 List<String> fileUrls = fileService.uploadFiles(qsheetEntity.getId(), files);
                 log.error("fileUrls {}", fileUrls);
-            ////////////
-                
                 for (ItemData data : qsheetUpdateDto.getData()) {
+                     List<FileInfo>  fileInfos = new ArrayList<>();
                     for (String filePath : fileUrls) {
                         String[] parts = filePath.split("/");
                         String fileId = parts[parts.length - 1];
                         FileEntity fileEntity = fileService.findById(fileId);
-                        if(fileEntity != null){
-                            if (fileEntity.getName().contains(data.getFilePath())){
-                                ItemData tempData = ItemData.builder()
-                                    .orderIndex(data.getOrderIndex())
-                                    .process(data.getProcess())
-                                    .content(data.getContent())
-                                    .actor(data.getActor())
-                                    .note(data.getNote())
-                                    .filePath(filePath)
+                        if(fileEntity != null &&  data.getFileName() !=null) {
+                            for(String fileName : data.getFileName() ){
+                                if (fileEntity.getName().contains(fileName)){
+                                    FileInfo fileInfo = FileInfo.builder()
+                                    .name(fileName)
+                                    .link(fileEntity.getUrl())
                                     .build();
-                                data = tempData;
-                                break;
+                                    fileInfos.add(fileInfo);
+                                }
                             }
-
-                        }    
+                        }else{
+                            fileInfos= data.getFileInfo();
+                        }     
                     }
-                    newItemData.add(data);
-                }
+                    ItemData tempData = ItemData.builder()
+                                .orderIndex(data.getOrderIndex())
+                                .process(data.getProcess())
+                                .content(data.getContent())
+                                .actor(data.getActor())
+                                .note(data.getNote())
+                                .fileInfo(fileInfos)
+                                .build();
+                        data = tempData;
+                        newItemData.add(data);
+                    }
+                
             }else if(qsheetUpdateDto.getData()!=null && files==null){
                 newItemData= new ArrayList<>();
                 for(ItemData data : qsheetUpdateDto.getData()){
@@ -231,12 +241,12 @@ public class QsheetServiceImpl implements QsheetService {
                         .content(data.getContent())
                         .actor(data.getActor())
                         .note(data.getNote())
-                        .filePath(data.getFilePath())
+                        .fileInfo(data.getFileInfo())
                         .build();
                      newItemData.add(tempData);           
                 }
             }
-            
+            log.error("create_at type : {} ", qsheetEntity.getCreated_at().getClass());
 			qsheetEntity = QsheetEntity.builder()
 			.id(qsheetEntity.getId())
 			.name(qsheetUpdateDto.getName()!=null?qsheetUpdateDto.getName():qsheetEntity.getName())
