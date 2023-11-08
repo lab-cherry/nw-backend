@@ -112,16 +112,16 @@ public class QsheetEntity implements Serializable {
     @Builder
     @NoArgsConstructor @AllArgsConstructor
     public static class FileInfo {
-		@Schema(title = "파일 네임",type="String",example = "38352658567418867")
+		@Schema(title = "파일 이름", example = "축가.mp3")
         private String name;
-        @Schema(title = "다운로드 링크", type="String", example = "false")
+        @Schema(title = "다운로드 링크", type= "String", example = "/api/v1/38352658567418867")
         private String link;
     }
     @Getter
     @Builder
     @NoArgsConstructor @AllArgsConstructor
     public static class FinalConfirm {
-		@Schema(title = "업체 확인자 정보",type="String",example = "38352658567418867")
+		@Schema(title = "업체 확인자 정보", type="String", example = "38352658567418867")
         private String org_approver;
         @Schema(title = "업체 확인", type="Boolean", example = "false")
         private boolean org_confirm;
