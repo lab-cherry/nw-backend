@@ -181,15 +181,15 @@ public class FinalTemplServiceImpl implements FinalTemplService {
      *
      * Author : taking(taking@duck.com)
      */
-    @Transactional(readOnly = true)
-    public FinalTemplEntity findByName(String name) {
-        return finalTemplRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("finalTempl with Name " + name + " Not Found."));
-    }
+    // @Transactional(readOnly = true)
+    // public FinalTemplEntity findByName(String name) {
+    //     return finalTemplRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("finalTempl with Name " + name + " Not Found."));
+    // }
 
-    @Transactional(readOnly = true)
-    public Page<FinalTemplEntity> findPageByName(String name, Pageable pageable) {
-        return finalTemplRepository.findPageByName(name, pageable);
-    }
+    // @Transactional(readOnly = true)
+    // public Page<FinalTemplEntity> findPageByName(String name, Pageable pageable) {
+    //     return finalTemplRepository.findPageByName(name, pageable);
+    // }
 
 
     @Transactional(readOnly = true)
