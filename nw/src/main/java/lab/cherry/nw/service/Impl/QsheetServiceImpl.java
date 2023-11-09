@@ -347,8 +347,8 @@ public class QsheetServiceImpl implements QsheetService {
     }
 
     @Transactional(readOnly = true)
-    public Page<QsheetEntity> findPageByOrgId(String orgSeq, Pageable pageable) {
-        return qsheetRepository.findPageByOrgid(orgSeq, pageable);
+    public Page<QsheetEntity> findPageByOrgId(String orgSeq, String type, Pageable pageable) {
+        return qsheetRepository.findPageByOrgid(orgSeq, type, pageable);
     }
     
     public Map<String, Object> download(String[] qsheetIds) {

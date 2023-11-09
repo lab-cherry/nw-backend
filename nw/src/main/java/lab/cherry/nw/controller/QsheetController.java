@@ -70,6 +70,7 @@ public class QsheetController {
     public ResponseEntity<?> findAllQsheets(
             @RequestParam(required = false) String userSeq,
             @RequestParam(required = false) String orgSeq,
+            @RequestParam(required = false) String type,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "100") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
@@ -84,7 +85,7 @@ public class QsheetController {
     } else if(userSeq != null && orgSeq==null) {
         qsheetEntity = qsheetService.findPageByUserId(userSeq, pageable);
 	} else{
-		qsheetEntity = qsheetService.findPageByOrgId(orgSeq, pageable);
+		qsheetEntity = qsheetService.findPageByOrgId(orgSeq, type, pageable);
 	}
         for (QsheetEntity qsheet : qsheetEntity) {
             qsheet.sortDataByOrderIndex();
