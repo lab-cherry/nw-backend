@@ -87,7 +87,7 @@ public class QsheetServiceImpl implements QsheetService {
      *
      * Author : yby654(yby654@github.com)
      */
-    public void createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files) {
+    public QsheetEntity createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files) {
         Instant instant = Instant.now();
         UserEntity userEntity = userService.findById(qsheetCreateDto.getUserSeq());
         OrgEntity orgEntity = null;
@@ -159,6 +159,7 @@ public class QsheetServiceImpl implements QsheetService {
             .build();
         qsheetRepository.save(qsheetEntity);
         qsheetLogService.createQsheetLog("create", qsheetEntity);
+        return qsheetEntity;
     }
 
     /**

@@ -2,6 +2,7 @@ package lab.cherry.nw.controller;
 
 import java.util.List;
 import java.util.Map;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -108,10 +109,11 @@ public class QsheetController {
     public ResponseEntity<?> createQsheet(@RequestPart QsheetEntity.QsheetCreateDto qsheetCreateDto, @RequestPart(name = "files", required = false) List<MultipartFile> files) {
         log.info("[QsheetController] createQsheet...!");
 
-        qsheetService.createQsheet(qsheetCreateDto, files);
+        QsheetEntity qsheetEntity = qsheetService.createQsheet(qsheetCreateDto, files);
 
-        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
-        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+        // final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+        ResultResponse result = ResultResponse.of(SuccessCode.OK, qsheetEntity.getId().toString());
+        return new ResponseEntity<>(result ,new HttpHeaders(), HttpStatus.OK);
     }
     /**
      * [QsheetController] 큐시트 수정 함수

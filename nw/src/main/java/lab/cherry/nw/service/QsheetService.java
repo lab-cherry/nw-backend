@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface QsheetService {
  Page<QsheetEntity> getQsheets(Pageable pageable);
  QsheetEntity findById(String id);
- void createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files);
+ QsheetEntity createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files);
  void updateById(String id, QsheetEntity.QsheetUpdateDto updateDto, List<MultipartFile> files);
  void deleteById(String id);
  Page<QsheetEntity> findPageByUserId(String userSeq, Pageable pageable);
