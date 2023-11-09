@@ -48,7 +48,7 @@ public class ScheduleEntity implements Serializable {
 
 	  @JsonProperty("scheduleContent")
 	  @Schema(title = "스케줄표 내용", example = "[]")
-	  private Map<String, Object> content;
+	  private List<Object> content;
 
     @JsonProperty("column")
     @Schema(title = "스케줄표  컬럼", example = "")
@@ -65,36 +65,13 @@ public class ScheduleEntity implements Serializable {
   @NoArgsConstructor @AllArgsConstructor
   public static class ScheduleCreateDto {
 
-
 		@NotBlank
 		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
 		private String orgId;
 
-
 		@Schema(title = "스케줄표 템플릿 내용", example = "문서 내용")
-		private Map<String, Object> content;
+		private List<Object> content;
 
 			}
-
-
-	//////////////////////////////////////////////////////////////////////////
-
-		@Getter
-		@Setter
-		@Builder
-		@NoArgsConstructor @AllArgsConstructor
-		public static class transDto {
-
-			@Schema(title = "스케줄표 고유번호", example = "64ed89aa9e813b5ab16da6de")
-			private  String finalTemplId;
-
-			@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-			private String orgId;
-			
-			@JsonProperty("scheduleContent")
-			@Schema(title = "스케줄표 내용", example = "[]")
-			private Map<String, Object> content;
-
-		}
 
 }

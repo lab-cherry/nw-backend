@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,7 +54,9 @@ public class FinalTemplEntity implements Serializable {
 
     @JsonProperty("content")
     @Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
-    private Map<String, Object> content;
+    // private Map<String, Object> content;
+    private List<Object> content;
+ 
 
     @JsonProperty("updated_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
@@ -81,8 +84,8 @@ public class FinalTemplEntity implements Serializable {
     private String orgId;
 
 	@Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
-    private Map<String, Object> content;
-
+    private List<Object> content;
+ 
     }
 
     @Getter
@@ -90,14 +93,14 @@ public class FinalTemplEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class FinalTemplUpdateDto {
 
-		@Schema(title = "사용자 고유 번호", example = "64ed89aa9e813b5ab16da6de")
-        private String userSeq;
+	@Schema(title = "사용자 고유 번호", example = "64ed89aa9e813b5ab16da6de")
+    private String userSeq;
 
-		@Schema(title = "조직 고유 번호", example = "64ed89aa9e813b5ab16da6de")
-        private String orgId;
+	@Schema(title = "조직 고유 번호", example = "64ed89aa9e813b5ab16da6de")
+    private String orgId;
 
-		@Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
-		private Map<String, Object> content;
+	@Schema(title = "최종확인서 템플릿 내용", example = "문서 내용")
+	private List<Object> content;
 
     }
 
