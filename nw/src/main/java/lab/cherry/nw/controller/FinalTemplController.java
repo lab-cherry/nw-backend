@@ -171,7 +171,7 @@ public class FinalTemplController {
     @Operation(summary = "최종 확인서 템플릿 삭제", description = "최종 확인서 템플릿을 삭제합니다.")
     public ResponseEntity<?> deleteFinalTemplate(@PathVariable("id") String id) {
 
-        log.info("[FinaldocsController] deleteFinalTempl...!");
+        log.info("[FinalTemplController] deleteFinalTempl...!");
 
         finalTemplService.deleteById(id);
 

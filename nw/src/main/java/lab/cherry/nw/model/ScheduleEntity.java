@@ -33,7 +33,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "schedule")
-@JsonPropertyOrder({ "id", "scheduleSeq","user","org","finaltempl", "scheduleContent", "column", "created_at"})
+@JsonPropertyOrder({ "id", "scheduleSeq", "org", "scheduleContent", "column", "created_at"})
 public class ScheduleEntity implements Serializable {
 
     @Id
@@ -42,22 +42,13 @@ public class ScheduleEntity implements Serializable {
     private String id;
 
     @DBRef
-    @JsonProperty("user")
-    @Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
-    private UserEntity user;
-
-    @DBRef
     @JsonProperty("org")
     @Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
     private OrgEntity org;
 
-	  @JsonProperty("finaltempl")
-	  @Schema(title = "최종확인서 템플릿 정보", example = "64ed89aa9e813b5ab16da6de")
-	  private FinalTemplEntity finaltempl;
-
 	  @JsonProperty("scheduleContent")
 	  @Schema(title = "스케줄표 내용", example = "[]")
-	  private Map<String,Object> content;
+	  private List<Object> content;
 
     @JsonProperty("column")
     @Schema(title = "스케줄표  컬럼", example = "")
@@ -74,49 +65,13 @@ public class ScheduleEntity implements Serializable {
   @NoArgsConstructor @AllArgsConstructor
   public static class ScheduleCreateDto {
 
-
-		@NotBlank
-		@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-		private String userSeq;
-
 		@NotBlank
 		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
 		private String orgId;
 
-		@NotBlank
-		@Schema(title = "최종확인서 템플릿 고유번호", example = "문서 내용")
-		private String finaltemplId;
-
-
 		@Schema(title = "스케줄표 템플릿 내용", example = "문서 내용")
-		private Map<String,Object> content;
-
+		private List<Object> content;
 
 			}
-
-
-	//////////////////////////////////////////////////////////////////////////
-
-		@Getter
-		@Setter
-		@Builder
-		@NoArgsConstructor @AllArgsConstructor
-		public static class transDto {
-
-			@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-			private String userId;
-
-			@Schema(title = "스케줄표 고유번호", example = "64ed89aa9e813b5ab16da6de")
-			private  String finalTemplId;
-
-			@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-			private String orgId;
-			
-
-			@JsonProperty("scheduleContent")
-			@Schema(title = "스케줄표 내용", example = "[]")
-			private Map<String,Object> content;
-
-		}
 
 }

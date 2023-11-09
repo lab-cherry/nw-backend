@@ -38,7 +38,6 @@ public class FinalTemplServiceImpl implements FinalTemplService {
     private final FinalTemplRepository finalTemplRepository;
     private final UserService userService;
     private final OrgService orgService;
-    private final UserCardService userCardService;
 
     /**
      * [FinalTemplServiceImpl] 최종확인서 템플릿 조회 함수
@@ -75,13 +74,11 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 
         UserEntity userEntity = userService.findById(finalTemplCreateDto.getUserSeq());
         OrgEntity orgEntity = orgService.findById(finalTemplCreateDto.getOrgId());
-        UserCardEntity usercard = userCardService.findById(finalTemplCreateDto.getUsercardId());
+    
 
         FinalTemplEntity finaltemplEntity = FinalTemplEntity.builder()
-            .name(finalTemplCreateDto.getName())
             .content(finalTemplCreateDto.getContent())
             .user(userEntity)
-            .usercard(usercard)
             .org(orgEntity)
             .created_at(instant)
             .build();
@@ -184,15 +181,15 @@ public class FinalTemplServiceImpl implements FinalTemplService {
      *
      * Author : taking(taking@duck.com)
      */
-    @Transactional(readOnly = true)
-    public FinalTemplEntity findByName(String name) {
-        return finalTemplRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("finalTempl with Name " + name + " Not Found."));
-    }
+    // @Transactional(readOnly = true)
+    // public FinalTemplEntity findByName(String name) {
+    //     return finalTemplRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("finalTempl with Name " + name + " Not Found."));
+    // }
 
-    @Transactional(readOnly = true)
-    public Page<FinalTemplEntity> findPageByName(String name, Pageable pageable) {
-        return finalTemplRepository.findPageByName(name, pageable);
-    }
+    // @Transactional(readOnly = true)
+    // public Page<FinalTemplEntity> findPageByName(String name, Pageable pageable) {
+    //     return finalTemplRepository.findPageByName(name, pageable);
+    // }
 
 
     @Transactional(readOnly = true)

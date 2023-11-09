@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lab.cherry.nw.error.ErrorResponse;
-import lab.cherry.nw.model.FinalTemplEntity;
 import lab.cherry.nw.model.ScheduleEntity;
 import lab.cherry.nw.service.ScheduleService;
 import lab.cherry.nw.util.Common;
@@ -23,9 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 
 /**
  * <pre>
@@ -93,34 +89,7 @@ public class ScheduleController {
 		return new ResponseEntity<>(scheduleService.findById(id), new HttpHeaders(), HttpStatus.OK);
 	}
 
-    /**
-     * [ScheduleController] 스케줄표 컬럼 변경 함수
-     *
-     * @param tranClounm 최종확인서에서 스케줄표에 필요한 컬럼만 담고 있는 객체입니다.
-     * @return
-     * <pre>
-     * true  : 성공(200)을 반환합니다.
-     * false : 에러(400)를 반환합니다.
-     * </pre>
-     *
-     * Author : hhhaeri(yhoo0020@gmail.com)
-     */
-    @PostMapping("/column")
-    @Operation(summary = "스케줄표 컬럼 변환", description = "최종확인서에 있는 컬럼을 스케줄표로 변환.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "스케줄표 컬럼 변환이 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
-            @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    public ResponseEntity<?> fianlToSchedule(@Valid @RequestBody(required = false) ScheduleEntity.transDto scheduleTransDto) {
-
-        log.info("[ScheduleController] fianlToSchedule...!");
-
-		ScheduleEntity scheduleEntity = scheduleService.transColumn(scheduleTransDto);
-
-            return new ResponseEntity<>(scheduleEntity, new HttpHeaders(), HttpStatus.OK);
-    }
-
-
+    
   /**
      * [ScheduleController] 스케줄표 생성 함수
      *
@@ -147,42 +116,5 @@ public class ScheduleController {
 
             return new ResponseEntity<>(scheduleEntity, new HttpHeaders(), HttpStatus.OK);
     }
-
-
-
-
-	// /**
-	//  * [ScheduleController] 스케줄표 날짜 기준 조회
-	//  *
-	//  * @param 날짜 기준으로 스케줄표를 조회합니다.
-	//  * @return
-	//  * <pre>
-	//  * true  : 성공(200)을 반환합니다.
-	//  * false : 에러(400)를 반환합니다.
-	//  * </pre>
-	//  *
-	//  * Author : hhhaeri(yhoo0020@gmail.com)
-	//  */
-	// @PostMapping("/date/{start}/{end}")
-	// @Operation(summary = "스케줄표 날짜 조회", description = "최종확인서에 있는 날짜 기준 조회")
-	// @ApiResponses(value = {
-	// 	@ApiResponse(responseCode = "200", description = "날짜 기준으로 조회를 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
-	// 	@ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-	// })
-	// public ResponseEntity<?> fianlToDateSchedule(@Valid @PathVariable("start") String start, @PathVariable("end") String end) {
-
-	// 	log.info("[ScheduleController] fianlToDateSchedule...!");
-
-	// 	LocalDate localStartDate = LocalDate.parse(start);
-	// 	LocalDate localEndDate = LocalDate.parse(end);
-
-	// 	// LocalDate를 Instant로 변환 (00:00:00 시간으로 설정)
-	// 	Instant startDate = localStartDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
-	// 	Instant endDate = localEndDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
-
-	// 	ScheduleEntity scheduleEntity = scheduleService.scheduleByDate(startDate,endDate);
-
-	// 	return new ResponseEntity<>(scheduleEntity, new HttpHeaders(), HttpStatus.OK);
-	// }
 
 }

@@ -167,8 +167,8 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
             ItemData item1 = map1.get(item2.getProcess());
             map2.put(item2.getProcess(), item2);
             if (item1 != null) {
-                 if(!(item1.getOrderIndex().equals(item2.getOrderIndex())) || !(item1.getActor().equals(item2.getActor())) || !(item1.getContent().equals(item2.getContent()))|| !(item1.getNote().equals(item2.getNote())) || !(item1.getFilePath().equals(item2.getFilePath())) ){
-                     Map<String, ItemData> modification = new HashMap<>();
+                 if(!(item1.getOrderIndex().equals(item2.getOrderIndex())) || !(item1.getActor().equals(item2.getActor())) || !(item1.getContent().equals(item2.getContent()))|| !(item1.getNote().equals(item2.getNote())) || item2.getFileName()!=null) {
+                    Map<String, ItemData> modification = new HashMap<>();
                     modification.put("수정", item2);
                     log.error("수정 : {} ", item2.getProcess());
                     resultList.add(modification);

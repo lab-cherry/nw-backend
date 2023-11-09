@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,8 +65,7 @@ public class FinaldocsEntity implements Serializable {
 
     @JsonProperty("content")
     @Schema(title = "최종확인서 내용", example = "")
-    private Map<String,String> content;
-
+    private List<Object> content;
 
 
     @JsonProperty("updated_at")
@@ -109,7 +109,7 @@ public class FinaldocsEntity implements Serializable {
 //		@NotBlank
 		@JsonProperty("content")
 		@Schema(title = "최종확인서 내용", example = "")
-        private Map<String,String> content;
+        private List<Object> content;
 
 
     }
@@ -133,7 +133,7 @@ public class FinaldocsEntity implements Serializable {
         private String org;
 
 		@Schema(title = "최종확인서 내용", example = "")
-        private Map<String,String> content;
+        private List<Object> content;
 
 
     }
