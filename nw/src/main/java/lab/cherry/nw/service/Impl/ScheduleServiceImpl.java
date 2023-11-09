@@ -82,46 +82,6 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.save(scheduleEntity);
     }
 
-
-
-    /**
-     * [scheduleServiceImpl] 스케줄표 생성 함수
-     *
-     * @param scheduleTransDto 스케줄표 생성에 필요한 최종확인서 정보를 담은 개체입니다.
-     * @return 최종확인서에서 스케줄표에 필요한 컬럼을 저장한 정보를 리턴합니다.
-     * <pre>
-     * 스케줄표 컬럼을 등록합니다.
-     * </pre>
-     *
-     * Author : hhhaeri(yhoo0020@gmail.com)
-     */
-	@Transactional(readOnly = true)
-	@Override
-    public ScheduleEntity transColumn(ScheduleEntity.transDto scheduleTransDto) {
-
-        OrgEntity orgEntity = orgService.findById(scheduleTransDto.getOrgId());
-		FinalTemplEntity finalTemplEntity = finalTemplService.findById(scheduleTransDto.getFinalTemplId());
-
-		Map<String, Object> content = finalTemplEntity.getContent();
-
-		// Null 값을 가진 값만 가져오기
-		Map<String, Object> nullEntries = new HashMap<>();
-
-		for (Map.Entry<String, Object> entry : content.entrySet()) {
-			if (!entry.getValue().equals("")) {
-				nullEntries.put(entry.getKey(), entry.getValue());
-			}
-		}
-
-		ScheduleEntity scheduleEntity = ScheduleEntity.builder()
-            .column(nullEntries)
-            .org(orgEntity)
-            .build();
-
-        return scheduleRepository.save(scheduleEntity);
-
-    }
-
     /**
      * [scheduleServiceImpl] 스케줄표 삭제 함수
      *

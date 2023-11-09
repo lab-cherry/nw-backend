@@ -74,25 +74,4 @@ public class ScheduleEntity implements Serializable {
 
 			}
 
-
-	//////////////////////////////////////////////////////////////////////////
-
-		@Getter
-		@Setter
-		@Builder
-		@NoArgsConstructor @AllArgsConstructor
-		public static class transDto {
-
-			@Schema(title = "스케줄표 고유번호", example = "64ed89aa9e813b5ab16da6de")
-			private  String finalTemplId;
-
-			@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-			private String orgId;
-			
-			@JsonProperty("scheduleContent")
-			@Schema(title = "스케줄표 내용", example = "[]")
-			private List<Object> content;
-
-		}
-
 }
