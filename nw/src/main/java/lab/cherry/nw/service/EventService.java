@@ -18,9 +18,7 @@ import org.springframework.stereotype.Component;
 public interface EventService {
     Page<EventEntity> getEvents(Pageable pageable);
 	EventEntity createEvent(String id);
-//    void updateById(String id, WeddinghallEntity.UpdateDto weddinghall);
     EventEntity findById(String id);
-//    WeddinghallEntity findByName(String name);
     void deleteById(String id);
-    // Page<EventEntity> findPageByName(String name, Pageable pageable);
+    boolean checkExistsWithEventId(String id);
 }

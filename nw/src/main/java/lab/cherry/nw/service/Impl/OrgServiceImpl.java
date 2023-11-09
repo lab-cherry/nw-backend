@@ -221,6 +221,8 @@ public class OrgServiceImpl implements OrgService {
 
     public void inviteOrgSend(String orgid, String email) {
 
+        log.error("orgid is {}", orgid);
+
         OrgEntity orgEntity = findById(orgid);
         emailAuthService.InviteOrgSend(orgEntity.getId(), orgEntity.getName(), email);
 

@@ -73,10 +73,10 @@ public class EventServiceImpl implements EventService {
     dateFormat = FormatConverter.convertDateFormat(userCardEntity.getResDate());
 
     // {hour}:{min} {groom}♥{bride}
-    String eventName = dateFormat.get("hour") + ":" + dateFormat.get("minute") + " " + userCardEntity.getGroom().getName() + "♥" + userCardEntity.getBride().getName();
+    String eventName = dateFormat.get("hour") + ":" + ((dateFormat.get("minute") == 0) ? "00" : dateFormat.get("minute")) + " " + userCardEntity.getGroom().getName() + "♥" + userCardEntity.getBride().getName();
 
     EventEntity eventEntity = EventEntity.builder()
-          .id(userCardEntity.getUserinfo().getId())
+          .id(userCardEntity.getId())
           .title(eventName)
           .location(userCardEntity.getWeddinghall().getName())
           .resDate(userCardEntity.getResDate())
@@ -160,5 +160,15 @@ public class EventServiceImpl implements EventService {
   public UserCardEntity userCardFindById(String id) {
       return userCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usercard with Id " + id + " Not Found."));
   }
+
+  @Transactional(readOnly = true)
+  public boolean checkExistsWithEventId(String id) {
+    if (eventRepository.findById(id).isPresent()) {
+      return true;
+    } else {
+      return false;
+    }
+	}
+
 
 }

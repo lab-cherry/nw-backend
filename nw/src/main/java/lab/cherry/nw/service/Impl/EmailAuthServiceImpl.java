@@ -119,7 +119,7 @@ public class EmailAuthServiceImpl implements EmailAuthService{
     public void InviteOrgSend(String orgid, String orgname, String email) {
 
         MimeMessage message = javaMmailSender.createMimeMessage();
-        String _link = FRONTEND_ADDR + "/auth/register/org/" + orgid;
+        String _link = FRONTEND_ADDR + "/register/org/" + orgid;
 
         try {
             message.addRecipients(MimeMessage.RecipientType.TO, email);
