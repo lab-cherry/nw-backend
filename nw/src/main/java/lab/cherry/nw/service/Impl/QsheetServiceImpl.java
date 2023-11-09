@@ -149,6 +149,7 @@ public class QsheetServiceImpl implements QsheetService {
             .org(orgEntity)
             .name(qsheetCreateDto.getName())
             .data(newItemData)
+            .type(qsheetCreateDto.getType())
             // .data(qsheetCreateDto.getData())
             .memo(qsheetCreateDto.getMemo())
             .org_approver(orgUserEntity)
@@ -259,6 +260,7 @@ public class QsheetServiceImpl implements QsheetService {
             .org_confirm(qsheetUpdateDto.isOrg_confirm()==!(qsheetEntity.isOrg_confirm())?qsheetUpdateDto.isOrg_confirm():qsheetEntity.isOrg_confirm())
             .client_confirm(qsheetUpdateDto.isClient_confirm()==!(qsheetEntity.isClient_confirm())?qsheetUpdateDto.isClient_confirm():qsheetEntity.isClient_confirm())
             .memo(qsheetUpdateDto.getMemo()!=null?qsheetUpdateDto.getMemo():qsheetEntity.getMemo())
+            .type(qsheetEntity.getType())
 			.updated_at(instant)
 			.build();
 			qsheetRepository.save(qsheetEntity);
@@ -345,8 +347,8 @@ public class QsheetServiceImpl implements QsheetService {
     }
 
     @Transactional(readOnly = true)
-    public Page<QsheetEntity> findPageByOrgId(String orgSeq, Pageable pageable) {
-        return qsheetRepository.findPageByOrgid(orgSeq, pageable);
+    public Page<QsheetEntity> findPageByOrgId(String orgSeq, String type, Pageable pageable) {
+        return qsheetRepository.findPageByOrgid(orgSeq, type, pageable);
     }
     
     public Map<String, Object> download(String[] qsheetIds) {

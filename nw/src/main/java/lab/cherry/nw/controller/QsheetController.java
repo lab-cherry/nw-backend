@@ -2,7 +2,6 @@ package lab.cherry.nw.controller;
 
 import java.util.List;
 import java.util.Map;
-import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +30,11 @@ import lab.cherry.nw.error.ErrorResponse;
 import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.QsheetEntity;
+import lab.cherry.nw.model.RoleEntity;
+import lab.cherry.nw.model.UserEntity;
+import lab.cherry.nw.service.AuthService;
 import lab.cherry.nw.service.QsheetService;
+import lab.cherry.nw.service.UserService;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +70,7 @@ public class QsheetController {
     public ResponseEntity<?> findAllQsheets(
             @RequestParam(required = false) String userSeq,
             @RequestParam(required = false) String orgSeq,
+            @RequestParam(required = false) String type,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "100") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
@@ -81,7 +85,7 @@ public class QsheetController {
     } else if(userSeq != null && orgSeq==null) {
         qsheetEntity = qsheetService.findPageByUserId(userSeq, pageable);
 	} else{
-		qsheetEntity = qsheetService.findPageByOrgId(orgSeq, pageable);
+		qsheetEntity = qsheetService.findPageByOrgId(orgSeq, type, pageable);
 	}
         for (QsheetEntity qsheet : qsheetEntity) {
             qsheet.sortDataByOrderIndex();

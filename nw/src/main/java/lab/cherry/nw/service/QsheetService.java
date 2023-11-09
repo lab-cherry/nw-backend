@@ -1,6 +1,7 @@
 package lab.cherry.nw.service;
 
 import lab.cherry.nw.model.QsheetEntity;
+import lab.cherry.nw.model.RoleEntity;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ public interface QsheetService {
  void updateById(String id, QsheetEntity.QsheetUpdateDto updateDto, List<MultipartFile> files);
  void deleteById(String id);
  Page<QsheetEntity> findPageByUserId(String userSeq, Pageable pageable);
- Page<QsheetEntity> findPageByOrgId(String orgSeq, Pageable pageable);
+ Page<QsheetEntity> findPageByOrgId(String orgSeq, String type, Pageable pageable);
 // void updateOrgById(String id, List<String> orgIds);
 Map<String, Object> download(String[] qsheetSeq);
 }

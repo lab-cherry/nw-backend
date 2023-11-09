@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import lab.cherry.nw.model.QsheetEntity;
+import lab.cherry.nw.model.RoleEntity;
 
 /**
  * <pre>
@@ -22,8 +23,8 @@ public interface QsheetRepository extends MongoRepository<QsheetEntity, String> 
 
     @Query("{'user.$_id' : ?0}")
     Page<QsheetEntity> findPageByUserid(String userSeq, Pageable pageable);
-    @Query("{'org.$_id' : ?0}")
-    Page<QsheetEntity> findPageByOrgid(String orgSeq, Pageable pageable);
+    @Query("{ 'org.$_id' : ?0 ,'type' : ?1 }")
+    Page<QsheetEntity> findPageByOrgid(String orgSeq, String type, Pageable pageable);
 
     Optional<QsheetEntity> findById(String id);
     void deleteById(UUID id);

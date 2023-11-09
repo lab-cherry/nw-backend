@@ -1,24 +1,21 @@
 package lab.cherry.nw.model;
 
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.Comparator;
+import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.aggregation.VariableOperators.Map;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-import java.io.Serializable;
-import java.time.Instant;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * <pre>
@@ -68,6 +65,10 @@ public class QsheetEntity implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
     @Schema(title = "큐시트 업데이트 시간", example = "2023-07-04 12:00:00")
     private Instant updated_at;
+
+    @JsonProperty("type")
+    @Schema(title = "타입", type="String", example = "템플릿 or 유저")
+    private String type;
 
     @JsonProperty("memo")
     @Schema(title = "메모", type="String", example = "신랑 깜짝 이벤트 준비")
@@ -155,6 +156,9 @@ public class QsheetEntity implements Serializable {
 		private List<ItemData> data;
         @Schema(title = "메모", type="String", example = "신랑 깜짝 이벤트 준비")
         private String memo;
+        @NotNull
+        @Schema(title = "타입", type="String", example = "template or user")
+        private String type;
         @Schema(title = "업체 확인자 정보",type="String",example = "38352658567418867")
         private String org_approverSeq;
         @Schema(title = "업체 확인", type="Boolean", example = "false")
