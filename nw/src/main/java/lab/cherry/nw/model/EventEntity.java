@@ -28,16 +28,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "events")
-@JsonPropertyOrder({ "eventSeq", "eventTitle", "eventLocation", "resDate", "weddingDate", "evenDate", "updated_at" })
+@JsonPropertyOrder({ "id", "title", "location", "resDate", "weddingDate", "updated_at" })
 public class EventEntity implements Serializable {
 
     @Id
-    @JsonProperty("eventSeq")
     @Schema(title = "이벤트 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
 	@NotNull
-    @JsonProperty("eventTitle")
     @Schema(title = "이벤트 이름", example = "{time}시 {title}")
     @Size(min = 1, max = 20, message = "이벤트 이름은 20자 이내로만 가능합니다.")
     private String title;
@@ -48,18 +46,20 @@ public class EventEntity implements Serializable {
     // private String description;
 
 	@NotNull
-    @JsonProperty("eventLocation")
     @Schema(title = "이벤트 장소", example = "더모멘트홀")
     @Size(min = 1, max = 20, message = "이벤트 장소명은 20글자 이내로만 가능합니다.")
     private String location;
 
     @NotBlank
-    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
+    @JsonProperty("resDate")
+    @JsonFormat(locale = "ko_KR", timezone = "Asia/Seoul")
+    // @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
     @Schema(title = "예약 날짜", example = "2023-08-29T05:11:38.002Z")
     private String resDate;
 
     @NotBlank
-    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
+    @JsonFormat(locale = "ko_KR", timezone = "Asia/Seoul")
+    // @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
     @Schema(title = "예식 날짜", example = "2023-08-29T05:11:38.002Z")
     
     private String weddingDate;

@@ -2,6 +2,7 @@ package lab.cherry.nw.error.handler;
 
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.util.FormatConverter;
+import lombok.extern.slf4j.Slf4j;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

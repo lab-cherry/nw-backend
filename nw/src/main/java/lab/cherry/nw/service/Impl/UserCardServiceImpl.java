@@ -36,7 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UserCardServiceImpl implements UserCardService {
 
     private final UserCardRepository userCardRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
     private final WeddinghallService weddinghallService;
     private final EventService eventService;
@@ -200,7 +199,9 @@ public class UserCardServiceImpl implements UserCardService {
      */
     public void deleteById(String id) {
         
-        eventService.deleteById(id);
+        if(eventService.checkExistsWithEventId(id)) {
+            eventService.deleteById(id); 
+        }
         userCardRepository.delete(userCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usercard with Id " + id + " Not Found.")));
     }
 

@@ -199,7 +199,8 @@ public class OrgController {
 
 	@GetMapping("/invite")
     @Operation(summary = "사용자(랑부) 초대", description = "이메일로 조직 초대 메일을 발송합니다.")
-    public ResponseEntity<?> inviteUser(@RequestParam(required = false) String orgid, @RequestParam(required = false) String email) {
+    public ResponseEntity<?> inviteUser(@RequestParam(required = false) String orgid,
+                                        @RequestParam(required = false) String email) {
 		log.info("[OrgController] inviteUser...!");
 
         orgService.inviteOrgSend(orgid, email);
