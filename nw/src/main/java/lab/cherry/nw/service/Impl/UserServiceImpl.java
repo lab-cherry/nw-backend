@@ -159,6 +159,23 @@ public class UserServiceImpl implements UserService {
 		}
     }
 
+    public void updateOrgByIdAndToken(String id, String orgId, String token) {
+
+        UserEntity userEntity = findById(id);
+
+        if (orgId != null) {
+
+		    OrgEntity orgEntity = orgService.findById(orgId);
+            userEntity.changeOrg(orgEntity);
+
+            userRepository.save(userEntity);
+
+        } else {
+			log.error("[UserServiceImpl - updateOrgById] orgId 만 입력 가능합니다.");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+		}
+    }    
+
     public void updateRoleById(String id, String roleId) {
 
         log.error("#0");

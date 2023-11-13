@@ -158,7 +158,9 @@ public class AuthServiceImpl implements AuthService {
         Map<String, String> info = new HashMap<>();
         info.put("userSeq", userEntity.get().getId());
         info.put("orgSeq", (userEntity.get().getOrg() == null) ? null : userEntity.get().getOrg().getId());
+        info.put("orgName", (userEntity.get().getOrg() == null) ? null : userEntity.get().getOrg().getName());
         info.put("roleSeq", (userEntity.get().getRole() == null) ? null : userEntity.get().getRole().getId());
+        info.put("roleName", (userEntity.get().getRole() == null) ? null : userEntity.get().getRole().getName());
 
         return AccessToken.Get.builder()
             .userSeq(userEntity.get().getId())
