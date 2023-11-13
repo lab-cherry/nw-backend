@@ -18,7 +18,7 @@ import lab.cherry.nw.model.UserCardEntity;
 public interface UserCardService {
     Page<UserCardEntity> getUsercards(Pageable pageable);
     UserCardEntity findById(String id);
-//    UserCardEntity findByUserCardId(String id);
+    UserCardEntity findByUserCardId(String userSeq);
     UserCardEntity createUserCard(UserCardEntity.UserCardCreateDto userCardCreateDto);
     void updateById(String id, UserCardEntity.UserCardUpdateDto usercard);
     void updateWeddinghallByName(String id, String weddinghall);
