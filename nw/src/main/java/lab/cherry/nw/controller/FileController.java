@@ -159,6 +159,7 @@ public class FileController {
           HttpHeaders headers = new HttpHeaders();
           headers.setContentType(MediaType.parseMediaType(file.getType()));
           headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
+          headers.add("filename", fileName);
 
           return new ResponseEntity<>(new ByteArrayResource(file.getFile()), headers, HttpStatus.OK);
 	}
