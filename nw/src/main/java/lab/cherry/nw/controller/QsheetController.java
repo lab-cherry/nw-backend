@@ -180,12 +180,18 @@ public class QsheetController {
      */
     @GetMapping("{id}")
     @Operation(summary = "ID로 큐시트 찾기", description = "큐시트를 조회합니다.")
-    public ResponseEntity<?> findByQsheetId(@PathVariable("id") String id) {
+    public ResponseEntity<?> findByQsheetId(@PathVariable("id") String id, 
+            @RequestParam(required = false, defaultValue = "false") Boolean share) {
 
         log.info("[QsheetController] findByQsheetId...!");
 
-        //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
-        return new ResponseEntity<>(qsheetService.findById(id), new HttpHeaders(), HttpStatus.OK);
+        if(share) {
+            List<QsheetEntity.ItemData> qsheetData = qsheetService.findByIdWithData(id);
+            return new ResponseEntity<>(qsheetData, new HttpHeaders(), HttpStatus.OK);
+        } else {
+            QsheetEntity qsheetEntity = qsheetService.findById(id);
+            return new ResponseEntity<>(qsheetEntity, new HttpHeaders(), HttpStatus.OK);
+        }
     }
     
 	/**

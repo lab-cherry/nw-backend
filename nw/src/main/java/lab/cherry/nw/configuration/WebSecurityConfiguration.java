@@ -55,6 +55,7 @@ public class WebSecurityConfiguration {
         http
             .authorizeHttpRequests()
             .requestMatchers(HttpMethod.GET, "/api/v1/org/{orgSeq}").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/qsheet/{qsheetSeq}").permitAll()
             .requestMatchers(
                     "/api/auth/**",
                     "/docs/**",

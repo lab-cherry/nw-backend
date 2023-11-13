@@ -347,6 +347,12 @@ public class QsheetServiceImpl implements QsheetService {
     }
 
     @Transactional(readOnly = true)
+    public List<QsheetEntity.ItemData> findByIdWithData(String id) {
+        QsheetEntity qsheetEntity = findById(id);
+        return qsheetEntity.getData();
+    }
+
+    @Transactional(readOnly = true)
     public Page<QsheetEntity> findPageByUserId(String userSeq, Pageable pageable) {
         return qsheetRepository.findPageByUserid(userSeq, pageable);
     }

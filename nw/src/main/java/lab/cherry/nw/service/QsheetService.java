@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import lab.cherry.nw.model.QsheetEntity;
@@ -19,6 +20,7 @@ import lab.cherry.nw.model.QsheetEntity;
 @Component
 public interface QsheetService {
  Page<QsheetEntity> getQsheets(Pageable pageable);
+ @PreAuthorize("hasAnyRole('ADMIN','ORG')")
  QsheetEntity findById(String id);
  QsheetEntity createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files);
  void updateById(String id, QsheetEntity.QsheetUpdateDto updateDto, List<MultipartFile> files);
@@ -27,4 +29,5 @@ public interface QsheetService {
  Page<QsheetEntity> findPageByOrgId(String orgSeq, String type, Pageable pageable);
 // void updateOrgById(String id, List<String> orgIds);
 Map<String, Object> download(String[] qsheetSeq);
+List<QsheetEntity.ItemData> findByIdWithData(String id);
 }
