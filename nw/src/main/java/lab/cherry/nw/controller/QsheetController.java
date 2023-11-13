@@ -195,7 +195,7 @@ public class QsheetController {
      *
      * Author : taking(taking@duck.com)
      */
-    @PostMapping("/download/{qsheetIds}")
+    @GetMapping("/download/{qsheetIds}")
     @Operation(summary = "큐시트 사용자 파일 다운로드", description = "큐시트 사용자 파일을 다운로드합니다.")
     public ResponseEntity<?> downloadQsheetBySeq(@PathVariable("qsheetIds") String[] qsheetIds) {
 
