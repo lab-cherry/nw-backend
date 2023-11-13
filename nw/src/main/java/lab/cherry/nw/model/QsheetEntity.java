@@ -61,9 +61,10 @@ public class QsheetEntity implements Serializable {
     private Instant created_at;
 
     @JsonProperty("wedding_date")
-    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
+    @JsonFormat(locale = "ko_KR", timezone = "Asia/Seoul")
+    // @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
     @Schema(title = "결혼식 날짜", example = "2023-07-04 12:00:00")
-    private Instant wedding_date;
+    private String wedding_date;
 
     @JsonProperty("updated_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
