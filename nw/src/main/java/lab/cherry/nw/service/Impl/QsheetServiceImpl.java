@@ -10,10 +10,12 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.bson.types.ObjectId;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
@@ -363,11 +365,12 @@ public class QsheetServiceImpl implements QsheetService {
                     ZipEntry zipEntry = new ZipEntry(qsheetName);
                     zipOut.putNextEntry(zipEntry);
 
-                    Object objectData = fileService.downloadFiles("seq", qsheetId).get("data");
-                    zipOut.write(FormatConverter.convertObjectToBytes(objectData));
+                    byte[] fileData = (byte[]) fileService.downloadFiles("seq", qsheetId).get("data");
+                    zipOut.write(fileData);
                     zipOut.closeEntry();
                 }
                 zipOut.finish();
+                zipOut.close();
 
         Map<String, Object> returnVal = new HashMap<>();
         returnVal.put("name", "download" + ".zip");

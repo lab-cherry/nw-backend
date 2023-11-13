@@ -127,6 +127,7 @@ public class FileServiceImpl implements FileService {
 							String fullName = fileNameWithoutExtension + "-" + new ObjectId() + "." + Extension;
 
 							ZipEntry zipEntry = new ZipEntry(fullName);
+							zipEntry.setSize(file.getChunkSize());
 							zipOut.putNextEntry(zipEntry);
 
 							byte[] objectData = IOUtils.toByteArray(operations.getResource(file).getInputStream());
@@ -134,6 +135,7 @@ public class FileServiceImpl implements FileService {
 							zipOut.closeEntry();
 					}
 					zipOut.finish();
+					zipOut.close();
 
 			Map<String, Object> returnVal = new HashMap<>();
 			returnVal.put("name", value + ".zip");
