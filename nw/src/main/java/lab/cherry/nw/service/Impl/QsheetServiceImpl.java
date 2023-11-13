@@ -161,7 +161,7 @@ public class QsheetServiceImpl implements QsheetService {
             .client_confirm(false)
             // .finalConfirm(FinalConfirm.builder().build())
             .created_at(instant)
-            .wedding_date(userCardEntity!=null? userCardEntity.getWeddingDate() : "")
+            .wedding_date(userCardEntity!=null? userCardEntity.getWeddingDate() : null)
             .build();
         qsheetRepository.save(qsheetEntity);
         qsheetLogService.createQsheetLog("create", qsheetEntity);
@@ -259,7 +259,7 @@ public class QsheetServiceImpl implements QsheetService {
 			.org(orgEntity)
 			.user(qsheetEntity.getUser())
 			.created_at(qsheetEntity.getCreated_at())
-            .wedding_date(userCardEntity!=null? userCardEntity.getWeddingDate() : "")
+            .wedding_date(userCardEntity!=null? userCardEntity.getWeddingDate() : null)
 			.data(qsheetUpdateDto.getData()!=null?newItemData:qsheetEntity.getData())
             .org_approver(orgUserEntity)
             .org_confirm(qsheetUpdateDto.isOrg_confirm()==!(qsheetEntity.isOrg_confirm())?qsheetUpdateDto.isOrg_confirm():qsheetEntity.isOrg_confirm())
