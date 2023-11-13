@@ -21,6 +21,7 @@ import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.FileEntity;
 import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.QsheetEntity;
+import lab.cherry.nw.model.UserCardEntity;
 import lab.cherry.nw.model.QsheetEntity.FileInfo;
 import lab.cherry.nw.model.QsheetEntity.ItemData;
 import lab.cherry.nw.model.UserEntity;
@@ -30,6 +31,7 @@ import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.QsheetHistoryService;
 import lab.cherry.nw.service.QsheetLogService;
 import lab.cherry.nw.service.QsheetService;
+import lab.cherry.nw.service.UserCardService;
 import lab.cherry.nw.service.UserService;
 import lab.cherry.nw.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +57,7 @@ public class QsheetServiceImpl implements QsheetService {
     private final FileService fileService;
     private final QsheetHistoryService qsheetHistoryService;
     private final QsheetLogService qsheetLogService;
+    private final UserCardService userCardService;
     /**
      * [QsheetServiceImpl] 전체 큐시트 조회 함수
      *
@@ -92,6 +95,7 @@ public class QsheetServiceImpl implements QsheetService {
         UserEntity userEntity = userService.findById(qsheetCreateDto.getUserSeq());
         OrgEntity orgEntity = null;
         UserEntity orgUserEntity = null; 
+        UserCardEntity userCardEntity = userCardService.findByUserCardId(qsheetCreateDto.getUserSeq());
         ObjectId objectid = new ObjectId();
         userService.findById(qsheetCreateDto.getUserSeq());
 		if (qsheetCreateDto.getOrgSeq() != null){
@@ -104,7 +108,6 @@ public class QsheetServiceImpl implements QsheetService {
         List<ItemData> newItemData = new ArrayList<>();
         if (files != null){
             List<String> fileUrls = fileService.uploadFiles(objectid.toString(), files);
-            log.error("fileUrls {}", fileUrls);
             ////////////
             for (ItemData data : qsheetCreateDto.getData()) {
                  List<FileInfo>  fileInfos = new ArrayList<>();
@@ -119,7 +122,6 @@ public class QsheetServiceImpl implements QsheetService {
                              .name(fileName)
                              .link(fileEntity.getUrl())
                              .build();
-                             log.error("fileInfo : {} ",fileInfo);
                             fileInfos.add(fileInfo);
                             }
                            
@@ -157,6 +159,7 @@ public class QsheetServiceImpl implements QsheetService {
             .client_confirm(false)
             // .finalConfirm(FinalConfirm.builder().build())
             .created_at(instant)
+            .wedding_date(userCardEntity!=null? userCardEntity.getWeddingDate() : "")
             .build();
         qsheetRepository.save(qsheetEntity);
         qsheetLogService.createQsheetLog("create", qsheetEntity);
@@ -180,7 +183,8 @@ public class QsheetServiceImpl implements QsheetService {
         QsheetEntity qsheetEntity = findById(id);
         QsheetEntity originEntity = findById(id);
         List<ItemData> newItemData =qsheetEntity.getData();
-
+        UserCardEntity userCardEntity =  userCardService.findByUserCardId(qsheetEntity.getUser().getId());
+ 
         if (qsheetEntity != null && qsheetUpdateDto !=null ) {
 //            qsheetEntity.updateFromDto(qsheetUpdateDto);
 //            qsheetRepository.save(qsheetEntity);
@@ -201,7 +205,6 @@ public class QsheetServiceImpl implements QsheetService {
             if(qsheetUpdateDto.getData()!=null && files!=null){
                 newItemData= new ArrayList<>();
                 List<String> fileUrls = fileService.uploadFiles(qsheetEntity.getId(), files);
-                log.error("fileUrls {}", fileUrls);
                 for (ItemData data : qsheetUpdateDto.getData()) {
                      List<FileInfo>  fileInfos = new ArrayList<>();
                     for (String filePath : fileUrls) {
@@ -248,13 +251,13 @@ public class QsheetServiceImpl implements QsheetService {
                      newItemData.add(tempData);           
                 }
             }
-            log.error("create_at type : {} ", qsheetEntity.getCreated_at().getClass());
 			qsheetEntity = QsheetEntity.builder()
 			.id(qsheetEntity.getId())
 			.name(qsheetUpdateDto.getName()!=null?qsheetUpdateDto.getName():qsheetEntity.getName())
 			.org(orgEntity)
 			.user(qsheetEntity.getUser())
 			.created_at(qsheetEntity.getCreated_at())
+            .wedding_date(userCardEntity!=null? userCardEntity.getWeddingDate() : "")
 			.data(qsheetUpdateDto.getData()!=null?newItemData:qsheetEntity.getData())
             .org_approver(orgUserEntity)
             .org_confirm(qsheetUpdateDto.isOrg_confirm()==!(qsheetEntity.isOrg_confirm())?qsheetUpdateDto.isOrg_confirm():qsheetEntity.isOrg_confirm())

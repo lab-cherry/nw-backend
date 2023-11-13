@@ -31,5 +31,5 @@ public interface UserCardRepository extends MongoRepository<UserCardEntity, Stri
     List<UserCardEntity> findAllById(List<String> orgIds);
 
     @Query("{'userinfo.$_id' : ?0}")
-    Optional<UserCardEntity> findByUserSeq(String seq);
+    Optional<UserCardEntity> findByUserSeq(String userSeq);
 }

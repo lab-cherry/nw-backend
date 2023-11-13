@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
+import lab.cherry.nw.model.QsheetEntity;
 import lab.cherry.nw.model.UserCardEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.model.WeddinghallEntity;
@@ -221,6 +222,11 @@ public class UserCardServiceImpl implements UserCardService {
     @Transactional(readOnly = true)
     public UserCardEntity findById(String id) {
         return userCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usercard with Id " + id + " Not Found."));
+    }
+
+    @Transactional(readOnly = true)
+    public UserCardEntity findByUserCardId(String userSeq) {
+        return userCardRepository.findByUserSeq(userSeq).orElse(null);
     }
 
 

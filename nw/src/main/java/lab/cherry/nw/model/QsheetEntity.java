@@ -47,7 +47,6 @@ public class QsheetEntity implements Serializable {
     @Schema(title = "조직 정보") // (Long) Tsid
     private OrgEntity org;
 
-
     @JsonProperty("name")
     @Schema(title = "큐시트 이름", type="String",example = "최해리_230824")
     private String name;
@@ -60,6 +59,11 @@ public class QsheetEntity implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
     @Schema(title = "큐시트 생성 시간", example = "2023-07-04 12:00:00")
     private Instant created_at;
+
+    @JsonProperty("wedding_date")
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
+    @Schema(title = "결혼식 날짜", example = "2023-07-04 12:00:00")
+    private String wedding_date;
 
     @JsonProperty("updated_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
