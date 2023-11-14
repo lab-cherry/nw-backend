@@ -18,7 +18,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <pre>
@@ -40,33 +39,37 @@ public class FinaldocsEntity implements Serializable {
     @Schema(title = "최종확인서 고유번호", example = "64ed89aa9e813b5ab16da6de")
     private String id;
 
-	@NotNull
-    @JsonProperty("finaltempl")
-    @Schema(title = "최종확인서 템플릿 정보", example = "64ed89aa9e813b5ab16da6de")
-    private FinalTemplEntity finaltempl;
-
-	@NotNull
     @DBRef
     @JsonProperty("user")
-    @Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
+    @Schema(title = "유저 정보") // (Long) Tsid
     private UserEntity user;
 
-	@NotNull
     @DBRef
     @JsonProperty("org")
-    @Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
+    @Schema(title = "조직 정보") // (Long) Tsid
     private OrgEntity org;
 
-	@NotNull
-    @JsonProperty("finaldocsName")
-	@Schema(title = "최종확인서 이름", example = "11시 그랜드 최종 확인서")
-	@Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
-    private String name;
+    @DBRef
+	@JsonProperty("finaltempl")
+	@Schema(title = "최종확인서 템플릿 정보", example = "64ed89aa9e813b5ab16da6de")
+    private  FinalTemplEntity finaltempl;
 
     @JsonProperty("content")
     @Schema(title = "최종확인서 내용", example = "")
     private List<Object> content;
 
+    @DBRef
+    @JsonProperty("org_approver")
+    @Schema(title = "업체 확인자 정보",type="String",example = "38352658567418867")
+    private UserEntity org_approver;
+
+    @JsonProperty("org_confirm")
+    @Schema(title = "업체 확인", type="Boolean", example = "false")
+    private boolean org_confirm;
+
+    @JsonProperty("client_confirm")
+	@Schema(title = "신랑신부 확인", type="Boolean", example = "false")
+	private boolean client_confirm;
 
     @JsonProperty("updated_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
@@ -78,6 +81,21 @@ public class FinaldocsEntity implements Serializable {
     @Schema(title = "최종확인서 생성 시간", example = "2023-07-04 12:00:00")
     private Instant createdAt;
 
+//////////////////////////////////////////////////////////////////////////
+
+@Getter
+@Builder
+@NoArgsConstructor @AllArgsConstructor
+public static class FinaldocsFinalConfirm {
+    @Schema(title = "업체 확인자 정보", type="String", example = "38352658567418867")
+    private String org_approver;
+
+    @Schema(title = "업체 확인", type="Boolean", example = "false")
+    private boolean org_confirm;
+
+    @Schema(title = "신랑신부 확인", type="Boolean", example = "false")
+    private boolean client_confirm;
+}
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -86,30 +104,32 @@ public class FinaldocsEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class FinaldocsCreateDto {
 
-		@NotBlank
-        @Schema(title = "최종확인서 이름", example = "11시 그랜드 최종 확인서")
-        @Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
-        private String name;
+		// @NotBlank
+        // @Schema(title = "최종확인서 이름", example = "11시 그랜드 최종 확인서")
+        // @Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
+        // private String name;
 
-		@NotBlank
-		@JsonProperty("user")
-		@Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
-        private String user;
+		@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
+        private String userSeq;
 
-		@NotBlank
-		@JsonProperty("org")
-		@Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
-        private String org;
+		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
+        private String orgSeq;
 
-		@NotBlank
-		@JsonProperty("finaltempl")
-		@Schema(title = "최종확인서 템플릿 정보", example = "64ed89aa9e813b5ab16da6de")
-        private  String finaltempl;
+		@Schema(title = "최종확인서 템플릿 고유번호", example = "64ed89aa9e813b5ab16da6de")
+        private  String finaltemplSeq;
 
-//		@NotBlank
-		@JsonProperty("content")
+
 		@Schema(title = "최종확인서 내용", example = "")
         private List<Object> content;
+
+        @Schema(title = "업체 확인자 정보",type="String",example = "38352658567418867")
+        private String org_approverSeq;
+
+        @Schema(title = "업체 확인", type="Boolean", example = "false")
+        private boolean org_confirm;
+
+		@Schema(title = "신랑신부 확인", type="Boolean", example = "false")
+		private boolean client_confirm;
 
 
     }
@@ -120,20 +140,26 @@ public class FinaldocsEntity implements Serializable {
     @NoArgsConstructor @AllArgsConstructor
     public static class FinaldocsUpdateDto {
 
-		@Schema(title = "최종확인서 고유번호", example = "64ed89aa9e813b5ab16da6de")
-        private String id;
+		@Schema(title = "최종확인서 템플릿 고유번호", example = "64ed89aa9e813b5ab16da6de")
+        private String finaltemplSeq;
 
-		@Schema(title = "최종확인서 템플릿 정보", example = "64ed89aa9e813b5ab16da6de")
-        private String finaltempl;
+		@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
+        private String userSeq;
 
-		@Schema(title = "사용자 정보", example = "64ed89aa9e813b5ab16da6de")
-        private String user;
-
-		@Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
-        private String org;
+		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
+        private String orgSeq;
 
 		@Schema(title = "최종확인서 내용", example = "")
         private List<Object> content;
+
+        @Schema(title = "업체 확인자 정보",type="String",example = "38352658567418867")
+        private String org_approverSeq;
+
+        @Schema(title = "업체 확인", type="Boolean", example = "false")
+        private boolean org_confirm;
+
+		@Schema(title = "신랑신부 확인", type="Boolean", example = "false")
+		private boolean client_confirm;
 
 
     }
