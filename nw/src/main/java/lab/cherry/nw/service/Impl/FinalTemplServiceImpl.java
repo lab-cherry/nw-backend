@@ -140,7 +140,7 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 
 
     /**
-     * [FinalTemplServiceImpl] ID로 최종확인서 템플릿  조회 함수
+     * [FinalTemplServiceImpl] ID로 최종확인서 템플릿 조회 함수
      *
      * @param id 조회할 최종확인서 템플릿의 식별자입니다.
      * @return 주어진 식별자에 해당하는 조직 정보
@@ -155,7 +155,6 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 //    public FinaldocsEntity findByName(String name) {
 //        return finaldocsRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Fianldocs with Id " + name + " Not Found."));
 //    }
-
 
     @Transactional(readOnly = true)
     public FinalTemplEntity findById(String id) {
