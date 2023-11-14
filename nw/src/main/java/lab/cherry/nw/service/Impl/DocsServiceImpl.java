@@ -124,7 +124,7 @@ public class DocsServiceImpl implements DocsService {
                 .org(docsEntity.getOrg())
                 .data(DocsEntity.DocsData.builder()
                     .title((docsUpdateDto.getData().getTitle() != null) ? docsUpdateDto.getData().getTitle() : docsEntity.getData().getTitle())
-                    .author((docsUpdateDto.getData().getAuthor() != null) ? docsUpdateDto.getData().getAuthor() : docsEntity.getData().getAuthor())
+                    .author(docsEntity.getData().getAuthor())
                     .content((docsUpdateDto.getData().getContent() != null) ? docsUpdateDto.getData().getContent() : docsEntity.getData().getContent())
                 .build())
                 .created_at(docsEntity.getCreated_at())

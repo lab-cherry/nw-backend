@@ -83,10 +83,10 @@ public class DocsEntity implements Serializable {
     public static class DocsCreateDto {
 
 		@NotNull
-		@Schema(title = "유저 고유번호", example = "38352658567418867")
+		@Schema(title = "유저 고유번호", example = "653f3f6d67e19f0f584df299")
         private String userSeq;
 
-		@Schema(title = "조직 고유번호", example = "38352658567418867")
+		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6dd")
         private String orgSeq;
 
 		@Schema(title = "데이터 리스트")

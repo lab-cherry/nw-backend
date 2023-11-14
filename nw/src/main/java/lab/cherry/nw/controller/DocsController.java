@@ -1,5 +1,6 @@
 package lab.cherry.nw.controller;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ import lab.cherry.nw.error.ErrorResponse;
 import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.DocsEntity;
+import lab.cherry.nw.model.QsheetEntity;
 import lab.cherry.nw.service.DocsService;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
@@ -155,4 +157,26 @@ public class DocsController {
         ResultResponse result = ResultResponse.of(SuccessCode.DOCS_DELETE_SUCCESS, id);
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
+
+
+    /**
+     * [DocsController] 특정 문서 조회 함수
+     *
+     * @param id 문서 고유번호를 입력합니다.
+     * @return
+     * <pre>
+     * true  : 특정 문서 정보를 반환합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @GetMapping("{id}")
+    @Operation(summary = "ID로 문서 찾기", description = "문서를 조회합니다.")
+    public ResponseEntity<?> findByDocsId(@PathVariable("id") String id) {
+
+        log.info("[QsheetController] findByQsheetId...!");
+
+        return new ResponseEntity<>(docsService.findById(id), new HttpHeaders(), HttpStatus.OK);
+    }    
 }
