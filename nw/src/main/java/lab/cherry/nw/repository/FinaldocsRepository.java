@@ -3,10 +3,14 @@ package lab.cherry.nw.repository;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+import lab.cherry.nw.model.BookmarkEntity;
 import lab.cherry.nw.model.FinaldocsEntity;
+import lab.cherry.nw.model.UserCardEntity;
 
 
 /**
@@ -22,14 +26,17 @@ public interface FinaldocsRepository extends MongoRepository<FinaldocsEntity, St
 
     Page<FinaldocsEntity> findAll(Pageable pageable);
 
-    Page<FinaldocsEntity> findPageByName(String finaldocsName, Pageable pageable);
+    // Page<FinaldocsEntity> findPageByName(String finaldocsName, Pageable pageable);
 
     Page<FinaldocsEntity> findPageById(String id, Pageable pageable);
 
     Optional<FinaldocsEntity> findById(String id);
 
-    Optional<FinaldocsEntity> findByName(String finaldocsName);
+    // Optional<FinaldocsEntity> findByName(String finaldocsName);
 
 	List<FinaldocsEntity> findAllBycreatedAtBetween(Instant start, Instant end);
 
+    @Query("{'user.$_id' : ?0}")
+    Optional<FinaldocsEntity> findByUserid(String userid);
+  
 }
