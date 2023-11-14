@@ -20,7 +20,6 @@ import lab.cherry.nw.model.QsheetEntity;
 @Component
 public interface QsheetService {
  Page<QsheetEntity> getQsheets(Pageable pageable);
- @PreAuthorize("hasAnyRole('ADMIN','ORG')")
  QsheetEntity findById(String id);
  QsheetEntity createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files);
  void updateById(String id, QsheetEntity.QsheetUpdateDto updateDto, List<MultipartFile> files);

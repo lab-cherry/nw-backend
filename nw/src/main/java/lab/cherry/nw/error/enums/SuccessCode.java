@@ -21,6 +21,11 @@ public enum SuccessCode {
     OK(200, "Success"),
     FILE_UPLOAD_SUCCESS(200, "파일 업로드 완료"),
     REGISTER_SUCCESS(200, "회원가입 완료"),
+
+    // Docs
+    DOCS_CREATE_SUCCESS(200, "문서 생성 완료"),
+    DOCS_UPDATE_SUCCESS(200, "문서 업데이트 완료"),
+    
     USERID_CHECK_OK(200, "사용 가능합니다."),
     PASSWORD_RESET_OK(200, "초기화 비밀번호 이메일 발송 완료"),
     EMAIL_INVITE_USER_OK(200, "사용자(랑부) 초대 이메일 발송 완료"),
