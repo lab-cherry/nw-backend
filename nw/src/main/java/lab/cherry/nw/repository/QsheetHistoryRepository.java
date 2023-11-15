@@ -31,7 +31,7 @@ public interface QsheetHistoryRepository extends MongoRepository<QsheetHistoryEn
     Optional<QsheetHistoryEntity> findById(String id);
 
     @Query("{'qsheet.$_id' : ?0}")
-    List<QsheetHistoryEntity> findByQsheetId(ObjectId qsheetId);
+    List<QsheetHistoryEntity> findByQsheetId(String qsheetId);
 
 
     void deleteById(UUID id);

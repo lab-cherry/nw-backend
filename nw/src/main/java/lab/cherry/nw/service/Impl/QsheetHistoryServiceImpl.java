@@ -232,8 +232,9 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<QsheetHistoryEntity> findByQsheetId(ObjectId qsheeObjectId) {
-        return EntityNotFoundException.requireNotEmpty(qsheetHistoryRepository.findByQsheetId(qsheeObjectId), "QsheetId Not Found");
+    public List<QsheetHistoryEntity> findByQsheetId(String qsheeObjectId) {
+         return qsheetHistoryRepository.findByQsheetId(qsheeObjectId);
+        // return EntityNotFoundException.requireNotEmpty(qsheetHistoryRepository.findByQsheetId(qsheeObjectId), "QsheetId Not Found");
     }
     
 }
