@@ -24,5 +24,5 @@ public interface QsheetHistoryService {
   Page<QsheetHistoryEntity> findPageByUserId(String userid, Pageable pageable);
   Page<QsheetHistoryEntity> findPageByQsheetId(String qsheetid, Pageable pageable);
   void createQsheetHistory(QsheetEntity qsheetEntity, QsheetEntity.QsheetUpdateDto qsheetUpdateDto);
-  List<QsheetHistoryEntity> findByQsheetId(ObjectId qsheetId);
+  List<QsheetHistoryEntity> findByQsheetId(String qsheetId);
 }

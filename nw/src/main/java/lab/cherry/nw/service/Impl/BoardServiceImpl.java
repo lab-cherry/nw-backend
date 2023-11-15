@@ -42,7 +42,6 @@ public class BoardServiceImpl implements BoardService {
     private final UserService userService;
 	private final QsheetService qsheetService;
     private final TagService tagService;
-    private final TagRepository tagRepository;
 
 	/**
      * [BoardServiceImpl] 전체 게시물 조회 함수
@@ -155,6 +154,7 @@ public class BoardServiceImpl implements BoardService {
 			.content(boardUpdateDto.getContent() != null ? boardUpdateDto.getContent():boardEntity.getContent() )
 			.qsheet(boardUpdateDto.getQsheetSeq()!=null? qsheetService.findById(boardUpdateDto.getQsheetSeq()) : boardEntity.getQsheet())
 			.tag(tagList)
+            .created_at(boardEntity.getCreated_at())
 			.updated_at(instant)
 			.build();
             boardRepository.save(boardEntity);

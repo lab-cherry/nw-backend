@@ -87,11 +87,10 @@ public class QsheetHistoryController {
     @GetMapping("/qsheet/{id}")
     @Operation(summary = "Qsheet ID로 히스토리 찾기", description = "큐시트 히스토리를 조회합니다.")
     public ResponseEntity<?> find(@PathVariable("id") String qsheetId) {
-    ObjectId objectId = new ObjectId(qsheetId);
         log.info("[QsheetController] findByQsheetId...!");
 
         //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
-        return new ResponseEntity<>(qsheetHistoryService.findByQsheetId(objectId), new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(qsheetHistoryService.findByQsheetId(qsheetId), new HttpHeaders(), HttpStatus.OK);
     }
 
 
