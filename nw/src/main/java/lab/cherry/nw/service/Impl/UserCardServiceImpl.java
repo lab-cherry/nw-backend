@@ -235,11 +235,13 @@ public class UserCardServiceImpl implements UserCardService {
         return userCardRepository.findPageById(name, pageable);
     }
 
+    // 사용자ID로 usercard 중복 체크
     @Transactional(readOnly = true)
     public void checkExistsWithUserId(String userid) {
         if (userCardRepository.findByUserSeq(userid).isPresent()) {
             throw new CustomException(ErrorCode.USERCARD_DUPLICATE); // usercard에 사용자 ID 중복 체크
         }
     }
+
 
 }

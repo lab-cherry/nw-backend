@@ -27,7 +27,7 @@ lab.cherry.nw.jwtSecret= bGFiLWNoZXJyeS1udy1wcm9qZWN0LXNlY3JldC1rZXkK
 lab.cherry.nw.jwtExpirationMs= 86400000
 
 #ADDR
-frontend.host={FRONTEND_ADDR:-http://localhost:8080}
+frontend.host=${FRONTEND_ADDR:-http://localhost:8080}
 
 #Email
 spring.mail.host=${SMTP_ADDRESS:-smtp.localhost.com}

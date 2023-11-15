@@ -311,11 +311,28 @@ public class AuthServiceImpl implements AuthService {
 
         UserEntity userEntity = userRepository.findByuseridAndEmail(userid, email).orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
 
-        EmailAuthEntity emailAuthEntity = emailAuthRepository.findById(userEntity.getId())
-                .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_AUTH_ERROR));
+        Optional<EmailAuthEntity> emailAuthEntity = emailAuthRepository.findById(userEntity.getId());
+        if(emailAuthEntity.isEmpty()) {
+
+        ObjectId verifiedObjectId = new ObjectId();
+            
+            EmailAuthEntity emailAuthEntity2  = EmailAuthEntity.builder()
+                .id(userEntity.getId())
+                .user(userEntity)
+                .email(email)
+                .token(verifiedObjectId.toString())
+                .expired(LocalDateTime.now().plusMinutes(5L))
+                .build();
+
+            emailAuthRepository.save(emailAuthEntity2);
+            emailAuthService.ConfirmEmailSend(emailAuthEntity2.getEmail(), emailAuthEntity2.getToken());
+        } else {
         
-        emailAuthEntity = emailAuthService.updateExpired(userEntity.getId());
-        emailAuthService.ConfirmEmailSend(emailAuthEntity.getEmail(), emailAuthEntity.getToken());
+            EmailAuthEntity emailAuthEntity2 = emailAuthEntity.get();
+            emailAuthEntity2 = emailAuthService.updateExpired(userEntity.getId());
+            emailAuthService.ConfirmEmailSend(emailAuthEntity2.getEmail(), emailAuthEntity2.getToken());
+
+        }
     }
 
     public void forgotPassword(String userid, String email) {

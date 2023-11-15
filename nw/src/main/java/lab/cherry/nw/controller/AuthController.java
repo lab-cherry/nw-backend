@@ -78,7 +78,7 @@ public class AuthController {
         
         ResultResponse result = ResultResponse.of(SuccessCode.REGISTER_SUCCESS, authService.addOrgUser(orgSeq, userRegisterDtoList));
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
-    }
+    }    
 
     /**
      * [AuthController] 로그인 함수
