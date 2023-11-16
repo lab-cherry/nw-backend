@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @NoArgsConstructor @AllArgsConstructor
-@Document(collection = "bookmark")
+@Document(collection = "comment")
 @JsonPropertyOrder({ "id", "userid"})
 public class CommentEntity implements Serializable {
 
@@ -76,8 +76,6 @@ public class CommentEntity implements Serializable {
     @Builder
     @NoArgsConstructor @AllArgsConstructor
     public static class CommentUpdateDto {
-        @Schema(title = "게시물 고유번호", example = "38352658567418867")
-        private String boardSeq;
         @Schema(title = "내용", example = "댓글 내용") // (Long) Tsid
         private String content;
 	}

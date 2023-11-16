@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/comment")
+@RequestMapping("/api/v1/board/comment")
 @Tag(name = "Comment", description = "Comment API Document")
 public class CommentController {
     private final CommentService commentService;
@@ -63,7 +63,7 @@ public class CommentController {
 
              List<CommentEntity> commentEntity =null;
         if(userid == null ) {
-            commentService.getComments();
+            commentEntity = commentService.getComments();
         } else {
             commentEntity = commentService.findByUserId(userid);
         }

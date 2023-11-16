@@ -79,29 +79,39 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
         List<QsheetLogEntity> logList =qsheetLogService.findByQsheetId(qsheetId);
         UserEntity userEntity = userService.findById(qsheetUpdateDto.getUpdateUser());
         List<Map<String,String>> contentList = new  ArrayList<>();
+        if(logList.size() > 0 ) {
+            if(logList.size()==1){
+                oldQsheetEntity = logList.get(0).getQsheet();
+            } else if(logList.size() > 1){
+                oldQsheetEntity = logList.get(logList.size()-2).getQsheet();
+            }
+        }
     
-        if(qsheetUpdateDto.getName()!=null){
+        if(qsheetUpdateDto.getName()!=null && !(oldQsheetEntity.getName().equals(qsheetUpdateDto.getName()))){
             log.info("큐시트 제목 수정");
             Map<String, String> data = new HashMap<>();
             data.put("action", "수정");
             data.put("info", "제목");
-            data.put("content",qsheetUpdateDto.getName());
+            data.put("old_content",oldQsheetEntity.getName());
+            data.put("new_content",qsheetUpdateDto.getName());
             contentList.add(data);
         }
-        if(qsheetUpdateDto.getOrgSeq()!=null){
+        if(qsheetUpdateDto.getOrgSeq()!=null && !(oldQsheetEntity.getOrg().getId().equals(qsheetUpdateDto.getOrgSeq()))){
             log.info("업체 수정");
             OrgEntity orgEntity = orgService.findById(qsheetUpdateDto.getOrgSeq());
             Map<String, String> data = new HashMap<>();
             data.put("action", "수정");
             data.put("info", "업체");
-            data.put("content",orgEntity.getName());
+            data.put("old_content", oldQsheetEntity.getOrg() != null ? oldQsheetEntity.getOrg().getName() : null);
+            data.put("content", orgEntity.getName());
             contentList.add(data);
         }
-        if(qsheetUpdateDto.getMemo()!=null){
+        if(qsheetUpdateDto.getMemo()!=null && !(oldQsheetEntity.getMemo().equals(qsheetUpdateDto.getMemo()))){
             log.info("시크릿 메모 수정");
             Map<String, String> data = new HashMap<>();
             data.put("action", "수정");
             data.put("info", "시크릿 메모");
+            data.put("old_content", qsheetUpdateDto.getMemo());
             data.put("content", qsheetUpdateDto.getMemo());
             contentList.add(data);
         }
@@ -124,17 +134,17 @@ public class QsheetHistoryServiceImpl implements QsheetHistoryService {
         }
         if(qsheetUpdateDto.getData()!=null){
             log.info("큐시트 데이터 수정" );
-            if(logList.size() > 0 ) {
-                if(logList.size()==1){
-                    oldQsheetEntity = logList.get(0).getQsheet();
-                    log.error("qsheetName1 : {}", oldQsheetEntity.getName());
-                } else if(logList.size() > 1){
-                    oldQsheetEntity = logList.get(logList.size()-2).getQsheet();
-                    log.error("qsheetName~ : {}", oldQsheetEntity.getName());
-                }
-            }
+            // if(logList.size() > 0 ) {
+            //     if(logList.size()==1){
+            //         oldQsheetEntity = logList.get(0).getQsheet();
+            //         log.error("qsheetName1 : {}", oldQsheetEntity.getName());
+            //     } else if(logList.size() > 1){
+            //         oldQsheetEntity = logList.get(logList.size()-2).getQsheet();
+            //         log.error("qsheetName~ : {}", oldQsheetEntity.getName());
+            //     }
+            // }
             
-            List<Map<String, ItemData>> result = compareLists(originQsheetEntity.getData(), qsheetUpdateDto.getData());
+            List<Map<String, ItemData>> result = compareLists(oldQsheetEntity.getData(), qsheetUpdateDto.getData());
             for (Map<String, ItemData> change : result) {
                 for (Map.Entry<String, ItemData> entry : change.entrySet()) {
                     ItemData item = entry.getValue();

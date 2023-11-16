@@ -13,8 +13,6 @@ import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.CommentRepository;
 import lab.cherry.nw.service.BoardService;
 import lab.cherry.nw.service.CommentService;
-import lab.cherry.nw.service.QsheetService;
-import lab.cherry.nw.service.TagService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

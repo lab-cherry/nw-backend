@@ -83,7 +83,7 @@ public class QsheetController {
     if(userSeq == null && orgSeq==null) {
         qsheetEntity = qsheetService.getQsheets(pageable);
     } else if(userSeq != null && orgSeq==null) {
-        qsheetEntity = qsheetService.findPageByUserId(userSeq, pageable);
+        qsheetEntity = qsheetService.findPageByUserId(userSeq, type, pageable);
 	} else{
 		qsheetEntity = qsheetService.findPageByOrgId(orgSeq, type, pageable);
 	}

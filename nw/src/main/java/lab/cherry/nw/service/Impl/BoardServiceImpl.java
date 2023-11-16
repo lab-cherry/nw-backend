@@ -103,6 +103,7 @@ public class BoardServiceImpl implements BoardService {
 			.content(boardCreateDto.getContent())
 			.qsheet(qsheetEntity)
             .tag(tagList)
+            .comment_size(0)
 //            .name(boardCreateDto.getName())
 //            .data(boardCreateDto.getData())
             .created_at(instant)

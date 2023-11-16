@@ -353,8 +353,8 @@ public class QsheetServiceImpl implements QsheetService {
     }
 
     @Transactional(readOnly = true)
-    public Page<QsheetEntity> findPageByUserId(String userSeq, Pageable pageable) {
-        return qsheetRepository.findPageByUserid(userSeq, pageable);
+    public Page<QsheetEntity> findPageByUserId(String userSeq, String type, Pageable pageable) {
+        return qsheetRepository.findPageByUserid(userSeq, type ,pageable);
     }
 
     @Transactional(readOnly = true)

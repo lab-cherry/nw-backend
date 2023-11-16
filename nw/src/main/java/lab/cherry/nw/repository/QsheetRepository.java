@@ -21,8 +21,8 @@ public interface QsheetRepository extends MongoRepository<QsheetEntity, String> 
 
     Page<QsheetEntity> findAll(Pageable pageable);
 
-    @Query("{'user.$_id' : ?0}")
-    Page<QsheetEntity> findPageByUserid(String userSeq, Pageable pageable);
+    @Query("{'user.$_id' : ?0, 'type' : ?1 }")
+    Page<QsheetEntity> findPageByUserid(String userSeq, String type, Pageable pageable);
     @Query("{ 'org.$_id' : ?0 ,'type' : ?1 }")
     Page<QsheetEntity> findPageByOrgid(String orgSeq, String type, Pageable pageable);
 

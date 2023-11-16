@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 /**
@@ -38,8 +39,8 @@ public class BoardEntity implements Serializable {
     private String id;
 
     @DBRef
-    @JsonProperty("userSeq")
-    @Schema(title = "유저 고유번호", example = "38352658567418867") // (Long) Tsid
+    @JsonProperty("user")
+    @Schema(title = "유저", example = "38352658567418867") // (Long) Tsid
     private UserEntity user;
 
     @JsonProperty("content")
@@ -100,9 +101,9 @@ public class BoardEntity implements Serializable {
 		private List<String> tagList;
     }
 
-    public void updateCommentSize(BookmarkEntity bookmark, Integer commentsize) {
-        if (bookmark!=null) {
-            this.comment_size = commentsize;
+    public void updateCommentSize(BoardEntity boardEntity) {
+        if (boardEntity!=null) {
+            this.comment_size = boardEntity.getComment_size() + 1;
         }
     }
 
