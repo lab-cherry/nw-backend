@@ -33,13 +33,13 @@ public class CommentEntity implements Serializable {
 
     @Id
     @JsonProperty("commentSeq")
-    @Schema(title = "북마크 고유번호", example = "38352658567418867") // (Long) Tsid
+    @Schema(title = "댓글 고유번호", example = "38352658567418867") // (Long) Tsid
     private String id;
 
     @DBRef
     @JsonProperty("board")
 	@Schema(title = "게시글 고유번호", example = "38352658567418867") // (Long) Tsid
-    private UserEntity board;
+    private BoardEntity board;
 
     @DBRef
     @JsonProperty("user")
@@ -67,6 +67,15 @@ public class CommentEntity implements Serializable {
     public static class CommentCreateDto {
 		@Schema(title = "유저 고유번호", example = "38352658567418867")
         private String userSeq;
+        @Schema(title = "게시물 고유번호", example = "38352658567418867")
+        private String boardSeq;
+        @Schema(title = "내용", example = "댓글 내용") // (Long) Tsid
+        private String content;
+    }
+    @Getter
+    @Builder
+    @NoArgsConstructor @AllArgsConstructor
+    public static class CommentUpdateDto {
         @Schema(title = "게시물 고유번호", example = "38352658567418867")
         private String boardSeq;
         @Schema(title = "내용", example = "댓글 내용") // (Long) Tsid
