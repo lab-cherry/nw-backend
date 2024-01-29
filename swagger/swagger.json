@@ -1,0 +1,5305 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "NW API Document",
+        "description": "Develop Team : Cherry Lab",
+        "contact": {
+            "name": "CherryLab",
+            "url": "",
+            "email": ""
+        },
+        "license": {
+            "name": "Apache License Version 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        },
+        "version": "v0.0.1"
+    },
+    "servers": [
+        {
+            "url": "http://152.69.228.245:10001",
+            "description": "Generated server url"
+        }
+    ],
+    "security": [
+        {
+            "jwtAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Board",
+            "description": "Board API Document"
+        },
+        {
+            "name": "Banquet",
+            "description": "Banquet API Document"
+        },
+        {
+            "name": "Finaltempl",
+            "description": "Finaltempl API Document"
+        },
+        {
+            "name": "Usercard",
+            "description": "Usercard API Document"
+        },
+        {
+            "name": "Docs",
+            "description": "Dcos API Document"
+        },
+        {
+            "name": "Authenticate",
+            "description": "Authenticate API Document"
+        },
+        {
+            "name": "Qsheet",
+            "description": "Qsheet API Document"
+        },
+        {
+            "name": "User",
+            "description": "User API Document"
+        },
+        {
+            "name": "Tag",
+            "description": "Tag API Document"
+        },
+        {
+            "name": "Schedule",
+            "description": "Schedule API Document"
+        },
+        {
+            "name": "Organization",
+            "description": "Organization API Document"
+        },
+        {
+            "name": "QsheetHistory",
+            "description": "QsheetHistory API Document"
+        },
+        {
+            "name": "Bookmark",
+            "description": "Bookmark API Document"
+        },
+        {
+            "name": "File",
+            "description": "File API Document"
+        },
+        {
+            "name": "Finaldocs",
+            "description": "Finaldocs API Document"
+        },
+        {
+            "name": "Pyebaeksil",
+            "description": "Pyebaeksil API Document"
+        },
+        {
+            "name": "Weddinghall",
+            "description": "Weddinghall API Document"
+        },
+        {
+            "name": "Role",
+            "description": "Role API Document"
+        },
+        {
+            "name": "Event",
+            "description": "Event API Document"
+        }
+    ],
+    "paths": {
+        "/api/v1/weddinghall": {
+            "get": {
+                "tags": [
+                    "Weddinghall"
+                ],
+                "summary": "웨딩홀 목록",
+                "description": "웨딩홀 목록을 조회합니다.",
+                "operationId": "findAllWeddinghalls",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Weddinghall"
+                ],
+                "summary": "웨딩홀(예식장) 생성",
+                "description": "웨딩홀(예식장)을 생성합니다.",
+                "operationId": "createWeddinghall",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "images",
+                                    "weddinghallCreateDto"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "weddinghallCreateDto": {
+                                        "$ref": "#/components/schemas/WeddinghallCreateDto"
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "images",
+                                    "weddinghallCreateDto"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "weddinghallCreateDto": {
+                                        "$ref": "#/components/schemas/WeddinghallCreateDto"
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "application/octet-stream": {
+                            "schema": {
+                                "required": [
+                                    "images",
+                                    "weddinghallCreateDto"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "weddinghallCreateDto": {
+                                        "$ref": "#/components/schemas/WeddinghallCreateDto"
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "웨딩홀(예식장) 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/usercard": {
+            "get": {
+                "tags": [
+                    "Usercard"
+                ],
+                "summary": "고객카드 목록",
+                "description": "고객카드를 조회합니다.",
+                "operationId": "findAllUserCards",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Usercard"
+                ],
+                "summary": "고객카드 생성",
+                "description": "고객카드를 생성합니다.",
+                "operationId": "createUserCard",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCardCreateDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "고객카드 생성이 완료되었습니다..",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/schedule": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "스케줄표 목록",
+                "description": "스케줄표 목록을 조회합니다.",
+                "operationId": "findAllSchedule",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "스케줄표 생성",
+                "description": "스케줄표를 생성합니다.",
+                "operationId": "createFinalTemplate",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ScheduleCreateDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "스케줄표 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/role": {
+            "get": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "역할 목록",
+                "description": "역할 목록을 조회합니다.",
+                "operationId": "findAllRoles",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "역할 생성",
+                "description": "역할을 생성합니다.",
+                "operationId": "createRole",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RoleCreateDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "역할 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/qsheet": {
+            "get": {
+                "tags": [
+                    "Qsheet"
+                ],
+                "summary": "큐시트 목록",
+                "description": "큐시트 목록을 조회합니다.",
+                "operationId": "findAllQsheets",
+                "parameters": [
+                    {
+                        "name": "userSeq",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "orgSeq",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Qsheet"
+                ],
+                "summary": "Qsheet 생성",
+                "description": "Qsheet를 추가합니다.",
+                "operationId": "createQsheet",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "qsheetCreateDto"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "qsheetCreateDto": {
+                                        "$ref": "#/components/schemas/QsheetCreateDto"
+                                    },
+                                    "files": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "qsheetCreateDto"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "qsheetCreateDto": {
+                                        "$ref": "#/components/schemas/QsheetCreateDto"
+                                    },
+                                    "files": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "application/octet-stream": {
+                            "schema": {
+                                "required": [
+                                    "qsheetCreateDto"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "qsheetCreateDto": {
+                                        "$ref": "#/components/schemas/QsheetCreateDto"
+                                    },
+                                    "files": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "큐시트 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못 되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pyebaeksil": {
+            "get": {
+                "tags": [
+                    "Pyebaeksil"
+                ],
+                "summary": "폐백실 목록",
+                "description": "폐백실 목록을 조회합니다.",
+                "operationId": "findAllPyebaeksils",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Pyebaeksil"
+                ],
+                "summary": "폐백실 생성",
+                "description": "폐백실을 생성합니다.",
+                "operationId": "createPyebaeksil",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "images",
+                                    "pyebaeksilCreateDto"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "pyebaeksilCreateDto": {
+                                        "$ref": "#/components/schemas/PyebaeksilCreateDto"
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "images",
+                                    "pyebaeksilCreateDto"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "pyebaeksilCreateDto": {
+                                        "$ref": "#/components/schemas/PyebaeksilCreateDto"
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "application/octet-stream": {
+                            "schema": {
+                                "required": [
+                                    "images",
+                                    "pyebaeksilCreateDto"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "pyebaeksilCreateDto": {
+                                        "$ref": "#/components/schemas/PyebaeksilCreateDto"
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "폐백실 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/org": {
+            "get": {
+                "tags": [
+                    "Organization"
+                ],
+                "summary": "조직 목록",
+                "description": "조직 목록을 조회합니다.",
+                "operationId": "findAllOrganizations",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Organization"
+                ],
+                "summary": "조직 생성",
+                "description": "조직을 생성합니다.",
+                "operationId": "createOrganization",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrgCreateDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "조직 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/finaltempl": {
+            "get": {
+                "tags": [
+                    "Finaltempl"
+                ],
+                "summary": "최종 확인서 템플릿 목록",
+                "description": "최종 확인서 템플릿 목록을 조회합니다.",
+                "operationId": "findAllFinalTemplate",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Finaltempl"
+                ],
+                "summary": "최종확인서 템플릿 생성",
+                "description": "최종확인서 템플릿을 생성합니다.",
+                "operationId": "createFinalTemplate_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FinalTemplCreateDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "최종확인서 템플릿 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/finaldocs": {
+            "get": {
+                "tags": [
+                    "Finaldocs"
+                ],
+                "summary": "최종 확인서 목록",
+                "description": "최종 확인서 목록을 조회합니다.",
+                "operationId": "findAllFinaldocs",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Finaldocs"
+                ],
+                "summary": "최종확인서 생성",
+                "description": "최종확인서를 생성합니다.",
+                "operationId": "createFinaldocs",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FinaldocsCreateDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "조직 최종확인서 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/file/upload": {
+            "post": {
+                "tags": [
+                    "File"
+                ],
+                "summary": "파일 업로드",
+                "description": "파일을 업로드합니다.",
+                "operationId": "uploadFile",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "files"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "files": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "files"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "files": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "application/octet-stream": {
+                            "schema": {
+                                "required": [
+                                    "files"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "files": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "파일 업로드가 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events/{id}": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "이벤트 찾기",
+                "description": "이벤트를 조회합니다.",
+                "operationId": "findEvent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "이벤트 생성",
+                "description": "이벤트을 생성합니다.",
+                "operationId": "createEvent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "이벤트 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "이벤트 삭제",
+                "description": "이벤트를 삭제합니다.",
+                "operationId": "deleteEvent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/docs": {
+            "get": {
+                "tags": [
+                    "Docs"
+                ],
+                "summary": "문서 목록",
+                "description": "문서 목록을 조회합니다.",
+                "operationId": "findAllDocs",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Docs"
+                ],
+                "summary": "Docs 생성",
+                "description": "Docs를 추가합니다.",
+                "operationId": "createDocs",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DocsCreateDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "문서 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못 되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/bookmark": {
+            "get": {
+                "tags": [
+                    "Bookmark"
+                ],
+                "summary": "북마크 목록",
+                "description": "북마크 목록을 조회합니다.",
+                "operationId": "findAllBookmarks",
+                "parameters": [
+                    {
+                        "name": "userid",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Bookmark"
+                ],
+                "summary": "Bookmark 생성",
+                "description": "Bookmark를 추가합니다.",
+                "operationId": "createBookmark",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BookmarkCreateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "북마크 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못 되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/board/tag": {
+            "get": {
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "태그 목록",
+                "description": "태그 목록을 조회합니다.",
+                "operationId": "findAllTags",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Tag 생성",
+                "description": "Tag를 추가합니다.",
+                "operationId": "createTag",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TagCreateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "태그 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못 되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/board/post": {
+            "get": {
+                "tags": [
+                    "Board"
+                ],
+                "summary": "게시물 목록",
+                "description": "게시물 목록을 조회합니다.",
+                "operationId": "findAllBoards",
+                "parameters": [
+                    {
+                        "name": "userid",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "created_at",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Board"
+                ],
+                "summary": "Board 생성",
+                "description": "Board를 추가합니다.",
+                "operationId": "createBoard",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BoardCreateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "게시물 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못 되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/banquet": {
+            "get": {
+                "tags": [
+                    "Banquet"
+                ],
+                "summary": "연회장 목록",
+                "description": "연회장 목록을 조회합니다.",
+                "operationId": "findAllBanquets",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Banquet"
+                ],
+                "summary": "연회장 생성",
+                "description": "연회장을 생성합니다.",
+                "operationId": "createBanquet",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "banquetCreateDto",
+                                    "images"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "banquetCreateDto": {
+                                        "$ref": "#/components/schemas/BanquetCreateDto"
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "banquetCreateDto",
+                                    "images"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "banquetCreateDto": {
+                                        "$ref": "#/components/schemas/BanquetCreateDto"
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "application/octet-stream": {
+                            "schema": {
+                                "required": [
+                                    "banquetCreateDto",
+                                    "images"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "banquetCreateDto": {
+                                        "$ref": "#/components/schemas/BanquetCreateDto"
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "연회장 생성이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "회원가입",
+                "description": "사용자를 추가합니다.",
+                "operationId": "register",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserRegisterDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "회원가입이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못 되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "중복된 사용자입니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/register/orgUser/{orgSeq}": {
+            "post": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "조직 유저 일괄 가입",
+                "description": "조직 유저를 추가합니다.",
+                "operationId": "register_1",
+                "parameters": [
+                    {
+                        "name": "orgSeq",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/UserRegisterDto"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "조직 유저 추가 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "입력 값이 잘못 되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "중복된 사용자입니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "로그인",
+                "description": "JWT 인증을 통한 사용자 로그인을 진행합니다.",
+                "operationId": "login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLoginDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "로그인이 완료되었습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "사용자를 찾을 수 없습니다.",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/usercard/{id}": {
+            "get": {
+                "tags": [
+                    "Usercard"
+                ],
+                "summary": "ID로 고객카드 찾기",
+                "description": "고객카드를 조회합니다.",
+                "operationId": "findByOrgId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Usercard"
+                ],
+                "summary": "고객카드 삭제",
+                "description": "고객카드를 삭제합니다.",
+                "operationId": "deleteUserCard",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Usercard"
+                ],
+                "summary": "고객카드 업데이트",
+                "description": "특정 고객카드를 업데이트합니다.",
+                "operationId": "updateUserCardById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCardUpdateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/usercard/{id}/weddinghall": {
+            "patch": {
+                "tags": [
+                    "Usercard"
+                ],
+                "summary": "고객카드 웨딩홀 정보 업데이트",
+                "description": "특정 고객카드의 웨딩홀 정보를 업데이트합니다.",
+                "operationId": "updateUserWeddinghalls",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCardUpdateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "사용자 찾기",
+                "description": "사용자를 조회합니다.",
+                "operationId": "findUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "사용자 삭제",
+                "description": "사용자를 삭제합니다.",
+                "operationId": "deleteById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "사용자 업데이트",
+                "description": "특정 사용자를 업데이트합니다.",
+                "operationId": "updateUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserUpdateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/{id}/role": {
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "사용자 조직 업데이트",
+                "description": "특정 사용자의 조직 정보를 업데이트합니다.",
+                "operationId": "updateUserRole",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserUpdateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/{id}/photo": {
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "사용자 사진 업데이트",
+                "description": "특정 사용자의 사진을 업데이트합니다.",
+                "operationId": "updateUserPhoto",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "image"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "image": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/{id}/org": {
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "사용자 조직 업데이트",
+                "description": "특정 사용자의 조직 정보를 업데이트합니다.",
+                "operationId": "updateUserOrg",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserUpdateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/qsheet/{id}": {
+            "get": {
+                "tags": [
+                    "Qsheet"
+                ],
+                "summary": "ID로 큐시트 찾기",
+                "description": "큐시트를 조회합니다.",
+                "operationId": "findByQsheetId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "share",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Qsheet"
+                ],
+                "summary": "큐시트 삭제",
+                "description": "큐시트를 삭제합니다.",
+                "operationId": "deleteById_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Qsheet"
+                ],
+                "summary": "큐시트 업데이트",
+                "description": "특정 큐시트를 업데이트합니다.",
+                "operationId": "updateById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "qsheetUpdateDto"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "qsheetUpdateDto": {
+                                        "$ref": "#/components/schemas/QsheetUpdateDto"
+                                    },
+                                    "files": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/org/{id}": {
+            "get": {
+                "tags": [
+                    "Organization"
+                ],
+                "summary": "ID로 조직 찾기",
+                "description": "조직을 조회합니다.",
+                "operationId": "findByOrgId_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Organization"
+                ],
+                "summary": "조직 삭제",
+                "description": "조직을 삭제합니다.",
+                "operationId": "deleteOrganization",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Organization"
+                ],
+                "summary": "조직 업데이트",
+                "description": "특정 조직을 업데이트합니다.",
+                "operationId": "updateOrgById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrgUpdateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/finaltempl/{id}": {
+            "get": {
+                "tags": [
+                    "Finaltempl"
+                ],
+                "summary": "ID로 최종확인서 템플릿 찾기",
+                "description": "최종확인서 템플릿을 조회합니다.",
+                "operationId": "findById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Finaltempl"
+                ],
+                "summary": "최종 확인서 템플릿 삭제",
+                "description": "최종 확인서 템플릿을 삭제합니다.",
+                "operationId": "deleteFinalTemplate",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Finaltempl"
+                ],
+                "summary": "최종 확인서 템플릿 업데이트",
+                "description": "특정 최종 확인서 템플릿을 업데이트합니다.",
+                "operationId": "updateFinalTemplById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FinalTemplUpdateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/finaldocs/{id}": {
+            "get": {
+                "tags": [
+                    "Finaldocs"
+                ],
+                "summary": "ID로 최종확인서 찾기",
+                "description": "최종확인서를 조회합니다.",
+                "operationId": "findById_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Finaldocs"
+                ],
+                "summary": "최종 확인서 삭제",
+                "description": "최종 확인서를 삭제합니다.",
+                "operationId": "deleteFinaldocs",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Finaldocs"
+                ],
+                "summary": "최종 확인서 업데이트",
+                "description": "특정 최종 확인서를 업데이트합니다.",
+                "operationId": "updateFinaldocsById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FinaldocsUpdateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/docs/{id}": {
+            "get": {
+                "tags": [
+                    "Docs"
+                ],
+                "summary": "ID로 문서 찾기",
+                "description": "문서를 조회합니다.",
+                "operationId": "findByDocsId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Docs"
+                ],
+                "summary": "문서 삭제",
+                "description": "문서 삭제합니다.",
+                "operationId": "deleteById_2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Docs"
+                ],
+                "summary": "문서 업데이트",
+                "description": "특정 문서를 업데이트합니다.",
+                "operationId": "updateById_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DocsUpdateDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/bookmark/user/{id}": {
+            "get": {
+                "tags": [
+                    "Bookmark"
+                ],
+                "summary": "ID로 북마크 찾기",
+                "description": "북마크를 조회합니다.",
+                "operationId": "findByBookmarkId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Bookmark"
+                ],
+                "summary": "북마크 업데이트",
+                "description": "특정 북마크를 업데이트합니다.",
+                "operationId": "updateById_2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BookmarkUpdateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/board/post/{id}": {
+            "patch": {
+                "tags": [
+                    "Board"
+                ],
+                "summary": "게시물 업데이트",
+                "description": "특정 게시물를 업데이트합니다.",
+                "operationId": "updateById_3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BoardUpdateDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/weddinghall/{id}": {
+            "get": {
+                "tags": [
+                    "Weddinghall"
+                ],
+                "summary": "웨딩홀(예식장) 찾기",
+                "description": "웨딩홀(예식장)를 조회합니다.",
+                "operationId": "findWeddinghall",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Weddinghall"
+                ],
+                "summary": "웨딩홀(예식장) 삭제",
+                "description": "웨딩홀(예식장)를 삭제합니다.",
+                "operationId": "deleteWeddinghall",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "사용자 목록",
+                "description": "사용자 목록을 조회합니다.",
+                "operationId": "findAllUsers",
+                "parameters": [
+                    {
+                        "name": "userid",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "orgSeq",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/schedule/{id}": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "summary": "ID로 스케줄표 찾기",
+                "description": "스케줄표를 조회합니다.",
+                "operationId": "findByScheduleId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/role/{id}": {
+            "get": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "ID로 역할 찾기",
+                "description": "역할을 조회합니다.",
+                "operationId": "findByRoleId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "역할 삭제",
+                "description": "역할을 삭제합니다.",
+                "operationId": "deleteRole",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/qsheetHistory": {
+            "get": {
+                "tags": [
+                    "QsheetHistory"
+                ],
+                "summary": "큐시트 히스토리 목록",
+                "description": "큐시트 히스토리 목록을 조회합니다.",
+                "operationId": "findAllQsheetHistory",
+                "parameters": [
+                    {
+                        "name": "userid",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "qsheetid",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/qsheetHistory/qsheet/{id}": {
+            "get": {
+                "tags": [
+                    "QsheetHistory"
+                ],
+                "summary": "Qsheet ID로 히스토리 찾기",
+                "description": "큐시트 히스토리를 조회합니다.",
+                "operationId": "find",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/qsheet/download/{qsheetIds}": {
+            "get": {
+                "tags": [
+                    "Qsheet"
+                ],
+                "summary": "큐시트 사용자 파일 다운로드",
+                "description": "큐시트 사용자 파일을 다운로드합니다.",
+                "operationId": "downloadQsheetBySeq",
+                "parameters": [
+                    {
+                        "name": "qsheetIds",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pyebaeksil/{id}": {
+            "get": {
+                "tags": [
+                    "Pyebaeksil"
+                ],
+                "summary": "폐백실 찾기",
+                "description": "폐백실를 조회합니다.",
+                "operationId": "findPyebaeksil",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Pyebaeksil"
+                ],
+                "summary": "폐백실 삭제",
+                "description": "폐백실를 삭제합니다.",
+                "operationId": "deletePyebaeksil",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/org/list": {
+            "get": {
+                "tags": [
+                    "Organization"
+                ],
+                "summary": "조직 목록",
+                "description": "조직 목록을 조회합니다.",
+                "operationId": "findAllOrgList",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/org/invite": {
+            "get": {
+                "tags": [
+                    "Organization"
+                ],
+                "summary": "사용자(랑부) 초대",
+                "description": "이메일로 조직 초대 메일을 발송합니다.",
+                "operationId": "inviteUser",
+                "parameters": [
+                    {
+                        "name": "orgid",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/finaldocs/user/{userid}": {
+            "get": {
+                "tags": [
+                    "Finaldocs"
+                ],
+                "summary": "User Id 로 최종확인서 찾기",
+                "description": "최종확인서를 조회합니다.",
+                "operationId": "findByUserId",
+                "parameters": [
+                    {
+                        "name": "userid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/file": {
+            "get": {
+                "tags": [
+                    "File"
+                ],
+                "summary": "파일 목록",
+                "description": "파일 목록을 조회합니다.",
+                "operationId": "findAllFiles",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "path",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/file/{id}": {
+            "get": {
+                "tags": [
+                    "File"
+                ],
+                "summary": "파일 조회",
+                "description": "파일을 조회합니다.",
+                "operationId": "findByFileId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "File"
+                ],
+                "summary": "파일 삭제",
+                "description": "파일을 삭제합니다.",
+                "operationId": "deleteFile",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/file/downloads/{id}": {
+            "get": {
+                "tags": [
+                    "File"
+                ],
+                "summary": "특정 파일 그룹 다운로드",
+                "description": "특정 그룹의 파일을 일괄 다운로드합니다. (ex. 웨딩홀 Seq, 연회장 Seq, 큐시트 Seq 등)",
+                "operationId": "downloadFiles",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/file/download/{file_id}": {
+            "get": {
+                "tags": [
+                    "File"
+                ],
+                "summary": "특정 파일 다운로드",
+                "description": "특정 파일을 다운로드합니다.",
+                "operationId": "downloadFile",
+                "parameters": [
+                    {
+                        "name": "file_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "이벤트 목록",
+                "description": "이벤트 목록을 조회합니다.",
+                "operationId": "findAllEvents",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 100
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [
+                                "id",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/board/{id}": {
+            "get": {
+                "tags": [
+                    "Board"
+                ],
+                "summary": "ID로 게시물 찾기",
+                "description": "게시물를 조회합니다.",
+                "operationId": "findByBoardId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Board"
+                ],
+                "summary": "게시글 삭제",
+                "description": "게시글을 삭제합니다.",
+                "operationId": "deleteById_4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/board/tag/{name}": {
+            "get": {
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "ID로 태그 찾기",
+                "description": "태그를 조회합니다.",
+                "operationId": "findByTagId",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/banquet/{id}": {
+            "get": {
+                "tags": [
+                    "Banquet"
+                ],
+                "summary": "연회장 찾기",
+                "description": "연회장를 조회합니다.",
+                "operationId": "findBanquet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Banquet"
+                ],
+                "summary": "연회장 삭제",
+                "description": "연회장를 삭제합니다.",
+                "operationId": "deleteBanquet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/re-confirm": {
+            "get": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "이메일 재인증",
+                "description": "이메일 재인증 메일을 발송합니다.",
+                "operationId": "reConfirmEmail",
+                "parameters": [
+                    {
+                        "name": "userid",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/myinfo": {
+            "get": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "사용자 정보 확인",
+                "description": "사용자 정보를 확인합니다.",
+                "operationId": "myInfo",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/forgot-password": {
+            "get": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "비밀번호 찾기",
+                "description": "이메일로 비밀번호 초기화 메일을 발송합니다.",
+                "operationId": "forgotPassword",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userEmail",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/confirm": {
+            "get": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "이메일 인증",
+                "description": "이메일 인증을 진행합니다.",
+                "operationId": "confirmEmail",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/check/{userid}": {
+            "get": {
+                "tags": [
+                    "Authenticate"
+                ],
+                "summary": "사용자 아이디 중복체크",
+                "description": "사용자 아이디를 중복체크합니다.",
+                "operationId": "existUserId",
+                "parameters": [
+                    {
+                        "name": "userid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/bookmark/{id}": {
+            "delete": {
+                "tags": [
+                    "Bookmark"
+                ],
+                "summary": "북마크 삭제",
+                "description": "북마크를 삭제합니다.",
+                "operationId": "deleteById_3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "WeddinghallCreateDto": {
+                "required": [
+                    "interval",
+                    "maxPerson",
+                    "orgId",
+                    "weddinghallName"
+                ],
+                "type": "object",
+                "properties": {
+                    "weddinghallName": {
+                        "title": "웨딩홀(예식장) 이름",
+                        "maxLength": 10,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "더글로리"
+                    },
+                    "maxPerson": {
+                        "title": "웨딩홀(예식장) 최대인원",
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 100
+                    },
+                    "orgId": {
+                        "title": "Org 정보",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "interval": {
+                        "title": "웨딩홀(예식장) 행사 시간 간격",
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 30
+                    }
+                }
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FieldError"
+                        }
+                    }
+                }
+            },
+            "FieldError": {
+                "type": "object",
+                "properties": {
+                    "field": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    },
+                    "reason": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UserCardCreateDto": {
+                "required": [
+                    "note",
+                    "resDate",
+                    "status",
+                    "userSeq",
+                    "weddingDate",
+                    "weddinghallName"
+                ],
+                "type": "object",
+                "properties": {
+                    "userSeq": {
+                        "title": "사용자 고유번호",
+                        "type": "string",
+                        "example": "64f82e492948d933edfaa9c0"
+                    },
+                    "weddinghallName": {
+                        "title": "예식장 이름",
+                        "type": "string",
+                        "example": "더모멘트"
+                    },
+                    "groom": {
+                        "$ref": "#/components/schemas/UserFamily"
+                    },
+                    "bride": {
+                        "$ref": "#/components/schemas/UserFamily"
+                    },
+                    "note": {
+                        "title": "비고",
+                        "maxLength": 500,
+                        "minLength": 0,
+                        "type": "string",
+                        "example": "가을"
+                    },
+                    "resDate": {
+                        "type": "string"
+                    },
+                    "weddingDate": {
+                        "title": "예식 날짜",
+                        "type": "string",
+                        "example": "2023-08-29T05:11:38.002Z"
+                    },
+                    "status": {
+                        "title": "진행 상태",
+                        "maxLength": 20,
+                        "minLength": 2,
+                        "type": "string",
+                        "example": "진행중"
+                    }
+                }
+            },
+            "UserFamily": {
+                "title": "신부측 정보",
+                "required": [
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "신랑/신부 이름",
+                        "type": "string",
+                        "example": "신짱구"
+                    },
+                    "email": {
+                        "title": "신랑/신부 이메일",
+                        "type": "string",
+                        "example": "jjanggu@nw.com"
+                    },
+                    "contact": {
+                        "title": "신랑/신부 연락처",
+                        "type": "string",
+                        "example": "010-1234-5678"
+                    },
+                    "father": {
+                        "title": "신랑/신부 아버지 성함",
+                        "type": "string",
+                        "example": "신영만"
+                    },
+                    "mother": {
+                        "title": "신랑/신부 어머니 성함",
+                        "type": "string",
+                        "example": "봉미선"
+                    }
+                }
+            },
+            "ScheduleCreateDto": {
+                "required": [
+                    "orgId"
+                ],
+                "type": "object",
+                "properties": {
+                    "orgId": {
+                        "title": "조직 고유번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "content": {
+                        "title": "스케줄표 템플릿 내용",
+                        "type": "array",
+                        "example": "문서 내용",
+                        "items": {
+                            "title": "스케줄표 템플릿 내용",
+                            "type": "object",
+                            "example": "문서 내용"
+                        }
+                    }
+                }
+            },
+            "RoleCreateDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "권한 이름",
+                        "maxLength": 20,
+                        "minLength": 3,
+                        "type": "string",
+                        "example": "ADMIN"
+                    }
+                }
+            },
+            "FileInfo": {
+                "title": "파일 정보",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "파일 이름",
+                        "type": "string",
+                        "example": "축가.mp3"
+                    },
+                    "link": {
+                        "title": "다운로드 링크",
+                        "type": "string",
+                        "example": "/api/v1/38352658567418867"
+                    }
+                }
+            },
+            "ItemData": {
+                "title": "데이터 리스트",
+                "type": "object",
+                "properties": {
+                    "orderIndex": {
+                        "title": "큐시트 순서",
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 1
+                    },
+                    "process": {
+                        "title": "큐시트 순서명",
+                        "type": "string",
+                        "example": "축가"
+                    },
+                    "content": {
+                        "title": "큐시트 내용",
+                        "type": "string",
+                        "example": "니가사는그집-박진영"
+                    },
+                    "actor": {
+                        "title": "큐시트 행위자",
+                        "type": "string",
+                        "example": "신부"
+                    },
+                    "note": {
+                        "title": "비고",
+                        "type": "string",
+                        "example": "신부가 노래를 못함"
+                    },
+                    "fileName": {
+                        "title": "파일 이름",
+                        "type": "array",
+                        "example": "[축가.mp3, 축하영상.mp4]",
+                        "items": {
+                            "title": "파일 이름",
+                            "type": "string",
+                            "example": "[축가.mp3, 축하영상.mp4]"
+                        }
+                    },
+                    "fileInfo": {
+                        "title": "파일 정보",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FileInfo"
+                        }
+                    }
+                }
+            },
+            "QsheetCreateDto": {
+                "required": [
+                    "name",
+                    "type",
+                    "userSeq"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "큐시트 제목",
+                        "type": "string",
+                        "example": "최해리_230824"
+                    },
+                    "userSeq": {
+                        "title": "유저 고유번호",
+                        "type": "string",
+                        "example": "38352658567418867"
+                    },
+                    "orgSeq": {
+                        "title": "조직 고유번호",
+                        "type": "string",
+                        "example": "38352658567418867"
+                    },
+                    "data": {
+                        "title": "데이터 리스트",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ItemData"
+                        }
+                    },
+                    "memo": {
+                        "title": "메모",
+                        "type": "string",
+                        "example": "신랑 깜짝 이벤트 준비"
+                    },
+                    "type": {
+                        "title": "타입",
+                        "type": "string",
+                        "example": "template or user"
+                    },
+                    "org_approverSeq": {
+                        "title": "업체 확인자 정보",
+                        "type": "string",
+                        "example": "38352658567418867"
+                    },
+                    "org_confirm": {
+                        "title": "업체 확인",
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "client_confirm": {
+                        "title": "신랑신부 확인",
+                        "type": "boolean",
+                        "example": false
+                    }
+                }
+            },
+            "PyebaeksilCreateDto": {
+                "required": [
+                    "orgId",
+                    "pyebaeksilName"
+                ],
+                "type": "object",
+                "properties": {
+                    "pyebaeksilName": {
+                        "title": "폐백실 이름",
+                        "maxLength": 10,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "더글로리"
+                    },
+                    "orgId": {
+                        "title": "Org 정보",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    }
+                }
+            },
+            "OrgCreateDto": {
+                "required": [
+                    "orgAddress",
+                    "orgBiznum",
+                    "orgContact",
+                    "orgName"
+                ],
+                "type": "object",
+                "properties": {
+                    "orgName": {
+                        "title": "조직 이름",
+                        "maxLength": 20,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "더모멘트"
+                    },
+                    "orgBiznum": {
+                        "title": "조직 사업자번호",
+                        "maxLength": 40,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "123-45-67890"
+                    },
+                    "orgContact": {
+                        "title": "조직 연락처",
+                        "maxLength": 40,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "02-0000-0000"
+                    },
+                    "orgAddress": {
+                        "title": "조직 주소",
+                        "maxLength": 255,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "서울시 종로구 파인애플주스 A동"
+                    }
+                }
+            },
+            "FinalTemplCreateDto": {
+                "required": [
+                    "orgId",
+                    "userSeq"
+                ],
+                "type": "object",
+                "properties": {
+                    "userSeq": {
+                        "title": "사용자 고유번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "orgId": {
+                        "title": "조직 고유번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "content": {
+                        "title": "최종확인서 템플릿 내용",
+                        "type": "array",
+                        "example": "문서 내용",
+                        "items": {
+                            "title": "최종확인서 템플릿 내용",
+                            "type": "object",
+                            "example": "문서 내용"
+                        }
+                    }
+                }
+            },
+            "FinaldocsCreateDto": {
+                "type": "object",
+                "properties": {
+                    "userSeq": {
+                        "title": "사용자 고유번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "orgSeq": {
+                        "title": "조직 고유번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "finaltemplSeq": {
+                        "title": "최종확인서 템플릿 고유번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "content": {
+                        "title": "최종확인서 내용",
+                        "type": "array",
+                        "items": {
+                            "title": "최종확인서 내용",
+                            "type": "object"
+                        }
+                    },
+                    "org_approverSeq": {
+                        "title": "업체 확인자 정보",
+                        "type": "string",
+                        "example": "38352658567418867"
+                    },
+                    "org_confirm": {
+                        "title": "업체 확인",
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "client_confirm": {
+                        "title": "신랑신부 확인",
+                        "type": "boolean",
+                        "example": false
+                    }
+                }
+            },
+            "DocsCreateDto": {
+                "required": [
+                    "userSeq"
+                ],
+                "type": "object",
+                "properties": {
+                    "userSeq": {
+                        "title": "유저 고유번호",
+                        "type": "string",
+                        "example": "653f3f6d67e19f0f584df299"
+                    },
+                    "orgSeq": {
+                        "title": "조직 고유번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6dd"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/DocsData"
+                    }
+                }
+            },
+            "DocsData": {
+                "title": "데이터 리스트",
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "title": "문서 제목",
+                        "type": "string",
+                        "example": "선언문"
+                    },
+                    "author": {
+                        "title": "문서 작성자",
+                        "type": "string",
+                        "example": "더모멘트"
+                    },
+                    "content": {
+                        "title": "문서 내용",
+                        "type": "string",
+                        "example": "문서 내용입니다."
+                    }
+                }
+            },
+            "BookmarkCreateDto": {
+                "type": "object",
+                "properties": {
+                    "userSeq": {
+                        "title": "유저 고유번호",
+                        "type": "string",
+                        "example": "38352658567418867"
+                    },
+                    "data": {
+                        "title": "북마크 정보",
+                        "type": "object",
+                        "example": {
+                            "로그인": "/login"
+                        }
+                    }
+                }
+            },
+            "TagCreateDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "이름",
+                        "maxLength": 10,
+                        "minLength": 2,
+                        "type": "string",
+                        "example": "스드메"
+                    }
+                }
+            },
+            "BoardCreateDto": {
+                "type": "object",
+                "properties": {
+                    "userSeq": {
+                        "title": "유저 고유번호",
+                        "type": "string",
+                        "example": "64f82e492948d933edfaa9c0"
+                    },
+                    "content": {
+                        "title": "게시물 내용",
+                        "type": "string",
+                        "example": "안녕하세요~ 반갑습니다"
+                    },
+                    "qsheetSeq": {
+                        "title": "큐시트 고유번호",
+                        "type": "string",
+                        "example": "64f82e492948d933edfaa9c0"
+                    },
+                    "tagList": {
+                        "title": "태그 목록",
+                        "type": "array",
+                        "items": {
+                            "title": "태그 목록",
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "BanquetCreateDto": {
+                "required": [
+                    "banquetName",
+                    "interval",
+                    "maxPerson",
+                    "orgId"
+                ],
+                "type": "object",
+                "properties": {
+                    "banquetName": {
+                        "title": "연회장 이름",
+                        "maxLength": 10,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "더글로리"
+                    },
+                    "maxPerson": {
+                        "title": "연회장 최대인원",
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 100
+                    },
+                    "orgId": {
+                        "title": "Org 정보",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "interval": {
+                        "title": "연회장 행사 시간 간격",
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 30
+                    }
+                }
+            },
+            "UserRegisterDto": {
+                "required": [
+                    "userEmail",
+                    "userId",
+                    "userName",
+                    "userPassword"
+                ],
+                "type": "object",
+                "properties": {
+                    "userId": {
+                        "title": "사용자 아이디",
+                        "maxLength": 10,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "admin"
+                    },
+                    "userName": {
+                        "title": "사용자 이름",
+                        "maxLength": 10,
+                        "minLength": 2,
+                        "type": "string",
+                        "example": "홍길동"
+                    },
+                    "userEmail": {
+                        "title": "사용자 이메일",
+                        "maxLength": 40,
+                        "minLength": 3,
+                        "type": "string",
+                        "example": "admin@nw.com"
+                    },
+                    "userType": {
+                        "title": "타입",
+                        "type": "string",
+                        "example": "user | org"
+                    },
+                    "userPassword": {
+                        "title": "사용자 비밀번호",
+                        "maxLength": 2147483647,
+                        "minLength": 3,
+                        "type": "string",
+                        "example": "Pa@sW0rd"
+                    }
+                }
+            },
+            "UserLoginDto": {
+                "required": [
+                    "userId",
+                    "userPassword"
+                ],
+                "type": "object",
+                "properties": {
+                    "userId": {
+                        "title": "사용자 아이디",
+                        "maxLength": 10,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "admin"
+                    },
+                    "userPassword": {
+                        "title": "사용자 비밀번호",
+                        "maxLength": 2147483647,
+                        "minLength": 3,
+                        "type": "string",
+                        "example": "Pa@sW0rd"
+                    }
+                }
+            },
+            "UserCardUpdateDto": {
+                "required": [
+                    "userSeq"
+                ],
+                "type": "object",
+                "properties": {
+                    "userSeq": {
+                        "title": "사용자 고유번호",
+                        "type": "string",
+                        "example": "64f82e492948d933edfaa9c0"
+                    },
+                    "weddinghallName": {
+                        "title": "예식장 이름",
+                        "type": "string",
+                        "example": "더모멘트"
+                    },
+                    "groom": {
+                        "$ref": "#/components/schemas/UserFamily"
+                    },
+                    "bride": {
+                        "$ref": "#/components/schemas/UserFamily"
+                    },
+                    "note": {
+                        "title": "비고",
+                        "maxLength": 500,
+                        "minLength": 0,
+                        "type": "string",
+                        "example": "가을"
+                    },
+                    "resDate": {
+                        "title": "예약 날짜",
+                        "type": "string",
+                        "example": "2023-08-29T05:11:38.002Z"
+                    },
+                    "weddingDate": {
+                        "title": "예식 날짜",
+                        "type": "string",
+                        "example": "2023-08-29T05:11:38.002Z"
+                    },
+                    "status": {
+                        "title": "진행 상태",
+                        "maxLength": 20,
+                        "minLength": 2,
+                        "type": "string",
+                        "example": "진행중"
+                    }
+                }
+            },
+            "UserUpdateDto": {
+                "type": "object",
+                "properties": {
+                    "userName": {
+                        "title": "사용자 이름",
+                        "maxLength": 10,
+                        "minLength": 2,
+                        "type": "string",
+                        "example": "관리자"
+                    },
+                    "userEmail": {
+                        "title": "사용자 이메일",
+                        "maxLength": 40,
+                        "minLength": 3,
+                        "type": "string",
+                        "example": "admin@innogrid.com"
+                    },
+                    "userPassword": {
+                        "title": "사용자 비밀번호",
+                        "maxLength": 40,
+                        "minLength": 3,
+                        "type": "string",
+                        "example": "Pa@sW0rd"
+                    },
+                    "orgId": {
+                        "title": "사용자 조직",
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "type": "string"
+                    },
+                    "roleId": {
+                        "title": "사용자 권한",
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "type": "string"
+                    }
+                }
+            },
+            "QsheetUpdateDto": {
+                "required": [
+                    "updateUser"
+                ],
+                "type": "object",
+                "properties": {
+                    "updateUser": {
+                        "title": "업데이트 유저",
+                        "type": "string",
+                        "example": "38352658567418867"
+                    },
+                    "name": {
+                        "title": "큐시트 제목",
+                        "type": "string",
+                        "example": "최해리_230824"
+                    },
+                    "orgSeq": {
+                        "title": "조직 고유번호",
+                        "type": "string",
+                        "example": "38352658567418867"
+                    },
+                    "data": {
+                        "title": "데이터 리스트",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ItemData"
+                        }
+                    },
+                    "memo": {
+                        "title": "메모",
+                        "type": "string",
+                        "example": "신랑 깜짝 이벤트 준비"
+                    },
+                    "org_approverSeq": {
+                        "title": "업체 확인자 정보",
+                        "type": "string",
+                        "example": "38352658567418867"
+                    },
+                    "org_confirm": {
+                        "title": "업체 확인",
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "client_confirm": {
+                        "title": "신랑신부 확인",
+                        "type": "boolean",
+                        "example": false
+                    }
+                }
+            },
+            "OrgUpdateDto": {
+                "type": "object",
+                "properties": {
+                    "orgName": {
+                        "title": "조직 이름",
+                        "maxLength": 20,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "더모멘트"
+                    },
+                    "orgBiznum": {
+                        "title": "조직 사업자번호",
+                        "maxLength": 40,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "123-45-67890"
+                    },
+                    "orgContact": {
+                        "title": "조직 연락처",
+                        "maxLength": 40,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "02-0000-0000"
+                    },
+                    "orgAddress": {
+                        "title": "조직 주소",
+                        "maxLength": 255,
+                        "minLength": 4,
+                        "type": "string",
+                        "example": "서울시 종로구 파인애플주스 A동"
+                    },
+                    "orgEnabled": {
+                        "title": "조직 활성화 여부",
+                        "type": "boolean",
+                        "example": true
+                    }
+                }
+            },
+            "FinalTemplUpdateDto": {
+                "type": "object",
+                "properties": {
+                    "userSeq": {
+                        "title": "사용자 고유 번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "orgId": {
+                        "title": "조직 고유 번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "content": {
+                        "title": "최종확인서 템플릿 내용",
+                        "type": "array",
+                        "example": "문서 내용",
+                        "items": {
+                            "title": "최종확인서 템플릿 내용",
+                            "type": "object",
+                            "example": "문서 내용"
+                        }
+                    }
+                }
+            },
+            "FinaldocsUpdateDto": {
+                "type": "object",
+                "properties": {
+                    "finaltemplSeq": {
+                        "title": "최종확인서 템플릿 고유번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "userSeq": {
+                        "title": "사용자 고유번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "orgSeq": {
+                        "title": "조직 고유번호",
+                        "type": "string",
+                        "example": "64ed89aa9e813b5ab16da6de"
+                    },
+                    "content": {
+                        "title": "최종확인서 내용",
+                        "type": "array",
+                        "items": {
+                            "title": "최종확인서 내용",
+                            "type": "object"
+                        }
+                    },
+                    "org_approverSeq": {
+                        "title": "업체 확인자 정보",
+                        "type": "string",
+                        "example": "38352658567418867"
+                    },
+                    "org_confirm": {
+                        "title": "업체 확인",
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "client_confirm": {
+                        "title": "신랑신부 확인",
+                        "type": "boolean",
+                        "example": false
+                    }
+                }
+            },
+            "DocsUpdateDto": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/DocsData"
+                    }
+                }
+            },
+            "BookmarkUpdateDto": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "title": "북마크 정보",
+                        "type": "object",
+                        "example": {
+                            "로그인": "/login"
+                        }
+                    }
+                }
+            },
+            "BoardUpdateDto": {
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "title": "게시물 내용",
+                        "type": "string",
+                        "example": "안녕하세요~ 반갑습니다"
+                    },
+                    "qsheetSeq": {
+                        "title": "큐시트 고유번호",
+                        "type": "string",
+                        "example": "64f82e492948d933edfaa9c0"
+                    },
+                    "tagList": {
+                        "title": "태그 목록",
+                        "type": "array",
+                        "items": {
+                            "title": "태그 목록",
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "jwtAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
