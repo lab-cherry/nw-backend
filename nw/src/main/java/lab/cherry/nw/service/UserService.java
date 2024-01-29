@@ -1,9 +1,12 @@
 package lab.cherry.nw.service;
 
 import lab.cherry.nw.model.UserEntity;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -22,5 +25,11 @@ public interface UserService {
     void updateById(String id, UserEntity.UserUpdateDto user);
     void deleteById(String id);
     Page<UserEntity> findPageByUserId(String userid, Pageable pageable);
+    Page<UserEntity> findPageByOrgSeq(String orgSeq, Pageable pageable);
+    @PreAuthorize("hasAnyRole('ADMIN','ORG')")
 	void updateOrgById(String id, String orgId);
+	void updateOrgByIdAndToken(String id, String orgId, String token);
+    void updateRoleById(String id, String roleId);
+    void updateUserPhoto(String id, List<MultipartFile> image);
+    void updateEmailVerifiedByid(String id);
 }

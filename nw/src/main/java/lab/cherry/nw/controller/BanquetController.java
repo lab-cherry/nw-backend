@@ -66,7 +66,7 @@ public class BanquetController {
     public ResponseEntity<?> findAllBanquets(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size,
+            @RequestParam(defaultValue = "100") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
 
         log.info("retrieve all banquet controller...!");
@@ -103,15 +103,11 @@ public class BanquetController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<?> createBanquet(@Valid @RequestPart BanquetEntity.BanquetCreateDto banquetCreateDto,
-											   		  @RequestPart List<MultipartFile> files) {
+											   		  @RequestPart List<MultipartFile> images) {
 
 		log.info("[BanquetController] createBanquet...!");
-		
-		log.error("이름 : {}", banquetCreateDto.getBanquetName());
-		log.error("조직 : {}", banquetCreateDto.getOrg());
-		log.error("이미지 : {}", files);
 
-		BanquetEntity banquetEntity =  banquetService.createBanquet(banquetCreateDto, files);
+		BanquetEntity banquetEntity =  banquetService.createBanquet(banquetCreateDto, images);
 
 		return new ResponseEntity<>(banquetEntity, new HttpHeaders(), HttpStatus.OK);
     }

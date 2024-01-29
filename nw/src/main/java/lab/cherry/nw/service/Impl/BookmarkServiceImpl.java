@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
  * </pre>
  */
 @Slf4j
-@Service("BookmarkServiceImpl")
+@Service("bookmarkServiceImpl")
 @Transactional
 @RequiredArgsConstructor
 public class BookmarkServiceImpl implements BookmarkService {
@@ -71,7 +71,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         UserEntity userEntity = userService.findById(bookmarkCreateDto.getUserSeq());
         BookmarkEntity bookmarkEntity = BookmarkEntity.builder()
 			.id(bookmarkCreateDto.getUserSeq())
-            .userid(userEntity)
+            .user(userEntity)
             .data(bookmarkCreateDto.getData())
             .created_at(instant)
             .build();
@@ -94,8 +94,6 @@ public class BookmarkServiceImpl implements BookmarkService {
         BookmarkEntity bookmarkEntity = findById(id);
 
         if (bookmarkEntity.getData() != null ) {
-            log.error("bookmarkEntity : {} ", bookmarkEntity);
-            log.error("bookmarkUpdateDto.getData() : {} ", bookmarkUpdateDto.getData());
             bookmarkEntity.updateFromDto(bookmarkUpdateDto);
             bookmarkRepository.save(bookmarkEntity);
 

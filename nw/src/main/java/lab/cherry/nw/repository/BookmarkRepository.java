@@ -22,13 +22,14 @@ import java.util.UUID;
 public interface BookmarkRepository extends MongoRepository<BookmarkEntity, String> {
 
     Page<BookmarkEntity> findAll(Pageable pageable);
-
+    
+    @Query("{'user.$_id' : ?0}")
     Page<BookmarkEntity> findPageByUserid(String userid, Pageable pageable);
 
     Optional<BookmarkEntity> findById(String id);
     
-    @Query("{'userid.$id' : ?0}")
-    Optional<BookmarkEntity> findByUserid(ObjectId userId);
+    @Query("{'user.$_id' : ?0}")
+    Optional<BookmarkEntity> findByUserid(ObjectId userSeq);
   
 
     void deleteById(UUID id);

@@ -1,6 +1,7 @@
 package lab.cherry.nw.service;
 
 import lab.cherry.nw.model.OrgEntity;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -22,4 +23,6 @@ public interface OrgService {
     OrgEntity findByName(String name);
     void deleteById(String id);
     Page<OrgEntity> findPageByName(String name, Pageable pageable);
+    void inviteOrgSend(String orgid, String email);
+    List<OrgEntity> getOrganizationList();
 }

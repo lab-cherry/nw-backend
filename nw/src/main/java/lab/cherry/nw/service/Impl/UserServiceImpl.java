@@ -4,17 +4,22 @@ import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.OrgEntity;
+import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.UserRepository;
+import lab.cherry.nw.service.FileService;
 import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.UserService;
+import lab.cherry.nw.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -33,6 +38,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 	private final OrgService orgService;
     private final PasswordEncoder passwordEncoder;
+    private final FileService fileService;
+    private final RoleService roleService;
 
     /**
      * [UserServiceImpl] 전체 사용자 조회 함수
@@ -84,7 +91,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = findById(id);
 
-        if (user.getUserName() != null || user.getEmail() != null || user.getPassword() != null) {
+        if (user.getUserName() != null || user.getUserEmail() != null || user.getUserPassword() != null) {
 
 			log.error("{}", userEntity.getId());
 
@@ -92,8 +99,8 @@ public class UserServiceImpl implements UserService {
                 .id(userEntity.getId())
 				.userid(userEntity.getUserid())
                 .username((user.getUserName() != null) ? user.getUserName() : userEntity.getUsername())
-                .email((user.getEmail() != null) ? user.getEmail() : userEntity.getEmail())
-                .password((user.getPassword() != null) ? passwordEncoder.encode(user.getPassword()) : userEntity.getPassword())
+                .email((user.getUserEmail() != null) ? user.getUserEmail() : userEntity.getEmail())
+                .password((user.getUserPassword() != null) ? passwordEncoder.encode(user.getUserPassword()) : userEntity.getPassword())
                 .build();
 
             userRepository.save(userEntity);
@@ -104,12 +111,30 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * [UserServiceImpl] 사용자 이메일 인증 부분 수정 함수
+     *
+     * @param id 조회할 사용자의 고유번호입니다.
+     * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 특정 사용자에 대해 이메일 인증 정보를 수정합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    public void updateEmailVerifiedByid(String id) {
+
+        UserEntity userEntity = findById(id);
+        userEntity.emailVerifiedSuccess();
+
+        userRepository.save(userEntity);
+    }
 
     /**
      * [UserServiceImpl] 사용자 조직 수정 함수
      *
      * @param id 조회할 사용자의 고유번호입니다.
-     * @param orgId 사용자의 조직 정보고유아이번호를 가진 객체입니다.를 담은 리스트입니다.
+     * @param orgId 사용자의 조직 정보고유아이번호를 가진 객체입니다.
      * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
      * <pre>
      * 특정 사용자에 대해 사용자 정보를 수정합니다.
@@ -124,15 +149,7 @@ public class UserServiceImpl implements UserService {
         if (orgId != null) {
 
 		    OrgEntity orgEntity = orgService.findById(orgId);
-
-            userEntity = UserEntity.builder()
-                .id(userEntity.getId())
-                .userid(userEntity.getUserid())
-                .username(userEntity.getUsername())
-                .email(userEntity.getEmail())
-                .password(userEntity.getPassword())
-                .org(orgEntity)
-                .build();
+            userEntity.changeOrg(orgEntity);
 
             userRepository.save(userEntity);
 
@@ -140,6 +157,71 @@ public class UserServiceImpl implements UserService {
 			log.error("[UserServiceImpl - updateOrgById] orgId 만 입력 가능합니다.");
             throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
 		}
+    }
+
+    public void updateOrgByIdAndToken(String id, String orgId, String token) {
+
+        UserEntity userEntity = findById(id);
+
+        if (orgId != null) {
+
+		    OrgEntity orgEntity = orgService.findById(orgId);
+            userEntity.changeOrg(orgEntity);
+
+            userRepository.save(userEntity);
+
+        } else {
+			log.error("[UserServiceImpl - updateOrgById] orgId 만 입력 가능합니다.");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+		}
+    }    
+
+    public void updateRoleById(String id, String roleId) {
+
+        log.error("#0");
+        UserEntity userEntity = findById(id);
+        log.error("#1");
+
+        if (roleId != null) {
+
+		    RoleEntity roleEntity = roleService.findById(roleId);
+            log.error("#2");
+            userEntity.changeRole(roleEntity);
+
+            userRepository.save(userEntity);
+
+        } else {
+			log.error("[UserServiceImpl - updateOrgById] orgId 만 입력 가능합니다.");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+		}
+    }
+
+    /**
+     * [UserServiceImpl] 사용자 사진 수정 함수
+     *
+     * @param id 조회할 사용자의 고유번호입니다.
+     * @param image 사용자의 사진 데이터 객체입니다.
+     * @throws EntityNotFoundException 사용자 정보가 없을 경우 예외 처리 발생
+     * <pre>
+     * 특정 사용자에 대해 사용자 사진을 수정합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    public void updateUserPhoto(String id, List<MultipartFile> image) {
+
+        UserEntity userEntity = findById(id);
+        Object imageData = null;
+
+        if(image == null) {
+            imageData = userEntity.getPhoto();
+        } else {
+            imageData = fileService.uploadFiles(userEntity.getId(), image).get(0);
+        }
+
+        userEntity.editImage(imageData);
+        userRepository.save(userEntity);
+
     }
 
 
@@ -178,6 +260,11 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public Page<UserEntity> findPageByUserId(String userid, Pageable pageable) {
         return userRepository.findPageByUserid(userid, pageable);
+    }
+
+     @Transactional(readOnly = true)
+    public Page<UserEntity> findPageByOrgSeq(String orgSeq, Pageable pageable) {
+        return userRepository.findPageByOrgseq(orgSeq, pageable);
     }
 
     public Boolean checkId(String id) {

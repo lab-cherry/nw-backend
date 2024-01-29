@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lab.cherry.nw.model.BookmarkEntity.BookmarkUpdateDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,7 +40,7 @@ public class BoardEntity implements Serializable {
     @DBRef
     @JsonProperty("userSeq")
     @Schema(title = "유저 고유번호", example = "38352658567418867") // (Long) Tsid
-    private UserEntity userid;
+    private UserEntity user;
 
     @JsonProperty("content")
     @Schema(title = "내용", example = "드디어 결혼합니다!")
@@ -55,7 +56,10 @@ public class BoardEntity implements Serializable {
     @JsonProperty("qsheet")
     @Schema(title = "큐시트", example = "큐시트") 
     private QsheetEntity qsheet;
-	
+
+    @JsonProperty("comment_size")
+    @Schema(title = "댓글 개수", type = "Integer", example = "0") 
+    private Integer comment_size;
 	
     @JsonProperty("created_at")
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
@@ -94,6 +98,12 @@ public class BoardEntity implements Serializable {
 		private String qsheetSeq;
 		@Schema(title = "태그 목록")
 		private List<String> tagList;
+    }
+
+    public void updateCommentSize(BookmarkEntity bookmark, Integer commentsize) {
+        if (bookmark!=null) {
+            this.comment_size = commentsize;
+        }
     }
 
 }

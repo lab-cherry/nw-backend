@@ -49,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     }
 
-    private boolean checkAccessToken(AccessToken accessToken) {
+    private Boolean checkAccessToken(AccessToken accessToken) {
         if (accessToken == null) return false;
         return tokenService.validateToken(accessToken);
     }

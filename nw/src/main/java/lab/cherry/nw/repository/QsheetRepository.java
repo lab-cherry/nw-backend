@@ -1,12 +1,13 @@
 package lab.cherry.nw.repository;
 
-import lab.cherry.nw.model.QsheetEntity;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.util.Optional;
-import java.util.UUID;
+import org.springframework.data.mongodb.repository.Query;
+import lab.cherry.nw.model.QsheetEntity;
+import lab.cherry.nw.model.RoleEntity;
 
 /**
  * <pre>
@@ -19,11 +20,12 @@ import java.util.UUID;
 public interface QsheetRepository extends MongoRepository<QsheetEntity, String> {
 
     Page<QsheetEntity> findAll(Pageable pageable);
-    Page<QsheetEntity> findPageByUserid(String userid, Pageable pageable);
-    Page<QsheetEntity> findPageByOrgid(String orgid, Pageable pageable);
+
+    @Query("{'user.$_id' : ?0}")
+    Page<QsheetEntity> findPageByUserid(String userSeq, Pageable pageable);
+    @Query("{ 'org.$_id' : ?0 ,'type' : ?1 }")
+    Page<QsheetEntity> findPageByOrgid(String orgSeq, String type, Pageable pageable);
 
     Optional<QsheetEntity> findById(String id);
-
-    Optional<QsheetEntity> findByuserid(String userid);
     void deleteById(UUID id);
 }

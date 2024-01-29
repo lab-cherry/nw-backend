@@ -4,8 +4,10 @@ import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.FinaldocsEntity;
+import lab.cherry.nw.model.BookmarkEntity;
 import lab.cherry.nw.model.FinalTemplEntity;
 import lab.cherry.nw.model.OrgEntity;
+import lab.cherry.nw.model.UserCardEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.FinaldocsRepository;
 import lab.cherry.nw.service.FinalTemplService;
@@ -14,12 +16,14 @@ import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Optional;
 
 /**
  * <pre>
@@ -73,16 +77,15 @@ public class FinaldocsServiceImpl implements FinaldocsService {
 
         Instant instant = Instant.now();
 
-        UserEntity userEntity = userService.findById(finaldocsCreateDto.getUserid());
-        OrgEntity orgEntity = orgService.findById(finaldocsCreateDto.getOrgid());
-        FinalTemplEntity finamTemplEntity = finalTemplService.findById(finaldocsCreateDto.getFinaltemplid());
+        UserEntity userEntity = userService.findById(finaldocsCreateDto.getUserSeq());
+        OrgEntity orgEntity = orgService.findById(finaldocsCreateDto.getOrgSeq());
+        FinalTemplEntity finamTemplEntity = finalTemplService.findById(finaldocsCreateDto.getFinaltemplSeq());
 
         FinaldocsEntity finaldocsEntity = FinaldocsEntity.builder()
-            .name(finaldocsCreateDto.getName())
             .content(finaldocsCreateDto.getContent())
-            .userid(userEntity)
-            .orgid(orgEntity)
-            .finaltemplid(finamTemplEntity)
+            .user(userEntity)
+            .org(orgEntity)
+            .finaltempl(finamTemplEntity)
             .createdAt(instant)
             .build();
 
@@ -100,23 +103,39 @@ public class FinaldocsServiceImpl implements FinaldocsService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    public void updateById(String id, FinaldocsEntity.FinaldocsUpdateDto finaldocs) {
+    public void updateById(String id, FinaldocsEntity.FinaldocsUpdateDto finaldocsUpdateDto) {
 
         FinaldocsEntity finaldocsEntity = findById(id);
-        UserEntity userEntity = userService.findById(finaldocs.getUserid());
-        OrgEntity orgEntity = orgService.findById(finaldocs.getOrgid());
-        FinalTemplEntity finamTemplEntity = finalTemplService.findById(finaldocs.getFinaltemplid());
+        UserEntity userEntity = userService.findById(finaldocsUpdateDto.getUserSeq());
+        OrgEntity orgEntity = orgService.findById(finaldocsUpdateDto.getOrgSeq());
+        FinalTemplEntity finamTemplEntity = finalTemplService.findById(finaldocsUpdateDto.getFinaltemplSeq());
+        UserEntity orgUserEntity = finaldocsEntity.getOrg_approver();
 
         Instant instant = Instant.now();
 
-        if (finaldocs.getContent() != null) {
+        if (finaldocsUpdateDto.getContent() != null) {   
+            
+            if (finaldocsUpdateDto.getOrgSeq() != null){
+				orgEntity = orgService.findById(finaldocsUpdateDto.getOrgSeq());
+			}
+			if (finaldocsUpdateDto.isOrg_confirm()){
+                if(finaldocsUpdateDto.getOrg_approverSeq()!=null){
+                    orgUserEntity = userService.findById(finaldocsUpdateDto.getOrg_approverSeq());
+                }else{
+                log.error("[FinaldocsServiceImpl - udpateFinaldocs] org_approver와 isOrg_confirm 입력이 잘못되었습니다.");
+                throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+                }
+                
+            }
 
             finaldocsEntity = FinaldocsEntity.builder()
-                    .id(finaldocsEntity.getId())
-                    .userid(userEntity)
-                    .orgid(orgEntity)
-                    .finaltemplid(finamTemplEntity)
-                    .content((finaldocs.getContent() != null) ? finaldocs.getContent() : finaldocsEntity.getContent())
+                    .user(userEntity)
+                    .org(orgEntity)
+                    .finaltempl(finamTemplEntity)
+                    .org_approver(orgUserEntity)
+                    .org_confirm(finaldocsUpdateDto.isOrg_confirm()==!(finaldocsEntity.isOrg_confirm())?finaldocsUpdateDto.isOrg_confirm():finaldocsEntity.isOrg_confirm())
+                    .client_confirm(finaldocsUpdateDto.isClient_confirm()==!(finaldocsEntity.isClient_confirm())?finaldocsUpdateDto.isClient_confirm():finaldocsEntity.isClient_confirm())
+                    .content((finaldocsUpdateDto.getContent() != null) ? finaldocsUpdateDto.getContent() : finaldocsEntity.getContent())
                     .updated_at(instant)
                     .build();
 
@@ -144,27 +163,6 @@ public class FinaldocsServiceImpl implements FinaldocsService {
     }
 
 
-  /**
-     * [FinaldocsServiceImpl] 최종확인서 승인 함수
-     *
-     * @param name 조회할 최종확인서의 이름입니다.
-     * @return 주어진 이름에 해당하는 최종확인서 정보를 리턴합니다.
-     * @throws EntityNotFoundException 해당 이름의 최종확인서 정보가 없을 경우 예외 처리 발생
-     * <pre>
-     * 입력한 name에 해당하는 최종확인서 정보를 조회합니다.
-     * </pre>
-     *
-     * Author : hhhaeri(yhoo0020@gmail.com)
-     */
-    @Transactional(readOnly = true)
-    @Override
-    public Boolean Approval(Boolean Yn) {
-        if(Yn ==true){
-            return true
-        }else{
-            return false
-        }
-    }
     /**
      * [FinaldocsServiceImpl] ID로 최종확인서 조회 함수
      *
@@ -200,16 +198,20 @@ public class FinaldocsServiceImpl implements FinaldocsService {
      *
      * Author : hhhaeri(yhoo0020@gmail.com)
      */
-    @Transactional(readOnly = true)
-    public FinaldocsEntity findByName(String name) {
-        return finaldocsRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Org with Name " + name + " Not Found."));
-    }
+    // @Transactional(readOnly = true)
+    // public FinaldocsEntity findByName(String name) {
+    //     return finaldocsRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Org with Name " + name + " Not Found."));
+    // }
+
+    // @Transactional(readOnly = true)
+    // public Page<FinaldocsEntity> findPageByName(String name, Pageable pageable) {
+    //     return finaldocsRepository.findPageByName(name, pageable);
+    // }
 
     @Transactional(readOnly = true)
-    public Page<FinaldocsEntity> findPageByName(String name, Pageable pageable) {
-        return finaldocsRepository.findPageByName(name, pageable);
+    public FinaldocsEntity findByUserId(String userId) {
+        return finaldocsRepository.findByUserid(userId).orElseThrow(() -> new EntityNotFoundException("FinaldocsEntity with User id " + userId.toString() + " Not Found."));
     }
-
 
     @Transactional(readOnly = true)
     public Page<FinaldocsEntity> findPageById(String id, Pageable pageable) {

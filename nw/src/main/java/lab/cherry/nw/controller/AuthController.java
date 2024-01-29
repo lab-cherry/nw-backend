@@ -15,6 +15,7 @@ import lab.cherry.nw.service.AuthService;
 import lab.cherry.nw.util.Security.AccessToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,10 +62,23 @@ public class AuthController {
     })
     @Operation(summary = "회원가입", description = "사용자를 추가합니다.")
     public ResponseEntity<?> register(@Valid @RequestBody UserEntity.UserRegisterDto userRegisterDto) {
-
-        AccessToken accessToken =  authService.register(userRegisterDto);
-        return new ResponseEntity<>(accessToken, new HttpHeaders(), HttpStatus.OK);
+        
+        ResultResponse result = ResultResponse.of(SuccessCode.REGISTER_SUCCESS, authService.register(userRegisterDto));
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
+
+    @PostMapping("/register/orgUser/{orgSeq}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조직 유저 추가 완료되었습니다.", content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+            @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "중복된 사용자입니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @Operation(summary = "조직 유저 일괄 가입", description = "조직 유저를 추가합니다.")
+    public ResponseEntity<?> register(@PathVariable("orgSeq") String orgSeq, @Valid @RequestBody List<UserEntity.UserRegisterDto> userRegisterDtoList) {
+        
+        ResultResponse result = ResultResponse.of(SuccessCode.REGISTER_SUCCESS, authService.addOrgUser(orgSeq, userRegisterDtoList));
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
+    }    
 
     /**
      * [AuthController] 로그인 함수
@@ -114,13 +128,11 @@ public class AuthController {
 
         authService.checkExistsWithUserId(userid);
 
-        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+        final ResultResponse response = ResultResponse.of(SuccessCode.USERID_CHECK_OK);
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
 
-
-
-	@GetMapping("myinfo")
+	@GetMapping("/myinfo")
     @Operation(summary = "사용자 정보 확인", description = "사용자 정보를 확인합니다.")
     public ResponseEntity<?> myInfo() {
 		log.info("[AuthController] myInfo...!");
@@ -129,4 +141,33 @@ public class AuthController {
 		return new ResponseEntity<>(authService.myInfo(), new HttpHeaders(), HttpStatus.OK);
 	}
 
+	@GetMapping("/confirm")
+    @Operation(summary = "이메일 인증", description = "이메일 인증을 진행합니다.")
+    public ResponseEntity<?> confirmEmail(@RequestParam(required = true) String email, @RequestParam(required = true) String token) {
+		log.info("[AuthController] confirmEmail...!");
+
+        authService.confirmEmail(email, token);
+        final ResultResponse response = ResultResponse.of(SuccessCode.EMAIL_CHECK_OK);
+		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+	}
+
+	@GetMapping("/re-confirm")
+    @Operation(summary = "이메일 재인증", description = "이메일 재인증 메일을 발송합니다.")
+    public ResponseEntity<?> reConfirmEmail(@RequestParam(required = true) String userid, @RequestParam(required = true) String email) {
+		log.info("[AuthController] reConfirmEmail...!");
+
+        authService.reConfirmEmail(userid, email);
+        final ResultResponse response = ResultResponse.of(SuccessCode.EMAIL_RESEND_OK);
+		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+	}
+
+	@GetMapping("/forgot-password")
+    @Operation(summary = "비밀번호 찾기", description = "이메일로 비밀번호 초기화 메일을 발송합니다.")
+    public ResponseEntity<?> forgotPassword(@RequestParam(required = false) String userId, @RequestParam(required = false) String userEmail) {
+		log.info("[AuthController] forgotPassword...!");
+
+        authService.forgotPassword(userId, userEmail);
+        final ResultResponse response = ResultResponse.of(SuccessCode.PASSWORD_RESET_OK);
+		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+	}
 }

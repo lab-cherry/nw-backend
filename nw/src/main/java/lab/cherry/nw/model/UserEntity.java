@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import org.springframework.web.multipart.MultipartFile;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -31,7 +31,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "users")
-@JsonPropertyOrder({ "id", "userId", "userName", "userEmail", "userRole", "userType", "userEnabled", "userRole", "userOrgs", "created_at" })
+@JsonPropertyOrder({ "id", "userId", "userName", "userEmail", "userRole", "userType", "userEnabled", "emailVerified", "userRole", "userOrgs", "created_at" })
 public class UserEntity implements Serializable {
 
     @Id
@@ -63,13 +63,13 @@ public class UserEntity implements Serializable {
     @Size(min = 3, message = "Minimum password length: 8 characters")
     private String password;
 
-	@JsonProperty("userType")
-	@Schema(title = "타입", example = "user | org")
-	private String type;
+	@JsonProperty("userPhoto")
+	@Schema(title = "사용자 사진")
+	private Object photo;
 
     @JsonProperty("userEnabled")
     @Schema(title = "사용자 활성화 여부", example = "true")
-    private boolean enabled;
+    private Boolean enabled;
 
     @JsonProperty("emailVerified")
     @Schema(title = "이메일 인증 여부", example = "true")
@@ -90,6 +90,27 @@ public class UserEntity implements Serializable {
     @Schema(title = "Org 정보", example = "더모멘트")
 //    private Set<OrgEntity> orgs = new HashSet<>();
 	private OrgEntity org;
+    
+    public void emailVerifiedSuccess() {
+        this.isEmailVerified = true;
+    }
+    
+    public void resetPassword(String password) {
+        this.password = password;
+    }
+    
+    public void changeOrg(OrgEntity org) {
+        this.org = org;
+    }
+    
+    public void changeRole(RoleEntity role) {
+        this.role = role;
+    }
+    
+    
+    public void editImage(Object image) {
+        this.photo = image;
+    }
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -105,7 +126,7 @@ public class UserEntity implements Serializable {
 
         @NotBlank
         @Schema(title = "사용자 이름", example = "홍길동")
-        @Size(min = 2, max = 10, message = "Minimum username length: 4 characters")
+        @Size(min = 2, max = 10, message = "Minimum username length: 2 characters")
         private String userName;
 
         @NotBlank
@@ -119,7 +140,7 @@ public class UserEntity implements Serializable {
 
         @NotBlank
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
-        @Size(min = 3, message = "Minimum password length: 8 characters")
+        @Size(min = 3, message = "Minimum password length: 3 characters")
         private String userPassword;
     }
 
@@ -151,15 +172,35 @@ public class UserEntity implements Serializable {
         @Schema(title = "사용자 이메일", example = "admin@innogrid.com")
         @Email
         @Size(min = 3, max = 40)
-        private String email;
+        private String userEmail;
 
         @Schema(title = "사용자 비밀번호", example = "Pa@sW0rd")
         @Size(min = 3, max = 40)
-        private String password;
+        private String userPassword;
 
 		@Schema(title = "사용자 조직", example = "")
-        @Size(min = 3, max = 40)
+        @Size(min = 1, max = 40)
         private String orgId;
+
+		@Schema(title = "사용자 권한", example = "")
+        @Size(min = 1, max = 40)
+        private String roleId;
+
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor @AllArgsConstructor
+    public static class UserForgotPassword {
+
+        @Schema(title = "사용자 아이디", example = "admin")
+        @Size(min = 4, max = 10)
+        private String userId;
+
+        @Schema(title = "사용자 이메일", example = "admin@innogrid.com")
+        @Email
+        @Size(min = 3, max = 40)
+        private String userEmail;
 
     }
 }

@@ -7,6 +7,7 @@ import lab.cherry.nw.error.handler.UnauthorizedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,18 +42,20 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // 토큰 사용으로 csrf 설정 Disable 처리
         http
-            .csrf()
-                .disable()
-            .formLogin()
-                .disable()
-            .httpBasic()
-                .disable()
-            .cors()
-                .configurationSource(corsConfigurationSource);
+            .csrf(csrf -> csrf
+                    .disable())
+            .formLogin(login -> login
+                    .disable())
+            .httpBasic(basic -> basic
+                    .disable())
+            .cors(cors -> cors
+                    .configurationSource(corsConfigurationSource));
 
         // 엔트리 포인트
         http
             .authorizeHttpRequests()
+            .requestMatchers(HttpMethod.GET, "/api/v1/org/{orgSeq}").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/qsheet/{qsheetSeq}").permitAll()
             .requestMatchers(
                     "/api/auth/**",
                     "/docs/**",
@@ -60,22 +63,24 @@ public class WebSecurityConfiguration {
                     "/swagger-resources/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
-                    "/api/v1/mail/**"
+                    "/api/auth/confirm/**",
+                    "/api/v1/file/download/**",
+                    "/api/v1/file/downloads/**",
+                    "/api/auth/forgot-password/**"
             )
               .permitAll()
-            .requestMatchers("/api/v1/**").hasAnyRole("ADMIN", "USER") // spring boot 에서 ROLE_ 은 자동으로 붙음
+            .requestMatchers("/api/v1/**").hasAnyRole("ADMIN", "USER", "ORG") // spring boot 에서 ROLE_ 은 자동으로 붙음
             .anyRequest()
               .authenticated();
 
         http
             // 권한이 없는 경우 Exception 핸들링 지정
-            .exceptionHandling()
+            .exceptionHandling(handling -> handling
                 .accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint(unauthorizedHandler)
-                .and()
+                .authenticationEntryPoint(unauthorizedHandler))
             .authenticationProvider(authenticationProvider)
-            .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);  // 세션 사용하지 않음 (STATELESS 처리)
+            .sessionManagement(management -> management
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));  // 세션 사용하지 않음 (STATELESS 처리)
 
         http
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

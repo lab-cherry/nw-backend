@@ -1,26 +1,24 @@
 package lab.cherry.nw.service.Impl;
 
-import lab.cherry.nw.error.enums.ErrorCode;
-import lab.cherry.nw.error.exception.CustomException;
-import lab.cherry.nw.error.exception.EntityNotFoundException;
-import lab.cherry.nw.model.PyebaeksilEntity;
-import lab.cherry.nw.model.OrgEntity;
-import lab.cherry.nw.repository.PyebaeksilRepository;
-import lab.cherry.nw.service.PyebaeksilService;
-import lab.cherry.nw.service.FileService;
-import lab.cherry.nw.service.OrgService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.time.Instant;
+import java.util.List;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import lab.cherry.nw.error.enums.ErrorCode;
+import lab.cherry.nw.error.exception.CustomException;
+import lab.cherry.nw.error.exception.EntityNotFoundException;
+import lab.cherry.nw.model.OrgEntity;
+import lab.cherry.nw.model.PyebaeksilEntity;
+import lab.cherry.nw.repository.PyebaeksilRepository;
+import lab.cherry.nw.service.FileService;
+import lab.cherry.nw.service.OrgService;
+import lab.cherry.nw.service.PyebaeksilService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <pre>
@@ -69,33 +67,24 @@ public class PyebaeksilServiceImpl implements PyebaeksilService {
      *
      * Author : taking(taking@duck.com)
      */
-    public PyebaeksilEntity createPyebaeksil(PyebaeksilEntity.PyebaeksilCreateDto pyebaeksilCreateDto, List<MultipartFile> imageFiles) {
-		
-		log.error("[#0] in createPyebaeksil");
+    public PyebaeksilEntity createPyebaeksil(PyebaeksilEntity.PyebaeksilCreateDto pyebaeksilCreateDto, List<MultipartFile> images) {
 		
 		checkExistsWithPyebaeksilName(pyebaeksilCreateDto.getPyebaeksilName());	// 중복 체크
 
-		String orgId = pyebaeksilCreateDto.getOrg();
+		String orgId = pyebaeksilCreateDto.getOrgId();
 		OrgEntity orgEntity = orgService.findById(orgId);
-		
-		// 파일 업로드 시, 구분하기 위한 정보 입력
-		// {org_objectId}/웨딩홀/{weddinghallName}/profile.jpg
-		// {org_objectId}/고객/{userName}/문서.xlsx
-		Map<String, String> info = new HashMap<>();
-		info.put("type", "폐백실");
-		info.put("org", pyebaeksilCreateDto.getOrg());
+    ObjectId objectId = new ObjectId();
 
 		// 업로드한 파일의 ObjectId 를 List로 반환
-        List<String> fileObjectIds = fileService.uploadFiles(info, imageFiles);
-
-        log.error("[#1] imageFileIds = {}", fileObjectIds);
+    List<String> imageUrls = fileService.uploadFiles(objectId.toString(), images);
 		
 		PyebaeksilEntity pyebaeksilEntity = PyebaeksilEntity.builder()
-            .name(pyebaeksilCreateDto.getPyebaeksilName())
-            .org(orgEntity)
-            .images(fileObjectIds)
-            .created_at(Instant.now())
-            .build();
+        .id(objectId.toString())
+        .name(pyebaeksilCreateDto.getPyebaeksilName())
+        .org(orgEntity)
+        .images(imageUrls)
+        .created_at(Instant.now())
+        .build();
 
 		return pyebaeksilRepository.save(pyebaeksilEntity);
 	}
@@ -154,16 +143,9 @@ public class PyebaeksilServiceImpl implements PyebaeksilService {
      */
     public void deleteById(String id) {
 
-		// 파일 다운로드
-		PyebaeksilEntity pyebaeksilEntity = findById(id);
-
-		List<String> fileObjectIds = pyebaeksilEntity.getImages();
-
-		if (!fileObjectIds.isEmpty()) {
-			fileService.deleteFiles(pyebaeksilEntity.getOrg().getId(), fileObjectIds);
-		}
-
+    PyebaeksilEntity pyebaeksilEntity = findById(id);
 		pyebaeksilRepository.delete(pyebaeksilRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Pyebaeksil with Id " + id + " Not Found.")));
+
 	}
 
 }

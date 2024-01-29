@@ -1,20 +1,24 @@
 package lab.cherry.nw.model;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 /**
  * <pre>
@@ -29,7 +33,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Document(collection = "schedule")
-@JsonPropertyOrder({ "id", "scheduleSeq","userid","orgid","finaltemplid","scheduleName", "scheduleContent", "column"})
+@JsonPropertyOrder({ "id", "scheduleSeq", "org", "scheduleContent", "column", "created_at"})
 public class ScheduleEntity implements Serializable {
 
     @Id
@@ -38,57 +42,36 @@ public class ScheduleEntity implements Serializable {
     private String id;
 
     @DBRef
-    @JsonProperty("userid")
-    @Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private UserEntity userid;
+    @JsonProperty("org")
+    @Schema(title = "조직 정보", example = "64ed89aa9e813b5ab16da6de")
+    private OrgEntity org;
 
-    @DBRef
-    @JsonProperty("orgid")
-    @Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-    private OrgEntity orgid;
-
-	@JsonProperty("finaltemplid")
-	@Schema(title = "스케줄표 고유번호", example = "64ed89aa9e813b5ab16da6de")
-	private FinalTemplEntity finaltemplid;
-
-    @JsonProperty("scheduleName")
-    @Schema(title = "스케줄표 이름", example = "문서1")
-    @Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
-    private String name;
-
-	@JsonProperty("scheduleContent")
-	@Schema(title = "스케줄표 내용", example = "[]")
-	private List<FinaldocsEntity> content;
+	  @JsonProperty("scheduleContent")
+	  @Schema(title = "스케줄표 내용", example = "[]")
+	  private List<Object> content;
 
     @JsonProperty("column")
     @Schema(title = "스케줄표  컬럼", example = "")
-	private Map<String, String> column;
+	  private Map<String, Object> column;
 
-//////////////////////////////////////////////////////////////////////////
+		@JsonProperty("created_at")
+		@JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale = "ko_KR", timezone = "Asia/Seoul")
+    private Instant created_at;
 
-	@Getter
-	@Setter
-	@Builder
-	@NoArgsConstructor @AllArgsConstructor
-	public static class transDto {
+		//////////////////////////////////////////////////////////////////////////
 
-		@Schema(title = "사용자 고유번호", example = "64ed89aa9e813b5ab16da6de")
-		private String userid;
+  @Getter
+  @Builder
+  @NoArgsConstructor @AllArgsConstructor
+  public static class ScheduleCreateDto {
 
-		@Schema(title = "스케줄표 고유번호", example = "64ed89aa9e813b5ab16da6de")
-		private  String finalTemplid;
-
+		@NotBlank
 		@Schema(title = "조직 고유번호", example = "64ed89aa9e813b5ab16da6de")
-		private String orgid;
+		private String orgId;
 
-		@Schema(title = "스케줄표 이름", example = "문서1")
-		@Size(min = 4, max = 255, message = "Minimum name length: 4 characters")
-		private String name;
+		@Schema(title = "스케줄표 템플릿 내용", example = "문서 내용")
+		private List<Object> content;
 
-		@JsonProperty("scheduleContent")
-		@Schema(title = "스케줄표 내용", example = "[]")
-		private String content;
-
-	}
+			}
 
 }

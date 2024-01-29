@@ -3,17 +3,13 @@ spring.data.mongodb.uri=mongodb://${DATABASE_USERID:-nw}:${DATABASE_USERPASS:-nw
 spring.jackson.default-property-inclusion=NON_NULL
 # logging.level.ROOT=DEBUG
 
-# Redis connection properties
-spring.data.redis.host=${REDIS_HOST:-nw-redis}
-spring.data.redis.port=${REDIS_PORT:-8083}
-
 #set your port
 server.port=8888
 #server.error.include-message=always
 server.servlet.encoding.charset=UTF-8
 server.servlet.encoding.force=true
-spring.servlet.multipart.max-file-size=3096MB
-spring.servlet.multipart.max-request-size=3096MB
+spring.servlet.multipart.max-file-size=${MAX_UPLOAD_SIZE:3096MB}
+spring.servlet.multipart.max-request-size=${MAX_UPLOAD_SIZE:3096MB}
 spring.servlet.multipart.enabled=true
 
 # Swagger springdoc-ui Configuration
@@ -30,23 +26,17 @@ springdoc.swagger-ui.operations-sorter=alpha
 lab.cherry.nw.jwtSecret= bGFiLWNoZXJyeS1udy1wcm9qZWN0LXNlY3JldC1rZXkK
 lab.cherry.nw.jwtExpirationMs= 86400000
 
+#ADDR
+frontend.host=${FRONTEND_ADDR:-http://localhost:8080}
+
 #Email
 spring.mail.host=${SMTP_ADDRESS:-smtp.localhost.com}
 spring.mail.port=${SMTP_PORT:-587}
-spring.mail.properties.debug=true
-spring.mail.properties.mail.smtp.auth=${SMTP_AUTH:-true}
-spring.mail.properties.mail.smtp.ssl.enable=${SMTP_SSL:-false}
-spring.mail.properties.mail.smtp.starttls.enable=${SMTP_STARTTLS:-true}
-spring.mail.properties.mail.smtp.starttls.required=${SMTP_STARTTLS_REQURED:-true}
-
 spring.mail.username=${SMTP_USER:-userName}
 spring.mail.password=${SMTP_PASS:-passWord}
+spring.mail.properties.mail.smtp.auth=${SMTP_AUTH:-true}
+spring.mail.properties.mail.smtp.starttls.enable=${SMTP_STARTTLS:-true}
 
 #echo 'lab-cherry-nw-project-secret-key' | base64
 lab.cherry.nw.jwtSecret= bGFiLWNoZXJyeS1udy1wcm9qZWN0LXNlY3JldC1rZXkK
 lab.cherry.nw.jwtExpirationMs= 86400000
-
-# MinIo Properties
-minio.url=${MINIO_URL:-http://nw-storage:9000}
-minio.access-key=${MINIO_ACCESS_KEY:-admin}
-minio.secret-key=${MINIO_SECRET_KEY:-nangmanwedding}

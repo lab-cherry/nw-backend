@@ -15,6 +15,7 @@ import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +57,7 @@ public class OrgController {
     public ResponseEntity<?> findAllOrganizations(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size,
+            @RequestParam(defaultValue = "100") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
 
         log.info("retrieve all orgs controller...!");
@@ -71,6 +72,24 @@ public class OrgController {
         }
 
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
+        return new ResponseEntity<>(orgEntity, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    /**
+     * [OrgController] 전체 조직 목록 함수
+     *
+     * @return 전체 조직 목록을 반환합니다.
+     *
+     * Author : yby654(yby654@github.com)
+     */
+    @GetMapping("/list")
+    @Operation(summary = "조직 목록", description = "조직 목록을 조회합니다.")
+    public ResponseEntity<?> findAllOrgList () {
+
+        log.info("retrieve all orgs List controller...!");
+
+        List<OrgEntity> orgEntity = orgService.getOrganizationList();
+        // final ResultResponse response = ResultResponse.of(SuccessCode.OK, orgService.getOrganizationList());
         return new ResponseEntity<>(orgEntity, new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -177,4 +196,15 @@ public class OrgController {
         final ResultResponse response = ResultResponse.of(SuccessCode.OK);
         return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
     }
+
+	@GetMapping("/invite")
+    @Operation(summary = "사용자(랑부) 초대", description = "이메일로 조직 초대 메일을 발송합니다.")
+    public ResponseEntity<?> inviteUser(@RequestParam(required = false) String orgid,
+                                        @RequestParam(required = false) String email) {
+		log.info("[OrgController] inviteUser...!");
+
+        orgService.inviteOrgSend(orgid, email);
+        final ResultResponse response = ResultResponse.of(SuccessCode.EMAIL_INVITE_USER_OK);
+		return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+	}
 }

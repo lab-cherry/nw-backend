@@ -21,13 +21,12 @@ import java.util.Optional;
 public interface FileRepository extends MongoRepository<FileEntity, String> {
 
 	Page<FileEntity> findAll(Pageable pageable);
-	Page<FileEntity> findPageByOrgid(String orgid, Pageable pageable);
+	// Page<FileEntity> findPageByOrgid(String orgid, Pageable pageable);
 
 	Page<FileEntity> findPageByName(String filename, Pageable pageable);
-	Optional<FileEntity> findByPath(String path);
 	Optional<FileEntity> findByid(String id);
 
-	Optional<FileEntity> findByName(String orgname);
+	Optional<FileEntity> findByName(String filename);
 
 	List<FileEntity> findAllById(List<String> orgIds);
 }

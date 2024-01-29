@@ -1,6 +1,7 @@
 package lab.cherry.nw.controller;
 
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -9,13 +10,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -27,12 +26,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lab.cherry.nw.error.ErrorResponse;
 import lab.cherry.nw.error.ResultResponse;
 import lab.cherry.nw.error.enums.SuccessCode;
 import lab.cherry.nw.model.QsheetEntity;
+import lab.cherry.nw.model.RoleEntity;
+import lab.cherry.nw.model.UserEntity;
+import lab.cherry.nw.service.AuthService;
 import lab.cherry.nw.service.QsheetService;
+import lab.cherry.nw.service.UserService;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,10 +68,11 @@ public class QsheetController {
     @GetMapping("")
     @Operation(summary = "큐시트 목록", description = "큐시트 목록을 조회합니다.")
     public ResponseEntity<?> findAllQsheets(
-            @RequestParam(required = false) String userid,
-            @RequestParam(required = false) String orgid,
+            @RequestParam(required = false) String userSeq,
+            @RequestParam(required = false) String orgSeq,
+            @RequestParam(required = false) String type,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size,
+            @RequestParam(defaultValue = "100") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
 
     log.info("retrieve all qsheets controller...!");
@@ -77,12 +80,12 @@ public class QsheetController {
     Pageable pageable = PageRequest.of(page, size, Sort.by(Common.getOrder(sort)));
 
     Page<QsheetEntity> qsheetEntity;
-    if(userid == null && orgid==null) {
+    if(userSeq == null && orgSeq==null) {
         qsheetEntity = qsheetService.getQsheets(pageable);
-    } else if(userid != null && orgid==null) {
-        qsheetEntity = qsheetService.findPageByUserId(userid, pageable);
+    } else if(userSeq != null && orgSeq==null) {
+        qsheetEntity = qsheetService.findPageByUserId(userSeq, pageable);
 	} else{
-		qsheetEntity = qsheetService.findPageByOrgId(orgid, pageable);
+		qsheetEntity = qsheetService.findPageByOrgId(orgSeq, type, pageable);
 	}
         for (QsheetEntity qsheet : qsheetEntity) {
             qsheet.sortDataByOrderIndex();
@@ -107,13 +110,14 @@ public class QsheetController {
             @ApiResponse(responseCode = "400", description = "입력 값이 잘못 되었습니다.", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @Operation(summary = "Qsheet 생성", description = "Qsheet를 추가합니다.")
-    public ResponseEntity<?> createQsheet(@RequestPart QsheetEntity.QsheetCreateDto qsheetCreateDto, @RequestPart(required = false) List<MultipartFile> files) {
+    public ResponseEntity<?> createQsheet(@RequestPart QsheetEntity.QsheetCreateDto qsheetCreateDto, @RequestPart(name = "files", required = false) List<MultipartFile> files) {
         log.info("[QsheetController] createQsheet...!");
-        
-        qsheetService.createQsheet(qsheetCreateDto, files);
 
-        final ResultResponse response = ResultResponse.of(SuccessCode.OK);
-        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+        QsheetEntity qsheetEntity = qsheetService.createQsheet(qsheetCreateDto, files);
+
+        // final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+        ResultResponse result = ResultResponse.of(SuccessCode.OK, qsheetEntity.getId().toString());
+        return new ResponseEntity<>(result ,new HttpHeaders(), HttpStatus.OK);
     }
     /**
      * [QsheetController] 큐시트 수정 함수
@@ -176,12 +180,18 @@ public class QsheetController {
      */
     @GetMapping("{id}")
     @Operation(summary = "ID로 큐시트 찾기", description = "큐시트를 조회합니다.")
-    public ResponseEntity<?> findByQsheetId(@PathVariable("id") String id) {
+    public ResponseEntity<?> findByQsheetId(@PathVariable("id") String id, 
+            @RequestParam(required = false, defaultValue = "false") Boolean share) {
 
         log.info("[QsheetController] findByQsheetId...!");
 
-        //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
-        return new ResponseEntity<>(qsheetService.findById(id), new HttpHeaders(), HttpStatus.OK);
+        if(share) {
+            List<QsheetEntity.ItemData> qsheetData = qsheetService.findByIdWithData(id);
+            return new ResponseEntity<>(qsheetData, new HttpHeaders(), HttpStatus.OK);
+        } else {
+            QsheetEntity qsheetEntity = qsheetService.findById(id);
+            return new ResponseEntity<>(qsheetEntity, new HttpHeaders(), HttpStatus.OK);
+        }
     }
     
 	/**
@@ -191,17 +201,18 @@ public class QsheetController {
      *
      * Author : taking(taking@duck.com)
      */
-    @PostMapping("/download")
+    @GetMapping("/download/{qsheetIds}")
     @Operation(summary = "큐시트 사용자 파일 다운로드", description = "큐시트 사용자 파일을 다운로드합니다.")
-    public ResponseEntity<?> downloadQsheetBySeq(@RequestBody QsheetEntity.QsheetDownloadDto qsheetDownloadDto) {
+    public ResponseEntity<?> downloadQsheetBySeq(@PathVariable("qsheetIds") String[] qsheetIds) {
 
         log.info("[QsheetController] downloadQsheetBySeq...!");
 
+        Map<String, Object> val = qsheetService.download(qsheetIds);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "download.zip");
-        return new ResponseEntity<>(qsheetService.download(qsheetDownloadDto.getUser()), new HttpHeaders(), HttpStatus.OK);
-
+        headers.setContentType(MediaType.parseMediaType("application/zip"));
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + val.get("name") + "\"");
+    
+        return new ResponseEntity<>(val.get("data"), headers, HttpStatus.OK);
    }
-
 }

@@ -29,7 +29,13 @@ public class ResultResponse {
 
     private ResultResponse(final SuccessCode code, final Object data) {
         this.status = code.getStatus();
+        this.message = code.getMessage();
         this.data = data;
+    }
+
+    private ResultResponse(final SuccessCode code, String message) {
+        this.status = code.getStatus();
+        this.message = message;
     }
 
     public static ResultResponse of(final SuccessCode code) {
@@ -38,6 +44,10 @@ public class ResultResponse {
 
     public static ResultResponse of(final SuccessCode code, final Object data) {
         return new ResultResponse(code, data);
+    }
+
+    public static ResultResponse of(final SuccessCode code, final String message) {
+        return new ResultResponse(code, message);
     }
 
 }

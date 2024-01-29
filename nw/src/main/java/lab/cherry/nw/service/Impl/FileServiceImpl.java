@@ -1,178 +1,159 @@
 package lab.cherry.nw.service.Impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.springframework.beans.factory.annotation.Value;
+import java.util.function.Consumer;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsOperations;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponentsBuilder;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.client.gridfs.GridFSFindIterable;
+import com.mongodb.client.gridfs.model.GridFSFile;
+import lab.cherry.nw.error.enums.ErrorCode;
+import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.FileEntity;
 import lab.cherry.nw.repository.FileRepository;
 import lab.cherry.nw.service.FileService;
-import lab.cherry.nw.service.MinioService;
 import lab.cherry.nw.util.FormatConverter;
-import lab.cherry.nw.util.HttpUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
-	private final MinioService minioService;
-  private final FileRepository fileRepository;
-
-	@Value("${minio.url}")
-	private String minioUrl;
-
-	@Value("${minio.access-key}")
-	private String accessKey;
-
-	@Value("${minio.secret-key}")
-	private String secretKey;
+  private final FileRepository fileRepository;	
+	private final GridFsTemplate template;
+	private final GridFsOperations operations;
 
 	public Page<FileEntity> getFiles(Pageable pageable) {
 		return fileRepository.findAll(pageable);
 	}
 	
 	@Override
-    public List<String> uploadFiles(Map<String, String> info, List<MultipartFile> files) {
+    public List<String> uploadFiles(String seq, List<MultipartFile> files) {
 
-		String orgId = info.get("org");	// 조직명
-		String userId = info.get("user"); 	// 사용자명
-		String type = info.get("type");
-		String qsheetSeq= info.get("qsheetSeq");		 	// 파일 구분명
-		String bucketName = null;
+		List<String> fileUrls = new ArrayList<>();
+		for (MultipartFile file : files) {		
 
-		String destPath;
-		if (userId != null) {
-			// user가 입력되면, /user/{userId}으로 Path 지정
-			bucketName = "user";
-			destPath = userId + "/" + qsheetSeq +"/";
-		} else {
-			// user값이 없을 시, {org_objectId}/관리/로 Path 지정
-			bucketName = orgId;
-			destPath = "/관리/";
-		}
+			DBObject metadata = new BasicDBObject();
+			metadata.put("seq", seq);
+			metadata.put("name", file.getOriginalFilename());
+			metadata.put("size", file.getSize());
+			metadata.put("type", file.getContentType());
 
-		List<String> fileObjectIds = new ArrayList<>();
-
-		for (MultipartFile file : files) {
-			String originalFilename = (userId != null) ? file.getOriginalFilename() : type + "/" + file.getOriginalFilename();
-			String filepath = destPath + originalFilename;
-
-			log.error("objectName is {}", filepath);
-
+			Object fileObjectID = null;
 			try {
-				minioService.uploadObject(bucketName, filepath, file);
-            } catch (IOException e) {
-				log.error(e.getMessage());
-			} catch (NoSuchAlgorithmException | InvalidKeyException e) {
-				throw new RuntimeException(e);
+				fileObjectID = template.store(file.getInputStream(), file.getOriginalFilename(), file.getContentType(), metadata);
+			} catch (IOException e) {
+				log.error("파일 업로드 실패 {}", e);
+				throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED);
 			}
 
-			String fileUrl = "/api/v1/file/download/" + bucketName + "?path=" + filepath;
+			String fileUrl = "/api/v1/file/download/" + fileObjectID.toString();
             // 파일 객체 ID 저장
-			fileObjectIds.add(fileUrl);
+			fileUrls.add(fileUrl);
 
 			FileEntity fileEntity = FileEntity.builder()
-						.name(file.getOriginalFilename())
-						.size(FormatConverter.convertInputBytes(file.getSize()))
-						.type(file.getContentType())
-						.path(filepath)
-						.url(fileUrl)
-						.userid(userId)
-						.orgid(bucketName)
-						.created_at(Instant.now())
-						.build();
+					.id(fileObjectID.toString())
+					.name(file.getOriginalFilename())
+					.size(FormatConverter.convertInputBytes(file.getSize()))
+					.type(file.getContentType())
+					.url(fileUrl)
+					.created_at(Instant.now())
+					.build();
 
 			fileRepository.save(fileEntity);
 		}
-		return fileObjectIds;
-	}
-
-	public List<String> getAllFiles(String orgId, String path) {
-
-		try {
-			return minioService.listObjects(orgId, path);
-
-		} catch (IOException e) {
-			log.error(e.getMessage());
-		} catch (NoSuchAlgorithmException | InvalidKeyException e) {
-			throw new RuntimeException(e);
-		}
-		return null;
+		return fileUrls;
 	}
 
 	@Override
-    public InputStream downloadFile(String orgId, String path) {
+    public FileEntity.LoadFile downloadFile(String id) throws IllegalStateException, IOException {
 
-		try {
-			return minioService.getObject(orgId, path);
+		GridFSFile gridFSFile = template.findOne( new Query(Criteria.where("_id").is(id)) );
 
-		} catch (IOException e) {
-			log.error("파일 콘텐츠 확인 중 오류 발생: {}", e.getMessage());
-		} catch (NoSuchAlgorithmException | InvalidKeyException e) {
-			throw new RuntimeException(e);
+		FileEntity.LoadFile fileEntity = new FileEntity.LoadFile();
+
+		if (gridFSFile != null && gridFSFile.getMetadata() != null) {
+
+			log.error("fsFile.getMetadata() = {}", gridFSFile.getMetadata());
+
+				fileEntity.setName( gridFSFile.getFilename() );
+				fileEntity.setSize( gridFSFile.getMetadata().get("size").toString() );
+				fileEntity.setType( gridFSFile.getMetadata().get("type").toString() );
+
+				fileEntity.setFile( IOUtils.toByteArray(operations.getResource(gridFSFile).getInputStream()) );
+		} else {
+			throw new CustomException(ErrorCode.ENTITY_NOT_FOUND);
 		}
-		return null;
+
+		return fileEntity;
 	}
 
-	@Override
-	public byte[] downloadZip(String bucketName, String objectName) {
+	public Map<String, Object> downloadFiles(String key, String value) {
+  		List<GridFSFile> allFiles = new ArrayList<>();
+			GridFSFindIterable resources = template.find(new Query().addCriteria(Criteria.where("metadata." + key).is(value)));
+			resources.forEach((Consumer<GridFSFile>) file -> allFiles.add(file));
 
-		objectName = Base64.encodeBase64String(objectName.getBytes());
-		String addr = minioUrl.substring(0, minioUrl.length()-5) + ":9001";
+			log.error("allFiles {}", allFiles);
+			log.error("allFiles.size {}", allFiles.size());
 
-		try {
-				URI uri = UriComponentsBuilder
-						.fromUriString(addr)
-						.path("/api/v1/buckets/{bucketName}/objects/download")
-						// .encode()
-						.queryParam("prefix", objectName)
-						.build()
-						.expand(bucketName, objectName)
-						.toUri();
+			try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+					ZipOutputStream zipOut = new ZipOutputStream(byteArrayOutputStream)) {
+					for (GridFSFile file : allFiles) {
+
+							int lastIndex = file.getFilename().lastIndexOf(".");
+							String fileNameWithoutExtension = file.getFilename().substring(0, lastIndex);
+							String Extension = file.getFilename().substring(file.getFilename().lastIndexOf(".") + 1);
+							String fullName = fileNameWithoutExtension + "-" + new ObjectId() + "." + Extension;
+
+							ZipEntry zipEntry = new ZipEntry(fullName);
+							zipEntry.setSize(file.getChunkSize());
+							zipOut.putNextEntry(zipEntry);
+
+							byte[] objectData = IOUtils.toByteArray(operations.getResource(file).getInputStream());
+							zipOut.write(objectData);
+							zipOut.closeEntry();
+					}
+					zipOut.finish();
+					zipOut.close();
+
+			Map<String, Object> returnVal = new HashMap<>();
+			returnVal.put("name", value + ".zip");
+			returnVal.put("data", byteArrayOutputStream.toByteArray());
 			
-			log.error("uri {}", uri);
-			return HttpUtils.getForObject(uri);
+			return returnVal;
 
-		} catch (Exception ex) {
-			log.error("error {}", ex);
-			log.error("error.msg {}", ex.getMessage());
-			// throw new CustomException(ErrorCode.URL_NOTFOUND);
-		}
-
-		return null;
-	}	
+			} catch (IOException e) {
+				log.error("Error creating and sending the zip file: {}", e);
+				return null;
+			}
+	}
 
 	public void deleteById(String id) {
+
 		FileEntity fileEntity = findById(id);
-
-		try {
-			minioService.deleteObject(fileEntity.getId(), fileEntity.getPath());
-
-			System.out.println("파일 삭제 성공: " + fileEntity.getName());
-		} catch (IOException e) {
-			log.error("파일 콘텐츠 확인 중 오류 발생: {}", e.getMessage());
-		} catch (NoSuchAlgorithmException | InvalidKeyException e) {
-			throw new RuntimeException(e);
-		}
-
 		fileRepository.delete(fileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("File with Id " + id + " Not Found.")));
+
 	}
 
 
@@ -182,37 +163,28 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Transactional(readOnly = true)
-    public Page<FileEntity> findPageByOrgId(String orgid, Pageable pageable) {
-		return fileRepository.findPageByOrgid(orgid, pageable);
-	}
-
-
-	@Transactional(readOnly = true)
     public FileEntity findById(String id) {
 		return fileRepository.findByid(id).orElseThrow(() -> new EntityNotFoundException("file with Id " + id + " Not Found."));
 	}
 
 	@Transactional(readOnly = true)
-    public FileEntity findByPath(String path) {
-		return fileRepository.findByPath(path).orElseThrow(() -> new EntityNotFoundException("file with Path " + path + " Not Found."));
+    public FileEntity findByName(String name) {
+		return fileRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("file with Name " + name + " Not Found."));
 	}
 
-	public void deleteFiles(String orgId, List<String> images) {
+	public void deleteFiles(List<String> files) {
 
-		for (String image : images) {
-			FileEntity fileEntity = findByPath(image); // checkFileExists
+		for (String file : files){
+			
+			String[] splitText = file.split("/");
+			String objectId = splitText[splitText.length -1];
 
-			try {
-				minioService.deleteObject(orgId, image);
+			GridFSFile gridFSFile = template.findOne( new Query(Criteria.where("_id").is(objectId)));
+			String fileName = gridFSFile.getMetadata().get("name").toString();
 
-				System.out.println("파일 삭제 성공: " + image);
-			} catch (IOException e) {
-				log.error("파일 콘텐츠 확인 중 오류 발생: {}", e.getMessage());
-			} catch (NoSuchAlgorithmException | InvalidKeyException e) {
-				throw new RuntimeException(e);
-			}
+			template.delete(new Query(Criteria.where("_id").is(objectId)));
 
-			fileRepository.delete(fileRepository.findByPath(image).orElseThrow(() -> new EntityNotFoundException("File with Path " + image + " Not Found.")));
+			fileRepository.delete(fileRepository.findByName(fileName).orElseThrow(() -> new EntityNotFoundException("File with Path " + file + " Not Found.")));
 		}
 	}
 }

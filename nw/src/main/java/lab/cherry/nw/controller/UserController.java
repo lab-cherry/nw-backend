@@ -9,6 +9,7 @@ import lab.cherry.nw.service.UserService;
 import lab.cherry.nw.util.Common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <pre>
@@ -49,8 +51,9 @@ public class UserController {
     @Operation(summary = "사용자 목록", description = "사용자 목록을 조회합니다.")
     public ResponseEntity<?> findAllUsers(
             @RequestParam(required = false) String userid,
+            @RequestParam(required = false) String orgSeq,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size,
+            @RequestParam(defaultValue = "100") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
 
         log.info("retrieve all users controller...!");
@@ -58,10 +61,12 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Common.getOrder(sort)));
 
         Page<UserEntity> userEntity;
-        if(userid == null) {
+        if(userid == null && orgSeq ==null) {
             userEntity = userService.getUsers(pageable);
-        } else {
+        } else if (userid != null && orgSeq ==null)  {
             userEntity = userService.findPageByUserId(userid, pageable);
+        } else  {
+            userEntity = userService.findPageByOrgSeq(orgSeq, pageable);
         }
 
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.getUsers());
@@ -100,7 +105,7 @@ public class UserController {
      * [UserController] 사용자 조직 업데이트 함수
      *
      * @param id 사용자 고유번호를 입력합니다.
-     * @param userEntity 사용자의 조직을 업데이트하기 위한 조직 고유아이디를 갖고 있는 객체입니다.업데이트에 필요한 사용자 정보를 담고 있는 객체입니다.
+     * @param userEntity 사용자의 조직을 업데이트하기 위한 조직 고유아이디를 갖고 있는 객체입니다.
      * @return
      * <pre>
      * true  : 업데이트된 사용자 정보를 반환합니다.
@@ -111,13 +116,54 @@ public class UserController {
      */
     @PatchMapping("{id}/org")
     @Operation(summary = "사용자 조직 업데이트", description = "특정 사용자의 조직 정보를 업데이트합니다.")
-    public ResponseEntity<?> updateUserOrgs(
+    public ResponseEntity<?> updateUserOrg(
+		@PathVariable("id") String id,
+		@RequestBody UserEntity.UserUpdateDto userEntity,
+        @RequestParam(required = false) String token) {
+
+            log.info("[UserController] updateUserOrg...!");
+
+            if(token != null) {
+			    userService.updateOrgById(id, userEntity.getOrgId());
+            } else {
+                userService.updateOrgByIdAndToken(id, userEntity.getOrgId(), token);
+            }
+
+            final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+            return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PatchMapping("{id}/role")
+    @Operation(summary = "사용자 조직 업데이트", description = "특정 사용자의 조직 정보를 업데이트합니다.")
+    public ResponseEntity<?> updateUserRole(
 		@PathVariable("id") String id,
 		@RequestBody UserEntity.UserUpdateDto userEntity) {
 
             log.info("[UserController] updateUserOrg...!");
 
-			userService.updateOrgById(id, userEntity.getOrgId());
+			userService.updateRoleById(id, userEntity.getRoleId());
+
+            final ResultResponse response = ResultResponse.of(SuccessCode.OK);
+            return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);
+    }    
+
+    /**
+     * [UserController] 사용자 사진 업데이트 함수
+     *
+     * @param id 사용자 고유번호를 입력합니다.
+     * @param image 사용자의 사진을 업데이트하기 위한 사진을 갖고 있는 객체입니다.
+     *
+     * Author : taking(taking@duck.com)
+     */
+    @PatchMapping("{id}/photo")
+    @Operation(summary = "사용자 사진 업데이트", description = "특정 사용자의 사진을 업데이트합니다.")
+    public ResponseEntity<?> updateUserPhoto(
+		@PathVariable("id") String id,
+		@RequestPart List<MultipartFile> image) {
+
+            log.info("[UserController] updateUserOrg...!");
+
+			userService.updateUserPhoto(id, image);
 
             final ResultResponse response = ResultResponse.of(SuccessCode.OK);
             return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.OK);

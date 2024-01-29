@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import lab.cherry.nw.model.UserCardEntity;
 
 
@@ -25,5 +26,10 @@ public interface UserCardRepository extends MongoRepository<UserCardEntity, Stri
 
     Optional<UserCardEntity> findById(String id);
 
+    String findByUserinfo(String id);
+
     List<UserCardEntity> findAllById(List<String> orgIds);
+
+    @Query("{'userinfo.$_id' : ?0}")
+    Optional<UserCardEntity> findByUserSeq(String userSeq);
 }

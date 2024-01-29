@@ -1,5 +1,6 @@
 package lab.cherry.nw.controller;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -63,7 +64,7 @@ public class FinaldocsController {
     public ResponseEntity<?> findAllFinaldocs(
             @RequestParam(required = false) String id,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size,
+            @RequestParam(defaultValue = "100") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort
     ) {
 
@@ -155,6 +156,28 @@ public class FinaldocsController {
 //        final ResultResponse response = ResultResponse.of(SuccessCode.OK, userService.findById(id));
             return new ResponseEntity<>(finaldocsService.findById(id), new HttpHeaders(), HttpStatus.OK);
     }
+
+     /**
+     * [FinaldocsController] 특정 최종확인서 조회 함수
+     *
+     * @param id 최종확인서 고유번호를 입력합니다.
+     * @return
+     * <pre>
+     * true  : 특정 최종확인서 정보를 반환합니다.
+     * false : 에러(400, 404)를 반환합니다.
+     * </pre>
+     *
+     * Author : hhhaeri(yhoo0020@gmail.com)
+     */
+    @GetMapping("/user/{userid}")
+    @Operation(summary = "User Id 로 최종확인서 찾기", description = "최종확인서를 조회합니다.")
+    public ResponseEntity<?> findByUserId(@PathVariable("userid") String userid) {
+
+        log.info("[FinaldocsController] findByFinaldocsId... with userId", userid);
+
+        return new ResponseEntity<>(finaldocsService.findByUserId(userid), new HttpHeaders(), HttpStatus.OK);
+    }
+
 
     /**
      * [FinaldocsController] 특정 최종확인서 삭제 함수

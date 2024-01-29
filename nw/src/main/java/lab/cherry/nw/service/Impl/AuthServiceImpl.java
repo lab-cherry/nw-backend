@@ -2,23 +2,31 @@ package lab.cherry.nw.service.Impl;
 
 import lab.cherry.nw.error.enums.ErrorCode;
 import lab.cherry.nw.error.exception.CustomException;
+import lab.cherry.nw.error.exception.EntityNotFoundException;
+import lab.cherry.nw.model.EmailAuthEntity;
+import lab.cherry.nw.model.OrgEntity;
 import lab.cherry.nw.model.RoleEntity;
 import lab.cherry.nw.model.UserEntity;
+import lab.cherry.nw.repository.EmailAuthRepository;
 import lab.cherry.nw.repository.RoleRepository;
 import lab.cherry.nw.repository.UserRepository;
 import lab.cherry.nw.service.AuthService;
+import lab.cherry.nw.service.EmailAuthService;
+import lab.cherry.nw.service.OrgService;
 import lab.cherry.nw.service.TokenService;
+import lab.cherry.nw.service.UserService;
 import lab.cherry.nw.util.Security.AccessToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -39,6 +47,10 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final EmailAuthRepository emailAuthRepository;
+    private final EmailAuthService emailAuthService;
+    private final UserService userService;
+    private final OrgService orgService;
 
     /**
      * [AuthServiceImpl] 회원가입 함수
@@ -52,30 +64,74 @@ public class AuthServiceImpl implements AuthService {
      *
      * Author : taking(taking@duck.com)
      */
-    public AccessToken register(UserEntity.UserRegisterDto userRegisterDto) {
+    public UserEntity register(UserEntity.UserRegisterDto userRegisterDto) {
 
         Instant instant = Instant.now();
+        ObjectId objectId = new ObjectId();
+        ObjectId verifiedObjectId = new ObjectId();
         checkExistsWithUserId(userRegisterDto.getUserId()); // 동일한 이름 중복체크
 
         RoleEntity roleEntity = roleRepository.findByName("ROLE_USER").get();
 
         UserEntity userEntity = UserEntity.builder()
+            .id(objectId.toString())
             .userid(userRegisterDto.getUserId())
             .username(userRegisterDto.getUserName())
             .email(userRegisterDto.getUserEmail())
             .password(passwordEncoder.encode(userRegisterDto.getUserPassword()))
-			.type((userRegisterDto.getUserType()) == null ? "user" : userRegisterDto.getUserType())
             .role(roleEntity)
             .enabled(true)
+            .isEmailVerified(false)
             .created_at(instant)
             .build();
 
-        userRepository.save(userEntity);
+        UserEntity user = userRepository.save(userEntity);
 
-        String userid = userEntity.getUserid();
-        RoleEntity role = userEntity.getRole();
 
-        return tokenService.generateJwtToken(userid,role);
+        EmailAuthEntity emailAuthEntity  = EmailAuthEntity.builder()
+            .id(objectId.toString())
+            .user(user)
+            .email(userRegisterDto.getUserEmail())
+            .token(verifiedObjectId.toString())
+            .expired(LocalDateTime.now().plusMinutes(5L))
+            .build();
+
+        emailAuthRepository.save(emailAuthEntity);
+
+        emailAuthService.ConfirmEmailSend(emailAuthEntity.getEmail(), emailAuthEntity.getToken());
+
+        return userEntity;
+    }
+    public List<UserEntity> addOrgUser(String orgSeq, List<UserEntity.UserRegisterDto> orgUserUpdateDtoList) {
+        List<UserEntity> createOrgUserList = new ArrayList<>();
+        if(orgUserUpdateDtoList.size()> 0){
+            OrgEntity orgEntity = orgService.findById(orgSeq);
+            RoleEntity roleEntity = roleRepository.findByName("ROLE_ORG").get();
+            Instant instant = Instant.now();
+             //  중복 체크 
+            for (UserEntity.UserRegisterDto userRegisterDto : orgUserUpdateDtoList){
+                checkExistsWithUserId(userRegisterDto.getUserId());
+            }
+            for (UserEntity.UserRegisterDto userRegisterDto : orgUserUpdateDtoList){
+                UserEntity userEntity = UserEntity.builder()
+                .userid(userRegisterDto.getUserId())
+                .username(userRegisterDto.getUserName())
+                .email(userRegisterDto.getUserEmail())
+                .password(passwordEncoder.encode("0000"))
+                .role(roleEntity)
+                .org(orgEntity)
+                .enabled(true)
+                .isEmailVerified(true)
+                .created_at(instant)
+                .build();
+                createOrgUserList.add(userEntity);
+            }
+           userRepository.saveAll(createOrgUserList);
+           return createOrgUserList;
+        }else {
+            log.error("[QsheetServiceImpl - CreateRegisterOrgUser] OrgSeq,data 만 수정 가능합니다.");
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);
+        }
     }
 
     /**
@@ -94,6 +150,7 @@ public class AuthServiceImpl implements AuthService {
     public AccessToken.Get login(UserEntity.UserLoginDto userLoginDto) {
 
         authenticateByIdAndPassword(userLoginDto);
+        isValidEmailVertified(userLoginDto);
 
         Optional<UserEntity> userEntity = userRepository.findByuserid(userLoginDto.getUserId());
         AccessToken accessToken = tokenService.generateJwtToken(userLoginDto.getUserId(), userEntity.get().getRole());
@@ -101,7 +158,9 @@ public class AuthServiceImpl implements AuthService {
         Map<String, String> info = new HashMap<>();
         info.put("userSeq", userEntity.get().getId());
         info.put("orgSeq", (userEntity.get().getOrg() == null) ? null : userEntity.get().getOrg().getId());
+        info.put("orgName", (userEntity.get().getOrg() == null) ? null : userEntity.get().getOrg().getName());
         info.put("roleSeq", (userEntity.get().getRole() == null) ? null : userEntity.get().getRole().getId());
+        info.put("roleName", (userEntity.get().getRole() == null) ? null : userEntity.get().getRole().getName());
 
         return AccessToken.Get.builder()
             .userSeq(userEntity.get().getId())
@@ -128,7 +187,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(readOnly = true)
     public void checkExistsWithUserId(String userid) {
         if (userRepository.findByuserid(userid).isPresent()) {
-            throw new CustomException(ErrorCode.DUPLICATE); // 사용자 아이디가 중복됨
+            throw new CustomException(ErrorCode.USER_DUPLICATE); // 사용자 아이디가 중복됨
         }
     }
 
@@ -150,11 +209,37 @@ public class AuthServiceImpl implements AuthService {
         }
 
         UserEntity user = userRepository.findByuserid(userLoginDto.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));   // 로그인 정보가 유효하지 않음
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));   // 로그인 정보가 유효하지 않음
 
         if(!passwordEncoder.matches(userLoginDto.getUserPassword(), user.getPassword())) {
             log.error("{} Account Password is Corrent!", userLoginDto.getUserId());
-            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 로그인 정보가 정확하지 않음
+            throw new CustomException(ErrorCode.USER_INVALID_INPUT_VALUE);   // 로그인 정보가 정확하지 않음
+        }
+    }
+
+    /**
+     * [AuthServiceImpl] 이메일 인증 여부 확인 함수
+     *
+     * @param userLoginDto userLoginDto 로그인 정보 검증에 필요한 사용자 등록 정보를 담은 개체입니다.
+     * @throws CustomException 사용자가 등록되지 않았거나, 비밀번호가 일치하지 않을 경우 예외 처리 발생
+     * <pre>
+     * 입력된 사용자 로그인 정보를 검증합니다.
+     * </pre>
+     *
+     * Author : taking(taking@duck.com)
+     */
+    private void isValidEmailVertified(UserEntity.UserLoginDto userLoginDto) {
+
+        if(userLoginDto == null) {  // Body 값이 비어 있을 경우, 예외처리
+            throw new CustomException(ErrorCode.INVALID_INPUT_VALUE);   // 입력 값이 유효하지 않음
+        }
+
+        UserEntity user = userRepository.findByuserid(userLoginDto.getUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));   // 로그인 정보가 유효하지 않음
+
+        if(!user.getIsEmailVerified()) {
+            log.error("{}는 이메일 인증이 필요합니다.", userLoginDto.getUserId());
+            throw new CustomException(ErrorCode.REQUIRE_EMAIL_VERIFIED);   // 이메일 인증이 필요합니다.
         }
     }
 
@@ -188,7 +273,79 @@ public class AuthServiceImpl implements AuthService {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
 
+        log.error("authentication.getName() {}", authentication.getName());
+
+        if(authentication.getName() == null || authentication.getName() == "anonymousUser") {
+            throw new CustomException(ErrorCode.ENTITY_NOT_FOUND);
+        }
+        
+
 		UserEntity user = userRepository.findByuserid(authentication.getName()).get();
 		return user;
+
 	}
+
+    @Transactional(readOnly = true)
+    public void confirmEmail(String email, String token) {
+
+        EmailAuthEntity emailAuthEntity = emailAuthRepository.findByEmailAndToken(email, token)
+                .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_AUTH_ERROR));
+
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime expiredDate = emailAuthEntity.getExpired();
+
+        if (currentDate.isAfter(expiredDate)) {
+            throw new CustomException(ErrorCode.EXPIRED_EXCEPTION);
+        }
+
+        userService.updateEmailVerifiedByid(emailAuthEntity.getUser().getId());
+    }
+
+        @Transactional(readOnly = true)
+    public UserEntity findByuserid(String userid) {
+        return userRepository.findByuserid(userid).orElseThrow(() -> new EntityNotFoundException("User with userId " + userid + " Not Found."));
+    }
+
+    @Transactional(readOnly = true)
+    public void reConfirmEmail(String userid, String email) {
+
+        UserEntity userEntity = userRepository.findByuseridAndEmail(userid, email).orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+
+        Optional<EmailAuthEntity> emailAuthEntity = emailAuthRepository.findById(userEntity.getId());
+        if(emailAuthEntity.isEmpty()) {
+
+        ObjectId verifiedObjectId = new ObjectId();
+            
+            EmailAuthEntity emailAuthEntity2  = EmailAuthEntity.builder()
+                .id(userEntity.getId())
+                .user(userEntity)
+                .email(email)
+                .token(verifiedObjectId.toString())
+                .expired(LocalDateTime.now().plusMinutes(5L))
+                .build();
+
+            emailAuthRepository.save(emailAuthEntity2);
+            emailAuthService.ConfirmEmailSend(emailAuthEntity2.getEmail(), emailAuthEntity2.getToken());
+        } else {
+        
+            EmailAuthEntity emailAuthEntity2 = emailAuthEntity.get();
+            emailAuthEntity2 = emailAuthService.updateExpired(userEntity.getId());
+            emailAuthService.ConfirmEmailSend(emailAuthEntity2.getEmail(), emailAuthEntity2.getToken());
+
+        }
+    }
+
+    public void forgotPassword(String userid, String email) {
+
+        UserEntity userEntity = userRepository.findByuseridAndEmail(userid, email).orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+
+        log.error("userEntity getUsername {}", userEntity.getUsername());
+        log.error("userEntity getEmail {}", userEntity.getEmail());
+
+        ObjectId objectId = new ObjectId();
+        userEntity.resetPassword(passwordEncoder.encode(objectId.toString()));
+        userRepository.save(userEntity);
+
+        emailAuthService.ResetPasswordSend(email, objectId.toString());
+    }
 }

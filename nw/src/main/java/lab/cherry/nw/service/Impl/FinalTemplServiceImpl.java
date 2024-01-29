@@ -5,10 +5,12 @@ import lab.cherry.nw.error.exception.CustomException;
 import lab.cherry.nw.error.exception.EntityNotFoundException;
 import lab.cherry.nw.model.FinalTemplEntity;
 import lab.cherry.nw.model.OrgEntity;
+import lab.cherry.nw.model.UserCardEntity;
 import lab.cherry.nw.model.UserEntity;
 import lab.cherry.nw.repository.FinalTemplRepository;
 import lab.cherry.nw.service.FinalTemplService;
 import lab.cherry.nw.service.OrgService;
+import lab.cherry.nw.service.UserCardService;
 import lab.cherry.nw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,18 +72,18 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 
         Instant instant = Instant.now();
 
-        UserEntity userEntity = userService.findById(finalTemplCreateDto.getUserid());
-        OrgEntity orgEntity = orgService.findById(finalTemplCreateDto.getOrgid());
+        UserEntity userEntity = userService.findById(finalTemplCreateDto.getUserSeq());
+        OrgEntity orgEntity = orgService.findById(finalTemplCreateDto.getOrgId());
+    
 
-        FinalTemplEntity finaldocsEntity = FinalTemplEntity.builder()
-            .name(finalTemplCreateDto.getName())
+        FinalTemplEntity finaltemplEntity = FinalTemplEntity.builder()
             .content(finalTemplCreateDto.getContent())
-            .userid(userEntity)
-            .orgid(orgEntity)
+            .user(userEntity)
+            .org(orgEntity)
             .created_at(instant)
             .build();
 
-        return finalTemplRepository.save(finaldocsEntity);
+        return finalTemplRepository.save(finaltemplEntity);
     }
 
     /**
@@ -98,8 +100,8 @@ public class FinalTemplServiceImpl implements FinalTemplService {
     public void updateById(String id, FinalTemplEntity.FinalTemplUpdateDto finalTempl) {
 
         FinalTemplEntity finalTemplEntity = findById(id);
-        UserEntity userEntity = userService.findById(finalTempl.getUserid());
-        OrgEntity orgEntity = orgService.findById(finalTempl.getOrgid());
+        UserEntity userEntity = userService.findById(finalTempl.getUserSeq());
+        OrgEntity orgEntity = orgService.findById(finalTempl.getOrgId());
         Instant instant = Instant.now();
 
         if (finalTempl.getContent() != null) {
@@ -107,8 +109,8 @@ public class FinalTemplServiceImpl implements FinalTemplService {
             finalTemplEntity = FinalTemplEntity.builder()
                 .id(finalTemplEntity.getId())
                 .content((finalTempl.getContent() != null) ? finalTempl.getContent() : finalTemplEntity.getContent())
-                .userid(userEntity)
-                .orgid(orgEntity)
+                .user(userEntity)
+                .org(orgEntity)
                 .updated_at(instant)
                 .build();
 
@@ -138,7 +140,7 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 
 
     /**
-     * [FinalTemplServiceImpl] ID로 최종확인서 템플릿  조회 함수
+     * [FinalTemplServiceImpl] ID로 최종확인서 템플릿 조회 함수
      *
      * @param id 조회할 최종확인서 템플릿의 식별자입니다.
      * @return 주어진 식별자에 해당하는 조직 정보
@@ -153,7 +155,6 @@ public class FinalTemplServiceImpl implements FinalTemplService {
 //    public FinaldocsEntity findByName(String name) {
 //        return finaldocsRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Fianldocs with Id " + name + " Not Found."));
 //    }
-
 
     @Transactional(readOnly = true)
     public FinalTemplEntity findById(String id) {
@@ -179,15 +180,15 @@ public class FinalTemplServiceImpl implements FinalTemplService {
      *
      * Author : taking(taking@duck.com)
      */
-    @Transactional(readOnly = true)
-    public FinalTemplEntity findByName(String name) {
-        return finalTemplRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("finalTempl with Name " + name + " Not Found."));
-    }
+    // @Transactional(readOnly = true)
+    // public FinalTemplEntity findByName(String name) {
+    //     return finalTemplRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("finalTempl with Name " + name + " Not Found."));
+    // }
 
-    @Transactional(readOnly = true)
-    public Page<FinalTemplEntity> findPageByName(String name, Pageable pageable) {
-        return finalTemplRepository.findPageByName(name, pageable);
-    }
+    // @Transactional(readOnly = true)
+    // public Page<FinalTemplEntity> findPageByName(String name, Pageable pageable) {
+    //     return finalTemplRepository.findPageByName(name, pageable);
+    // }
 
 
     @Transactional(readOnly = true)

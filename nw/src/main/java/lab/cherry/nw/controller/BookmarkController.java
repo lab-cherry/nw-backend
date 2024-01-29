@@ -63,7 +63,7 @@ public class BookmarkController {
     public ResponseEntity<?> findAllBookmarks(
             @RequestParam(required = false) String userid,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "5") Integer size,
+            @RequestParam(defaultValue = "100") Integer size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
 
     log.info("retrieve all bookmarks controller...!");
@@ -178,7 +178,7 @@ public class BookmarkController {
     }
 
     /**
-     * [BookmarkController] 특정 역할 조회 함수
+     * [BookmarkController] 특정 북마크 조회 함수
      *
      * @param id 북마크 고유번호를 입력합니다.
      * @return

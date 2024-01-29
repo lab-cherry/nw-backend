@@ -1,11 +1,13 @@
 package lab.cherry.nw.service;
 
-import lab.cherry.nw.model.QsheetEntity;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import lab.cherry.nw.model.QsheetEntity;
 
 /**
  * <pre>
@@ -18,14 +20,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public interface QsheetService {
  Page<QsheetEntity> getQsheets(Pageable pageable);
+//  @PreAuthorize("hasAnyRole('ADMIN','ORG')")
  QsheetEntity findById(String id);
-// QsheetEntity findByUserId(String userid);
-// QsheetEntity findByOrgId(String orgid);
- void createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files);
+ QsheetEntity createQsheet(QsheetEntity.QsheetCreateDto qsheetCreateDto, List<MultipartFile> files);
  void updateById(String id, QsheetEntity.QsheetUpdateDto updateDto, List<MultipartFile> files);
  void deleteById(String id);
- Page<QsheetEntity> findPageByUserId(String userid, Pageable pageable);
- Page<QsheetEntity> findPageByOrgId(String orgid, Pageable pageable);
+ Page<QsheetEntity> findPageByUserId(String userSeq, Pageable pageable);
+ Page<QsheetEntity> findPageByOrgId(String orgSeq, String type, Pageable pageable);
 // void updateOrgById(String id, List<String> orgIds);
-byte[] download(List<String> users);
+Map<String, Object> download(String[] qsheetSeq);
+List<QsheetEntity.ItemData> findByIdWithData(String id);
 }
